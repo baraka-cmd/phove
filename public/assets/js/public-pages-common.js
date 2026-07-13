@@ -271,4 +271,53 @@ document.addEventListener('DOMContentLoaded', function () {
         'color: #777;'
     );
 
+
+    // ============================================================
+    // TOAST NOTIFICATION
+    // ============================================================
+    function showToast(message, type = 'success', duration = 5000) {
+        // Créer le conteneur s'il n'existe pas
+        let container = document.querySelector('.toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+
+        // Créer le toast
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.innerHTML = `
+            <div class="toast-icon">
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+            </div>
+            <div class="toast-content">
+                <div class="toast-title">${type === 'success' ? 'Succès' : 'Erreur'}</div>
+                <div class="toast-text">${message}</div>
+            </div>
+            <button class="toast-close" title="Fermer">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="toast-progress"></div>
+        `;
+
+        container.appendChild(toast);
+
+        // Fermer au clic
+        const closeBtn = toast.querySelector('.toast-close');
+        closeBtn.addEventListener('click', () => removeToast(toast));
+
+        // Disparition automatique
+        setTimeout(() => removeToast(toast), duration);
+    }
+
+    function removeToast(toast) {
+        toast.style.animation = 'toastOut 0.3s ease forwards';
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.remove();
+            }
+        }, 300);
+    }
+
 });

@@ -11,6 +11,7 @@ use App\Http\Controllers\Public\ActualiteController;
 use App\Http\Controllers\Public\DonController;
 use App\Http\Controllers\Public\MembreController;
 use App\Http\Controllers\Public\ContactController;
+use App\Http\Controllers\Public\RechercheController;
 
 
 
@@ -219,8 +220,8 @@ Route::get('/devenir-partenaire', function () { return 'Devenir partenaire'; })-
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-// Recherche
-Route::get('/recherche', function () { return 'Recherche'; })->name('recherche');
+//Recherche
+Route::get('/recherche', [RechercheController::class, 'index'])->name('recherche');
 
 
 
@@ -233,6 +234,24 @@ Route::get('/don/merci', [DonController::class, 'merci'])->name('don.merci');
 Route::get('/devenir-membre', [MembreController::class, 'index'])->name('devenir-membre');
 Route::post('/devenir-membre', [MembreController::class, 'store'])->name('devenir-membre.store');
 Route::get('/devenir-membre/confirmation', [MembreController::class, 'confirmation'])->name('devenir-membre.confirmation');
+
+// Devenir bénévole
+Route::get('/devenir-benevole', function () {
+    return view('public.devenir-benevole');
+})->name('devenir-benevole');
+
+Route::get('/devenir-benevole/confirmation', function () {
+    return view('public.benevole-confirmation');
+})->name('devenir-benevole.confirmation');
+
+// Devenir partenaire
+Route::get('/devenir-partenaire', function () {
+    return view('public.devenir-partenaire');
+})->name('devenir-partenaire');
+
+Route::get('/devenir-partenaire/confirmation', function () {
+    return view('public.partenaire-confirmation');
+})->name('devenir-partenaire.confirmation');
 
 // Newsletter
 Route::post('/newsletter/subscribe', function () { return 'Abonnement newsletter'; })->name('newsletter.subscribe');

@@ -45,6 +45,7 @@ class ContactController extends Controller
             'email' => ['required', 'email', 'max:191'],
             'telephone' => ['nullable', 'string', 'max:20'],
             'organisation' => ['nullable', 'string', 'max:255'],
+            'adresse' => ['nullable', 'string', 'max:255'],
             'motif' => ['required', 'in:information,partenariat,don,adhesion,benevolat,presse,plainte,autre'],
             'sujet' => ['required', 'string', 'max:255'],
             'message' => ['required', 'string', 'max:5000'],
@@ -78,7 +79,20 @@ class ContactController extends Controller
             // L'email a échoué, mais le message est bien enregistré
         }
 
-        // 4. Rediriger avec un message de succès
+        // 4. Rediriger selon le motif
+        $motif = $validated['motif'];
+
+        if ($motif === 'benevolat') {
+            return redirect()->route('devenir-benevole.confirmation')
+                ->with('success', 'Votre candidature bénévole a été enregistrée avec succès. Nous vous contacterons dans les plus brefs délais.');
+        }
+
+        if ($motif === 'partenariat') {
+            return redirect()->route('devenir-partenaire.confirmation')
+                ->with('success', 'Votre proposition de partenariat a été enregistrée avec succès. Notre équipe va l\'examiner et reviendra vers vous.');
+        }
+
+        // Par défaut : page contact
         return redirect()->route('contact')
             ->with('success', 'Votre message a été envoyé avec succès. Nous vous répondrons dans les plus brefs délais.');
     }

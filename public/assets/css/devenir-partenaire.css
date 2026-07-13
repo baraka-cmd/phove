@@ -1,0 +1,514 @@
+/* ============================================================
+   AHD-RDC — STYLES PAGE DEVENIR PARTENAIRE
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. SECTION POURQUOI DEVENIR PARTENAIRE
+   ---------------------------------------------------------- */
+.partenaire-pourquoi-section {
+    padding: var(--spacing-5xl) 0 var(--spacing-3xl);
+    background: #fff;
+}
+
+.partenaire-avantages-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
+}
+
+.partenaire-avantage-card {
+    background: var(--color-bg-light);
+    border-radius: 16px;
+    padding: 28px 22px;
+    text-align: center;
+    border: 1px solid var(--border-color-light);
+    transition: all 0.3s ease;
+}
+
+.partenaire-avantage-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    border-color: var(--color-primary-lighter);
+}
+
+.partenaire-avantage-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    transition: all 0.3s ease;
+}
+
+.partenaire-avantage-card:hover .partenaire-avantage-icon {
+    background: var(--color-primary);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.partenaire-avantage-card h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.partenaire-avantage-card p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+/* ----------------------------------------------------------
+   2. SECTION TYPES DE PARTENARIAT
+   ---------------------------------------------------------- */
+.partenaire-types-section {
+    padding: var(--spacing-5xl) 0;
+    background: var(--color-bg-light);
+}
+
+.partenaire-types-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
+}
+
+.partenaire-type-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px 24px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.partenaire-type-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.partenaire-type-card:hover::before {
+    transform: scaleX(1);
+}
+
+.partenaire-type-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
+}
+
+.partenaire-type-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    transition: all 0.3s ease;
+}
+
+.partenaire-type-card:hover .partenaire-type-icon {
+    background: var(--color-primary);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.partenaire-type-card h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.partenaire-type-card p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+/* ----------------------------------------------------------
+   3. FORMULAIRE DE PARTENARIAT
+   ---------------------------------------------------------- */
+.partenaire-form-section {
+    padding: var(--spacing-5xl) 0;
+    background: #fff;
+}
+
+.partenaire-form-wrapper {
+    max-width: 800px;
+    margin: var(--spacing-2xl) auto 0;
+}
+
+.partenaire-alert {
+    padding: 14px 18px;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.partenaire-alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.partenaire-alert-success i { color: #28a745; }
+
+/* Étapes */
+.partenaire-step {
+    background: #fff;
+    border-radius: 18px;
+    padding: 32px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.partenaire-step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--color-primary-lighter);
+}
+
+.partenaire-step-number {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.partenaire-step-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0;
+}
+
+/* Grille formulaire */
+.partenaire-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.partenaire-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.partenaire-form-full {
+    grid-column: 1 / -1;
+}
+
+.partenaire-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.partenaire-label .required { color: var(--color-accent); }
+
+.partenaire-input {
+    padding: 13px 16px;
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+    background: #fff;
+    color: #1a1a1a;
+}
+
+.partenaire-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.1);
+}
+
+.partenaire-input::placeholder { color: #aaa; }
+
+.partenaire-textarea {
+    padding: 13px 16px;
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+    resize: vertical;
+    min-height: 150px;
+    background: #fff;
+    color: #1a1a1a;
+}
+
+.partenaire-textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.1);
+}
+
+.partenaire-textarea::placeholder { color: #aaa; }
+
+/* Radio buttons */
+.partenaire-radio-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.partenaire-radio-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: var(--color-bg-light);
+    border-radius: 10px;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.partenaire-radio-item:hover {
+    background: #fff;
+    border-color: var(--color-primary-lighter);
+}
+
+.partenaire-radio-item input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+.partenaire-radio-item:has(input:checked) {
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* Soumission */
+.partenaire-submit-section {
+    text-align: center;
+}
+
+.partenaire-submit-btn {
+    width: 100%;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    letter-spacing: 0.3px;
+    margin-bottom: 16px;
+}
+
+.partenaire-submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(22, 85, 143, 0.4);
+}
+
+.partenaire-submit-btn .btn-loader {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+.partenaire-submit-btn.btn-loading .btn-loader { display: inline-block; }
+.partenaire-submit-btn.btn-loading .btn-text { display: none; }
+.partenaire-submit-btn.btn-loading { pointer-events: none; opacity: 0.8; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.partenaire-info-text {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    line-height: 1.5;
+}
+
+.partenaire-info-text i { color: var(--color-primary); }
+
+/* ----------------------------------------------------------
+   4. CTA
+   ---------------------------------------------------------- */
+.cta-section-page {
+    background: linear-gradient(135deg, #0f3f6b 0%, #16558F 50%, #1a1a1a 100%);
+    padding: 80px 0 100px;
+    text-align: center;
+}
+
+.cta-title-page {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.highlight-page { color: #D32F2F; }
+
+.cta-text-page {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 600px;
+    margin: 0 auto 35px;
+    line-height: 1.7;
+}
+
+.cta-buttons-page {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-page-don {
+    background: #D32F2F;
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid #D32F2F;
+}
+
+.btn-page-don:hover {
+    background: #b71c1c;
+    border-color: #b71c1c;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(211, 47, 47, 0.4);
+    color: #fff;
+}
+
+.btn-page-outline {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.btn-page-outline:hover {
+    background: #fff;
+    color: #16558F;
+    border-color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.2);
+}
+
+/* ----------------------------------------------------------
+   5. ANIMATIONS
+   ---------------------------------------------------------- */
+.partenaire-step,
+.partenaire-avantage-card,
+.partenaire-type-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.partenaire-step.visible,
+.partenaire-avantage-card.visible,
+.partenaire-type-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ----------------------------------------------------------
+   6. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .partenaire-avantages-grid { grid-template-columns: repeat(2, 1fr); }
+    .partenaire-types-grid { grid-template-columns: repeat(2, 1fr); }
+    .partenaire-radio-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    .partenaire-avantages-grid { grid-template-columns: 1fr 1fr; }
+    .partenaire-types-grid { grid-template-columns: 1fr; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .partenaire-form-grid { grid-template-columns: 1fr; }
+    .partenaire-radio-grid { grid-template-columns: repeat(2, 1fr); }
+    .partenaire-step { padding: 22px 18px; }
+    .cta-section-page { padding: 60px 0 70px; }
+    .cta-buttons-page { flex-direction: column; align-items: center; }
+    .btn-page-don, .btn-page-outline { width: 100%; justify-content: center; text-align: center; }
+}
+
+@media (max-width: 576px) {
+    .partenaire-avantages-grid { grid-template-columns: 1fr; }
+    .partenaire-radio-grid { grid-template-columns: 1fr; }
+}

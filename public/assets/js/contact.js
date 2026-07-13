@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                alert('Veuillez remplir tous les champs obligatoires.');
+                showToast('Veuillez remplir tous les champs obligatoires.', 'error');
                 return;
             }
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!emailRegex.test(email)) {
                 e.preventDefault();
                 document.getElementById('email').classList.add('error');
-                alert('Veuillez entrer une adresse email valide.');
+                showToast('Veuillez entrer une adresse email valide.', 'error');
                 return;
             }
 
