@@ -9,6 +9,10 @@ use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Public\ProjetController;
 use App\Http\Controllers\Public\ActualiteController;
 use App\Http\Controllers\Public\DonController;
+use App\Http\Controllers\Public\MembreController;
+use App\Http\Controllers\Public\ContactController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -208,12 +212,12 @@ Route::get('/transparence/documents', function () {
 })->name('transparence.documents');
 // Impliquez-vous
 
-Route::get('/devenir-membre', function () { return 'Devenir membre'; })->name('devenir-membre');
 Route::get('/devenir-benevole', function () { return 'Devenir bénévole'; })->name('devenir-benevole');
 Route::get('/devenir-partenaire', function () { return 'Devenir partenaire'; })->name('devenir-partenaire');
 
 // Contact
-Route::get('/contact', function () { return 'Contact'; })->name('contact');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 // Recherche
 Route::get('/recherche', function () { return 'Recherche'; })->name('recherche');
@@ -224,6 +228,11 @@ Route::get('/recherche', function () { return 'Recherche'; })->name('recherche')
 Route::get('/faire-un-don', [DonController::class, 'index'])->name('don');
 Route::post('/faire-un-don', [DonController::class, 'store'])->name('don.store');
 Route::get('/don/merci', [DonController::class, 'merci'])->name('don.merci');
+
+// Devenir membre
+Route::get('/devenir-membre', [MembreController::class, 'index'])->name('devenir-membre');
+Route::post('/devenir-membre', [MembreController::class, 'store'])->name('devenir-membre.store');
+Route::get('/devenir-membre/confirmation', [MembreController::class, 'confirmation'])->name('devenir-membre.confirmation');
 
 // Newsletter
 Route::post('/newsletter/subscribe', function () { return 'Abonnement newsletter'; })->name('newsletter.subscribe');

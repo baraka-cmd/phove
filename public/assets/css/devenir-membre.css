@@ -1,0 +1,794 @@
+/* ============================================================
+   AHD-RDC — STYLES PAGE DEVENIR MEMBRE
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. SECTION POURQUOI ADHÉRER
+   ---------------------------------------------------------- */
+.adhesion-pourquoi-section {
+    padding: var(--spacing-5xl) 0 var(--spacing-3xl);
+    background: #fff;
+}
+
+.adhesion-avantages-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
+}
+
+.adhesion-avantage-card {
+    background: var(--color-bg-light);
+    border-radius: 16px;
+    padding: 28px 22px;
+    text-align: center;
+    border: 1px solid var(--border-color-light);
+    transition: all 0.3s ease;
+}
+
+.adhesion-avantage-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08);
+    border-color: var(--color-primary-lighter);
+}
+
+.adhesion-avantage-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    transition: all 0.3s ease;
+}
+
+.adhesion-avantage-card:hover .adhesion-avantage-icon {
+    background: var(--color-primary);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.adhesion-avantage-card h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.adhesion-avantage-card p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+/* ----------------------------------------------------------
+   2. SECTION CATÉGORIES DE MEMBRES
+   ---------------------------------------------------------- */
+.adhesion-categories-section {
+    padding: var(--spacing-5xl) 0;
+    background: var(--color-bg-light);
+}
+
+.adhesion-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
+}
+
+.adhesion-categorie-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 32px 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.adhesion-categorie-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 5px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    border-radius: 0 4px 4px 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.adhesion-categorie-card:hover::before {
+    opacity: 1;
+}
+
+.adhesion-categorie-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
+}
+
+.adhesion-categorie-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    transition: all 0.3s ease;
+}
+
+.adhesion-categorie-card:hover .adhesion-categorie-icon {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.adhesion-categorie-card h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.adhesion-categorie-card p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.adhesion-categorie-details {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.adhesion-categorie-details li {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.adhesion-categorie-details li i {
+    color: var(--color-success);
+    font-size: 11px;
+}
+
+/* ----------------------------------------------------------
+   3. SECTION CONDITIONS D'ADHÉSION
+   ---------------------------------------------------------- */
+.adhesion-conditions-section {
+    padding: 0 0 var(--spacing-4xl);
+    background: #fff;
+    margin-top: -1px;
+}
+
+.adhesion-conditions-card {
+    background: linear-gradient(135deg, var(--color-primary-lighter) 0%, #fff 100%);
+    border-radius: 18px;
+    padding: 32px;
+    display: flex;
+    gap: 24px;
+    border: 1px solid var(--color-primary-lighter);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.adhesion-conditions-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 14px;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.adhesion-conditions-content h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+}
+
+.adhesion-conditions-content p {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 14px;
+    line-height: 1.7;
+}
+
+.adhesion-conditions-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.adhesion-conditions-list li {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+}
+
+.adhesion-conditions-list li i {
+    color: var(--color-success);
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+.adhesion-conditions-list li strong {
+    color: #1a1a1a;
+}
+
+/* ----------------------------------------------------------
+   4. FORMULAIRE D'ADHÉSION
+   ---------------------------------------------------------- */
+.adhesion-form-section {
+    padding: var(--spacing-5xl) 0;
+    background: var(--color-bg-light);
+}
+
+.adhesion-form-wrapper {
+    max-width: 800px;
+    margin: var(--spacing-2xl) auto 0;
+}
+
+/* Étapes */
+.adhesion-step {
+    background: #fff;
+    border-radius: 18px;
+    padding: 32px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.adhesion-step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--color-primary-lighter);
+}
+
+.adhesion-step-number {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.adhesion-step-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0;
+}
+
+/* Grille du formulaire */
+.adhesion-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.adhesion-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.adhesion-form-full {
+    grid-column: 1 / -1;
+}
+
+.adhesion-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.adhesion-label .required {
+    color: var(--color-accent);
+}
+
+.adhesion-input,
+.adhesion-select,
+.adhesion-textarea {
+    padding: 13px 16px;
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+    background: #fff;
+    color: #1a1a1a;
+}
+
+.adhesion-input:focus,
+.adhesion-select:focus,
+.adhesion-textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.1);
+}
+
+.adhesion-input::placeholder,
+.adhesion-textarea::placeholder {
+    color: #aaa;
+}
+
+.adhesion-input.error,
+.adhesion-select.error {
+    border-color: var(--color-accent);
+    background: #fff5f5;
+}
+
+.adhesion-select {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23777' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+}
+
+.adhesion-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.adhesion-error {
+    font-size: 12px;
+    color: var(--color-accent);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ----------------------------------------------------------
+   5. UPLOAD PHOTO
+   ---------------------------------------------------------- */
+.adhesion-photo-upload {
+    position: relative;
+}
+
+.adhesion-file-input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.adhesion-file-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 28px 20px;
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--color-bg-light);
+}
+
+.adhesion-file-label:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-lighter);
+}
+
+.adhesion-file-label i {
+    font-size: 2rem;
+    color: var(--color-primary);
+}
+
+.adhesion-file-label span {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.adhesion-file-label small {
+    font-size: 11px;
+    color: var(--color-text-muted);
+}
+
+.adhesion-photo-preview {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--color-primary);
+    margin-top: 10px;
+}
+
+.adhesion-photo-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.adhesion-photo-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.adhesion-photo-remove:hover {
+    background: var(--color-accent-hover);
+}
+
+/* ----------------------------------------------------------
+   6. ENGAGEMENTS
+   ---------------------------------------------------------- */
+.adhesion-engagements {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.adhesion-engagement-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    padding: 14px 16px;
+    background: var(--color-bg-light);
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.adhesion-engagement-item:hover {
+    background: #fff;
+    border-color: var(--color-primary-lighter);
+}
+
+.adhesion-engagement-item input[type="checkbox"] {
+    margin-top: 2px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.adhesion-engagement-item strong {
+    color: #1a1a1a;
+}
+
+/* ----------------------------------------------------------
+   7. RÉCAPITULATIF
+   ---------------------------------------------------------- */
+.adhesion-recap {
+    background: var(--color-primary-lighter);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 2px solid var(--color-primary);
+}
+
+.adhesion-recap h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.adhesion-recap-info {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-bottom: 14px;
+}
+
+.adhesion-recap-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.adhesion-recap-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #1a1a1a;
+}
+
+.adhesion-recap-row strong {
+    color: var(--color-primary);
+}
+
+/* ----------------------------------------------------------
+   8. SOUMISSION
+   ---------------------------------------------------------- */
+.adhesion-submit-section {
+    text-align: center;
+}
+
+.adhesion-submit-btn {
+    width: 100%;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    letter-spacing: 0.3px;
+    margin-bottom: 16px;
+}
+
+.adhesion-submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(22, 85, 143, 0.4);
+}
+
+.adhesion-submit-btn .btn-loader {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+.adhesion-submit-btn.btn-loading .btn-loader {
+    display: inline-block;
+}
+
+.adhesion-submit-btn.btn-loading .btn-text {
+    display: none;
+}
+
+.adhesion-submit-btn.btn-loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.adhesion-info-text {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    line-height: 1.5;
+}
+
+.adhesion-info-text i {
+    color: var(--color-primary);
+}
+
+/* ----------------------------------------------------------
+   9. CTA
+   ---------------------------------------------------------- */
+.cta-section-page {
+    background: linear-gradient(135deg, #0f3f6b 0%, #16558F 50%, #1a1a1a 100%);
+    padding: 80px 0 100px;
+    text-align: center;
+}
+
+.cta-title-page {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.highlight-page { color: #D32F2F; }
+
+.cta-text-page {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 600px;
+    margin: 0 auto 35px;
+    line-height: 1.7;
+}
+
+.cta-buttons-page {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-page-don {
+    background: #D32F2F;
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid #D32F2F;
+}
+
+.btn-page-don:hover {
+    background: #b71c1c;
+    border-color: #b71c1c;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(211, 47, 47, 0.4);
+    color: #fff;
+}
+
+.btn-page-outline {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.btn-page-outline:hover {
+    background: #fff;
+    color: #16558F;
+    border-color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.2);
+}
+
+/* ----------------------------------------------------------
+   10. ANIMATIONS
+   ---------------------------------------------------------- */
+.adhesion-step,
+.adhesion-avantage-card,
+.adhesion-categorie-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.adhesion-step.visible,
+.adhesion-avantage-card.visible,
+.adhesion-categorie-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ----------------------------------------------------------
+   11. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .adhesion-avantages-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .adhesion-categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .adhesion-conditions-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .adhesion-conditions-icon {
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .adhesion-avantages-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .adhesion-categories-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .adhesion-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .adhesion-step {
+        padding: 22px 18px;
+    }
+
+    .cta-section-page {
+        padding: 60px 0 70px;
+    }
+
+    .cta-buttons-page {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-page-don,
+    .btn-page-outline {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .adhesion-avantages-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .adhesion-conditions-card {
+        padding: 22px 16px;
+    }
+}
