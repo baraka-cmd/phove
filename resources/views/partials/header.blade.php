@@ -81,9 +81,9 @@
                             <i class="fas fa-chevron-down dropdown-arrow"></i>
                         </a>
                         <ul class="header-dropdown">
-                            <li><a href="{{ url('/transparence/rapports-financiers') }}" class="dropdown-link">Rapports financiers</a></li>
-                            <li><a href="{{ url('/transparence/rapports-annuels') }}" class="dropdown-link">Rapports annuels</a></li>
-                            <li><a href="{{ url('/transparence/documents-officiels') }}" class="dropdown-link">Documents officiels</a></li>
+                            <li><a href="{{ route('transparence', ['tab' => 'financiers']) }}" class="dropdown-link">Rapports financiers</a></li>
+                            <li><a href="{{ route('transparence', ['tab' => 'annuels']) }}" class="dropdown-link">Rapports annuels</a></li>
+                            <li><a href="{{ route('transparence', ['tab' => 'documents']) }}" class="dropdown-link">Documents officiels</a></li>
                         </ul>
                     </li>
 

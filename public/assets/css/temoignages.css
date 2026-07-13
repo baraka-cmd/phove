@@ -1,0 +1,479 @@
+/* ============================================================
+   AHD-RDC — STYLES PAGE TÉMOIGNAGES
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. SECTION FILTRE PAR ZONE
+   ---------------------------------------------------------- */
+.temoignages-filtre-section {
+    padding: 0 0 var(--spacing-xl);
+    background: var(--color-bg-white);
+    position: relative;
+    z-index: 2;
+    margin-top: -30px;
+}
+
+.temoignages-filtre-bar {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px 24px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.filtre-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.filtre-label i {
+    color: var(--color-primary);
+}
+
+.filtre-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex: 1;
+}
+
+.filtre-zone-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    background: var(--color-bg-light);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.filtre-zone-btn:hover {
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    border-color: var(--color-primary-lighter);
+}
+
+.filtre-zone-btn.active {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+}
+
+.filtre-zone-btn i {
+    font-size: 10px;
+}
+
+.filtre-reset {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+}
+
+.filtre-reset:hover {
+    color: var(--color-accent-hover);
+}
+
+/* ----------------------------------------------------------
+   2. GRILLE DES TÉMOIGNAGES
+   ---------------------------------------------------------- */
+.temoignages-grid-section {
+    padding: var(--spacing-4xl) 0 var(--spacing-5xl);
+    background: var(--color-bg-light);
+}
+
+.temoignages-count {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xl);
+}
+
+.temoignages-count i {
+    color: var(--color-accent);
+    font-size: var(--font-size-md);
+}
+
+.temoignages-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+}
+
+/* ----------------------------------------------------------
+   3. CARTE TÉMOIGNAGE
+   ---------------------------------------------------------- */
+.temoignage-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.temoignage-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
+    border-color: var(--color-primary-lighter);
+}
+
+/* Icône citation */
+.temoignage-card-quote {
+    font-size: 2.5rem;
+    color: var(--color-accent);
+    opacity: 0.4;
+    margin-bottom: 10px;
+    line-height: 0.4;
+}
+
+/* Texte */
+.temoignage-card-text {
+    font-size: 0.9rem;
+    color: #444;
+    line-height: 1.9;
+    font-style: italic;
+    margin-bottom: 20px;
+    flex: 1;
+}
+
+/* Auteur */
+.temoignage-card-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color-light);
+    margin-bottom: 12px;
+}
+
+.temoignage-card-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+}
+
+.temoignage-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.temoignage-card-name {
+    font-size: var(--font-size-sm);
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.temoignage-card-location {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.temoignage-card-location i {
+    color: var(--color-accent);
+    font-size: 9px;
+}
+
+.temoignage-card-projet {
+    font-size: 11px;
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+}
+
+.temoignage-card-projet i {
+    font-size: 9px;
+}
+
+.temoignage-card-projet a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.temoignage-card-projet a:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
+/* Badge catégorie */
+.temoignage-card-categorie {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 600;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    letter-spacing: 0.3px;
+}
+
+/* ----------------------------------------------------------
+   4. ÉTAT VIDE
+   ---------------------------------------------------------- */
+.temoignages-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: var(--spacing-5xl) var(--spacing-xl);
+}
+
+.temoignages-empty-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--color-bg-light);
+    color: var(--color-text-muted);
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-lg);
+}
+
+.temoignages-empty h3 {
+    font-size: var(--font-size-xl);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.temoignages-empty p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-xl);
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ----------------------------------------------------------
+   5. PAGINATION
+   ---------------------------------------------------------- */
+.temoignages-pagination {
+    margin-top: var(--spacing-3xl);
+    display: flex;
+    justify-content: center;
+}
+
+.temoignages-pagination .pagination {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+    padding: 0;
+}
+
+.temoignages-pagination .page-item .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: #fff;
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.temoignages-pagination .page-item .page-link:hover {
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.temoignages-pagination .page-item.active .page-link {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+}
+
+/* ----------------------------------------------------------
+   6. CTA
+   ---------------------------------------------------------- */
+.cta-section-page {
+    background: linear-gradient(135deg, #0f3f6b 0%, #16558F 50%, #1a1a1a 100%);
+    padding: 80px 0 100px;
+    text-align: center;
+}
+
+.cta-title-page {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.highlight-page { color: #D32F2F; }
+
+.cta-text-page {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 600px;
+    margin: 0 auto 35px;
+    line-height: 1.7;
+}
+
+.cta-buttons-page {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-page-don {
+    background: #D32F2F;
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid #D32F2F;
+}
+
+.btn-page-don:hover {
+    background: #b71c1c;
+    border-color: #b71c1c;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(211, 47, 47, 0.4);
+    color: #fff;
+}
+
+.btn-page-outline {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.btn-page-outline:hover {
+    background: #fff;
+    color: #16558F;
+    border-color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.2);
+}
+
+/* ----------------------------------------------------------
+   7. ANIMATIONS
+   ---------------------------------------------------------- */
+.temoignage-card {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.temoignage-card.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ----------------------------------------------------------
+   8. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .temoignages-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .temoignages-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .temoignages-filtre-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .filtre-buttons {
+        width: 100%;
+    }
+
+    .cta-section-page {
+        padding: 60px 0 70px;
+    }
+
+    .cta-buttons-page {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-page-don,
+    .btn-page-outline {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .temoignage-card {
+        padding: 22px 18px;
+    }
+
+    .temoignage-card-text {
+        font-size: 0.85rem;
+    }
+}

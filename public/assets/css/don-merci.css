@@ -1,0 +1,640 @@
+/* ============================================================
+   AHD-RDC — STYLES PAGE REMERCIEMENT DON
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. SECTION REMERCIEMENT
+   ---------------------------------------------------------- */
+.merci-section {
+    padding: var(--spacing-5xl) 0 var(--spacing-4xl);
+    background: var(--color-bg-light);
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+}
+
+.merci-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 50px 40px;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.merci-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(90deg, var(--color-success) 0%, var(--color-primary) 50%, var(--color-accent) 100%);
+}
+
+/* ----------------------------------------------------------
+   2. ICÔNE DE SUCCÈS
+   ---------------------------------------------------------- */
+.merci-icon-wrapper {
+    position: relative;
+    margin-bottom: 24px;
+    display: inline-block;
+}
+
+.merci-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--color-success-light);
+    color: var(--color-success);
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Confettis */
+.merci-confetti {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.merci-confetti span {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    animation: confettiFall 2s ease-out forwards;
+    opacity: 0;
+}
+
+.merci-confetti span:nth-child(1) { background: #D32F2F; top: 0; left: 50%; animation-delay: 0.1s; }
+.merci-confetti span:nth-child(2) { background: #16558F; top: 10%; left: 20%; animation-delay: 0.2s; }
+.merci-confetti span:nth-child(3) { background: #28a745; top: 5%; left: 70%; animation-delay: 0.15s; }
+.merci-confetti span:nth-child(4) { background: #ffc107; top: 20%; left: 10%; animation-delay: 0.3s; }
+.merci-confetti span:nth-child(5) { background: #e67e22; top: 0; left: 80%; animation-delay: 0.25s; }
+.merci-confetti span:nth-child(6) { background: #8e44ad; top: 15%; left: 40%; animation-delay: 0.35s; }
+.merci-confetti span:nth-child(7) { background: #D32F2F; top: 10%; left: 60%; animation-delay: 0.4s; }
+.merci-confetti span:nth-child(8) { background: #16558F; top: 25%; left: 30%; animation-delay: 0.45s; }
+.merci-confetti span:nth-child(9) { background: #28a745; top: 5%; left: 50%; animation-delay: 0.5s; }
+.merci-confetti span:nth-child(10) { background: #ffc107; top: 20%; left: 75%; animation-delay: 0.55s; }
+
+@keyframes confettiFall {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--x, 50px), var(--y, 150px)) rotate(var(--r, 360deg)) scale(0);
+    }
+}
+
+/* Variables pour chaque confetti */
+.merci-confetti span:nth-child(1) { --x: -40px; --y: 120px; --r: 180deg; }
+.merci-confetti span:nth-child(2) { --x: 50px; --y: 140px; --r: -200deg; }
+.merci-confetti span:nth-child(3) { --x: -30px; --y: 100px; --r: 250deg; }
+.merci-confetti span:nth-child(4) { --x: 60px; --y: 130px; --r: -150deg; }
+.merci-confetti span:nth-child(5) { --x: -50px; --y: 110px; --r: 300deg; }
+.merci-confetti span:nth-child(6) { --x: 35px; --y: 125px; --r: -220deg; }
+.merci-confetti span:nth-child(7) { --x: -45px; --y: 135px; --r: 190deg; }
+.merci-confetti span:nth-child(8) { --x: 55px; --y: 115px; --r: -180deg; }
+.merci-confetti span:nth-child(9) { --x: -25px; --y: 145px; --r: 270deg; }
+.merci-confetti span:nth-child(10) { --x: 40px; --y: 105px; --r: -240deg; }
+
+/* ----------------------------------------------------------
+   3. TITRE ET SOUS-TITRE
+   ---------------------------------------------------------- */
+.merci-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 12px;
+    animation: fadeInUp 0.6s ease 0.3s forwards;
+    opacity: 0;
+}
+
+.merci-title .highlight {
+    color: var(--color-accent);
+}
+
+.merci-subtitle {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.7;
+    animation: fadeInUp 0.6s ease 0.5s forwards;
+    opacity: 0;
+}
+
+.merci-subtitle strong {
+    color: #1a1a1a;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ----------------------------------------------------------
+   4. DÉTAILS DU DON
+   ---------------------------------------------------------- */
+.merci-details {
+    background: var(--color-bg-light);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 24px;
+    text-align: left;
+    animation: fadeInUp 0.6s ease 0.7s forwards;
+    opacity: 0;
+}
+
+.merci-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-color-light);
+}
+
+.merci-detail-row:last-child {
+    border-bottom: none;
+}
+
+.merci-detail-label {
+    font-size: 13px;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.merci-detail-label i {
+    color: var(--color-primary);
+    width: 18px;
+    text-align: center;
+}
+
+.merci-detail-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    text-align: right;
+}
+
+.merci-detail-ref {
+    color: var(--color-primary);
+    font-size: 15px;
+    letter-spacing: 0.5px;
+}
+
+/* ----------------------------------------------------------
+   5. MESSAGE DU DONATEUR
+   ---------------------------------------------------------- */
+.merci-message {
+    background: #fef5e7;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    position: relative;
+    animation: fadeInUp 0.6s ease 0.9s forwards;
+    opacity: 0;
+}
+
+.merci-message i {
+    font-size: 2rem;
+    color: #e67e22;
+    opacity: 0.3;
+    position: absolute;
+    top: 8px;
+    left: 16px;
+}
+
+.merci-message p {
+    font-size: 14px;
+    color: #856404;
+    font-style: italic;
+    margin-bottom: 0;
+    line-height: 1.7;
+    padding-left: 20px;
+}
+
+/* ----------------------------------------------------------
+   6. INSTRUCTIONS DE PAIEMENT
+   ---------------------------------------------------------- */
+.merci-instructions {
+    background: #e8f0f8;
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 24px;
+    text-align: left;
+    border-left: 4px solid var(--color-primary);
+    animation: fadeInUp 0.6s ease 1s forwards;
+    opacity: 0;
+}
+
+.merci-instructions h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.merci-instructions p {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+.merci-mobile-numbers {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.merci-mobile-number {
+    background: #fff;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    border: 1px solid var(--border-color-light);
+}
+
+.merci-mobile-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.merci-mobile-number strong {
+    font-size: 1rem;
+    color: var(--color-primary);
+}
+
+.merci-instruction-note {
+    font-size: 12px !important;
+    color: var(--color-text-muted) !important;
+    margin-bottom: 0 !important;
+    font-style: italic;
+}
+
+.merci-instruction-note strong {
+    color: var(--color-accent);
+}
+
+/* ----------------------------------------------------------
+   7. ACTIONS
+   ---------------------------------------------------------- */
+.merci-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.6s ease 1.2s forwards;
+    opacity: 0;
+}
+
+.btn-cta-don {
+    background: var(--color-primary);
+    color: #fff;
+    padding: 13px 26px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid var(--color-primary);
+}
+
+.btn-cta-don:hover {
+    background: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(22, 85, 143, 0.3);
+    color: #fff;
+}
+
+.btn-cta-outline {
+    background: transparent;
+    color: var(--color-primary);
+    padding: 13px 26px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid var(--color-primary);
+}
+
+.btn-cta-outline:hover {
+    background: var(--color-primary);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(22, 85, 143, 0.3);
+}
+
+.merci-share-btn {
+    background: var(--color-accent);
+    color: #fff;
+    padding: 13px 26px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: 2px solid var(--color-accent);
+    font-family: var(--font-primary);
+}
+
+.merci-share-btn:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(211, 47, 47, 0.3);
+}
+
+/* ----------------------------------------------------------
+   8. SECTION IMPACT
+   ---------------------------------------------------------- */
+.merci-impact-section {
+    padding: var(--spacing-5xl) 0;
+    background: #fff;
+}
+
+.merci-impact-grid {
+    display: grid;
+    grid-template-cols: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.merci-impact-card {
+    background: var(--color-bg-light);
+    border-radius: 16px;
+    padding: 28px 22px;
+    text-align: center;
+    border: 1px solid var(--border-color-light);
+    transition: all 0.3s ease;
+}
+
+.merci-impact-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.merci-impact-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+}
+
+.merci-impact-card h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.merci-impact-card p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+.merci-transparence-link {
+    text-align: center;
+}
+
+/* ----------------------------------------------------------
+   9. CTA
+   ---------------------------------------------------------- */
+.cta-section-page {
+    background: linear-gradient(135deg, #0f3f6b 0%, #16558F 50%, #1a1a1a 100%);
+    padding: 80px 0 100px;
+    text-align: center;
+}
+
+.cta-title-page {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.highlight-page { color: #D32F2F; }
+
+.cta-text-page {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 600px;
+    margin: 0 auto 35px;
+    line-height: 1.7;
+}
+
+.cta-buttons-page {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-page-don {
+    background: #D32F2F;
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid #D32F2F;
+}
+
+.btn-page-don:hover {
+    background: #b71c1c;
+    border-color: #b71c1c;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(211, 47, 47, 0.4);
+    color: #fff;
+}
+
+.btn-page-outline {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.btn-page-outline:hover {
+    background: #fff;
+    color: #16558F;
+    border-color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.2);
+}
+
+/* ----------------------------------------------------------
+   10. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .merci-impact-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .merci-mobile-numbers {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .merci-section {
+        padding: var(--spacing-3xl) 0;
+    }
+
+    .merci-card {
+        padding: 35px 22px;
+        border-radius: 18px;
+    }
+
+    .merci-title {
+        font-size: 1.6rem;
+    }
+
+    .merci-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 2.5rem;
+    }
+
+    .merci-mobile-numbers {
+        grid-template-columns: 1fr;
+    }
+
+    .merci-actions {
+        flex-direction: column;
+    }
+
+    .btn-cta-don,
+    .btn-cta-outline,
+    .merci-share-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .merci-impact-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .merci-card {
+        padding: 28px 16px;
+    }
+
+    .merci-title {
+        font-size: 1.4rem;
+    }
+
+    .merci-details {
+        padding: 16px;
+    }
+
+    .merci-detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .merci-detail-value {
+        text-align: left;
+    }
+
+    .merci-impact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-section-page {
+        padding: 60px 0 70px;
+    }
+
+    .cta-buttons-page {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-page-don,
+    .btn-page-outline {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+}

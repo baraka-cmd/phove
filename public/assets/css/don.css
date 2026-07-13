@@ -1,0 +1,856 @@
+/* ============================================================
+   AHD-RDC — STYLES PAGE FAIRE UN DON
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. SECTION IMPACT — POURQUOI DONNER
+   ---------------------------------------------------------- */
+.don-pourquoi-section {
+    padding: var(--spacing-3xl) 0 var(--spacing-xl);
+    background: var(--color-bg-light);
+}
+
+.don-impact-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.don-impact-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px 20px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+}
+
+.don-impact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.don-impact-icon {
+    width: 55px;
+    height: 55px;
+    border-radius: 14px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    transition: all 0.3s ease;
+}
+
+.don-impact-card:hover .don-impact-icon {
+    background: var(--color-primary);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.don-impact-card h4 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--color-accent);
+    margin-bottom: 4px;
+}
+
+.don-impact-card p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+
+/* ----------------------------------------------------------
+   2. FORMULAIRE DE DON
+   ---------------------------------------------------------- */
+.don-form-section {
+    padding: var(--spacing-4xl) 0 var(--spacing-5xl);
+    background: #fff;
+}
+
+.don-form-wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+}
+
+/* ----------------------------------------------------------
+   3. ÉTAPES
+   ---------------------------------------------------------- */
+.don-step {
+    background: #fff;
+    border-radius: 18px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.don-step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--color-primary-lighter);
+}
+
+.don-step-number {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.don-step-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 0;
+}
+
+/* ----------------------------------------------------------
+   4. MONTANTS
+   ---------------------------------------------------------- */
+.don-montants-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.don-montant-card {
+    background: var(--color-bg-light);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 18px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.don-montant-card:hover {
+    border-color: var(--color-primary-lighter);
+    background: var(--color-primary-lighter);
+}
+
+.don-montant-card.selected {
+    border-color: var(--color-primary);
+    background: var(--color-primary-lighter);
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.1);
+}
+
+.don-montant-radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.don-montant-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    display: block;
+}
+
+.don-montant-card.selected .don-montant-value {
+    color: var(--color-primary);
+}
+
+/* Montant personnalisé */
+.don-montant-custom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.don-montant-input-wrapper {
+    display: none;
+    margin-top: 12px;
+    position: relative;
+}
+
+.don-montant-input-wrapper.visible {
+    display: flex;
+    align-items: center;
+}
+
+.don-montant-symbol {
+    position: absolute;
+    left: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    z-index: 1;
+}
+
+.don-montant-input {
+    width: 100%;
+    padding: 14px 60px 14px 36px;
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.don-montant-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.1);
+}
+
+.don-montant-currency {
+    position: absolute;
+    right: 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+/* ----------------------------------------------------------
+   5. DEVISES
+   ---------------------------------------------------------- */
+.don-devise {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.don-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.don-select {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    outline: none;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23777' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+}
+
+.don-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.1);
+}
+
+/* ----------------------------------------------------------
+   6. TYPE DE DON
+   ---------------------------------------------------------- */
+.don-type {
+    margin-bottom: 0;
+}
+
+.don-type-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.don-type-card {
+    background: var(--color-bg-light);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.don-type-card:hover {
+    border-color: var(--color-primary-lighter);
+    background: var(--color-primary-lighter);
+}
+
+.don-type-card.selected {
+    border-color: var(--color-primary);
+    background: var(--color-primary-lighter);
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.1);
+}
+
+.don-type-radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.don-type-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.don-type-content i {
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    margin-bottom: 4px;
+}
+
+.don-type-card.selected .don-type-content i {
+    color: var(--color-accent);
+}
+
+.don-type-content span {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.don-type-content small {
+    font-size: 12px;
+    color: var(--color-text-muted);
+}
+
+/* ----------------------------------------------------------
+   7. AFFECTATION
+   ---------------------------------------------------------- */
+.don-affectation-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.don-affectation-grid::-webkit-scrollbar {
+    width: 6px;
+}
+
+.don-affectation-grid::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.don-affectation-card {
+    background: var(--color-bg-light);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.don-affectation-card:hover {
+    border-color: var(--color-primary-lighter);
+    background: var(--color-primary-lighter);
+}
+
+.don-affectation-card.selected {
+    border-color: var(--color-primary);
+    background: var(--color-primary-lighter);
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.1);
+}
+
+.don-affectation-radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.don-affectation-content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.don-affectation-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #fff;
+    color: var(--color-primary);
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.don-affectation-card.selected .don-affectation-icon {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.don-affectation-content h4 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+}
+
+.don-affectation-content p {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-bottom: 0;
+}
+
+/* ----------------------------------------------------------
+   8. INFORMATIONS PERSONNELLES
+   ---------------------------------------------------------- */
+.don-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+}
+
+.don-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.don-form-full {
+    grid-column: 1 / -1;
+}
+
+.don-input {
+    padding: 13px 16px;
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+    background: #fff;
+    color: #1a1a1a;
+}
+
+.don-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.1);
+}
+
+.don-input::placeholder {
+    color: #aaa;
+}
+
+.don-input.error {
+    border-color: var(--color-accent);
+    background: #fff5f5;
+}
+
+.don-textarea {
+    padding: 13px 16px;
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+    resize: vertical;
+    background: #fff;
+    color: #1a1a1a;
+    min-height: 80px;
+}
+
+.don-textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.1);
+}
+
+.don-error {
+    font-size: 12px;
+    color: var(--color-accent);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.required {
+    color: var(--color-accent);
+}
+
+/* ----------------------------------------------------------
+   9. MODE DE PAIEMENT
+   ---------------------------------------------------------- */
+.don-paiement-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.don-paiement-card {
+    background: var(--color-bg-light);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.don-paiement-card:hover {
+    border-color: var(--color-primary-lighter);
+    background: var(--color-primary-lighter);
+}
+
+.don-paiement-card.selected {
+    border-color: var(--color-primary);
+    background: var(--color-primary-lighter);
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.1);
+}
+
+.don-paiement-radio {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.don-paiement-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.don-paiement-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: #fff;
+    color: var(--color-primary);
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.don-paiement-card.selected .don-paiement-icon {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.don-paiement-content span {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.4;
+}
+
+/* Instructions de paiement */
+.don-paiement-instructions {
+    background: #fef5e7;
+    border-radius: 10px;
+    padding: 18px;
+    border-left: 4px solid #e67e22;
+}
+
+.don-instruction-card h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #856404;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.don-instruction-card p {
+    font-size: 13px;
+    color: #856404;
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
+/* ----------------------------------------------------------
+   10. RÉCAPITULATIF
+   ---------------------------------------------------------- */
+.don-recap {
+    background: var(--color-primary-lighter);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 24px;
+    border: 2px solid var(--color-primary);
+}
+
+.don-recap h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.don-recap-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.don-recap-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95rem;
+    color: #1a1a1a;
+}
+
+.don-recap-row strong {
+    color: var(--color-primary);
+    font-size: 1rem;
+}
+
+/* ----------------------------------------------------------
+   11. SOUMISSION
+   ---------------------------------------------------------- */
+.don-submit-section {
+    text-align: center;
+}
+
+.don-conditions {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: #666;
+    cursor: pointer;
+    margin-bottom: 20px;
+    text-align: left;
+    line-height: 1.5;
+}
+
+.don-conditions input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.don-submit-btn {
+    width: 100%;
+    padding: 16px 32px;
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-hover) 100%);
+    color: #fff;
+    font-family: var(--font-primary);
+    font-size: 1.1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    letter-spacing: 0.3px;
+}
+
+.don-submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(211, 47, 47, 0.4);
+}
+
+.don-submit-btn:active {
+    transform: translateY(0);
+}
+
+.don-submit-btn .btn-loader {
+    display: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+.don-submit-btn.btn-loading .btn-loader {
+    display: inline-block;
+}
+
+.don-submit-btn.btn-loading .btn-text {
+    display: none;
+}
+
+.don-submit-btn.btn-loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.don-securite {
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.don-securite i {
+    color: var(--color-success);
+}
+
+/* ----------------------------------------------------------
+   12. SECTION TRANSPARENCE
+   ---------------------------------------------------------- */
+.don-transparence-section {
+    padding: 0 0 var(--spacing-5xl);
+    background: #fff;
+}
+
+.don-transparence-card {
+    background: var(--color-bg-light);
+    border-radius: 16px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    max-width: 780px;
+    margin: 0 auto;
+    border: 1px solid var(--border-color-light);
+}
+
+.don-transparence-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 14px;
+    background: var(--color-success-light);
+    color: var(--color-success);
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.don-transparence-content h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+}
+
+.don-transparence-content p {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+/* ----------------------------------------------------------
+   13. ANIMATIONS
+   ---------------------------------------------------------- */
+.don-step {
+    opacity: 0;
+    transform: translateY(15px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.don-step.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ----------------------------------------------------------
+   14. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .don-impact-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .don-montants-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .don-paiement-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .don-impact-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .don-montants-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .don-type-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .don-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .don-paiement-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .don-transparence-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .don-step {
+        padding: 22px 18px;
+    }
+}
+
+@media (max-width: 576px) {
+    .don-impact-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .don-montants-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .don-paiement-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .don-step-title {
+        font-size: 1.1rem;
+    }
+
+    .don-submit-btn {
+        font-size: 1rem;
+        padding: 14px 24px;
+    }
+}

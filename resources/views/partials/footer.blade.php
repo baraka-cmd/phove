@@ -70,6 +70,9 @@
                         <li><a href="{{ url('/contact') }}"><i class="fas fa-chevron-right"></i> Contact</a></li>
                         <li><a href="{{ url('/domaines-intervention') }}"><i class="fas fa-chevron-right"></i> Domaines d'intervention</a></li>
                         <li><a href="{{ url('/partenaires') }}"><i class="fas fa-chevron-right"></i> Nos Partenaires</a></li>
+                        <li><a href="{{ route('transparence', ['tab' => 'financiers']) }}"><i class="fas fa-chevron-right"></i> Rapports financiers</a></li>
+                        <li><a href="{{ route('transparence', ['tab' => 'annuels']) }}"><i class="fas fa-chevron-right"></i> Rapports annuels</a></li>
+                        <li><a href="{{ route('transparence', ['tab' => 'documents']) }}"><i class="fas fa-chevron-right"></i> Documents officiels</a></li>
                     </ul>
                 </div>
 

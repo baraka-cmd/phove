@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Public\ProjetController;
+use App\Http\Controllers\Public\ActualiteController;
+use App\Http\Controllers\Public\DonController;
 
 /*
 |--------------------------------------------------------------------------
@@ -187,15 +189,25 @@ Route::get('/projets', [ProjetController::class, 'index'])->name('projets.index'
 Route::get('/projets/{slug}', [ProjetController::class, 'show'])->name('projets.show');
 
 // Actualités
-Route::get('/actualites', function () { return 'Actualités'; })->name('actualites.index');
+Route::get('/actualites', [ActualiteController::class, 'index'])->name('actualites.index');
+Route::get('/actualites/{slug}', [ActualiteController::class, 'show'])->name('actualites.show');
+
+// Témoignages
+Route::get('/temoignages', [ActualiteController::class, 'temoignages'])->name('temoignages');
 
 // Transparence
-Route::get('/transparence/rapports-financiers', function () { return 'Rapports financiers'; })->name('transparence.rapports-financiers');
-Route::get('/transparence/rapports-annuels', function () { return 'Rapports annuels'; })->name('transparence.rapports-annuels');
-Route::get('/transparence/documents-officiels', function () { return 'Documents officiels'; })->name('transparence.documents-officiels');
-
+Route::get('/transparence', [ActualiteController::class, 'transparence'])->name('transparence');
+Route::get('/transparence/financiers', function () {
+    return redirect()->route('transparence', ['tab' => 'financiers']);
+})->name('transparence.financiers');
+Route::get('/transparence/annuels', function () {
+    return redirect()->route('transparence', ['tab' => 'annuels']);
+})->name('transparence.annuels');
+Route::get('/transparence/documents', function () {
+    return redirect()->route('transparence', ['tab' => 'documents']);
+})->name('transparence.documents');
 // Impliquez-vous
-Route::get('/faire-un-don', function () { return 'Faire un don'; })->name('don');
+
 Route::get('/devenir-membre', function () { return 'Devenir membre'; })->name('devenir-membre');
 Route::get('/devenir-benevole', function () { return 'Devenir bénévole'; })->name('devenir-benevole');
 Route::get('/devenir-partenaire', function () { return 'Devenir partenaire'; })->name('devenir-partenaire');
@@ -205,6 +217,13 @@ Route::get('/contact', function () { return 'Contact'; })->name('contact');
 
 // Recherche
 Route::get('/recherche', function () { return 'Recherche'; })->name('recherche');
+
+
+
+// Faire un don
+Route::get('/faire-un-don', [DonController::class, 'index'])->name('don');
+Route::post('/faire-un-don', [DonController::class, 'store'])->name('don.store');
+Route::get('/don/merci', [DonController::class, 'merci'])->name('don.merci');
 
 // Newsletter
 Route::post('/newsletter/subscribe', function () { return 'Abonnement newsletter'; })->name('newsletter.subscribe');
