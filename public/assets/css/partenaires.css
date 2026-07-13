@@ -1,0 +1,639 @@
+/* ============================================================
+   AHD-RDC — STYLES PAGE PARTENAIRES
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. CARTE PARTENAIRE
+   ---------------------------------------------------------- */
+.partenaire-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: var(--spacing-2xl);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    margin-bottom: var(--spacing-2xl);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.partenaire-card:last-child {
+    margin-bottom: 0;
+}
+
+.partenaire-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 100%;
+    background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    border-radius: 0 4px 4px 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.partenaire-card:hover::before {
+    opacity: 1;
+}
+
+.partenaire-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 45px rgba(0, 0, 0, 0.11);
+}
+
+.partenaire-card-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: var(--spacing-2xl);
+    align-items: center;
+}
+
+/* ----------------------------------------------------------
+   2. LOGO DU PARTENAIRE
+   ---------------------------------------------------------- */
+.partenaire-logo-wrapper {
+    text-align: center;
+    position: relative;
+}
+
+.partenaire-logo {
+    width: 150px;
+    height: 150px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, var(--color-primary-lighter) 0%, #e8f0f8 100%);
+    color: var(--color-primary);
+    font-size: 2.5rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-lg);
+    box-shadow: 0 10px 30px rgba(22, 85, 143, 0.12);
+    border: 3px solid rgba(22, 85, 143, 0.08);
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+}
+
+.partenaire-card:hover .partenaire-logo {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(22, 85, 143, 0.2);
+}
+
+.partenaire-logo-dmp {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    color: #2d7a4a;
+    border-color: rgba(45, 122, 74, 0.1);
+}
+
+.partenaire-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.partenaire-type-badge i {
+    font-size: 10px;
+}
+
+/* ----------------------------------------------------------
+   3. INFORMATIONS DU PARTENAIRE
+   ---------------------------------------------------------- */
+.partenaire-info {
+    min-width: 0;
+}
+
+.partenaire-name {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.3;
+}
+
+.partenaire-description {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* Métadonnées */
+.partenaire-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    background: var(--color-bg-light);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: 12px;
+}
+
+.partenaire-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+
+.partenaire-meta-item i {
+    color: var(--color-accent);
+    font-size: 14px;
+}
+
+.partenaire-meta-item strong {
+    color: #1a1a1a;
+}
+
+/* Projets soutenus */
+.partenaire-projets {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.partenaire-projets-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.partenaire-projets-label i {
+    color: var(--color-primary);
+}
+
+.partenaire-projets-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.partenaire-projet-tag {
+    display: inline-block;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    padding: 5px 14px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.partenaire-projet-tag:hover {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+/* ----------------------------------------------------------
+   4. TYPES DE PARTENARIAT
+   ---------------------------------------------------------- */
+.partenariat-types-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
+}
+
+.partenariat-type-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.partenariat-type-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.partenariat-type-card:hover::before {
+    transform: scaleX(1);
+}
+
+.partenariat-type-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.1);
+}
+
+.partenariat-type-icon {
+    width: 65px;
+    height: 65px;
+    border-radius: 16px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-lg);
+    transition: all 0.3s ease;
+}
+
+.partenariat-type-card:hover .partenariat-type-icon {
+    background: var(--color-primary);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.partenariat-type-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: var(--spacing-sm);
+}
+
+.partenariat-type-text {
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.7;
+}
+
+/* ----------------------------------------------------------
+   5. SECTION DEVENIR PARTENAIRE
+   ---------------------------------------------------------- */
+.devenir-partenaire-section {
+    padding: var(--spacing-5xl) 0;
+    background: var(--color-bg-light);
+}
+
+.devenir-partenaire-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: var(--spacing-3xl);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.07);
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: var(--spacing-3xl);
+    align-items: center;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.devenir-partenaire-content .section-subtitle {
+    text-align: left;
+}
+
+.devenir-partenaire-content .section-title {
+    text-align: left;
+    margin-bottom: var(--spacing-lg);
+}
+
+.devenir-partenaire-content .content-block-text {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: var(--spacing-lg);
+}
+
+.devenir-partenaire-content .check-list {
+    margin-bottom: var(--spacing-xl);
+}
+
+.devenir-partenaire-content .check-list li {
+    font-size: 0.9rem;
+    padding: var(--spacing-xs) 0;
+}
+
+.devenir-partenaire-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+/* Visuel */
+.devenir-partenaire-visual {
+    text-align: center;
+}
+
+.devenir-partenaire-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary-lighter) 0%, rgba(211, 47, 47, 0.08) 100%);
+    color: var(--color-primary);
+    font-size: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-lg);
+    border: 4px dashed rgba(22, 85, 143, 0.15);
+    transition: all 0.4s ease;
+}
+
+.devenir-partenaire-card:hover .devenir-partenaire-circle {
+    transform: rotate(10deg) scale(1.05);
+    border-color: var(--color-accent);
+}
+
+.devenir-partenaire-slogan {
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+/* ----------------------------------------------------------
+   6. CTA PARTENAIRES — STYLE CORRIGÉ
+   ---------------------------------------------------------- */
+.cta-section-partenaires {
+    background: linear-gradient(135deg, #0f3f6b 0%, #16558F 50%, #1a1a1a 100%);
+    padding: 80px 0 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Cercles décoratifs */
+.cta-section-partenaires .cta-decoration {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.cta-section-partenaires .cta-decoration-left {
+    top: -120px;
+    right: -120px;
+    width: 450px;
+    height: 450px;
+    background: rgba(211, 47, 47, 0.05);
+}
+
+.cta-section-partenaires .cta-decoration-right {
+    bottom: -180px;
+    left: -180px;
+    width: 550px;
+    height: 550px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Titre */
+.cta-title-partenaires {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.highlight-partenaires {
+    color: #D32F2F;
+}
+
+/* Texte */
+.cta-text-partenaires {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 600px;
+    margin: 0 auto 35px;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+}
+
+/* Conteneur des boutons */
+.cta-buttons-partenaires {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+/* Bouton Devenir partenaire (rouge) */
+.btn-partenaires-don {
+    background: #D32F2F;
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid #D32F2F;
+}
+
+.btn-partenaires-don:hover {
+    background: #b71c1c;
+    border-color: #b71c1c;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(211, 47, 47, 0.4);
+    color: #fff;
+}
+
+/* Bouton Voir nos projets (blanc transparent) */
+.btn-partenaires-outline {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.btn-partenaires-outline:hover {
+    background: #fff;
+    color: #16558F;
+    border-color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .cta-section-partenaires {
+        padding: 60px 0 70px;
+    }
+
+    .cta-buttons-partenaires {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-partenaires-don,
+    .btn-partenaires-outline {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+/* ----------------------------------------------------------
+   7. ANIMATIONS
+   ---------------------------------------------------------- */
+.partenaire-card,
+.partenariat-type-card,
+.devenir-partenaire-card {
+    opacity: 0;
+    transform: translateY(25px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.partenaire-card.animated,
+.partenariat-type-card.animated,
+.devenir-partenaire-card.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ----------------------------------------------------------
+   8. ALIGNEMENT
+   ---------------------------------------------------------- */
+.text-left {
+    text-align: left;
+}
+
+/* ----------------------------------------------------------
+   9. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .partenaire-card-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+        text-align: center;
+    }
+
+    .partenaire-logo {
+        width: 120px;
+        height: 120px;
+        border-radius: 24px;
+        font-size: 2rem;
+    }
+
+    .partenaire-meta {
+        justify-content: center;
+    }
+
+    .partenaire-projets {
+        justify-content: center;
+    }
+
+    .partenariat-types-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .devenir-partenaire-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .devenir-partenaire-content .section-subtitle,
+    .devenir-partenaire-content .section-title {
+        text-align: center;
+    }
+
+    .devenir-partenaire-content .check-list li {
+        justify-content: center;
+    }
+
+    .devenir-partenaire-actions {
+        justify-content: center;
+    }
+
+    .devenir-partenaire-circle {
+        width: 140px;
+        height: 140px;
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .partenaire-card {
+        padding: var(--spacing-xl);
+    }
+
+    .partenaire-name {
+        font-size: 1.3rem;
+    }
+
+    .partenaire-meta {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .partenariat-types-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .devenir-partenaire-card {
+        padding: var(--spacing-xl);
+    }
+
+    .devenir-partenaire-actions {
+        flex-direction: column;
+    }
+
+    .devenir-partenaire-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .partenaire-card {
+        padding: var(--spacing-lg);
+        border-radius: 14px;
+    }
+
+    .partenaire-logo {
+        width: 100px;
+        height: 100px;
+        border-radius: 20px;
+        font-size: 1.6rem;
+    }
+
+    .partenaire-name {
+        font-size: 1.2rem;
+    }
+
+    .partenaire-description {
+        font-size: 0.85rem;
+    }
+
+    .devenir-partenaire-card {
+        padding: var(--spacing-lg);
+        border-radius: 14px;
+    }
+
+    .devenir-partenaire-circle {
+        width: 120px;
+        height: 120px;
+        font-size: 2.5rem;
+    }
+}

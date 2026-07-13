@@ -1,0 +1,801 @@
+/* ============================================================
+   AHD-RDC — STYLES TOPBAR + HEADER (CORRIGÉ)
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   Corrections : z-index header, dropdowns opaques, espacement
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. TOPBAR
+   ---------------------------------------------------------- */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--topbar-height);
+    background: var(--color-bg-dark);
+    z-index: 10000 !important; /* Juste au-dessus du header */
+    transition: transform var(--transition-base);
+    transform: translateZ(0);
+}
+
+
+.topbar.hidden {
+    transform: translateY(-100%);
+}
+
+.topbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--topbar-height);
+}
+
+/* Contacts gauche */
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
+.topbar-contact {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    white-space: nowrap;
+}
+
+.topbar-contact:hover {
+    color: var(--color-text-white);
+}
+
+.topbar-contact i {
+    font-size: 11px;
+    color: var(--color-accent);
+    width: 14px;
+    text-align: center;
+}
+
+/* Droite */
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+/* Réseaux sociaux */
+.topbar-socials {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.topbar-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: var(--border-radius-circle);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: var(--font-size-xs);
+    transition: all var(--transition-fast);
+}
+
+.topbar-social:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-white);
+}
+
+/* Séparateur */
+.topbar-divider {
+    width: 1px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Sélecteur de langues */
+.topbar-languages {
+    position: relative;
+}
+
+.topbar-lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 4px 10px;
+    border-radius: var(--border-radius-xs);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.topbar-lang-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    color: var(--color-text-white);
+}
+
+.topbar-lang-btn .fa-globe {
+    font-size: 12px;
+    color: var(--color-accent);
+}
+
+.topbar-lang-btn .fa-chevron-down {
+    font-size: 8px;
+    transition: transform var(--transition-fast);
+}
+
+.topbar-lang-btn.open .fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+/* ============================================================
+   MODIFICATION DANS : public/assets/css/public-header.css
+   ============================================================ */
+
+.topbar-lang-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: #ffffff !important;  /* Force le fond blanc totalement opaque */
+    border-radius: var(--border-radius-sm);
+    box-shadow: var(--shadow-lg);
+    min-width: 150px;
+    padding: var(--spacing-xs) 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-5px);
+    transition: all var(--transition-fast);
+    
+    /* CORRECTION ICI : On lui donne un z-index ultra élevé */
+    z-index: 99999 !important;
+}
+
+
+.topbar-lang-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* ============================================================
+   CORRECTION ALIGNEMENT DES LANGUES DANS : public-header.css
+   ============================================================ */
+
+.topbar-lang-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;                  /* Crée un espace propre entre le drapeau et le texte */
+    padding: 10px 16px;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    background: #ffffff;        /* Assure l'opacité */
+    white-space: nowrap;        /* Force le texte à rester sur une seule ligne */
+}
+
+
+.topbar-lang-option i.fa-flag {
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+/* Couleurs personnalisées pour chaque pays */
+.flag-fr { color: #16558F; } /* Bleu */
+.flag-en { color: #D32F2F; } /* Rouge */
+.flag-rdc { color: #007FFF; } /* Bleu RDC */
+
+
+.topbar-lang-option:hover {
+    background: var(--color-bg-light);
+    color: var(--color-primary);
+}
+
+.topbar-lang-option.active {
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Sécurité pour la taille et le comportement du drapeau */
+.lang-flag {
+    width: 20px;
+    height: 14px;
+    border-radius: 2px;
+    object-fit: cover;
+    flex-shrink: 0;
+    display: inline-block;
+    /* Sécurité si l'image est cassée : évite d'afficher le texte alt de façon moche */
+    font-size: 0;
+    color: transparent;
+    text-indent: -9999px;
+}
+
+
+
+/* ----------------------------------------------------------
+   2. HEADER — CORRIGÉ (Forçage de l'empilement)
+   ---------------------------------------------------------- */
+.header {
+    position: fixed;
+    top: var(--topbar-height);
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    background: #ffffff !important; /* Force l'opacité totale blanche */
+    border-bottom: 1px solid var(--border-color-light);
+    z-index: 9999 !important; /* On met une valeur brute ultra haute temporairement */
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-xs);
+    
+    /* Force le navigateur à détacher le header du flux du Hero */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+
+/* ============================================================
+   MODIFICATION À FAIRE DANS : public/assets/css/public-header.css
+   ============================================================ */
+
+.header.scrolled {
+    top: 0 !important;             /* Supprime l'espace laissé par la topbar */
+    background: #ffffff !important; /* Garde le fond blanc opaque */
+    box-shadow: var(--shadow-md);   /* Ajoute une ombre légère sous le menu */
+    height: 70px;                   /* Réduit légèrement la hauteur du menu au scroll */
+}
+
+
+.header.scrolled .header-logo-img {
+    width: 40px;
+    height: 40px;
+}
+
+.header.scrolled .header-logo-name {
+    font-size: var(--font-size-lg);
+}
+
+.header.scrolled .header-logo-subtitle {
+    display: none;
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-height);
+    transition: height var(--transition-base);
+    position: relative;
+}
+
+.header.scrolled .header-inner {
+    height: 70px;
+}
+
+/* Logo */
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-decoration: none;
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+.header-logo-img {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--border-radius-circle);
+    transition: all var(--transition-base);
+}
+
+.header-logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.header-logo-name {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-extrabold);
+    color: var(--color-primary);
+    letter-spacing: 1px;
+    transition: font-size var(--transition-base);
+}
+
+.text-accent {
+    color: var(--color-accent);
+}
+
+.header-logo-subtitle {
+    font-size: 10px;
+    font-weight: var(--font-weight-light);
+    color: var(--color-text-muted);
+    letter-spacing: 0.5px;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+}
+
+/* ----------------------------------------------------------
+   3. MENU PRINCIPAL
+   ---------------------------------------------------------- */
+.header-nav {
+    margin-left: auto;
+    margin-right: var(--spacing-xl);
+}
+
+.header-menu {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.header-menu-item {
+    position: relative;
+}
+
+.header-menu-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    background: transparent;
+    cursor: pointer;
+}
+
+.header-menu-link i {
+    font-size: 13px;
+}
+
+.header-menu-link .fa-home,
+.header-menu-link .fa-users,
+.header-menu-link .fa-hand-holding-heart,
+.header-menu-link .fa-newspaper,
+.header-menu-link .fa-search-dollar,
+.header-menu-link .fa-hands-helping,
+.header-menu-link .fa-envelope-open-text {
+    color: var(--color-primary);
+    opacity: 0.7;
+}
+
+.header-menu-link:hover {
+    color: var(--color-primary);
+    background: var(--color-primary-lighter);
+}
+
+.header-menu-link.active {
+    color: var(--color-primary);
+    background: var(--color-primary-lighter);
+    font-weight: var(--font-weight-semibold);
+}
+
+.dropdown-arrow {
+    font-size: 8px;
+    transition: transform var(--transition-fast);
+}
+
+.header-menu-item:hover .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+/* ----------------------------------------------------------
+   4. DROPDOWN MENU — CORRIGÉ (fond opaque, z-index fort)
+   ---------------------------------------------------------- */
+.header-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: var(--color-bg-white);
+    min-width: 240px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-xl);
+    padding: var(--spacing-sm) 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+    z-index: var(--z-dropdown);
+    border: 1px solid var(--border-color-light);
+    background-color: #ffffff;
+}
+
+.header-menu-item:hover .header-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.header-dropdown-large {
+    min-width: 320px;
+}
+
+.dropdown-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 11px 20px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    background: #ffffff;
+}
+
+.dropdown-link i {
+    width: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--color-primary);
+    opacity: 0.7;
+}
+
+.dropdown-link:hover {
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    padding-left: 24px;
+}
+
+.dropdown-link .text-accent {
+    color: var(--color-accent) !important;
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--border-color-light);
+    margin: var(--spacing-xs) 0;
+}
+
+/* ----------------------------------------------------------
+   5. ACTIONS HEADER
+   ---------------------------------------------------------- */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+/* Bouton recherche */
+.header-search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--color-bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-circle);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.header-search-btn:hover {
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* Bouton don */
+.header-donate-btn {
+    animation: pulse 2s infinite;
+}
+
+/* Bouton admin */
+.header-admin-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--color-primary);
+    border-radius: var(--border-radius-circle);
+    color: var(--color-text-white);
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.header-admin-btn:hover {
+    background: var(--color-primary-dark);
+    transform: scale(1.05);
+}
+
+/* ----------------------------------------------------------
+   6. BARRE DE RECHERCHE
+   ---------------------------------------------------------- */
+.header-search-bar {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--color-bg-white);
+    border-bottom: 3px solid var(--color-primary);
+    box-shadow: var(--shadow-lg);
+    padding: var(--spacing-lg) 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all var(--transition-base);
+    z-index: var(--z-search-bar);
+}
+
+.header-search-bar.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.search-form {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.search-input-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.search-input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-md);
+    pointer-events: none;
+}
+
+.search-input {
+    width: 100%;
+    padding: 14px 50px 14px 44px;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    outline: none;
+    transition: all var(--transition-base);
+}
+
+.search-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-focus);
+}
+
+.search-input::placeholder {
+    color: var(--color-text-light);
+    font-style: italic;
+}
+
+.search-close {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-md);
+    cursor: pointer;
+    padding: 4px;
+    transition: color var(--transition-fast);
+}
+
+.search-close:hover {
+    color: var(--color-accent);
+}
+
+.search-submit {
+    flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------
+   7. BURGER MENU MOBILE
+   ---------------------------------------------------------- */
+.header-burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    background: var(--color-bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    padding: 8px;
+    transition: all var(--transition-fast);
+}
+
+.burger-line {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--color-text-primary);
+    border-radius: 2px;
+    transition: all var(--transition-base);
+}
+
+.header-burger.active .burger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.header-burger.active .burger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.header-burger.active .burger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ----------------------------------------------------------
+   8. OVERLAY MENU MOBILE
+   ---------------------------------------------------------- */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: var(--z-overlay);
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+}
+
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ----------------------------------------------------------
+   9. MENU MOBILE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .header-burger {
+        display: flex;
+    }
+
+    .header-nav {
+        position: fixed;
+        top: 0;
+        right: -320px;
+        width: 300px;
+        height: 100vh;
+        background: var(--color-bg-white);
+        box-shadow: var(--shadow-xl);
+        padding: var(--spacing-xl);
+        padding-top: calc(var(--topbar-height) + var(--header-height) + var(--spacing-xl));
+        transition: right var(--transition-base);
+        z-index: var(--z-nav-mobile);
+        overflow-y: auto;
+        margin: 0;
+    }
+
+    .header-nav.active {
+        right: 0;
+    }
+
+    .header-menu {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+    }
+
+    .header-menu-item {
+        border-bottom: 1px solid var(--border-color-light);
+    }
+
+    .header-menu-link {
+        padding: 14px 0;
+        font-size: var(--font-size-base);
+        border-radius: 0;
+    }
+
+    .header-menu-link:hover {
+        background: transparent;
+    }
+
+    .dropdown-arrow {
+        margin-left: auto;
+    }
+
+    .header-dropdown {
+        position: static;
+        transform: none;
+        box-shadow: none;
+        border: none;
+        padding: 0 0 var(--spacing-sm) var(--spacing-lg);
+        display: none;
+        opacity: 1;
+        visibility: visible;
+        min-width: auto;
+        background: transparent;
+    }
+
+    .header-dropdown-large {
+        min-width: auto;
+    }
+
+    .dropdown-link {
+        background: transparent;
+    }
+
+    .header-menu-item.dropdown-open .header-dropdown {
+        display: block;
+    }
+
+    .header-donate-btn span {
+        display: none;
+    }
+
+    .header-donate-btn {
+        padding: 10px 12px;
+    }
+}
+
+/* ----------------------------------------------------------
+   10. RESPONSIVE TOPBAR
+   ---------------------------------------------------------- */
+@media (max-width: 768px) {
+    .topbar-left .topbar-contact:nth-child(3) {
+        display: none;
+    }
+
+    .topbar-socials .topbar-social:nth-child(4),
+    .topbar-socials .topbar-social:nth-child(5) {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .topbar-contact span {
+        display: none;
+    }
+
+    .topbar-contact i {
+        font-size: 14px;
+    }
+
+    .topbar-socials {
+        gap: 0;
+    }
+
+    .header-logo-name {
+        font-size: var(--font-size-lg);
+    }
+
+    .header-logo-subtitle {
+        display: none;
+    }
+
+    .header-logo-img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .header-donate-btn span {
+        display: none;
+    }
+}

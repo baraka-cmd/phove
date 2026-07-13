@@ -1,0 +1,563 @@
+/* ============================================================
+   AHD-RDC — STYLES PAGE ORGANIGRAMME
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. STRUCTURE DE L'ORGANIGRAMME
+   ---------------------------------------------------------- */
+.org-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: var(--spacing-2xl) 0;
+    overflow-x: auto;
+}
+
+/* Niveau */
+.org-level {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-3xl);
+    width: 100%;
+    max-width: 900px;
+}
+
+.org-level-2 {
+    max-width: 750px;
+}
+
+.org-level-4 {
+    max-width: 850px;
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+}
+
+/* ----------------------------------------------------------
+   2. CONNECTEURS (LIGNES)
+   ---------------------------------------------------------- */
+.org-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+}
+
+.org-line {
+    width: 3px;
+    height: 35px;
+    background: var(--border-color);
+    position: relative;
+}
+
+.org-line-single {
+    background: linear-gradient(to bottom, var(--border-color), var(--color-primary));
+}
+
+/* Split pour 2 branches */
+.org-split {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 550px;
+    position: relative;
+}
+
+.org-split::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 15%;
+    right: 15%;
+    height: 3px;
+    background: var(--border-color);
+}
+
+.org-split-4::before {
+    left: 8%;
+    right: 8%;
+}
+
+.org-line-branch {
+    width: 3px;
+    height: 35px;
+    background: var(--border-color);
+}
+
+.org-line-branch.left {
+    background: linear-gradient(to bottom, var(--border-color), var(--color-primary));
+}
+
+.org-line-branch.right {
+    background: linear-gradient(to bottom, var(--border-color), var(--color-accent));
+}
+
+/* ----------------------------------------------------------
+   3. BOÎTES DE L'ORGANIGRAMME
+   ---------------------------------------------------------- */
+.org-box {
+    background: var(--color-bg-white);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    border: 2px solid var(--border-color-light);
+    text-align: center;
+    transition: all var(--transition-base);
+    position: relative;
+    min-width: 180px;
+    cursor: default;
+}
+
+.org-box:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+}
+
+/* Assemblée Générale */
+.org-box-ag {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, var(--color-primary-lighter) 0%, var(--color-bg-white) 100%);
+    min-width: 300px;
+    max-width: 450px;
+}
+
+.org-box-ag .org-box-icon {
+    background: var(--color-primary);
+    color: var(--color-text-white);
+}
+
+.org-box-ag:hover {
+    border-color: var(--color-primary-dark);
+}
+
+/* Conseil d'Administration */
+.org-box-ca {
+    border-color: #2d7a4a;
+    background: linear-gradient(135deg, #e8f5e9 0%, var(--color-bg-white) 100%);
+}
+
+.org-box-ca .org-box-icon {
+    background: #2d7a4a;
+    color: var(--color-text-white);
+}
+
+/* Commission de Contrôle */
+.org-box-cc {
+    border-color: #8e44ad;
+    background: linear-gradient(135deg, #f3e5f5 0%, var(--color-bg-white) 100%);
+}
+
+.org-box-cc .org-box-icon {
+    background: #8e44ad;
+    color: var(--color-text-white);
+}
+
+/* Direction Exécutive */
+.org-box-de {
+    border-color: var(--color-accent);
+    background: linear-gradient(135deg, var(--color-bg-accent-light) 0%, var(--color-bg-white) 100%);
+    min-width: 300px;
+    max-width: 450px;
+}
+
+.org-box-de .org-box-icon {
+    background: var(--color-accent);
+    color: var(--color-text-white);
+}
+
+.org-box-de:hover {
+    border-color: var(--color-accent-hover);
+}
+
+/* Bureau des Programmes */
+.org-box-prog {
+    border-color: #d35400;
+    background: linear-gradient(135deg, #fef5e7 0%, var(--color-bg-white) 100%);
+}
+
+.org-box-prog .org-box-icon {
+    background: #d35400;
+    color: var(--color-text-white);
+}
+
+/* Administration & Finance */
+.org-box-admin {
+    border-color: #2980b9;
+    background: linear-gradient(135deg, #eaf2f8 0%, var(--color-bg-white) 100%);
+}
+
+.org-box-admin .org-box-icon {
+    background: #2980b9;
+    color: var(--color-text-white);
+}
+
+/* Sous-départements */
+.org-box-sub {
+    border-color: #7f8c8d;
+    background: linear-gradient(135deg, #f2f4f4 0%, var(--color-bg-white) 100%);
+    min-width: 150px;
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.org-box-sub .org-box-icon {
+    background: #7f8c8d;
+    color: var(--color-text-white);
+}
+
+/* Structures de Base */
+.org-box-base {
+    border-color: #27ae60;
+    background: linear-gradient(135deg, #e8f8f5 0%, var(--color-bg-white) 100%);
+    min-width: 300px;
+    max-width: 450px;
+}
+
+.org-box-base .org-box-icon {
+    background: #27ae60;
+    color: var(--color-text-white);
+}
+
+/* ----------------------------------------------------------
+   4. ICÔNES DES BOÎTES
+   ---------------------------------------------------------- */
+.org-box-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: var(--border-radius-circle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin: 0 auto var(--spacing-sm);
+    transition: all var(--transition-base);
+}
+
+.org-box-icon-sm {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+}
+
+.org-box:hover .org-box-icon {
+    transform: scale(1.1) rotate(-5deg);
+}
+
+/* ----------------------------------------------------------
+   5. CONTENU DES BOÎTES
+   ---------------------------------------------------------- */
+.org-box-content {
+    text-align: center;
+}
+
+.org-box-title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.org-box-subtitle {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-bottom: 4px;
+}
+
+.org-box-info {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    background: var(--color-primary-lighter);
+    padding: 2px 10px;
+    border-radius: var(--border-radius-full);
+}
+
+.org-box-de .org-box-info {
+    color: var(--color-accent);
+    background: var(--color-bg-accent-light);
+}
+
+/* ----------------------------------------------------------
+   6. LÉGENDE
+   ---------------------------------------------------------- */
+.legend-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--color-bg-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-xs);
+    border: 1px solid var(--border-color-light);
+    transition: all var(--transition-fast);
+}
+
+.legend-item:hover {
+    box-shadow: var(--shadow-sm);
+    transform: translateX(3px);
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: var(--border-radius-xs);
+    flex-shrink: 0;
+}
+
+.legend-ag { background: var(--color-primary); }
+.legend-ca { background: #2d7a4a; }
+.legend-cc { background: #8e44ad; }
+.legend-de { background: var(--color-accent); }
+.legend-prog { background: #d35400; }
+.legend-admin { background: #2980b9; }
+.legend-sub { background: #7f8c8d; }
+.legend-base { background: #27ae60; }
+
+.legend-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.legend-text strong {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-primary);
+}
+
+.legend-text span {
+    font-size: 10px;
+    color: var(--color-text-muted);
+    line-height: 1.4;
+}
+
+/* ----------------------------------------------------------
+   7. ALIGNEMENT
+   ---------------------------------------------------------- */
+.text-left {
+    text-align: left;
+}
+
+/* ----------------------------------------------------------
+   8. ANIMATION
+   ---------------------------------------------------------- */
+.org-box {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease;
+}
+
+.org-box.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ----------------------------------------------------------
+   9. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .org-chart {
+        padding: var(--spacing-xl) 0;
+    }
+
+    .org-level-4 {
+        gap: var(--spacing-md);
+    }
+
+    .org-box {
+        min-width: 140px;
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+
+    .org-box-ag,
+    .org-box-de,
+    .org-box-base {
+        min-width: 220px;
+        max-width: 350px;
+    }
+
+    .legend-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .org-chart {
+        align-items: flex-start;
+        padding: var(--spacing-md);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .org-level {
+        gap: var(--spacing-lg);
+        min-width: 650px;
+        justify-content: space-around;
+    }
+
+    .org-level-4 {
+        min-width: 700px;
+    }
+
+    .org-connector {
+        min-width: 650px;
+    }
+
+    .org-split {
+        max-width: 400px;
+    }
+
+    .org-box {
+        min-width: 120px;
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .org-box-ag,
+    .org-box-de,
+    .org-box-base {
+        min-width: 180px;
+    }
+
+    .org-box-title {
+        font-size: var(--font-size-xs);
+    }
+
+    .org-box-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .org-box-icon-sm {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+
+    .legend-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .org-level {
+        min-width: 500px;
+    }
+
+    .org-connector {
+        min-width: 500px;
+    }
+
+    .org-box {
+        min-width: 100px;
+        padding: var(--spacing-sm);
+    }
+
+    .org-box-ag,
+    .org-box-de,
+    .org-box-base {
+        min-width: 150px;
+    }
+
+    .org-box-subtitle,
+    .org-box-info {
+        display: none;
+    }
+}
+
+
+
+/* ----------------------------------------------------------
+   10. CTA PAGE — STYLE CORRIGÉ
+   ---------------------------------------------------------- */
+.cta-section-page {
+    background: linear-gradient(135deg, #0f3f6b 0%, #16558F 50%, #1a1a1a 100%);
+    padding: 80px 0 100px;
+    text-align: center;
+}
+
+.cta-title-page {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.highlight-page { color: #D32F2F; }
+
+.cta-text-page {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 600px;
+    margin: 0 auto 35px;
+    line-height: 1.7;
+}
+
+.cta-buttons-page {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-page-don {
+    background: #D32F2F;
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid #D32F2F;
+}
+
+.btn-page-don:hover {
+    background: #b71c1c;
+    border-color: #b71c1c;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(211, 47, 47, 0.4);
+    color: #fff;
+}
+
+.btn-page-outline {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.btn-page-outline:hover {
+    background: #fff;
+    color: #16558F;
+    border-color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 576px) {
+    .cta-section-page { padding: 60px 0 70px; }
+    .cta-buttons-page { flex-direction: column; align-items: center; }
+    .btn-page-don, .btn-page-outline { width: 100%; justify-content: center; text-align: center; }
+}

@@ -1,0 +1,736 @@
+/* ============================================================
+   AHD-RDC — STYLES COMMUNS D'AUTHENTIFICATION
+   Action Humanitaire pour le Développement en RD Congo
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. VARIABLES CSS
+   ---------------------------------------------------------- */
+:root {
+    /* Couleurs principales — issues du logo AHD-RDC */
+    --color-primary: #16558F;
+    --color-primary-dark: #0f3f6b;
+    --color-primary-light: #2874b8;
+    --color-accent: #D32F2F;
+    --color-accent-hover: #b71c1c;
+
+    /* Couleurs de fond */
+    --color-bg-light: #f8f9fa;
+    --color-bg-white: #ffffff;
+    --color-bg-overlay: rgba(22, 85, 143, 0.03);
+    --color-bg-dark: #1A1A1A;
+
+    /* Couleurs de texte */
+    --color-text-primary: #1A1A1A;
+    --color-text-secondary: #555555;
+    --color-text-muted: #888888;
+    --color-text-white: #ffffff;
+
+    /* Couleurs fonctionnelles */
+    --color-success: #28a745;
+    --color-error: #dc3545;
+    --color-error-bg: #f8d7da;
+    --color-error-border: #f5c6cb;
+    --color-error-text: #721c24;
+    --color-warning: #ffc107;
+    --color-info: #17a2b8;
+
+    /* Bordures */
+    --border-color: #e0e0e0;
+    --border-focus: #16558F;
+    --border-radius: 10px;
+    --border-radius-sm: 6px;
+    --border-radius-lg: 14px;
+    --border-radius-full: 50px;
+
+    /* Ombres */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+    --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.15);
+    --shadow-focus: 0 0 0 3px rgba(22, 85, 143, 0.15);
+
+    /* Typographie */
+    --font-primary: 'Poppins', sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.85rem;
+    --font-size-base: 0.95rem;
+    --font-size-md: 1.05rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5rem;
+    --font-size-2xl: 2rem;
+    --font-size-3xl: 2.5rem;
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+
+    /* Espacements */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-base: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* ----------------------------------------------------------
+   2. RESET DE BASE
+   ---------------------------------------------------------- */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-regular);
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-light);
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ----------------------------------------------------------
+   3. LAYOUT PRINCIPAL — DEUX COLONNES
+   ---------------------------------------------------------- */
+.auth-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: var(--spacing-md);
+    background: linear-gradient(135deg, #e8edf3 0%, #f0f2f5 50%, #f8f9fa 100%);
+}
+
+.auth-wrapper {
+    display: flex;
+    width: 100%;
+    max-width: 1100px;
+    min-height: 650px;
+    background: var(--color-bg-white);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+}
+
+/* ----------------------------------------------------------
+   4. COLONNE BRANDING (GAUCHE)
+   ---------------------------------------------------------- */
+.auth-branding {
+    width: 45%;
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 50%, var(--color-primary-light) 100%);
+    color: var(--color-text-white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-3xl) var(--spacing-2xl);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Motif de fond subtil */
+.auth-branding::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 30px 30px;
+    pointer-events: none;
+}
+
+/* Cercle décoratif */
+.auth-branding::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    right: -80px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    pointer-events: none;
+}
+
+.auth-branding-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 380px;
+}
+
+/* Logo */
+.auth-logo {
+    margin-bottom: var(--spacing-xl);
+}
+
+.auth-logo-img {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    transition: transform var(--transition-base);
+}
+
+.auth-logo-img:hover {
+    transform: scale(1.05);
+}
+
+/* Nom de l'organisation */
+.auth-org-name {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-extrabold);
+    letter-spacing: 2px;
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+}
+
+.text-accent {
+    color: var(--color-accent);
+}
+
+/* Nom complet */
+.auth-org-fullname {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-light);
+    line-height: 1.5;
+    opacity: 0.9;
+    margin-bottom: var(--spacing-lg);
+    letter-spacing: 0.3px;
+}
+
+/* Slogan */
+.auth-slogan {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1.6;
+}
+
+.auth-slogan .fa-quote-left {
+    margin-right: 6px;
+    opacity: 0.7;
+    font-size: var(--font-size-sm);
+}
+
+.auth-slogan .fa-quote-right {
+    margin-left: 6px;
+    opacity: 0.7;
+    font-size: var(--font-size-sm);
+}
+
+/* Badges des valeurs */
+.auth-values {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    margin-bottom: var(--spacing-2xl);
+}
+
+.auth-value-badge {
+    background: rgba(255, 255, 255, 0.12);
+    padding: 6px 14px;
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.3px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: all var(--transition-fast);
+}
+
+.auth-value-badge:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.auth-value-badge .fa-check-circle {
+    color: var(--color-accent);
+    margin-right: 4px;
+    font-size: 10px;
+}
+
+/* Footer branding */
+.auth-branding-footer {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-xl);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.auth-branding-footer p {
+    font-size: var(--font-size-xs);
+    opacity: 0.7;
+    margin-bottom: 4px;
+}
+
+.auth-location {
+    font-style: italic;
+}
+
+.auth-location .fa-map-marker-alt {
+    color: var(--color-accent);
+    margin-right: 4px;
+}
+
+/* ----------------------------------------------------------
+   5. COLONNE FORMULAIRE (DROITE)
+   ---------------------------------------------------------- */
+.auth-form-side {
+    width: 55%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-3xl) var(--spacing-2xl);
+    background: var(--color-bg-white);
+}
+
+.auth-form-container {
+    width: 100%;
+    max-width: 420px;
+}
+
+/* ----------------------------------------------------------
+   6. TITRES DES FORMULAIRES
+   ---------------------------------------------------------- */
+.auth-form-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.2;
+}
+
+.auth-form-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-xl);
+    font-weight: var(--font-weight-regular);
+}
+
+/* ----------------------------------------------------------
+   7. FORMULAIRES
+   ---------------------------------------------------------- */
+.auth-form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: var(--spacing-lg);
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: 0.2px;
+}
+
+.form-label .required {
+    color: var(--color-error);
+    margin-left: 2px;
+}
+
+/* Champ avec icône */
+.input-icon-wrapper {
+    position: relative;
+}
+
+.input-icon-wrapper .form-input {
+    padding-left: 44px;
+    padding-right: 44px;
+}
+
+.input-icon-wrapper .input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+    transition: color var(--transition-fast);
+    pointer-events: none;
+}
+
+.input-icon-wrapper .input-icon-right {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.input-icon-wrapper .input-icon-right:hover {
+    color: var(--color-primary);
+}
+
+/* Champ input */
+.form-input {
+    width: 100%;
+    padding: 13px 16px;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    color: var(--color-text-primary);
+    background: var(--color-bg-light);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius);
+    outline: none;
+    transition: all var(--transition-base);
+}
+
+.form-input:focus {
+    border-color: var(--border-focus);
+    background: var(--color-bg-white);
+    box-shadow: var(--shadow-focus);
+}
+
+.form-input::placeholder {
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-light);
+    font-size: var(--font-size-sm);
+}
+
+.form-input.error {
+    border-color: var(--color-error);
+    background: #fff5f5;
+}
+
+.form-input.error:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.15);
+}
+
+/* Messages d'erreur */
+.form-error {
+    font-size: var(--font-size-xs);
+    color: var(--color-error);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.form-error .fa-exclamation-circle {
+    font-size: 11px;
+}
+
+/* ----------------------------------------------------------
+   8. BOUTONS
+   ---------------------------------------------------------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: 13px 24px;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    letter-spacing: 0.3px;
+    line-height: 1;
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Bouton primaire */
+.btn-primary {
+    width: 100%;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: var(--color-text-white);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, #0a2e4e 100%);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Bouton Google */
+.btn-google {
+    width: 100%;
+    background: var(--color-bg-white);
+    color: var(--color-text-primary);
+    border: 2px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-google:hover {
+    background: var(--color-bg-light);
+    border-color: #ccc;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.btn-google img {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-google .fa-google {
+    font-size: var(--font-size-md);
+    color: #4285f4;
+}
+
+/* ----------------------------------------------------------
+   9. SÉPARATEUR "OU"
+   ---------------------------------------------------------- */
+.auth-separator {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin: var(--spacing-xl) 0;
+}
+
+.auth-separator::before,
+.auth-separator::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-color);
+}
+
+.auth-separator span {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ----------------------------------------------------------
+   10. LIENS
+   ---------------------------------------------------------- */
+.auth-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    transition: color var(--transition-fast);
+    font-size: var(--font-size-sm);
+}
+
+.auth-link:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+}
+
+.auth-link-forgot {
+    display: block;
+    text-align: right;
+    margin-top: -8px;
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-sm);
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    transition: color var(--transition-fast);
+}
+
+.auth-link-forgot:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+}
+
+/* ----------------------------------------------------------
+   11. FOOTER DE PAGE (SOUS LE FORMULAIRE)
+   ---------------------------------------------------------- */
+.auth-form-footer {
+    text-align: center;
+    margin-top: var(--spacing-xl);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+}
+
+.auth-form-footer a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: var(--font-weight-semibold);
+}
+
+.auth-form-footer a:hover {
+    text-decoration: underline;
+}
+
+/* ----------------------------------------------------------
+   12. ALERTES / MESSAGES FLASH
+   ---------------------------------------------------------- */
+.alert {
+    padding: 14px 16px;
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    border: 1px solid transparent;
+    animation: slideDown var(--transition-base);
+}
+
+.alert-error {
+    background: var(--color-error-bg);
+    color: var(--color-error-text);
+    border-color: var(--color-error-border);
+}
+
+.alert-error .fa-exclamation-triangle {
+    color: var(--color-error);
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border-color: #c3e6cb;
+}
+
+.alert-success .fa-check-circle {
+    color: var(--color-success);
+}
+
+.alert-info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border-color: #bee5eb;
+}
+
+/* ----------------------------------------------------------
+   13. ANIMATIONS
+   ---------------------------------------------------------- */
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ----------------------------------------------------------
+   14. LOADER DU BOUTON
+   ---------------------------------------------------------- */
+.btn-loader {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+.btn-loading .btn-loader {
+    display: inline-block;
+}
+
+.btn-loading .btn-text {
+    display: none;
+}
+
+.btn-loading {
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ----------------------------------------------------------
+   15. RESPONSIVE DESIGN
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .auth-wrapper {
+        flex-direction: column;
+        max-width: 500px;
+        min-height: auto;
+    }
+    .auth-branding {
+        width: 100%;
+        padding: var(--spacing-2xl) var(--spacing-xl);
+        text-align: center;
+    }
+    .auth-branding-content { max-width: 100%; }
+    .auth-logo-img { width: 70px; height: 70px; padding: 10px; }
+    .auth-org-name { font-size: var(--font-size-2xl); }
+    .auth-form-side { width: 100%; padding: var(--spacing-2xl) var(--spacing-xl); }
+    .auth-form-container { max-width: 100%; }
+}
+
+@media (max-width: 576px) {
+    .auth-body { padding: 0; background: var(--color-bg-white); }
+    .auth-wrapper { border-radius: 0; box-shadow: none; min-height: 100vh; }
+    .auth-branding { padding: var(--spacing-xl) var(--spacing-md); }
+    .auth-logo-img { width: 60px; height: 60px; }
+    .auth-org-name { font-size: var(--font-size-xl); }
+    .auth-org-fullname { font-size: var(--font-size-xs); }
+    .auth-slogan { font-size: var(--font-size-sm); }
+    .auth-values { gap: 4px; }
+    .auth-value-badge { padding: 4px 10px; font-size: 0.7rem; }
+    .auth-form-side { padding: var(--spacing-xl) var(--spacing-lg); }
+    .auth-form-title { font-size: var(--font-size-xl); }
+}
+
+@media (max-width: 380px) {
+    .auth-branding { padding: var(--spacing-lg) var(--spacing-sm); }
+    .auth-form-side { padding: var(--spacing-lg) var(--spacing-md); }
+    .form-input { padding: 11px 14px; }
+    .btn { padding: 11px 20px; }
+}

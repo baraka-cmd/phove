@@ -1,0 +1,436 @@
+/* ============================================================
+   AHD-RDC — STYLES PAGE NOS VALEURS
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. BADGE NUMÉRO DE VALEUR
+   ---------------------------------------------------------- */
+.value-number-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: var(--color-primary);
+    color: var(--color-text-white);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-extrabold);
+    border-radius: var(--border-radius-circle);
+    margin-bottom: var(--spacing-md);
+    box-shadow: 0 4px 15px rgba(22, 85, 143, 0.3);
+    position: relative;
+}
+
+.value-number-badge::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    width: calc(100% + 8px);
+    height: calc(100% + 8px);
+    border-radius: var(--border-radius-circle);
+    border: 2px dashed var(--color-primary);
+    opacity: 0.3;
+    animation: rotateBadge 20s linear infinite;
+}
+
+@keyframes rotateBadge {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ----------------------------------------------------------
+   2. ICÔNE DE VALEUR LARGE
+   ---------------------------------------------------------- */
+.value-icon-large {
+    width: 90px;
+    height: 90px;
+    border-radius: var(--border-radius-circle);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-size: 2.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--spacing-lg);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.value-icon-large::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    opacity: 0;
+    transition: opacity var(--transition-base);
+    border-radius: var(--border-radius-circle);
+}
+
+.value-icon-large:hover::before {
+    opacity: 1;
+}
+
+.value-icon-large i {
+    position: relative;
+    z-index: 1;
+    transition: color var(--transition-base);
+}
+
+.value-icon-large:hover i {
+    color: var(--color-text-white);
+}
+
+/* ----------------------------------------------------------
+   3. LISTE DE VÉRIFICATION AMÉLIORÉE
+   ---------------------------------------------------------- */
+.check-list {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--spacing-lg);
+}
+
+.check-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    transition: all var(--transition-fast);
+}
+
+.check-list li:hover {
+    color: var(--color-text-primary);
+    padding-left: 5px;
+}
+
+.check-list li i {
+    color: var(--color-success);
+    margin-top: 4px;
+    flex-shrink: 0;
+    font-size: var(--font-size-base);
+    background: var(--color-success-light);
+    padding: 6px;
+    border-radius: var(--border-radius-circle);
+    transition: all var(--transition-fast);
+}
+
+.check-list li:hover i {
+    background: var(--color-success);
+    color: var(--color-text-white);
+    transform: scale(1.1);
+}
+
+.check-list li strong {
+    color: var(--color-primary);
+}
+
+/* ----------------------------------------------------------
+   4. ALTERNANCE DES SECTIONS
+   ---------------------------------------------------------- */
+.page-section-light .value-number-badge {
+    background: var(--color-accent);
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+}
+
+.page-section-light .value-number-badge::after {
+    border-color: var(--color-accent);
+}
+
+.page-section-light .value-icon-large {
+    background: var(--color-bg-white);
+}
+
+.page-section-light .check-list li i {
+    background: var(--color-bg-white);
+}
+
+/* ----------------------------------------------------------
+   5. GRILLE RÉCAPITULATIF DES VALEURS
+   ---------------------------------------------------------- */
+.values-recap-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
+}
+
+.value-recap-card {
+    background: var(--color-bg-white);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-2xl) var(--spacing-xl);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color-light);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.value-recap-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition-base);
+}
+
+.value-recap-card:hover::before {
+    transform: scaleX(1);
+}
+
+.value-recap-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--color-primary-lighter);
+}
+
+.value-recap-card-full {
+    grid-column: 1 / -1;
+    max-width: 350px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.value-recap-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: var(--border-radius-circle);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-md);
+    transition: all var(--transition-base);
+}
+
+.value-recap-card:hover .value-recap-icon {
+    background: var(--color-primary);
+    color: var(--color-text-white);
+    transform: rotateY(180deg);
+}
+
+.value-recap-card h3 {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: 0;
+}
+
+/* ----------------------------------------------------------
+   6. ANIMATION D'ENTRÉE DES SECTIONS
+   ---------------------------------------------------------- */
+.content-grid {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.content-grid.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ----------------------------------------------------------
+   7. ALIGNEMENT
+   ---------------------------------------------------------- */
+.text-left {
+    text-align: left;
+}
+
+.text-left::after {
+    margin-left: 0;
+}
+
+/* ----------------------------------------------------------
+   8. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .value-number-badge {
+        width: 40px;
+        height: 40px;
+        font-size: var(--font-size-lg);
+    }
+
+    .value-icon-large {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+    }
+
+    .values-recap-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .value-recap-card-full {
+        grid-column: 1 / -1;
+        max-width: 300px;
+    }
+
+    .check-list li {
+        font-size: var(--font-size-xs);
+    }
+}
+
+@media (max-width: 768px) {
+    .value-number-badge {
+        width: 36px;
+        height: 36px;
+        font-size: var(--font-size-md);
+    }
+
+    .value-icon-large {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+
+    .values-recap-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+
+    .value-recap-card {
+        padding: var(--spacing-lg) var(--spacing-md);
+    }
+
+    .value-recap-icon {
+        width: 55px;
+        height: 55px;
+        font-size: 1.3rem;
+    }
+
+    .check-list li i {
+        padding: 4px;
+        font-size: var(--font-size-xs);
+    }
+
+    .check-list li {
+        font-size: var(--font-size-xs);
+    }
+}
+
+@media (max-width: 576px) {
+    .values-recap-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .value-recap-card-full {
+        grid-column: auto;
+        max-width: 100%;
+    }
+
+    .content-block-text {
+        font-size: var(--font-size-sm);
+    }
+
+    .section-title {
+        font-size: var(--font-size-lg);
+    }
+
+    .value-icon-large {
+        width: 55px;
+        height: 55px;
+        font-size: 1.3rem;
+    }
+}
+
+
+/* ----------------------------------------------------------
+   9. CTA PAGE — STYLE CORRIGÉ
+   ---------------------------------------------------------- */
+.cta-section-page {
+    background: linear-gradient(135deg, #0f3f6b 0%, #16558F 50%, #1a1a1a 100%);
+    padding: 80px 0 100px;
+    text-align: center;
+}
+
+.cta-title-page {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.highlight-page { color: #D32F2F; }
+
+.cta-text-page {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 600px;
+    margin: 0 auto 35px;
+    line-height: 1.7;
+}
+
+.cta-buttons-page {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-page-don {
+    background: #D32F2F;
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid #D32F2F;
+}
+
+.btn-page-don:hover {
+    background: #b71c1c;
+    border-color: #b71c1c;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(211, 47, 47, 0.4);
+    color: #fff;
+}
+
+.btn-page-outline {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.btn-page-outline:hover {
+    background: #fff;
+    color: #16558F;
+    border-color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 576px) {
+    .cta-section-page { padding: 60px 0 70px; }
+    .cta-buttons-page { flex-direction: column; align-items: center; }
+    .btn-page-don, .btn-page-outline { width: 100%; justify-content: center; text-align: center; }
+}

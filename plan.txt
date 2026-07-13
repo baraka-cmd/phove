@@ -1,0 +1,290 @@
+📋 PLAN COMPLET DE DÉVELOPPEMENT — PLATEFORME AHD-RDC
+
+Stack : HTML + CSS + JavaScript / Laravel / MySQL (XAMPP)
+
+---
+
+ÉTAPE 1 — Installation et configuration de l'environnement
+
+Mise en place de XAMPP, création du projet Laravel, configuration du fichier .env, connexion à la base MySQL, lancement du serveur local.
+
+---
+
+ÉTAPE 2 — Création de la base de données
+
+Conception et exécution de toutes les migrations Laravel (16 tables avec leurs relations, clés étrangères, index).
+
+---
+
+ÉTAPE 3 — Modèles Eloquent et relations
+
+Définition de tous les modèles Laravel avec les relations (hasMany, belongsTo, belongsToMany) et les propriétés fillable/guarded.
+
+---
+
+ÉTAPE 4 — Seeders et données de test
+
+Création des seeders pour le Super Admin, les 7 membres fondateurs, les organes de gouvernance, des projets et partenaires factices.
+
+---
+
+ÉTAPE 5 — Authentification (Login / Mot de passe oublié)
+
+Mise en place du système d'authentification Laravel, personnalisation des vues de connexion, middleware de vérification de rôle, redirection selon le profil.
+
+---
+
+ÉTAPE 6 — Layout principal du site public
+
+Création du template HTML/CSS/JS responsive avec header, footer, menu de navigation, barre de recherche, sélecteur de langue.
+
+---
+
+ÉTAPE 7 — Page d'accueil publique dynamique
+
+Hero section, compteurs en direct, projets récents, témoignages, appels à l'action (faire un don, devenir membre), actualités récentes.
+
+---
+
+ÉTAPE 8 — Pages institutionnelles publiques
+
+Qui sommes-nous, Mission & Vision & Valeurs, Notre équipe/Gouvernance, Organigramme, Mentions légales.
+
+---
+
+ÉTAPE 9 — Page Projets publique avec carte interactive
+
+Affichage des projets avec filtres (domaine, zone, statut), carte Leaflet.js avec marqueurs, page détail d'un projet avec indicateurs et galerie.
+
+---
+
+ÉTAPE 10 — Pages Domaines d'intervention et Partenaires publics
+
+Présentation des 9 domaines d'intervention, liste des partenaires avec logos.
+
+---
+
+ÉTAPE 11 — Pages Actualités, Témoignages et Transparence publiques
+
+Blog avec pagination et catégories, témoignages de bénéficiaires, rapports annuels téléchargeables.
+
+---
+
+ÉTAPE 12 — Page Faire un don publique
+
+Formulaire de don avec sélection de projet, montant, mode de paiement, informations donateur, message de confirmation.
+
+---
+
+ÉTAPE 13 — Page Devenir membre publique
+
+Formulaire d'adhésion avec toutes les informations requises, upload photo, conditions d'adhésion, soumission en base.
+
+---
+
+ÉTAPE 14 — Page Contact publique
+
+Formulaire de contact (nom, email, sujet, message), validation, enregistrement en base, notification email à l'admin.
+
+---
+
+ÉTAPE 15 — Layout du dashboard administrateur
+
+Template admin responsive avec sidebar, topbar, breadcrumb, notifications, menu complet, déconnexion.
+
+---
+
+ÉTAPE 16 — Tableau de bord administrateur
+
+Statistiques globales, graphiques, projets actifs, derniers dons, nouveaux membres, messages non lus, alertes.
+
+---
+
+ÉTAPE 17 — CRUD Gestion des membres (admin)
+
+Liste, ajout, modification, suppression, filtrage par catégorie et statut, fiche détaillée du membre, historique.
+
+---
+
+ÉTAPE 18 — Validation des demandes d'adhésion (admin)
+
+Liste des demandes en attente, consultation du dossier, approbation ou rejet, notification par email au demandeur.
+
+---
+
+ÉTAPE 19 — Gestion des cotisations (admin)
+
+Tableau mensuel par membre, enregistrement d'un paiement, alertes de retard, historique complet, export.
+
+---
+
+ÉTAPE 20 — Gestion des sanctions, suspensions, exclusions (admin)
+
+Enregistrement d'une sanction avec motif et date, changement automatique du statut, historique des sanctions par membre, possibilité de réintégration.
+
+---
+
+ÉTAPE 21 — Gestion des organes de gouvernance (admin)
+
+Affichage et modification des membres du CA, DE, CC, AG. Historique des mandats, PV d'assemblées téléchargeables.
+
+---
+
+ÉTAPE 22 — Gestion des assemblées générales (admin)
+
+Création d'une AG (date, type, lieu), saisie des décisions, upload du PV en PDF, liste chronologique.
+
+---
+
+ÉTAPE 23 — CRUD Gestion des projets (admin)
+
+Création, modification, suppression de projets. Tous les champs : titre, domaine, zone, dates, budget, bailleur, statut, description, objectifs, image.
+
+---
+
+ÉTAPE 24 — Gestion des indicateurs de projet / KPI (admin)
+
+Ajout d'indicateurs personnalisés par projet, mise à jour des valeurs actuelles, barres de progression visuelles.
+
+---
+
+ÉTAPE 25 — Gestion des bénéficiaires (admin)
+
+Ajout de bénéficiaires liés à un projet, catégorisation, localisation, type d'aide, liste filtrable, statistiques.
+
+---
+
+ÉTAPE 26 — Gestion des dons (admin)
+
+Enregistrement manuel d'un don, liste de tous les dons, filtrage par date/projet/donateur, génération de reçu fiscal en PDF.
+
+---
+
+ÉTAPE 27 — Génération de reçus de don en PDF
+
+Utilisation de DomPDF pour créer des reçus personnalisés au format PDF avec logo, coordonnées, montant, date, signature.
+
+---
+
+ÉTAPE 28 — Gestion des budgets projets (admin)
+
+Saisie du budget prévisionnel, suivi des dépenses, comparaison budget vs réel, barres de progression, alertes dépassement.
+
+---
+
+ÉTAPE 29 — Rapports financiers (admin)
+
+Génération de rapports mensuels/annuels, synthèse entrées/sorties, export PDF, graphiques.
+
+---
+
+ÉTAPE 30 — CRUD Gestion des partenaires (admin)
+
+Ajout, modification, suppression de partenaires, association aux projets, historique des collaborations, logos.
+
+---
+
+ÉTAPE 31 — CRUD Gestion des articles / actualités (admin)
+
+Création d'articles avec éditeur WYSIWYG, catégories, images, programmation de publication, statut brouillon/publié.
+
+---
+
+ÉTAPE 32 — Gestion de la galerie médias (admin)
+
+Upload d'images et vidéos, organisation par albums, liaison aux projets, légendes, suppression.
+
+---
+
+ÉTAPE 33 — Gestion des témoignages (admin)
+
+Ajout, validation, modification de témoignages bénéficiaires, liaison à un projet, affichage public après validation.
+
+---
+
+ÉTAPE 34 — Gestion des documents officiels (admin)
+
+Upload de statuts, ROI, conventions, rapports. Classement par type, visibilité publique/privée, téléchargement.
+
+---
+
+ÉTAPE 35 — Gestion des messages de contact (admin)
+
+Liste des messages reçus, marquage lu/non lu, réponse par email, archivage, filtrage.
+
+---
+
+ÉTAPE 36 — Système de newsletter (admin)
+
+Création de listes de diffusion, rédaction d'emails, envoi groupé, statistiques d'envoi basiques.
+
+---
+
+ÉTAPE 37 — Gestion des comptes administrateurs (Super Admin)
+
+Création de nouveaux comptes admin, attribution de rôles (Super Admin, Admin, Éditeur), activation/désactivation, suppression.
+
+---
+
+ÉTAPE 38 — Paramètres généraux du site (admin)
+
+Modification du logo, favicon, nom du site, slogan, adresse, contacts, emails, liens réseaux sociaux, textes des pages statiques.
+
+---
+
+ÉTAPE 39 — Système multilingue (Français, Anglais, Swahili, Lingala)
+
+Mise en place des fichiers de traduction Laravel, middleware de détection de langue, switch de langue sur le site public, traduction des contenus statiques.
+
+---
+
+ÉTAPE 40 — Sécurisation complète de l'application
+
+Protection CSRF, validation des données, échappement XSS, rate limiting, middleware rôles, uploads sécurisés, headers sécurité.
+
+---
+
+ÉTAPE 41 — Optimisation des performances
+
+Mise en cache Laravel (route, config, view), optimisation des images, lazy loading, minification CSS/JS, pagination des listes.
+
+---
+
+ÉTAPE 42 — Tests complets de l'application
+
+Tests fonctionnels de toutes les pages publiques et admin, vérification des formulaires, test des rôles et permissions, correction des bugs.
+
+---
+
+ÉTAPE 43 — Sauvegarde automatique de la base de données
+
+Création d'une commande Laravel pour dump SQL automatique planifié, stockage des sauvegardes, possibilité de restauration depuis l'admin.
+
+---
+
+ÉTAPE 44 — Déploiement en ligne
+
+Achat nom de domaine, choix hébergement, transfert fichiers, import base de données, configuration production, SSL, cron jobs, mise en ligne.
+
+---
+
+ÉTAPE 45 — Documentation et formation du client
+
+Rédaction du manuel d'utilisation administrateur (PDF), formation du Dr AKSANTI DUNIA Steeng et son équipe, remise des accès.
+
+---
+
+Voilà les 45 étapes du projet. On commence par laquelle ?
+
+
+
+
+
+
+
+
+
+
+
+
+

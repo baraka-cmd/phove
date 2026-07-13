@@ -1,0 +1,427 @@
+/* ============================================================
+   AHD-RDC — STYLES FOOTER
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. FOOTER PRINCIPAL
+   ---------------------------------------------------------- */
+.footer {
+    background: var(--color-bg-dark);
+    color: rgba(255, 255, 255, 0.7);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Motif de fond subtil */
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 20% 50%, rgba(22, 85, 143, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 80% 20%, rgba(211, 47, 47, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* ----------------------------------------------------------
+   2. FOOTER TOP (4 colonnes)
+   ---------------------------------------------------------- */
+.footer-top {
+    padding: var(--spacing-5xl) 0 var(--spacing-3xl);
+    position: relative;
+    z-index: 1;
+}
+
+.footer-col {
+    margin-bottom: var(--spacing-2xl);
+}
+
+/* ----------------------------------------------------------
+   3. COLONNE 1 : BRAND
+   ---------------------------------------------------------- */
+.footer-brand {
+    margin-bottom: var(--spacing-lg);
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    text-decoration: none;
+    margin-bottom: var(--spacing-md);
+}
+
+.footer-logo-img {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--border-radius-circle);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    transition: transform var(--transition-base);
+}
+
+.footer-logo:hover .footer-logo-img {
+    transform: scale(1.05);
+}
+
+.footer-logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.footer-logo-name {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-extrabold);
+    color: var(--color-text-white);
+    letter-spacing: 1px;
+}
+
+.text-accent {
+    color: var(--color-accent);
+}
+
+.footer-logo-subtitle {
+    font-size: 9px;
+    font-weight: var(--font-weight-light);
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.3px;
+}
+
+.footer-description {
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.8;
+    margin-bottom: var(--spacing-lg);
+}
+
+/* ----------------------------------------------------------
+   4. CONTACTS LIST
+   ---------------------------------------------------------- */
+.footer-contact-list {
+    margin-bottom: var(--spacing-lg);
+}
+
+.footer-contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.5;
+}
+
+.footer-contact-item i {
+    color: var(--color-accent);
+    font-size: 13px;
+    margin-top: 3px;
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------
+   5. RÉSEAUX SOCIAUX
+   ---------------------------------------------------------- */
+.footer-socials {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.footer-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius-circle);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+    transition: all var(--transition-base);
+}
+
+.footer-social:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-text-white);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(22, 85, 143, 0.4);
+}
+
+/* ----------------------------------------------------------
+   6. TITRES DE COLONNES
+   ---------------------------------------------------------- */
+.footer-title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-white);
+    margin-bottom: var(--spacing-lg);
+    position: relative;
+    padding-bottom: var(--spacing-sm);
+}
+
+.footer-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 35px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+}
+
+/* ----------------------------------------------------------
+   7. LIENS
+   ---------------------------------------------------------- */
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer-links li a {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    padding: 4px 0;
+}
+
+.footer-links li a i {
+    font-size: 10px;
+    color: var(--color-accent);
+    transition: transform var(--transition-fast);
+    width: 16px;
+    text-align: center;
+}
+
+.footer-links li a i.fa-heartbeat,
+.footer-links li a i.fa-graduation-cap,
+.footer-links li a i.fa-shield-alt,
+.footer-links li a i.fa-tint,
+.footer-links li a i.fa-seedling,
+.footer-links li a i.fa-tree,
+.footer-links li a i.fa-dove {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.footer-links li a:hover {
+    color: var(--color-text-white);
+    padding-left: 4px;
+}
+
+.footer-links li a:hover i {
+    transform: translateX(2px);
+    color: var(--color-accent);
+}
+
+.footer-links li a .text-accent {
+    color: var(--color-accent) !important;
+}
+
+/* ----------------------------------------------------------
+   8. NEWSLETTER
+   ---------------------------------------------------------- */
+.footer-newsletter {
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-newsletter-title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-white);
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.footer-newsletter-title i {
+    color: var(--color-accent);
+    font-size: 13px;
+}
+
+.footer-newsletter-text {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.45);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+}
+
+.footer-newsletter-form {
+    width: 100%;
+}
+
+.newsletter-input-wrapper {
+    position: relative;
+    display: flex;
+}
+
+.newsletter-input {
+    flex: 1;
+    padding: 12px 50px 12px 16px;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-white);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--border-radius);
+    outline: none;
+    transition: all var(--transition-base);
+}
+
+.newsletter-input::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+    font-style: italic;
+}
+
+.newsletter-input:focus {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.15);
+}
+
+.newsletter-btn {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    bottom: 4px;
+    width: 38px;
+    background: var(--color-primary);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    color: var(--color-text-white);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.newsletter-btn:hover {
+    background: var(--color-accent);
+}
+
+/* ----------------------------------------------------------
+   9. FOOTER BOTTOM
+   ---------------------------------------------------------- */
+.footer-bottom {
+    background: rgba(0, 0, 0, 0.25);
+    padding: var(--spacing-lg) 0;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.footer-copyright {
+    font-size: var(--font-size-xs);
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0;
+}
+
+.footer-copyright strong {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: var(--font-weight-semibold);
+}
+
+.footer-slogan {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.4);
+    margin-left: var(--spacing-sm);
+}
+
+.footer-bottom-links {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+}
+
+.footer-bottom-links a {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer-bottom-links a:hover {
+    color: var(--color-accent);
+}
+
+.footer-bottom-divider {
+    color: rgba(255, 255, 255, 0.15);
+}
+
+/* ----------------------------------------------------------
+   10. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .footer-col {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .footer-bottom-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-slogan {
+        display: block;
+        margin-left: 0;
+        margin-top: 4px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-top {
+        padding: var(--spacing-3xl) 0 var(--spacing-xl);
+    }
+
+    .footer-col {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .footer-logo-subtitle {
+        display: none;
+    }
+
+    .footer-newsletter {
+        margin-top: var(--spacing-md);
+    }
+}
+
+@media (max-width: 576px) {
+    .footer-bottom-links {
+        flex-direction: column;
+        gap: 4px;
+        text-align: center;
+    }
+
+    .footer-bottom-divider {
+        display: none;
+    }
+}

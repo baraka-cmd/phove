@@ -1,0 +1,485 @@
+/* ============================================================
+   AHD-RDC — STYLES PAGE DOMAINES D'INTERVENTION
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. SECTION STATISTIQUES RAPIDES
+   ---------------------------------------------------------- */
+.domaines-stats-section {
+    padding: var(--spacing-xl) 0;
+    background: var(--color-bg-white);
+    border-bottom: 1px solid var(--border-color-light);
+    margin-top: -30px;
+    position: relative;
+    z-index: 2;
+}
+
+.domaines-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.domaine-stat-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 28px 24px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+}
+
+.domaine-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.1);
+}
+
+.domaine-stat-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.domaine-stat-card:hover .domaine-stat-icon {
+    background: var(--color-primary);
+    color: #fff;
+    transform: scale(1.08);
+}
+
+.domaine-stat-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.domaine-stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    line-height: 1;
+}
+
+.domaine-stat-label {
+    font-size: 13px;
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+/* ----------------------------------------------------------
+   2. SECTIONS DOMAINES (ALTERNANCE)
+   ---------------------------------------------------------- */
+.domaine-detail-section {
+    padding: var(--spacing-5xl) 0;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.domaine-detail-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(22,85,143,0.03) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.domaine-alt {
+    background: var(--color-bg-light);
+}
+
+.domaine-alt::before {
+    left: 0;
+    right: auto;
+    background: radial-gradient(circle, rgba(211,47,47,0.04) 0%, transparent 70%);
+}
+
+/* Grille */
+.domaine-detail-grid {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: var(--spacing-3xl);
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.domaine-alt .domaine-detail-grid {
+    grid-template-columns: 1fr 180px;
+}
+
+/* ----------------------------------------------------------
+   3. VISUEL DU DOMAINE (Icône + Numéro)
+   ---------------------------------------------------------- */
+.domaine-detail-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-lg);
+    position: relative;
+}
+
+.domaine-detail-icon {
+    width: 130px;
+    height: 130px;
+    border-radius: 30px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-size: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(22, 85, 143, 0.1);
+}
+
+.domaine-detail-visual:hover .domaine-detail-icon {
+    background: var(--color-primary);
+    color: #fff;
+    transform: scale(1.05) rotate(-5deg);
+    box-shadow: 0 15px 40px rgba(22, 85, 143, 0.25);
+}
+
+.domaine-detail-number {
+    font-size: 5rem;
+    font-weight: 900;
+    color: #1a1a1a;
+    opacity: 0.04;
+    position: absolute;
+    bottom: -30px;
+    line-height: 1;
+    pointer-events: none;
+}
+
+/* ----------------------------------------------------------
+   4. CONTENU DU DOMAINE
+   ---------------------------------------------------------- */
+.domaine-detail-content {
+    max-width: 700px;
+}
+
+.domaine-alt .domaine-detail-content {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.domaine-detail-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 3px solid var(--color-primary-lighter);
+    position: relative;
+}
+
+.domaine-detail-title::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: var(--color-accent);
+    border-radius: 2px;
+}
+
+.domaine-detail-text {
+    font-size: 1rem;
+    color: #444;
+    line-height: 1.9;
+    margin-bottom: var(--spacing-xl);
+}
+
+.domaine-detail-text strong {
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+.domaine-detail-actions {
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+/* ----------------------------------------------------------
+   5. ANIMATIONS
+   ---------------------------------------------------------- */
+.domaine-detail-section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.domaine-detail-section.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.domaine-stat-card {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.domaine-stat-card.animated {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ----------------------------------------------------------
+   6. CTA DOMAINES — STYLE CORRIGÉ
+   ---------------------------------------------------------- */
+.cta-section-domaines {
+    background: linear-gradient(135deg, #0f3f6b 0%, #16558F 50%, #1a1a1a 100%);
+    padding: 80px 0 100px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Cercles décoratifs */
+.cta-decoration {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.cta-decoration-left {
+    top: -120px;
+    right: -120px;
+    width: 450px;
+    height: 450px;
+    background: rgba(211, 47, 47, 0.05);
+}
+
+.cta-decoration-right {
+    bottom: -180px;
+    left: -180px;
+    width: 550px;
+    height: 550px;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Titre */
+.cta-section-domaines .cta-title {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.cta-section-domaines .highlight {
+    color: #D32F2F;
+}
+
+/* Texte */
+.cta-section-domaines .cta-text {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 600px;
+    margin: 0 auto 35px;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+}
+
+/* Conteneur des boutons */
+.cta-section-domaines .cta-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+}
+
+/* Bouton Don (rouge) */
+.btn-cta-don {
+    background: #D32F2F;
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid #D32F2F;
+}
+
+.btn-cta-don:hover {
+    background: #b71c1c;
+    border-color: #b71c1c;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(211, 47, 47, 0.4);
+    color: #fff;
+}
+
+/* Bouton Outline (blanc transparent) */
+.btn-cta-outline {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    padding: 16px 34px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.btn-cta-outline:hover {
+    background: #fff;
+    color: #16558F;
+    border-color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .cta-section-domaines {
+        padding: 60px 0 70px;
+    }
+
+    .cta-section-domaines .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn-cta-don,
+    .btn-cta-outline {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+/* ----------------------------------------------------------
+   7. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .domaine-detail-grid,
+    .domaine-alt .domaine-detail-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-xl);
+        text-align: center;
+    }
+
+    .domaine-detail-visual {
+        order: -1;
+    }
+
+    .domaine-detail-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 24px;
+        font-size: 2.5rem;
+        margin: 0 auto;
+    }
+
+    .domaine-detail-number {
+        display: none;
+    }
+
+    .domaine-detail-content {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .domaine-detail-title {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .domaine-detail-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .domaine-detail-actions {
+        justify-content: center;
+    }
+
+    .domaines-stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .domaine-detail-section {
+        padding: var(--spacing-3xl) 0;
+    }
+
+    .domaine-detail-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        font-size: 2rem;
+    }
+
+    .domaine-detail-title {
+        font-size: 1.3rem;
+    }
+
+    .domaine-detail-text {
+        font-size: 0.9rem;
+    }
+
+    .domaines-stats-grid {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 576px) {
+    .domaine-detail-section {
+        padding: var(--spacing-2xl) 0;
+    }
+
+    .domaine-detail-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 16px;
+        font-size: 1.6rem;
+    }
+
+    .domaine-detail-title {
+        font-size: 1.2rem;
+    }
+
+    .domaine-detail-actions {
+        flex-direction: column;
+    }
+
+    .domaine-detail-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
