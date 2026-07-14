@@ -1,0 +1,188 @@
+/* ============================================================
+   AHD-RDC — STYLES FOOTER ADMINISTRATEUR
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. FOOTER ADMIN
+   ---------------------------------------------------------- */
+.admin-footer {
+    background: var(--color-bg-white);
+    border-top: 1px solid var(--border-color-light);
+    padding: 12px var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-top: auto;
+}
+
+/* ----------------------------------------------------------
+   2. INFORMATIONS DE SESSION
+   ---------------------------------------------------------- */
+.footer-session {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.footer-session-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.footer-session-item i {
+    font-size: 11px;
+    color: var(--color-primary);
+}
+
+.footer-session-item strong {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* ----------------------------------------------------------
+   3. HEURE
+   ---------------------------------------------------------- */
+.footer-clock {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: var(--font-weight-medium);
+}
+
+.footer-clock i {
+    color: var(--color-accent);
+    font-size: 12px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.footer-clock-time {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ----------------------------------------------------------
+   4. COPYRIGHT
+   ---------------------------------------------------------- */
+.footer-copyright {
+    text-align: center;
+}
+
+.footer-copyright strong {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+}
+
+.footer-copyright .footer-slogan {
+    font-style: italic;
+    color: var(--color-text-muted);
+    margin-left: 6px;
+    opacity: 0.7;
+}
+
+/* ----------------------------------------------------------
+   5. VERSION
+   ---------------------------------------------------------- */
+.footer-version {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-version-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: var(--font-weight-semibold);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    letter-spacing: 0.3px;
+}
+
+.footer-version-badge i {
+    font-size: 9px;
+}
+
+/* ----------------------------------------------------------
+   6. LIENS RAPIDES
+   ---------------------------------------------------------- */
+.footer-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-links a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: 11px;
+    transition: color var(--transition-fast);
+}
+
+.footer-links a:hover {
+    color: var(--color-primary);
+}
+
+.footer-links-divider {
+    width: 1px;
+    height: 10px;
+    background: var(--border-color);
+}
+
+/* ----------------------------------------------------------
+   7. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .admin-footer {
+        padding: 12px var(--spacing-md);
+    }
+
+    .footer-slogan {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-footer {
+        flex-direction: column;
+        text-align: center;
+        gap: 8px;
+        padding: 12px var(--spacing-sm);
+    }
+
+    .footer-session {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .footer-version {
+        justify-content: center;
+    }
+
+    .footer-links {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .footer-copyright .footer-slogan {
+        display: block;
+        margin-left: 0;
+        margin-top: 2px;
+    }
+}
