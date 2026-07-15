@@ -8,6 +8,9 @@ use App\Models\Membre;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\AdhesionApprouveeMail;
+use App\Mail\AdhesionRejeteeMail;
+
 
 class MembreController extends Controller
 {
@@ -124,4 +127,109 @@ class MembreController extends Controller
 
         return view('public.membre-confirmation', compact('membre'));
     }
+
+
+    /**
+ * Affiche la liste des demandes d'adhésion en attente.
+ */
+public function demandes(Request $request)
+{
+    $query = Membre::where('statut', 'en_attente');
+
+    // Recherche
+    if ($request->filled('recherche')) {
+        $recherche = $request->recherche;
+        $query->where(function ($q) use ($recherche) {
+            $q->where('nom', 'like', '%' . $recherche . '%')
+              ->orWhere('post_nom', 'like', '%' . $recherche . '%')
+              ->orWhere('prenom', 'like', '%' . $recherche . '%')
+              ->orWhere('email', 'like', '%' . $recherche . '%')
+              ->orWhere('telephone', 'like', '%' . $recherche . '%');
+        });
+    }
+
+    // Filtre par catégorie
+    if ($request->filled('categorie')) {
+        $query->where('categorie', $request->categorie);
+    }
+
+    $demandes = $query->orderBy('created_at', 'desc')
+        ->paginate(15)
+        ->withQueryString();
+
+    $totalDemandes = Membre::where('statut', 'en_attente')->count();
+    $demandesAujourdhui = Membre::where('statut', 'en_attente')
+        ->whereDate('created_at', today())
+        ->count();
+
+    return view('admin.membres.demandes', compact(
+        'demandes',
+        'totalDemandes',
+        'demandesAujourdhui'
+    ));
+}
+
+/**
+ * Approuve une demande d'adhésion.
+ */
+public function approuver(Membre $membre)
+{
+    if ($membre->statut !== 'en_attente') {
+        return redirect()->back()
+            ->with('error', 'Cette demande a déjà été traitée.');
+    }
+
+    $membre->update([
+        'statut' => 'actif',
+        'motif_sanction' => null,
+        'date_sanction' => null,
+    ]);
+
+    // Envoyer l'email d'approbation
+    if ($membre->email) {
+        try {
+            Mail::to($membre->email)->send(new AdhesionApprouveeMail($membre));
+        } catch (\Exception $e) {
+            // Email échoué, mais l'approbation est effective
+        }
+    }
+
+    return redirect()->route('admin.membres.demandes')
+        ->with('success', 'La demande de ' . $membre->nomComplet() . ' a été approuvée avec succès. Un email de confirmation lui a été envoyé.');
+}
+
+/**
+ * Rejette une demande d'adhésion.
+ */
+public function rejeter(Request $request, Membre $membre)
+{
+    if ($membre->statut !== 'en_attente') {
+        return redirect()->back()
+            ->with('error', 'Cette demande a déjà été traitée.');
+    }
+
+    $validated = $request->validate([
+        'motif_rejet' => ['required', 'string', 'max:1000'],
+    ], [
+        'motif_rejet.required' => 'Le motif de rejet est obligatoire.',
+    ]);
+
+    $membre->update([
+        'statut' => 'exclu',
+        'motif_sanction' => $validated['motif_rejet'],
+        'date_sanction' => now(),
+    ]);
+
+    // Envoyer l'email de rejet
+    if ($membre->email) {
+        try {
+            Mail::to($membre->email)->send(new AdhesionRejeteeMail($membre, $validated['motif_rejet']));
+        } catch (\Exception $e) {
+            // Email échoué
+        }
+    }
+
+    return redirect()->route('admin.membres.demandes')
+        ->with('success', 'La demande de ' . $membre->nomComplet() . ' a été rejetée. Un email lui a été envoyé.');
+}
 }

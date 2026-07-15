@@ -1,0 +1,465 @@
+/* ============================================================
+   AHD-RDC — STYLES FICHE DÉTAILLÉE MEMBRE (SHOW)
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. EN-TÊTE DU MEMBRE
+   ---------------------------------------------------------- */
+.membre-show-header {
+    background: #fff;
+    border-radius: 18px;
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+.membre-show-header::after {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    opacity: 0.03;
+    pointer-events: none;
+}
+
+.membre-show-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(22, 85, 143, 0.2);
+    border: 3px solid #fff;
+}
+
+.membre-show-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.membre-show-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.membre-show-info h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.membre-show-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.membre-show-meta .membre-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.membre-show-actions-header {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------
+   2. GRILLE PRINCIPALE
+   ---------------------------------------------------------- */
+.membre-show-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+/* ----------------------------------------------------------
+   3. CARTES DE DÉTAIL
+   ---------------------------------------------------------- */
+.membre-detail-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.membre-detail-card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.membre-detail-card-header {
+    padding: 18px 22px;
+    background: linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+    border-bottom: 1px solid #eef0f4;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.membre-detail-card-header i {
+    color: #fff;
+    background: var(--color-primary);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+}
+
+.membre-detail-card-body {
+    padding: 20px 22px;
+}
+
+/* ----------------------------------------------------------
+   4. LIGNES DE DÉTAIL
+   ---------------------------------------------------------- */
+.membre-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f6f8;
+    font-size: 13px;
+}
+
+.membre-detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.membre-detail-row:first-child {
+    padding-top: 0;
+}
+
+.membre-detail-label {
+    color: #888;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.membre-detail-label i {
+    font-size: 12px;
+    color: #bbb;
+    width: 16px;
+    text-align: center;
+}
+
+.membre-detail-value {
+    color: #1a1a1a;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+}
+
+.membre-detail-value.highlight {
+    color: var(--color-primary);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.membre-detail-value.success {
+    color: var(--color-success);
+}
+
+.membre-detail-value.danger {
+    color: var(--color-accent);
+}
+
+/* ----------------------------------------------------------
+   5. BADGES DANS LA FICHE
+   ---------------------------------------------------------- */
+.membre-show-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.membre-show-badge-success { background: var(--color-success-light); color: var(--color-success); }
+.membre-show-badge-warning { background: var(--color-warning-light); color: #856404; }
+.membre-show-badge-danger { background: var(--color-error-light); color: var(--color-accent); }
+.membre-show-badge-info { background: var(--color-info-light); color: var(--color-info); }
+.membre-show-badge-primary { background: var(--color-primary-lighter); color: var(--color-primary); }
+
+/* ----------------------------------------------------------
+   6. CARTE SANCTION
+   ---------------------------------------------------------- */
+.membre-detail-card.sanction {
+    border-left: 4px solid var(--color-accent);
+}
+
+.membre-detail-card.sanction .membre-detail-card-header {
+    background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
+}
+
+.membre-detail-card.sanction .membre-detail-card-header i {
+    background: var(--color-accent);
+}
+
+/* ----------------------------------------------------------
+   7. TABLEAU COTISATIONS
+   ---------------------------------------------------------- */
+.membre-cotisations-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.membre-cotisations-table thead th {
+    padding: 12px 14px;
+    background: #fafbfc;
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #eef0f4;
+    white-space: nowrap;
+}
+
+.membre-cotisations-table tbody td {
+    padding: 10px 14px;
+    color: #555;
+    border-bottom: 1px solid #f5f6f8;
+}
+
+.membre-cotisations-table tbody tr:hover {
+    background: #fafbfc;
+}
+
+.membre-cotisations-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.cotisation-montant {
+    font-weight: 700;
+    color: var(--color-success);
+}
+
+.cotisation-mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.cotisation-mode i {
+    font-size: 10px;
+    color: var(--color-primary);
+}
+
+/* ----------------------------------------------------------
+   8. ÉTAT VIDE (COTISATIONS)
+   ---------------------------------------------------------- */
+.membre-empty-state {
+    text-align: center;
+    padding: 30px 20px;
+    color: #999;
+}
+
+.membre-empty-state i {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 10px;
+    opacity: 0.5;
+}
+
+.membre-empty-state p {
+    font-size: 13px;
+    margin: 0;
+}
+
+/* ----------------------------------------------------------
+   9. SECTION ACTIONS RAPIDES
+   ---------------------------------------------------------- */
+.membre-actions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.membre-action-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.membre-action-link i {
+    width: 20px;
+    text-align: center;
+    font-size: 13px;
+}
+
+.membre-action-link.edit {
+    color: var(--color-primary);
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary-lighter);
+}
+
+.membre-action-link.edit:hover {
+    background: var(--color-primary);
+    color: #fff;
+}
+
+.membre-action-link.suspend {
+    color: var(--color-accent);
+    background: var(--color-error-light);
+    border-color: var(--color-error-light);
+}
+
+.membre-action-link.suspend:hover {
+    background: var(--color-accent);
+    color: #fff;
+}
+
+.membre-action-link.activate {
+    color: var(--color-success);
+    background: var(--color-success-light);
+    border-color: var(--color-success-light);
+}
+
+.membre-action-link.activate:hover {
+    background: var(--color-success);
+    color: #fff;
+}
+
+.membre-action-link.back {
+    color: #888;
+    background: #f5f6f8;
+}
+
+.membre-action-link.back:hover {
+    background: #e0e4e8;
+    color: #555;
+}
+
+/* ----------------------------------------------------------
+   10. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .membre-show-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .membre-show-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 18px;
+    }
+
+    .membre-show-avatar {
+        margin: 0 auto;
+        width: 75px;
+        height: 75px;
+        border-radius: 16px;
+        font-size: 1.6rem;
+    }
+
+    .membre-show-meta {
+        justify-content: center;
+    }
+
+    .membre-show-actions-header {
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .membre-detail-card-body {
+        padding: 16px;
+    }
+
+    .membre-detail-card-header {
+        padding: 14px 16px;
+        font-size: 13px;
+    }
+
+    .membre-detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .membre-detail-value {
+        text-align: left;
+    }
+
+    .membre-cotisations-table {
+        font-size: 11px;
+    }
+
+    .membre-cotisations-table thead th,
+    .membre-cotisations-table tbody td {
+        padding: 8px 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .membre-show-header {
+        padding: 18px 14px;
+        border-radius: 14px;
+    }
+
+    .membre-show-avatar {
+        width: 65px;
+        height: 65px;
+        border-radius: 14px;
+        font-size: 1.4rem;
+    }
+
+    .membre-show-info h2 {
+        font-size: 1.2rem;
+    }
+
+    .membre-detail-card {
+        border-radius: 12px;
+    }
+}

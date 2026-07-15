@@ -9,10 +9,11 @@ use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Public\ProjetController;
 use App\Http\Controllers\Public\ActualiteController;
 use App\Http\Controllers\Public\DonController;
-use App\Http\Controllers\Public\MembreController;
+use App\Http\Controllers\Public\MembreController as PublicMembreController;
 use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\RechercheController;
-
+use App\Http\Controllers\Admin\MembreController as AdminMembreController;
+use App\Http\Controllers\Admin\CotisationController;
 
 
 /*
@@ -133,7 +134,17 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
 
     // Gestion des membres (admin et super_admin)
     Route::middleware('check.role:admin,super_admin')->prefix('membres')->name('membres.')->group(function () {
-        Route::get('/', function () { return 'Liste membres'; })->name('index');
+        Route::get('/', [AdminMembreController::class, 'index'])->name('index');
+        Route::get('/create', [AdminMembreController::class, 'create'])->name('create');
+        Route::post('/', [AdminMembreController::class, 'store'])->name('store');
+        Route::get('/demandes', [AdminMembreController::class, 'demandes'])->name('demandes');  // ← Celle-ci
+        Route::get('/{membre}', [AdminMembreController::class, 'show'])->name('show');
+        Route::get('/{membre}/edit', [AdminMembreController::class, 'edit'])->name('edit');
+        Route::put('/{membre}', [AdminMembreController::class, 'update'])->name('update');
+        Route::delete('/{membre}', [AdminMembreController::class, 'destroy'])->name('destroy');
+        Route::put('/{membre}/change-status', [AdminMembreController::class, 'changeStatus'])->name('changeStatus');
+        Route::put('/{membre}/approuver', [AdminMembreController::class, 'approuver'])->name('approuver');
+        Route::put('/{membre}/rejeter', [AdminMembreController::class, 'rejeter'])->name('rejeter');
     });
 
     // Gestion des articles (tous les rôles)
@@ -179,6 +190,15 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
     // Paramètres (super_admin uniquement)
     Route::middleware('check.role:super_admin')->prefix('parametres')->name('parametres.')->group(function () {
         Route::get('/', function () { return 'Paramètres'; })->name('index');
+    });
+
+    // Gestion des cotisations (admin et super_admin)
+    Route::middleware('check.role:admin,super_admin')->prefix('cotisations')->name('cotisations.')->group(function () {
+        Route::get('/', [CotisationController::class, 'index'])->name('index');
+        Route::get('/create', [CotisationController::class, 'create'])->name('create');
+        Route::post('/', [CotisationController::class, 'store'])->name('store');
+        Route::get('/retard', [CotisationController::class, 'retard'])->name('retard');
+        Route::get('/regle', [CotisationController::class, 'regle'])->name('regle');
     });
 });
 
@@ -230,10 +250,10 @@ Route::get('/faire-un-don', [DonController::class, 'index'])->name('don');
 Route::post('/faire-un-don', [DonController::class, 'store'])->name('don.store');
 Route::get('/don/merci', [DonController::class, 'merci'])->name('don.merci');
 
-// Devenir membre
-Route::get('/devenir-membre', [MembreController::class, 'index'])->name('devenir-membre');
-Route::post('/devenir-membre', [MembreController::class, 'store'])->name('devenir-membre.store');
-Route::get('/devenir-membre/confirmation', [MembreController::class, 'confirmation'])->name('devenir-membre.confirmation');
+//Devenir membre
+Route::get('/devenir-membre', [PublicMembreController::class, 'index'])->name('devenir-membre');
+Route::post('/devenir-membre', [PublicMembreController::class, 'store'])->name('devenir-membre.store');
+Route::get('/devenir-membre/confirmation', [PublicMembreController::class, 'confirmation'])->name('devenir-membre.confirmation');
 
 // Devenir bénévole
 Route::get('/devenir-benevole', function () {
@@ -248,6 +268,7 @@ Route::get('/devenir-benevole/confirmation', function () {
 Route::get('/devenir-partenaire', function () {
     return view('public.devenir-partenaire');
 })->name('devenir-partenaire');
+
 
 Route::get('/devenir-partenaire/confirmation', function () {
     return view('public.partenaire-confirmation');

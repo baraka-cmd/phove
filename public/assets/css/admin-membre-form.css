@@ -1,0 +1,569 @@
+/* ============================================================
+   AHD-RDC — STYLES FORMULAIRE MEMBRE (CREATE & EDIT)
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. CONTAINER PRINCIPAL
+   ---------------------------------------------------------- */
+.membre-form-wrapper {
+    max-width: 900px;
+}
+
+.membre-form-card {
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    padding: 40px 44px;
+    margin-bottom: 30px;
+}
+
+/* ----------------------------------------------------------
+   2. EN-TÊTE DU FORMULAIRE
+   ---------------------------------------------------------- */
+.membre-form-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.membre-form-header-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.membre-form-header-text h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+.membre-form-header-text p {
+    font-size: 13px;
+    color: #888;
+    margin: 0;
+}
+
+/* ----------------------------------------------------------
+   3. SECTIONS
+   ---------------------------------------------------------- */
+.membre-form-section {
+    margin-bottom: 32px;
+    padding-bottom: 8px;
+}
+
+.membre-form-section:last-child {
+    margin-bottom: 0;
+}
+
+.membre-form-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--color-primary-lighter);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.membre-form-section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: var(--color-accent);
+    border-radius: 2px;
+}
+
+.membre-form-section-title i {
+    color: #fff;
+    background: var(--color-primary);
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------
+   4. GRILLE DU FORMULAIRE
+   ---------------------------------------------------------- */
+.membre-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 24px;
+}
+
+.membre-form-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.membre-form-full {
+    grid-column: 1 / -1;
+}
+
+/* ----------------------------------------------------------
+   5. GROUPE DE CHAMP
+   ---------------------------------------------------------- */
+.membre-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.membre-form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.membre-form-label .required {
+    color: var(--color-accent);
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.membre-form-label .optional {
+    font-size: 11px;
+    color: #aaa;
+    font-weight: 400;
+    font-style: italic;
+    margin-left: 2px;
+}
+
+/* ----------------------------------------------------------
+   6. INPUTS
+   ---------------------------------------------------------- */
+.membre-form-input,
+.membre-form-select,
+.membre-form-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: var(--font-primary);
+    font-size: 13px;
+    color: #1a1a1a;
+    background: #fafbfc;
+    border: 2px solid #e0e4e8;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.membre-form-input:hover,
+.membre-form-select:hover,
+.membre-form-textarea:hover {
+    border-color: #c0c7cf;
+    background: #fff;
+}
+
+.membre-form-input:focus,
+.membre-form-select:focus,
+.membre-form-textarea:focus {
+    border-color: var(--color-primary);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(22, 85, 143, 0.08);
+}
+
+.membre-form-input::placeholder,
+.membre-form-textarea::placeholder {
+    color: #b0b8c1;
+    font-style: italic;
+    font-size: 12px;
+}
+
+.membre-form-input.error,
+.membre-form-select.error,
+.membre-form-textarea.error {
+    border-color: var(--color-accent);
+    background: #fffafa;
+    box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.05);
+}
+
+.membre-form-input:disabled,
+.membre-form-select:disabled {
+    background: #f0f2f5;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* ----------------------------------------------------------
+   7. SELECT
+   ---------------------------------------------------------- */
+.membre-form-select {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 40px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%23666' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+}
+
+/* ----------------------------------------------------------
+   8. TEXTAREA
+   ---------------------------------------------------------- */
+.membre-form-textarea {
+    resize: vertical;
+    min-height: 110px;
+    line-height: 1.6;
+}
+
+/* ----------------------------------------------------------
+   9. MESSAGE D'ERREUR
+   ---------------------------------------------------------- */
+.membre-form-error {
+    font-size: 11px;
+    color: var(--color-accent);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    animation: fadeIn 0.2s ease;
+}
+
+.membre-form-error i {
+    font-size: 11px;
+    flex-shrink: 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-3px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------------------------------
+   10. INPUT AVEC ICÔNE
+   ---------------------------------------------------------- */
+.membre-input-group {
+    position: relative;
+}
+
+.membre-input-group .membre-form-input {
+    padding-left: 42px;
+}
+
+.membre-input-group-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #b0b8c1;
+    font-size: 15px;
+    pointer-events: none;
+    z-index: 1;
+    transition: color 0.25s ease;
+}
+
+.membre-input-group .membre-form-input:focus ~ .membre-input-group-icon,
+.membre-input-group .membre-form-input:focus + .membre-input-group-icon {
+    color: var(--color-primary);
+}
+
+/* ----------------------------------------------------------
+   11. UPLOAD PHOTO
+   ---------------------------------------------------------- */
+.membre-photo-upload {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.membre-photo-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    border: 2px dashed #d0d5dd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    background: #fafbfc;
+    position: relative;
+}
+
+.membre-photo-preview:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-lighter);
+    transform: scale(1.02);
+}
+
+.membre-photo-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.membre-photo-placeholder {
+    font-size: 2.5rem;
+    color: #c0c7cf;
+    transition: color 0.3s ease;
+}
+
+.membre-photo-preview:hover .membre-photo-placeholder {
+    color: var(--color-primary);
+}
+
+.membre-photo-info {
+    flex: 1;
+    padding-top: 4px;
+}
+
+.membre-photo-info p {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+}
+
+.membre-photo-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px 0;
+}
+
+.membre-photo-info ul li {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.membre-photo-info ul li i {
+    font-size: 10px;
+    color: var(--color-success);
+}
+
+.membre-photo-input {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.membre-photo-input::file-selector-button {
+    padding: 7px 16px;
+    background: var(--color-bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-family: var(--font-primary);
+    font-size: 12px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: all 0.2s ease;
+}
+
+.membre-photo-input::file-selector-button:hover {
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* ----------------------------------------------------------
+   12. BARRE D'ACTIONS
+   ---------------------------------------------------------- */
+.membre-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 36px;
+    padding-top: 26px;
+    border-top: 2px solid #f0f0f0;
+}
+
+.membre-form-actions-right {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.membre-form-actions-left {
+    display: flex;
+    gap: 10px;
+}
+
+/* Boutons du formulaire */
+.membre-form-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 26px;
+    font-family: var(--font-primary);
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+.membre-form-btn i {
+    font-size: 14px;
+}
+
+/* Bouton primaire */
+.membre-form-btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+    border-color: var(--color-primary);
+}
+
+.membre-form-btn-primary:hover {
+    background: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(22, 85, 143, 0.3);
+    color: #fff;
+}
+
+/* Bouton outline */
+.membre-form-btn-outline {
+    background: #fff;
+    color: #555;
+    border-color: #d0d5dd;
+}
+
+.membre-form-btn-outline:hover {
+    background: #f8f9fa;
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    transform: translateY(-1px);
+}
+
+/* Bouton danger */
+.membre-form-btn-danger {
+    background: #fff;
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.membre-form-btn-danger:hover {
+    background: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(211, 47, 47, 0.3);
+}
+
+/* Bouton annuler */
+.membre-form-btn-cancel {
+    background: #fff;
+    color: #888;
+    border-color: #e0e4e8;
+}
+
+.membre-form-btn-cancel:hover {
+    background: #f0f2f5;
+    color: #555;
+}
+
+/* ----------------------------------------------------------
+   13. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .membre-form-card {
+        padding: 32px 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .membre-form-card {
+        padding: 24px 18px;
+        border-radius: 14px;
+    }
+
+    .membre-form-grid,
+    .membre-form-grid-3 {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .membre-form-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .membre-form-header-icon {
+        margin: 0 auto;
+    }
+
+    .membre-photo-upload {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .membre-photo-preview {
+        width: 100px;
+        height: 100px;
+        border-radius: 14px;
+    }
+
+    .membre-form-actions {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .membre-form-actions-right,
+    .membre-form-actions-left {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .membre-form-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+    }
+
+    .membre-form-section-title {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 576px) {
+    .membre-form-card {
+        padding: 18px 14px;
+    }
+
+    .membre-form-section-title i {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        font-size: 12px;
+    }
+}

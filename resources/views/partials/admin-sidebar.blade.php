@@ -64,14 +64,17 @@
                 <a href="{{ route('admin.membres.index') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.membres.index') ? 'active' : '' }}">
                     <i class="fas fa-address-book"></i> Tous les membres
                 </a>
-                <a href="#" class="sidebar-submenu-link">
+                <a href="/admin/membres/create" class="membres-add-btn">
                     <i class="fas fa-user-plus"></i> Ajouter un membre
                 </a>
-                <a href="#" class="sidebar-submenu-link">
+                <a href="{{ route('admin.membres.demandes') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.membres.demandes') ? 'active' : '' }}">
                     <i class="fas fa-clock"></i> Demandes d'adhésion
-                    <span class="sidebar-badge sidebar-badge-danger">3</span>
+                    @php $demandesCount = \App\Models\Membre::where('statut', 'en_attente')->count(); @endphp
+                    @if($demandesCount > 0)
+                    <span class="sidebar-badge sidebar-badge-danger">{{ $demandesCount }}</span>
+                    @endif
                 </a>
-                <a href="#" class="sidebar-submenu-link">
+                <a href="{{ route('admin.cotisations.index') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.cotisations.*') ? 'active' : '' }}">
                     <i class="fas fa-coins"></i> Cotisations
                 </a>
             </div>

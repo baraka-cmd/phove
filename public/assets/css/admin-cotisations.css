@@ -1,0 +1,593 @@
+/* ============================================================
+   AHD-RDC — STYLES GESTION COTISATIONS (ADMIN)
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. STATISTIQUES KPI
+   ---------------------------------------------------------- */
+.cotisations-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.cotisation-stat-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 22px 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.3s ease;
+}
+
+.cotisation-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.cotisation-stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.cotisation-stat-card:nth-child(1) .cotisation-stat-icon { background: var(--color-primary-lighter); color: var(--color-primary); }
+.cotisation-stat-card:nth-child(2) .cotisation-stat-icon { background: var(--color-success-light); color: var(--color-success); }
+.cotisation-stat-card:nth-child(3) .cotisation-stat-icon { background: #fff3cd; color: #e67e22; }
+.cotisation-stat-card:nth-child(4) .cotisation-stat-icon { background: var(--color-info-light); color: var(--color-info); }
+.cotisation-stat-card:nth-child(5) .cotisation-stat-icon { background: var(--color-error-light); color: var(--color-accent); }
+
+.cotisation-stat-content { flex: 1; min-width: 0; }
+.cotisation-stat-value { font-size: 1.5rem; font-weight: 800; color: #1a1a1a; line-height: 1; margin-bottom: 4px; }
+.cotisation-stat-label { font-size: 12px; color: var(--color-text-muted); font-weight: 500; }
+.cotisation-stat-sub { font-size: 11px; color: var(--color-text-muted); margin-top: 2px; }
+.cotisation-stat-sub.up { color: var(--color-success); }
+.cotisation-stat-sub.down { color: var(--color-accent); }
+
+/* ----------------------------------------------------------
+   2. GRILLE DE GRAPHIQUES
+   ---------------------------------------------------------- */
+.cotisations-charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+}
+
+/* ----------------------------------------------------------
+   3. WIDGET GRAPHIQUE
+   ---------------------------------------------------------- */
+.cotisations-widget {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+}
+
+.cotisations-widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border-color-light);
+}
+
+.cotisations-widget-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cotisations-widget-title i { color: var(--color-primary); }
+
+.cotisations-widget-body {
+    padding: 20px 22px;
+}
+
+/* ----------------------------------------------------------
+   4. BARRE D'OUTILS (RECHERCHE + FILTRES + AJOUT)
+   ---------------------------------------------------------- */
+.cotisations-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-xl);
+    padding: 18px 20px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.cotisations-search {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+    max-width: 320px;
+}
+
+.cotisations-search i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    font-size: 14px;
+    pointer-events: none;
+}
+
+.cotisations-search-input {
+    width: 100%;
+    padding: 10px 16px 10px 38px;
+    font-family: var(--font-primary);
+    font-size: 13px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.3s ease;
+    background: #fff;
+}
+
+.cotisations-search-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.08);
+}
+
+.cotisations-filtres {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.cotisations-filtre-select {
+    padding: 10px 34px 10px 12px;
+    font-family: var(--font-primary);
+    font-size: 13px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    outline: none;
+    background: #fff;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23777' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    transition: all 0.3s ease;
+}
+
+.cotisations-filtre-select:focus { border-color: var(--color-primary); }
+
+.cotisations-add-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--color-primary);
+    color: #fff;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.cotisations-add-btn:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(22, 85, 143, 0.3);
+    color: #fff;
+}
+
+/* ----------------------------------------------------------
+   5. TABLEAU DES COTISATIONS
+   ---------------------------------------------------------- */
+.cotisations-table-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+}
+
+.table-cotisations {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-cotisations thead {
+    background: var(--color-bg-light);
+}
+
+.table-cotisations thead th {
+    padding: 14px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 2px solid var(--border-color-light);
+    white-space: nowrap;
+}
+
+.table-cotisations tbody td {
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--border-color-light);
+    vertical-align: middle;
+}
+
+.table-cotisations tbody tr { transition: background 0.2s ease; }
+.table-cotisations tbody tr:hover { background: var(--color-bg-light); }
+.table-cotisations tbody tr:last-child td { border-bottom: none; }
+
+/* Cellule membre */
+.cotisation-cell-membre {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cotisation-cell-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cotisation-cell-nom {
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.cotisation-cell-categorie {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    display: block;
+}
+
+/* Montant */
+.cotisation-montant {
+    font-weight: 700;
+    color: var(--color-success);
+    font-size: 14px;
+}
+
+/* Badges */
+.cotisation-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.cotisation-badge-especes { background: var(--color-success-light); color: var(--color-success); }
+.cotisation-badge-virement { background: var(--color-primary-lighter); color: var(--color-primary); }
+.cotisation-badge-mobile { background: #fff3cd; color: #856404; }
+.cotisation-badge-autre { background: #f3e5f5; color: #8e44ad; }
+
+/* Retard */
+.cotisation-retard {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.cotisation-retard i {
+    font-size: 10px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* ----------------------------------------------------------
+   6. PAGINATION
+   ---------------------------------------------------------- */
+.cotisations-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 18px 20px;
+    border-top: 1px solid var(--border-color-light);
+}
+
+.cotisations-pagination-info {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-right: auto;
+}
+
+/* ----------------------------------------------------------
+   7. ÉTAT VIDE
+   ---------------------------------------------------------- */
+.cotisations-empty {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.cotisations-empty-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--color-bg-light);
+    color: var(--color-text-muted);
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+}
+
+.cotisations-empty h4 { font-size: 1rem; color: #1a1a1a; margin-bottom: 6px; }
+.cotisations-empty p { font-size: 13px; color: var(--color-text-muted); }
+
+/* ----------------------------------------------------------
+   8. FORMULAIRE ENREGISTREMENT
+   ---------------------------------------------------------- */
+.cotisation-form-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 36px 40px;
+    max-width: 700px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.cotisation-form-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.cotisation-form-header-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cotisation-form-header h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.cotisation-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.cotisation-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.cotisation-form-full { grid-column: 1 / -1; }
+
+.cotisation-form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 7px;
+}
+
+.cotisation-form-label .required { color: var(--color-accent); }
+
+.cotisation-form-input,
+.cotisation-form-select,
+.cotisation-form-textarea {
+    padding: 11px 14px;
+    font-family: var(--font-primary);
+    font-size: 13px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.25s ease;
+    background: #fafbfc;
+    color: #1a1a1a;
+    width: 100%;
+}
+
+.cotisation-form-input:focus,
+.cotisation-form-select:focus,
+.cotisation-form-textarea:focus {
+    border-color: var(--color-primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.08);
+}
+
+.cotisation-form-select {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 36px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23777' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+
+.cotisation-form-textarea { resize: vertical; min-height: 80px; }
+
+.cotisation-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 2px solid #f0f0f0;
+}
+
+/* ----------------------------------------------------------
+   9. PROGRESS BAR RECOUVREMENT
+   ---------------------------------------------------------- */
+.recouvrement-progress {
+    background: #f0f0f0;
+    border-radius: 10px;
+    height: 12px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.recouvrement-progress-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 1.2s ease;
+}
+
+.recouvrement-progress-fill.high { background: var(--color-success); }
+.recouvrement-progress-fill.medium { background: var(--color-warning); }
+.recouvrement-progress-fill.low { background: var(--color-accent); }
+
+/* ----------------------------------------------------------
+   10. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 1200px) {
+    .cotisations-stats-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 992px) {
+    .cotisations-charts-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    .cotisations-stats-grid { grid-template-columns: 1fr 1fr; gap: var(--spacing-md); }
+    .cotisations-toolbar { flex-direction: column; align-items: stretch; }
+    .cotisations-search { max-width: 100%; }
+    .cotisations-filtre-select { flex: 1; min-width: 120px; }
+    .cotisations-add-btn { justify-content: center; }
+    .cotisation-form-grid { grid-template-columns: 1fr; }
+    .cotisation-form-card { padding: 24px 18px; }
+}
+
+@media (max-width: 576px) {
+    .cotisations-stats-grid { grid-template-columns: 1fr; }
+}
+
+
+
+
+/* ----------------------------------------------------------
+   6. PAGINATION PERSONNALISÉE
+   ---------------------------------------------------------- */
+.cotisations-pagination {
+    padding: 0;
+    border-top: 1px solid var(--border-color-light);
+}
+
+.custom-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.custom-pagination-info {
+    font-size: 12px;
+    color: var(--color-text-muted);
+}
+
+.custom-pagination-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.custom-pagination-links li {
+    display: inline-flex;
+}
+
+.custom-pagination-links li a,
+.custom-pagination-links li span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 6px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background: #fff;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.custom-pagination-links li a:hover {
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.custom-pagination-links li.active span {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+    font-weight: 600;
+}
+
+.custom-pagination-links li.disabled span {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.custom-pagination-links li a i,
+.custom-pagination-links li span i {
+    font-size: 11px;
+}
+
+@media (max-width: 576px) {
+    .custom-pagination {
+        flex-direction: column;
+        text-align: center;
+    }
+}
