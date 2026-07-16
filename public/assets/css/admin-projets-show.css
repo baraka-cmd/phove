@@ -1,0 +1,417 @@
+/* ============================================================
+   AHD-RDC — STYLES FICHE DÉTAILLÉE PROJET (ADMIN)
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. EN-TÊTE
+   ---------------------------------------------------------- */
+.projet-show-header {
+    background: #fff;
+    border-radius: 18px;
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+.projet-show-header::after {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    opacity: 0.03;
+    pointer-events: none;
+}
+
+.projet-show-image {
+    width: 120px;
+    height: 85px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 2px solid #eef0f4;
+}
+
+.projet-show-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.projet-show-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-light);
+    color: #ccc;
+    font-size: 2rem;
+}
+
+.projet-show-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.projet-show-info h2 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.projet-show-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.projet-show-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------
+   2. GRILLE PRINCIPALE
+   ---------------------------------------------------------- */
+.projet-show-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+.projet-show-grid-full {
+    grid-template-columns: 1fr;
+}
+
+/* ----------------------------------------------------------
+   3. CARTES DE DÉTAIL
+   ---------------------------------------------------------- */
+.projet-detail-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.projet-detail-card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.projet-detail-card-header {
+    padding: 18px 22px;
+    background: linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+    border-bottom: 1px solid #eef0f4;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.projet-detail-card-header i {
+    color: #fff;
+    background: var(--color-primary);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+}
+
+.projet-detail-card-body {
+    padding: 20px 22px;
+}
+
+/* ----------------------------------------------------------
+   4. LIGNES DE DÉTAIL
+   ---------------------------------------------------------- */
+.projet-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f6f8;
+    font-size: 13px;
+}
+
+.projet-detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.projet-detail-row:first-child {
+    padding-top: 0;
+}
+
+.projet-detail-label {
+    color: #888;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.projet-detail-label i {
+    font-size: 12px;
+    color: #bbb;
+    width: 16px;
+    text-align: center;
+}
+
+.projet-detail-value {
+    color: #1a1a1a;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+}
+
+.projet-detail-value.highlight {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+/* ----------------------------------------------------------
+   5. BARRE DE PROGRESSION BUDGET
+   ---------------------------------------------------------- */
+.projet-budget-progress {
+    margin-top: 8px;
+}
+
+.projet-budget-bar {
+    width: 100%;
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+
+.projet-budget-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+    border-radius: 4px;
+    transition: width 1.2s ease;
+}
+
+.projet-budget-fill.full {
+    background: linear-gradient(90deg, var(--color-success) 0%, #34ce57 100%);
+}
+
+/* ----------------------------------------------------------
+   6. BLOC TEXTE
+   ---------------------------------------------------------- */
+.projet-text-block {
+    background: var(--color-bg-light);
+    border-radius: 10px;
+    padding: 18px 20px;
+    font-size: 13px;
+    color: #555;
+    line-height: 1.8;
+    white-space: pre-line;
+}
+
+.projet-text-block:empty::after {
+    content: 'Non renseigné';
+    color: #bbb;
+    font-style: italic;
+}
+
+/* ----------------------------------------------------------
+   7. BADGES
+   ---------------------------------------------------------- */
+.projet-show-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.projet-show-badge-primary { background: var(--color-primary-lighter); color: var(--color-primary); }
+.projet-show-badge-success { background: var(--color-success-light); color: var(--color-success); }
+.projet-show-badge-danger { background: var(--color-error-light); color: var(--color-accent); }
+.projet-show-badge-warning { background: var(--color-warning-light); color: #856404; }
+.projet-show-badge-info { background: var(--color-info-light); color: var(--color-info); }
+
+/* ----------------------------------------------------------
+   8. INDICATEURS KPI
+   ---------------------------------------------------------- */
+.projet-kpi-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #f5f6f8;
+}
+
+.projet-kpi-item:last-child {
+    border-bottom: none;
+}
+
+.projet-kpi-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.projet-kpi-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.projet-kpi-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+.projet-kpi-bar {
+    width: 100%;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.projet-kpi-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--color-primary);
+}
+
+.projet-kpi-fill.achieved {
+    background: var(--color-success);
+}
+
+/* ----------------------------------------------------------
+   9. GALERIE MINIATURE
+   ---------------------------------------------------------- */
+.projet-medias-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.projet-media-thumb {
+    width: 100%;
+    aspect-ratio: 4/3;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #eef0f4;
+}
+
+.projet-media-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ----------------------------------------------------------
+   10. BARRE D'ACTIONS
+   ---------------------------------------------------------- */
+.projet-show-actions-bar {
+    display: flex;
+    gap: 10px;
+    margin-top: 28px;
+}
+
+/* ----------------------------------------------------------
+   11. ANIMATIONS
+   ---------------------------------------------------------- */
+.projet-show-header,
+.projet-detail-card {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+.projet-show-header { animation-delay: 0.1s; }
+.projet-detail-card:nth-child(1) { animation-delay: 0.2s; }
+.projet-detail-card:nth-child(2) { animation-delay: 0.3s; }
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------------------------------
+   12. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .projet-show-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .projet-show-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 18px;
+    }
+    .projet-show-image {
+        width: 100%;
+        max-width: 300px;
+        height: 120px;
+        margin: 0 auto;
+    }
+    .projet-show-meta {
+        justify-content: center;
+    }
+    .projet-show-actions {
+        justify-content: center;
+        margin-top: 10px;
+    }
+    .projet-detail-card-body {
+        padding: 16px;
+    }
+    .projet-detail-card-header {
+        padding: 14px 16px;
+        font-size: 13px;
+    }
+    .projet-detail-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+    .projet-detail-value {
+        text-align: left;
+    }
+    .projet-medias-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .projet-show-header {
+        padding: 18px 14px;
+        border-radius: 14px;
+    }
+    .projet-show-info h2 {
+        font-size: 1.2rem;
+    }
+    .projet-detail-card {
+        border-radius: 12px;
+    }
+}

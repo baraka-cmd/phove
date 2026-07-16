@@ -605,3 +605,8 @@
     .membre-stat-card { padding: 16px; }
     .membre-form-card { padding: 18px 14px; }
 }
+
+#motif_suspend_autre_group,
+#motif_exclure_autre_group {
+    display: none;
+}

@@ -352,4 +352,114 @@ public function rejeter(Request $request, Membre $membre)
     return redirect()->route('admin.membres.demandes')
         ->with('success', 'La demande de ' . $membre->nomComplet() . ' a été rejetée.');
 }
+
+
+/**
+ * Affiche la liste des membres sanctionnés (suspendus, exclus).
+ */
+public function sanctions(Request $request)
+{
+    $query = Membre::whereIn('statut', ['suspendu', 'exclu']);
+
+    // Filtre par type de sanction
+    if ($request->filled('statut')) {
+        $query->where('statut', $request->statut);
+    }
+
+    // Recherche
+    if ($request->filled('recherche')) {
+        $recherche = $request->recherche;
+        $query->where(function ($q) use ($recherche) {
+            $q->where('nom', 'like', '%' . $recherche . '%')
+              ->orWhere('post_nom', 'like', '%' . $recherche . '%')
+              ->orWhere('prenom', 'like', '%' . $recherche . '%');
+        });
+    }
+
+    $sanctions = $query->orderBy('date_sanction', 'desc')
+        ->paginate(15)
+        ->withQueryString();
+
+    // Statistiques
+    $totalSuspendus = Membre::where('statut', 'suspendu')->count();
+    $totalExclus = Membre::where('statut', 'exclu')->count();
+    $totalSanctions = $totalSuspendus + $totalExclus;
+
+    return view('admin.membres.sanctions', compact(
+        'sanctions',
+        'totalSuspendus',
+        'totalExclus',
+        'totalSanctions'
+    ));
+}
+
+/**
+ * Réintègre un membre suspendu ou exclu.
+ */
+public function reintegrer(Membre $membre)
+{
+    if (!in_array($membre->statut, ['suspendu', 'exclu'])) {
+        return redirect()->back()
+            ->with('error', 'Ce membre n\'est pas suspendu ni exclu.');
+    }
+
+    $ancienStatut = $membre->statut;
+    
+    $membre->update([
+        'statut' => 'actif',
+        'motif_sanction' => null,
+        'date_sanction' => null,
+    ]);
+
+    $statutLibelle = $ancienStatut === 'suspendu' ? 'suspendu' : 'exclu';
+
+    return redirect()->back()
+        ->with('success', $membre->nomComplet() . ' a été réintégré avec succès. Le statut est passé de "' . $statutLibelle . '" à "Actif".');
+}
+
+/**
+ * Suspend un membre avec motif obligatoire.
+ */
+/**
+ * Suspend un membre avec motif obligatoire.
+ */
+public function suspendre(Request $request, Membre $membre)
+{
+    $validated = $request->validate([
+        'motif_sanction' => ['required', 'string', 'max:1000'],
+    ], [
+        'motif_sanction.required' => 'Le motif de suspension est obligatoire.',
+    ]);
+
+    $membre->update([
+        'statut' => 'suspendu',
+        'motif_sanction' => $validated['motif_sanction'],
+        'date_sanction' => now(),
+    ]);
+
+    return redirect()->back()
+        ->with('success', $membre->nomComplet() . ' a été suspendu.');
+}
+
+/**
+ * Exclut définitivement un membre.
+ */
+public function exclure(Request $request, Membre $membre)
+{
+    $validated = $request->validate([
+        'motif_sanction' => ['required', 'string', 'max:1000'],
+    ], [
+        'motif_sanction.required' => 'Le motif d\'exclusion est obligatoire.',
+    ]);
+
+    $membre->update([
+        'statut' => 'exclu',
+        'motif_sanction' => $validated['motif_sanction'],
+        'date_sanction' => now(),
+    ]);
+
+    return redirect()->back()
+        ->with('success', $membre->nomComplet() . ' a été exclu définitivement.');
+}
+
 }

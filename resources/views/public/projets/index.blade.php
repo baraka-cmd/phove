@@ -336,3 +336,8 @@
     <script src="{{ asset('assets/js/public-pages-common.js') }}"></script>
     <script src="{{ asset('assets/js/projets-index.js') }}"></script>
 @endsection
+
+
+@section('scripts')
+    <script src="{{ asset('assets/js/admin-gouvernance-index.js') }}"></script>
+@endsection

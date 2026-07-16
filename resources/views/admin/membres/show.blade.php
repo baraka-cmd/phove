@@ -260,35 +260,113 @@
                 </div>
             </div>
 
+
+            {{-- Carte : Historique des sanctions --}}
+            @if($membre->motif_sanction)
+            <div class="membre-detail-card sanction" style="margin-top: var(--spacing-xl);">
+                <div class="membre-detail-card-header">
+                    <i class="fas fa-history"></i> Historique des sanctions
+                </div>
+                <div class="membre-detail-card-body">
+                    <div class="membre-detail-row">
+                        <span class="membre-detail-label">Statut actuel</span>
+                        <span class="membre-detail-value" style="color: {{ $membre->statut === 'suspendu' ? '#856404' : '#721c24' }}; font-weight: 700;">
+                            {{ $membre->statut === 'suspendu' ? 'Suspendu' : 'Exclu' }}
+                        </span>
+                    </div>
+                    <div class="membre-detail-row">
+                        <span class="membre-detail-label">Motif</span>
+                        <span class="membre-detail-value">{{ $membre->motif_sanction }}</span>
+                    </div>
+                    <div class="membre-detail-row">
+                        <span class="membre-detail-label">Date de sanction</span>
+                        <span class="membre-detail-value">{{ $membre->date_sanction ? $membre->date_sanction->format('d/m/Y') : '—' }}</span>
+                    </div>
+                    <div class="membre-detail-row">
+                        <span class="membre-detail-label">Durée de la sanction</span>
+                        <span class="membre-detail-value">
+                            @if($membre->date_sanction)
+                                {{ $membre->date_sanction->diffInDays(now()) }} jours
+                            @else
+                                —
+                            @endif
+                        </span>
+                    </div>
+                </div>
+            </div>
+            @endif
             {{-- Carte : Actions rapides --}}
+            {{-- Carte : Actions administratives --}}
             <div class="membre-detail-card" style="margin-top: var(--spacing-xl);">
                 <div class="membre-detail-card-header">
-                    <i class="fas fa-bolt"></i> Actions rapides
+                    <i class="fas fa-bolt"></i> Actions administratives
                 </div>
-                <div class="membre-detail-card-body" style="display: flex; flex-direction: column; gap: 8px;">
-                    <a href="{{ route('admin.membres.edit', $membre) }}" class="btn btn-outline btn-sm" style="justify-content: center;">
+                <div class="membre-detail-card-body" style="display: flex; flex-direction: column; gap: 10px;">
+                    
+                    {{-- Modifier --}}
+                    <a href="{{ route('admin.membres.edit', $membre) }}" class="membre-action-link edit">
                         <i class="fas fa-edit"></i> Modifier ce membre
                     </a>
+
+                    {{-- Selon le statut actuel --}}
                     @if($membre->statut === 'actif')
-                    <form action="{{ route('admin.membres.changeStatus', $membre) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="statut" value="suspendu">
-                        <button type="submit" class="btn btn-outline btn-sm" style="width: 100%; justify-content: center; color: var(--color-accent); border-color: var(--color-accent);">
-                            <i class="fas fa-ban"></i> Suspendre ce membre
+                        {{-- Suspendre --}}
+                        <button class="membre-action-link suspend btn-suspend-membre" 
+                                data-id="{{ $membre->id }}" 
+                                data-nom="{{ $membre->nomComplet() }}">
+                            <i class="fas fa-pause-circle"></i> Suspendre ce membre
                         </button>
-                    </form>
+                        {{-- Exclure --}}
+                        <button class="membre-action-link suspend btn-exclure-membre" 
+                                data-id="{{ $membre->id }}" 
+                                data-nom="{{ $membre->nomComplet() }}"
+                                style="background: #721c24; color: #f8d7da; border-color: #f5c6cb;">
+                            <i class="fas fa-ban"></i> Exclure définitivement
+                        </button>
+
                     @elseif($membre->statut === 'suspendu')
-                    <form action="{{ route('admin.membres.changeStatus', $membre) }}" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="statut" value="actif">
-                        <button type="submit" class="btn btn-outline btn-sm" style="width: 100%; justify-content: center; color: var(--color-success); border-color: var(--color-success);">
-                            <i class="fas fa-check"></i> Réactiver ce membre
+                        {{-- Réintégrer --}}
+                        <form action="{{ route('admin.membres.reintegrer', $membre) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="membre-action-link activate" style="width: 100%;"
+                                    onclick="return confirm('Réintégrer {{ $membre->nomComplet() }} ? Son statut passera à Actif.');">
+                                <i class="fas fa-undo"></i> Réintégrer ce membre (annuler la suspension)
+                            </button>
+                        </form>
+                        {{-- Exclure --}}
+                        <button class="membre-action-link suspend btn-exclure-membre" 
+                                data-id="{{ $membre->id }}" 
+                                data-nom="{{ $membre->nomComplet() }}"
+                                style="background: #721c24; color: #f8d7da; border-color: #f5c6cb;">
+                            <i class="fas fa-ban"></i> Exclure définitivement
                         </button>
-                    </form>
+
+                    @elseif($membre->statut === 'exclu')
+                        {{-- Réintégrer --}}
+                        <form action="{{ route('admin.membres.reintegrer', $membre) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="membre-action-link activate" style="width: 100%;"
+                                    onclick="return confirm('Réintégrer {{ $membre->nomComplet() }} ? Son statut passera à Actif.');">
+                                <i class="fas fa-undo"></i> Réintégrer ce membre (annuler l'exclusion)
+                            </button>
+                        </form>
+
+                    @elseif($membre->statut === 'en_attente')
+                        {{-- Approuver --}}
+                        <form action="{{ route('admin.membres.approuver', $membre) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="membre-action-link activate" style="width: 100%;"
+                                    onclick="return confirm('Approuver la demande de {{ $membre->nomComplet() }} ?');">
+                                <i class="fas fa-check-circle"></i> Approuver cette demande
+                            </button>
+                        </form>
                     @endif
-                    <a href="{{ route('admin.membres.index') }}" class="btn btn-outline btn-sm" style="justify-content: center;">
+
+                    {{-- Retour --}}
+                    <a href="{{ route('admin.membres.index') }}" class="membre-action-link back">
                         <i class="fas fa-arrow-left"></i> Retour à la liste
                     </a>
                 </div>
@@ -296,8 +374,289 @@
         </div>
     </div>
 
+    {{-- ============================================ --}}
+{{-- MODALE DE SUSPENSION --}}
+{{-- ============================================ --}}
+<div class="modal-overlay" id="suspendModal">
+    <div class="modal" style="max-width: 520px;">
+        <div class="modal-header">
+            <h3 class="modal-title" style="color: #856404;">
+                <i class="fas fa-pause-circle"></i> Suspendre le membre
+            </h3>
+            <button class="modal-close" id="closeSuspendModal"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <p style="font-size: 14px; color: #555; margin-bottom: 16px;">
+                Vous allez suspendre : <strong id="suspendMembreNom">—</strong>
+            </p>
+            <form action="" method="POST" id="suspendForm">
+                @csrf
+                @method('PUT')
+                
+                {{-- L'input hidden manquant pour stocker la valeur du select si ce n'est pas "autre" --}}
+                <input type="hidden" name="motif_sanction" id="motif_suspend_hidden" disabled>
+
+                <div class="form-group">
+                    <label for="motif_suspend_select" class="form-label">
+                        Motif de la suspension <span class="required">*</span>
+                    </label>
+                    <select id="motif_suspend_select" class="form-select" onchange="toggleMotifSuspend()">
+                        <option value="">Sélectionnez un motif...</option>
+                        <optgroup label="Articles 8 & 35 — Fautes graves">
+                            <option value="Détournement des fonds">Détournement des fonds</option>
+                            <option value="Trahison et indiscrétion">Trahison et indiscrétion</option>
+                            <option value="Ivresse pendant les heures de service">Ivresse pendant les heures de service</option>
+                            <option value="Débauche">Débauche</option>
+                            <option value="Harcèlement sexuel">Harcèlement sexuel</option>
+                            <option value="Faux et usage de faux">Faux et usage de faux</option>
+                            <option value="Violation des droits des bénéficiaires">Violation des droits des bénéficiaires</option>
+                            <option value="Discrimination et exclusion">Discrimination et exclusion</option>
+                        </optgroup>
+                        <optgroup label="Article 10 — Fautes légères">
+                            <option value="Manque de moralité">Manque de moralité</option>
+                            <option value="Manque de crédibilité">Manque de crédibilité</option>
+                            <option value="Refus de payer les cotisations mensuelles">Refus de payer les cotisations mensuelles</option>
+                        </optgroup>
+                        <optgroup label="Article 12 — Absences">
+                            <option value="Absence non justifiée à 3 AG consécutives">Absence non justifiée à 3 AG consécutives</option>
+                        </optgroup>
+                        <optgroup label="Article 34 — Non-respect">
+                            <option value="Non-paiement des cotisations dans les délais">Non-paiement des cotisations dans les délais</option>
+                            <option value="Non-respect des statuts et du ROI">Non-respect des statuts et du ROI</option>
+                            <option value="Comportement immoral, indiscipline notoire">Comportement immoral, indiscipline notoire</option>
+                            <option value="Déclarations calomnieuses ou diffamatoires">Déclarations calomnieuses ou diffamatoires</option>
+                        </optgroup>
+                        <option value="autre">📝 Autre motif (à préciser)</option>
+                    </select>
+                </div>
+
+                {{-- ID corrigé ici : motif_suspend_autre_group --}}
+                <div class="form-group" id="motif_suspend_autre_group" style="display: none;">
+                    <label for="motif_suspend" class="form-label">Précisez le motif <span class="required">*</span></label>
+                    {{-- ID corrigé ici : motif_suspend --}}
+                    <textarea id="motif_suspend" class="form-textarea" rows="3" 
+                              placeholder="Décrivez le motif de la suspension..."></textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px;">
+                    <button type="button" class="btn btn-outline btn-sm" id="cancelSuspend">Annuler</button>
+                    <button type="submit" class="btn btn-accent btn-sm">
+                        <i class="fas fa-pause-circle"></i> Confirmer la suspension
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{{-- ============================================ --}}
+{{-- MODALE D'EXCLUSION --}}
+{{-- ============================================ --}}
+<div class="modal-overlay" id="exclureModal">
+    <div class="modal" style="max-width: 520px;">
+        <div class="modal-header">
+            <h3 class="modal-title" style="color: var(--color-accent);">
+                <i class="fas fa-ban"></i> Exclure le membre
+            </h3>
+            <button class="modal-close" id="closeExclureModal"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <p style="font-size: 14px; color: #555; margin-bottom: 6px;">
+                Vous allez exclure définitivement : <strong id="exclureMembreNom">—</strong>
+            </p>
+            <p style="font-size: 12px; color: var(--color-accent); margin-bottom: 16px;">
+                <i class="fas fa-exclamation-triangle"></i> Cette action est irréversible (sauf réintégration manuelle).
+            </p>
+            <form action="" method="POST" id="exclureForm">
+                @csrf
+                @method('PUT')
+
+                {{-- L'input hidden pour l'exclusion --}}
+                <input type="hidden" name="motif_sanction" id="motif_exclure_hidden" disabled>
+
+                <div class="form-group">
+                    <label for="motif_exclure_select" class="form-label">
+                        Motif de l'exclusion <span class="required">*</span>
+                    </label>
+                    <select id="motif_exclure_select" class="form-select" onchange="toggleMotifExclure()">
+                        <option value="">Sélectionnez un motif...</option>
+                        <optgroup label="Articles 8 & 35 — Fautes graves">
+                            <option value="Détournement établi des fonds">Détournement établi des fonds</option>
+                            <option value="Trahison et indiscrétion">Trahison et indiscrétion</option>
+                            <option value="Ivresse pendant les heures de service">Ivresse pendant les heures de service</option>
+                            <option value="Débauche">Débauche</option>
+                            <option value="Harcèlement sexuel">Harcèlement sexuel</option>
+                            <option value="Faux et usage de faux">Faux et usage de faux</option>
+                            <option value="Violation des droits des bénéficiaires">Violation des droits des bénéficiaires</option>
+                            <option value="Immoralité">Immoralité</option>
+                            <option value="Discrimination et exclusion">Discrimination et exclusion</option>
+                        </optgroup>
+                        <option value="autre">📝 Autre motif (à préciser)</option>
+                    </select>
+                </div>
+
+                {{-- ID corrigé ici : motif_exclure_autre_group --}}
+                <div class="form-group" id="motif_exclure_autre_group" style="display: none;">
+                    <label for="motif_exclure" class="form-label">Précisez le motif <span class="required">*</span></label>
+                    {{-- ID corrigé ici : motif_exclure --}}
+                    <textarea id="motif_exclure" class="form-textarea" rows="3" 
+                              placeholder="Décrivez le motif de l'exclusion..."></textarea>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px;">
+                    <button type="button" class="btn btn-outline btn-sm" id="cancelExclure">Annuler</button>
+                    <button type="submit" class="btn btn-accent btn-sm">
+                        <i class="fas fa-ban"></i> Confirmer l'exclusion
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 @endsection
 
 @section('scripts')
     <script src="{{ asset('assets/js/admin-membres.js') }}"></script>
+    <script>
+        // ============================================================
+// GESTION DU SELECT MOTIF SUSPENSION
+// ============================================================
+function toggleMotifSuspend() {
+    const select = document.getElementById('motif_suspend_select');
+    const autreGroup = document.getElementById('motif_suspend_autre_group');
+    const hiddenInput = document.getElementById('motif_suspend_hidden');
+    const textarea = document.getElementById('motif_suspend');
+    
+    if (!select || !autreGroup || !hiddenInput || !textarea) return;
+
+    if (select.value === 'autre') {
+        autreGroup.style.display = 'block';
+        hiddenInput.removeAttribute('name');
+        hiddenInput.disabled = true;
+        
+        textarea.setAttribute('name', 'motif_sanction');
+        textarea.required = true;
+        textarea.focus();
+    } else if (select.value !== '') {
+        autreGroup.style.display = 'none';
+        hiddenInput.value = select.value;
+        hiddenInput.setAttribute('name', 'motif_sanction');
+        hiddenInput.disabled = false;
+        
+        textarea.removeAttribute('name');
+        textarea.required = false;
+        textarea.value = '';
+    } else {
+        autreGroup.style.display = 'none';
+        hiddenInput.removeAttribute('name');
+        hiddenInput.disabled = true;
+        
+        textarea.removeAttribute('name');
+        textarea.required = false;
+        textarea.value = '';
+    }
+}
+
+// ============================================================
+// GESTION DU SELECT MOTIF EXCLUSION
+// ============================================================
+function toggleMotifExclure() {
+    const select = document.getElementById('motif_exclure_select');
+    const autreGroup = document.getElementById('motif_exclure_autre_group');
+    const hiddenInput = document.getElementById('motif_exclure_hidden');
+    const textarea = document.getElementById('motif_exclure');
+    
+    if (!select || !autreGroup || !hiddenInput || !textarea) return;
+
+    if (select.value === 'autre') {
+        autreGroup.style.display = 'block';
+        hiddenInput.removeAttribute('name');
+        hiddenInput.disabled = true;
+        
+        textarea.setAttribute('name', 'motif_sanction');
+        textarea.required = true;
+        textarea.focus();
+    } else if (select.value !== '') {
+        autreGroup.style.display = 'none';
+        hiddenInput.value = select.value;
+        hiddenInput.setAttribute('name', 'motif_sanction');
+        hiddenInput.disabled = false;
+        
+        textarea.removeAttribute('name');
+        textarea.required = false;
+        textarea.value = '';
+    } else {
+        autreGroup.style.display = 'none';
+        hiddenInput.removeAttribute('name');
+        hiddenInput.disabled = true;
+        
+        textarea.removeAttribute('name');
+        textarea.required = false;
+        textarea.value = '';
+    }
+}
+
+
+        // ============================================================
+        // MODALE SUSPENSION
+        // ============================================================
+        const suspendModal = document.getElementById('suspendModal');
+        const suspendForm = document.getElementById('suspendForm');
+        const suspendMembreNom = document.getElementById('suspendMembreNom');
+        
+        document.querySelectorAll('.btn-suspend-membre').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                const nom = this.getAttribute('data-nom');
+                suspendForm.action = '/admin/membres/' + id + '/suspendre';
+                suspendMembreNom.textContent = nom;
+                
+                // Réinitialiser le formulaire
+                document.getElementById('motif_suspend_select').value = '';
+                document.getElementById('motif_suspend_autre_group').style.display = 'none';
+                document.getElementById('motif_suspend').value = '';
+                document.getElementById('motif_suspend_hidden').value = '';
+                document.getElementById('motif_suspend_hidden').disabled = true;
+                document.getElementById('motif_suspend').removeAttribute('name');
+                
+                suspendModal.classList.add('active');
+            });
+        });
+
+        document.getElementById('closeSuspendModal')?.addEventListener('click', () => suspendModal.classList.remove('active'));
+        document.getElementById('cancelSuspend')?.addEventListener('click', () => suspendModal.classList.remove('active'));
+        suspendModal?.addEventListener('click', function (e) { if (e.target === this) this.classList.remove('active'); });
+
+        // ============================================================
+        // MODALE EXCLUSION
+        // ============================================================
+        const exclureModal = document.getElementById('exclureModal');
+        const exclureForm = document.getElementById('exclureForm');
+        const exclureMembreNom = document.getElementById('exclureMembreNom');
+        
+        document.querySelectorAll('.btn-exclure-membre').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                const nom = this.getAttribute('data-nom');
+                exclureForm.action = '/admin/membres/' + id + '/exclure';
+                exclureMembreNom.textContent = nom;
+                
+                // Réinitialiser le formulaire
+                document.getElementById('motif_exclure_select').value = '';
+                document.getElementById('motif_exclure_autre_group').style.display = 'none';
+                document.getElementById('motif_exclure').value = '';
+                document.getElementById('motif_exclure_hidden').value = '';
+                document.getElementById('motif_exclure_hidden').disabled = true;
+                document.getElementById('motif_exclure').removeAttribute('name');
+                
+                exclureModal.classList.add('active');
+            });
+        });
+
+        document.getElementById('closeExclureModal')?.addEventListener('click', () => exclureModal.classList.remove('active'));
+        document.getElementById('cancelExclure')?.addEventListener('click', () => exclureModal.classList.remove('active'));
+        exclureModal?.addEventListener('click', function (e) { if (e.target === this) this.classList.remove('active'); });
+    </script>
 @endsection

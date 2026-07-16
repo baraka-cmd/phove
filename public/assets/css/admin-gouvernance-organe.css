@@ -1,0 +1,346 @@
+/* ============================================================
+   AHD-RDC — STYLES GOUVERNANCE — DÉTAIL ORGANE
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. GRILLE PRINCIPALE (TABLEAU + FORMULAIRE)
+   ---------------------------------------------------------- */
+.gouvernance-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: var(--spacing-xl);
+    align-items: start;
+}
+
+/* ----------------------------------------------------------
+   2. TABLEAU DES MEMBRES
+   ---------------------------------------------------------- */
+.gouvernance-table-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+}
+
+.table-gouvernance {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-gouvernance thead {
+    background: var(--color-bg-light);
+}
+
+.table-gouvernance thead th {
+    padding: 14px 16px;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--color-text-muted);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    border-bottom: 2px solid var(--border-color-light);
+    white-space: nowrap;
+}
+
+.table-gouvernance tbody td {
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--border-color-light);
+    vertical-align: middle;
+}
+
+.table-gouvernance tbody tr {
+    transition: background 0.2s ease;
+}
+
+.table-gouvernance tbody tr:hover {
+    background: var(--color-bg-light);
+}
+
+.table-gouvernance tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Cellule membre */
+.gouvernance-cell-membre {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.gouvernance-cell-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.gouvernance-cell-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.gouvernance-cell-nom {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+/* Poste */
+.gouvernance-poste {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+/* Statut badge */
+.gouvernance-statut-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.gouvernance-statut-actif {
+    background: var(--color-success-light);
+    color: var(--color-success);
+}
+
+.gouvernance-statut-termine {
+    background: var(--color-info-light);
+    color: var(--color-info);
+}
+
+/* Actions */
+.gouvernance-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.gouvernance-action-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: #fff;
+    color: var(--color-text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.gouvernance-action-btn:hover {
+    background: var(--color-bg-light);
+}
+
+.gouvernance-action-btn.edit:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.gouvernance-action-btn.remove:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    background: var(--color-error-light);
+}
+
+/* État vide */
+.gouvernance-empty {
+    text-align: center;
+    padding: 50px 20px;
+    color: #999;
+}
+
+.gouvernance-empty i {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 12px;
+    opacity: 0.4;
+}
+
+.gouvernance-empty p {
+    font-size: 14px;
+    margin: 0;
+}
+
+/* ----------------------------------------------------------
+   3. FORMULAIRE D'AJOUT (SIDEBAR)
+   ---------------------------------------------------------- */
+.gouvernance-form-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 24px;
+    position: sticky;
+    top: calc(var(--topbar-height) + 25px);
+}
+
+.gouvernance-form-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--color-primary-lighter);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gouvernance-form-title i {
+    color: var(--color-primary);
+}
+
+.gouvernance-form-group {
+    margin-bottom: 16px;
+}
+
+.gouvernance-form-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.gouvernance-form-label .required {
+    color: var(--color-accent);
+}
+
+.gouvernance-form-input,
+.gouvernance-form-select {
+    width: 100%;
+    padding: 10px 12px;
+    font-family: var(--font-primary);
+    font-size: 13px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.25s ease;
+    background: #fafbfc;
+    color: #1a1a1a;
+}
+
+.gouvernance-form-input:focus,
+.gouvernance-form-select:focus {
+    border-color: var(--color-primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.08);
+}
+
+.gouvernance-form-select {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 36px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23777' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+
+.gouvernance-form-submit {
+    width: 100%;
+    padding: 11px;
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-primary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.gouvernance-form-submit:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(22, 85, 143, 0.3);
+}
+
+/* ----------------------------------------------------------
+   4. FORMULAIRE D'ÉDITION (CACHÉ)
+   ---------------------------------------------------------- */
+.gouvernance-edit-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 24px;
+    margin-top: var(--spacing-xl);
+    border-left: 4px solid var(--color-primary);
+}
+
+/* ----------------------------------------------------------
+   5. ANIMATIONS
+   ---------------------------------------------------------- */
+.gouvernance-table-card,
+.gouvernance-form-card {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------------------------------
+   6. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .gouvernance-detail-grid {
+        grid-template-columns: 1fr;
+    }
+    .gouvernance-form-card {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .table-gouvernance thead th,
+    .table-gouvernance tbody td {
+        padding: 10px 8px;
+        font-size: 11px;
+    }
+    .gouvernance-cell-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 0.7rem;
+    }
+    .gouvernance-form-card,
+    .gouvernance-edit-card {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 576px) {
+    .gouvernance-actions {
+        flex-direction: column;
+        gap: 4px;
+    }
+}

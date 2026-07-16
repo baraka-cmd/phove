@@ -1,0 +1,429 @@
+/* ============================================================
+   AHD-RDC — STYLES DÉTAIL ASSEMBLÉE GÉNÉRALE
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. EN-TÊTE
+   ---------------------------------------------------------- */
+.assembly-show-header {
+    background: #fff;
+    border-radius: 18px;
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+.assembly-show-header::after {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    opacity: 0.03;
+    pointer-events: none;
+}
+
+.assembly-show-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: #fff;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 8px 25px rgba(22, 85, 143, 0.2);
+}
+
+.assembly-show-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.assembly-show-info h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.assembly-show-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.assembly-show-meta .assembly-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.assembly-type-badge.ordinaire {
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+}
+
+.assembly-type-badge.extraordinaire {
+    background: var(--color-error-light);
+    color: var(--color-accent);
+}
+
+.assembly-show-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------
+   2. GRILLE PRINCIPALE
+   ---------------------------------------------------------- */
+.assembly-show-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+.assembly-show-grid-full {
+    grid-template-columns: 1fr;
+}
+
+/* ----------------------------------------------------------
+   3. CARTES DE DÉTAIL
+   ---------------------------------------------------------- */
+.assembly-detail-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.assembly-detail-card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.assembly-detail-card-header {
+    padding: 18px 22px;
+    background: linear-gradient(135deg, #fafbfc 0%, #f5f7fa 100%);
+    border-bottom: 1px solid #eef0f4;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.assembly-detail-card-header i {
+    color: #fff;
+    background: var(--color-primary);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+}
+
+.assembly-detail-card-body {
+    padding: 20px 22px;
+}
+
+/* ----------------------------------------------------------
+   4. LIGNES DE DÉTAIL
+   ---------------------------------------------------------- */
+.assembly-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px 0;
+    border-bottom: 1px solid #f5f6f8;
+    font-size: 13px;
+}
+
+.assembly-detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.assembly-detail-row:first-child {
+    padding-top: 0;
+}
+
+.assembly-detail-label {
+    color: #888;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.assembly-detail-label i {
+    font-size: 12px;
+    color: #bbb;
+    width: 16px;
+    text-align: center;
+}
+
+.assembly-detail-value {
+    color: #1a1a1a;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+}
+
+.assembly-detail-value.highlight {
+    color: var(--color-primary);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+/* ----------------------------------------------------------
+   5. STATUT BADGE
+   ---------------------------------------------------------- */
+.assembly-statut-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.assembly-statut-planifiee { background: var(--color-info-light); color: var(--color-info); }
+.assembly-statut-tenue { background: var(--color-success-light); color: var(--color-success); }
+.assembly-statut-annulee { background: var(--color-error-light); color: var(--color-accent); }
+.assembly-statut-reportee { background: var(--color-warning-light); color: #856404; }
+
+/* ----------------------------------------------------------
+   6. QUORUM
+   ---------------------------------------------------------- */
+.assembly-quorum-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.quorum-atteint {
+    background: var(--color-success-light);
+    color: var(--color-success);
+}
+
+.quorum-non-atteint {
+    background: var(--color-error-light);
+    color: var(--color-accent);
+}
+
+/* ----------------------------------------------------------
+   7. BLOC TEXTE (ORDRE DU JOUR, DÉCISIONS, RÉSOLUTIONS)
+   ---------------------------------------------------------- */
+.assembly-text-block {
+    background: var(--color-bg-light);
+    border-radius: 10px;
+    padding: 18px 20px;
+    font-size: 13px;
+    color: #555;
+    line-height: 1.8;
+    white-space: pre-line;
+}
+
+.assembly-text-block:empty::after {
+    content: 'Non renseigné';
+    color: #bbb;
+    font-style: italic;
+}
+
+/* ----------------------------------------------------------
+   8. SECTION PV
+   ---------------------------------------------------------- */
+.assembly-pv-section {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 24px;
+    margin-bottom: 28px;
+}
+
+.assembly-pv-header {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.assembly-pv-header i {
+    color: var(--color-accent);
+    font-size: 1.2rem;
+}
+
+.assembly-pv-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--color-accent);
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.assembly-pv-download:hover {
+    background: var(--color-accent-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+    color: #fff;
+}
+
+.assembly-pv-none {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px;
+    background: var(--color-bg-light);
+    border-radius: 10px;
+    color: #888;
+    font-style: italic;
+    font-size: 13px;
+}
+
+.assembly-pv-none i {
+    font-size: 1.2rem;
+    opacity: 0.5;
+}
+
+/* ----------------------------------------------------------
+   9. BARRE D'ACTIONS
+   ---------------------------------------------------------- */
+.assembly-show-actions-bar {
+    display: flex;
+    gap: 10px;
+    margin-top: 28px;
+}
+
+/* ----------------------------------------------------------
+   10. ANIMATIONS
+   ---------------------------------------------------------- */
+.assembly-show-header,
+.assembly-detail-card,
+.assembly-pv-section {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+.assembly-show-header { animation-delay: 0.1s; }
+.assembly-detail-card:nth-child(1) { animation-delay: 0.2s; }
+.assembly-detail-card:nth-child(2) { animation-delay: 0.3s; }
+.assembly-pv-section { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------------------------------
+   11. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .assembly-show-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .assembly-show-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 18px;
+    }
+
+    .assembly-show-icon {
+        margin: 0 auto;
+        width: 65px;
+        height: 65px;
+        border-radius: 14px;
+        font-size: 1.6rem;
+    }
+
+    .assembly-show-meta {
+        justify-content: center;
+    }
+
+    .assembly-show-actions {
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .assembly-detail-card-body {
+        padding: 16px;
+    }
+
+    .assembly-detail-card-header {
+        padding: 14px 16px;
+        font-size: 13px;
+    }
+
+    .assembly-detail-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .assembly-detail-value {
+        text-align: left;
+    }
+}
+
+@media (max-width: 576px) {
+    .assembly-show-header {
+        padding: 18px 14px;
+        border-radius: 14px;
+    }
+
+    .assembly-show-icon {
+        width: 55px;
+        height: 55px;
+        border-radius: 12px;
+        font-size: 1.3rem;
+    }
+
+    .assembly-show-info h2 {
+        font-size: 1.2rem;
+    }
+
+    .assembly-detail-card {
+        border-radius: 12px;
+    }
+}

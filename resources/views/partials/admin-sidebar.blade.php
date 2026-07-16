@@ -44,15 +44,12 @@
                 <a href="{{ route('admin.projets.index') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.projets.index') ? 'active' : '' }}">
                     <i class="fas fa-list-ul"></i> Tous les projets
                 </a>
-                <a href="#" class="sidebar-submenu-link">
+                <a href="{{ route('admin.projets.create') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.projets.create') ? 'active' : '' }}">
                     <i class="fas fa-plus-circle"></i> Ajouter un projet
-                </a>
-                <a href="#" class="sidebar-submenu-link">
-                    <i class="fas fa-tags"></i> Domaines
                 </a>
             </div>
         </div>
-
+        
         {{-- Membres --}}
         <div class="sidebar-menu-item has-submenu {{ request()->routeIs('admin.membres.*') ? 'open' : '' }}">
             <a href="#" class="sidebar-menu-link">

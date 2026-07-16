@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\GoogleAuthController;
-use App\Http\Controllers\Public\ProjetController;
+use App\Http\Controllers\Public\ProjetController as PublicProjetController;
 use App\Http\Controllers\Public\ActualiteController;
 use App\Http\Controllers\Public\DonController;
 use App\Http\Controllers\Public\MembreController as PublicMembreController;
@@ -14,7 +14,8 @@ use App\Http\Controllers\Public\ContactController;
 use App\Http\Controllers\Public\RechercheController;
 use App\Http\Controllers\Admin\MembreController as AdminMembreController;
 use App\Http\Controllers\Admin\CotisationController;
-
+use App\Http\Controllers\Admin\GouvernanceController;
+use App\Http\Controllers\Admin\ProjetController as AdminProjetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -127,11 +128,21 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
         Route::get('/', function () { return 'Liste utilisateurs'; })->name('index');
     });
 
+    
+
     // Gestion des projets (admin et super_admin)
     Route::middleware('check.role:admin,super_admin')->prefix('projets')->name('projets.')->group(function () {
-        Route::get('/', function () { return 'Liste projets'; })->name('index');
+        Route::get('/', [AdminProjetController::class, 'index'])->name('index');
+        Route::get('/create', [AdminProjetController::class, 'create'])->name('create');
+        Route::post('/', [AdminProjetController::class, 'store'])->name('store');
+        Route::get('/{projet}', [AdminProjetController::class, 'show'])->name('show');
+        Route::get('/{projet}/edit', [AdminProjetController::class, 'edit'])->name('edit');
+        Route::put('/{projet}', [AdminProjetController::class, 'update'])->name('update');
+        Route::delete('/{projet}', [AdminProjetController::class, 'destroy'])->name('destroy');
+        Route::put('/{projet}/change-status', [AdminProjetController::class, 'changeStatus'])->name('changeStatus');
+        Route::put('/{projet}/toggle-publier', [AdminProjetController::class, 'togglePublier'])->name('togglePublier');
     });
-
+    
     // Gestion des membres (admin et super_admin)
     Route::middleware('check.role:admin,super_admin')->prefix('membres')->name('membres.')->group(function () {
         Route::get('/', [AdminMembreController::class, 'index'])->name('index');
@@ -145,6 +156,10 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
         Route::put('/{membre}/change-status', [AdminMembreController::class, 'changeStatus'])->name('changeStatus');
         Route::put('/{membre}/approuver', [AdminMembreController::class, 'approuver'])->name('approuver');
         Route::put('/{membre}/rejeter', [AdminMembreController::class, 'rejeter'])->name('rejeter');
+        Route::get('/sanctions', [AdminMembreController::class, 'sanctions'])->name('sanctions');
+        Route::put('/{membre}/reintegrer', [AdminMembreController::class, 'reintegrer'])->name('reintegrer');
+        Route::put('/{membre}/suspendre', [AdminMembreController::class, 'suspendre'])->name('suspendre');
+        Route::put('/{membre}/exclure', [AdminMembreController::class, 'exclure'])->name('exclure');
     });
 
     // Gestion des articles (tous les rôles)
@@ -200,6 +215,28 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
         Route::get('/retard', [CotisationController::class, 'retard'])->name('retard');
         Route::get('/regle', [CotisationController::class, 'regle'])->name('regle');
     });
+
+    
+
+    // Gouvernance
+    Route::middleware('check.role:admin,super_admin')->prefix('gouvernance')->name('gouvernance.')->group(function () {
+        Route::get('/', [GouvernanceController::class, 'index'])->name('index');
+        Route::get('/organes/{organe}', [GouvernanceController::class, 'organe'])->name('organe');
+        Route::post('/organes/store', [GouvernanceController::class, 'storeMembre'])->name('storeMembre');
+        Route::put('/organes/{organe}/update', [GouvernanceController::class, 'updateMembre'])->name('updateMembre');
+        Route::put('/organes/{organe}/retirer', [GouvernanceController::class, 'retirerMembre'])->name('retirerMembre');
+        
+        // Assemblées Générales
+        Route::get('/assemblies', [GouvernanceController::class, 'assemblies'])->name('assemblies');
+        Route::get('/assemblies/create', [GouvernanceController::class, 'createAssembly'])->name('assemblies.create');
+        Route::post('/assemblies', [GouvernanceController::class, 'storeAssembly'])->name('assemblies.store');
+        Route::get('/assemblies/{assembly}', [GouvernanceController::class, 'showAssembly'])->name('assemblies.show');
+        Route::get('/assemblies/{assembly}/edit', [GouvernanceController::class, 'editAssembly'])->name('assemblies.edit');
+        Route::put('/assemblies/{assembly}', [GouvernanceController::class, 'updateAssembly'])->name('assemblies.update');
+        Route::delete('/assemblies/{assembly}', [GouvernanceController::class, 'destroyAssembly'])->name('assemblies.destroy');
+    });
+    
+
 });
 
 /*
@@ -210,8 +247,8 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
 
 // Projets (liste et détail)
 
-Route::get('/projets', [ProjetController::class, 'index'])->name('projets.index');
-Route::get('/projets/{slug}', [ProjetController::class, 'show'])->name('projets.show');
+Route::get('/projets', [PublicProjetController::class, 'index'])->name('projets.index');
+Route::get('/projets/{slug}', [PublicProjetController::class, 'show'])->name('projets.show');
 
 // Actualités
 Route::get('/actualites', [ActualiteController::class, 'index'])->name('actualites.index');

@@ -1,0 +1,438 @@
+/* ============================================================
+   AHD-RDC — STYLES FORMULAIRE PROJET (CREATE & EDIT)
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. CONTAINER DU FORMULAIRE
+   ---------------------------------------------------------- */
+.projet-form-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 36px 40px;
+    max-width: 900px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+/* ----------------------------------------------------------
+   2. EN-TÊTE
+   ---------------------------------------------------------- */
+.projet-form-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.projet-form-header-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.projet-form-header h2 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.projet-form-header p {
+    font-size: 13px;
+    color: #888;
+    margin: 4px 0 0 0;
+}
+
+/* ----------------------------------------------------------
+   3. SECTIONS
+   ---------------------------------------------------------- */
+.projet-form-section {
+    margin-bottom: 28px;
+}
+
+.projet-form-section:last-child {
+    margin-bottom: 0;
+}
+
+.projet-form-section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--color-primary-lighter);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.projet-form-section-title i {
+    color: #fff;
+    background: var(--color-primary);
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+/* ----------------------------------------------------------
+   4. GRILLE DU FORMULAIRE
+   ---------------------------------------------------------- */
+.projet-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.projet-form-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.projet-form-full {
+    grid-column: 1 / -1;
+}
+
+/* ----------------------------------------------------------
+   5. GROUPES DE CHAMPS
+   ---------------------------------------------------------- */
+.projet-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+}
+
+.projet-form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 7px;
+}
+
+.projet-form-label .required {
+    color: var(--color-accent);
+}
+
+.projet-form-label .optional {
+    font-size: 11px;
+    color: #aaa;
+    font-weight: 400;
+    font-style: italic;
+    margin-left: 2px;
+}
+
+.projet-form-input,
+.projet-form-select,
+.projet-form-textarea {
+    width: 100%;
+    padding: 11px 14px;
+    font-family: var(--font-primary);
+    font-size: 13px;
+    border: 2px solid #e0e4e8;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.25s ease;
+    background: #fafbfc;
+    color: #1a1a1a;
+}
+
+.projet-form-input:focus,
+.projet-form-select:focus,
+.projet-form-textarea:focus {
+    border-color: var(--color-primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.08);
+}
+
+.projet-form-input::placeholder,
+.projet-form-textarea::placeholder {
+    color: #bbb;
+    font-style: italic;
+}
+
+.projet-form-input.error,
+.projet-form-select.error,
+.projet-form-textarea.error {
+    border-color: var(--color-accent);
+    background: #fffbfb;
+}
+
+.projet-form-select {
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 36px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23777' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+
+.projet-form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+}
+
+.projet-form-error {
+    font-size: 11px;
+    color: var(--color-accent);
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.projet-form-hint {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    margin-top: 4px;
+    font-style: italic;
+}
+
+/* ----------------------------------------------------------
+   6. UPLOAD IMAGE
+   ---------------------------------------------------------- */
+.projet-image-upload {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.projet-image-preview {
+    width: 200px;
+    height: 140px;
+    border-radius: 12px;
+    border: 2px dashed #d0d5dd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    background: #fafbfc;
+}
+
+.projet-image-preview:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-lighter);
+}
+
+.projet-image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.projet-image-placeholder {
+    font-size: 2.5rem;
+    color: #c0c7cf;
+    transition: color 0.3s ease;
+}
+
+.projet-image-preview:hover .projet-image-placeholder {
+    color: var(--color-primary);
+}
+
+.projet-image-info {
+    flex: 1;
+    padding-top: 4px;
+}
+
+.projet-image-info p {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+}
+
+.projet-image-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px 0;
+}
+
+.projet-image-info ul li {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.projet-image-info ul li i {
+    font-size: 10px;
+    color: var(--color-success);
+}
+
+.projet-image-input {
+    font-size: 12px;
+}
+
+.projet-image-input::file-selector-button {
+    padding: 7px 16px;
+    background: var(--color-bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-family: var(--font-primary);
+    font-size: 12px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: all 0.2s ease;
+}
+
+.projet-image-input::file-selector-button:hover {
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* ----------------------------------------------------------
+   7. SWITCH (PUBLIER)
+   ---------------------------------------------------------- */
+.projet-form-switch {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--color-bg-light);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.projet-form-switch:hover {
+    background: #eef0f4;
+}
+
+.projet-form-switch input[type="checkbox"] {
+    width: 40px;
+    height: 22px;
+    appearance: none;
+    -webkit-appearance: none;
+    background: #ccc;
+    border-radius: 11px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.projet-form-switch input[type="checkbox"]::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    transition: all 0.3s ease;
+}
+
+.projet-form-switch input[type="checkbox"]:checked {
+    background: var(--color-success);
+}
+
+.projet-form-switch input[type="checkbox"]:checked::before {
+    left: 20px;
+}
+
+.projet-form-switch-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.projet-form-switch-desc {
+    font-size: 11px;
+    color: #888;
+}
+
+/* ----------------------------------------------------------
+   8. BARRE D'ACTIONS
+   ---------------------------------------------------------- */
+.projet-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 2px solid #f0f0f0;
+}
+
+/* ----------------------------------------------------------
+   9. ANIMATIONS
+   ---------------------------------------------------------- */
+.projet-form-card {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------------------------------
+   10. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 992px) {
+    .projet-form-card {
+        padding: 28px 24px;
+    }
+    .projet-image-upload {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .projet-image-preview {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .projet-form-grid,
+    .projet-form-grid-3 {
+        grid-template-columns: 1fr;
+    }
+    .projet-form-card {
+        padding: 22px 18px;
+    }
+    .projet-form-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    .projet-form-header-icon {
+        margin: 0 auto;
+    }
+    .projet-form-actions {
+        flex-direction: column;
+    }
+    .projet-form-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .projet-form-card {
+        padding: 18px 14px;
+        border-radius: 14px;
+    }
+    .projet-form-section-title {
+        font-size: 13px;
+    }
+}
