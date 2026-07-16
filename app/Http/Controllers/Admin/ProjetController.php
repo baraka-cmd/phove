@@ -283,4 +283,132 @@ class ProjetController extends Controller
         return redirect()->back()
             ->with('success', 'Le projet a été ' . $etat . ' avec succès.');
     }
+
+
+    /**
+ * Affiche la vue d'ensemble des budgets de tous les projets.
+ */
+public function budgets(Request $request)
+{
+    $query = Projet::query();
+
+    // Filtre par domaine
+    if ($request->filled('domaine')) {
+        $query->where('domaine', $request->domaine);
+    }
+
+    // Filtre par statut
+    if ($request->filled('statut')) {
+        $query->where('statut', $request->statut);
+    }
+
+    // Recherche
+    if ($request->filled('recherche')) {
+        $recherche = $request->recherche;
+        $query->where(function ($q) use ($recherche) {
+            $q->where('titre', 'like', '%' . $recherche . '%')
+              ->orWhere('zone_geographique', 'like', '%' . $recherche . '%');
+        });
+    }
+
+    $projets = $query->orderBy('budget_total', 'desc')
+        ->paginate(15)
+        ->withQueryString();
+
+    // ============================================
+    // STATISTIQUES KPI
+    // ============================================
+    $totalBudgetPrevisionnel = Projet::sum('budget_total');
+    $totalBudgetUtilise = Projet::sum('budget_utilise');
+    $tauxConsommationGlobal = $totalBudgetPrevisionnel > 0 
+        ? round(($totalBudgetUtilise / $totalBudgetPrevisionnel) * 100) 
+        : 0;
+    $nombreProjetsAvecBudget = Projet::where('budget_total', '>', 0)->count();
+    $projetsEnDepassement = Projet::whereRaw('budget_utilise > budget_total')
+        ->where('budget_total', '>', 0)
+        ->count();
+
+    // Budget restant global
+    $budgetRestant = $totalBudgetPrevisionnel - $totalBudgetUtilise;
+
+    // ============================================
+    // DONNÉES GRAPHIQUE BARRES (Top 10 projets)
+    // ============================================
+    $topProjets = Projet::where('budget_total', '>', 0)
+        ->orderBy('budget_total', 'desc')
+        ->take(10)
+        ->get();
+
+    $graphLabels = $topProjets->pluck('titre')->map(fn($t) => \Str::limit($t, 35));
+    $graphBudgetTotal = $topProjets->pluck('budget_total');
+    $graphBudgetUtilise = $topProjets->pluck('budget_utilise');
+
+    // ============================================
+    // DONNÉES GRAPHIQUE ANNEAU (par domaine)
+    // ============================================
+    $domainesStats = Projet::selectRaw('domaine, SUM(budget_utilise) as total')
+        ->where('budget_utilise', '>', 0)
+        ->groupBy('domaine')
+        ->get();
+
+    $donutLabels = [];
+    $donutValues = [];
+    $domainesColors = [
+        'sante_nutrition' => '#16558F',
+        'education' => '#28a745',
+        'protection' => '#8e44ad',
+        'wash' => '#2980b9',
+        'securite_alimentaire' => '#e67e22',
+        'communication' => '#17a2b8',
+        'environnement' => '#27ae60',
+        'paix' => '#D32F2F',
+        'genre' => '#e91e63',
+    ];
+
+    foreach ($domainesStats as $stat) {
+        $donutLabels[] = $stat->projet ? $stat->projet->domaineLibelle() : $stat->domaine;
+        $donutValues[] = (float) $stat->total;
+    }
+
+    return view('admin.projets.budgets', compact(
+        'projets',
+        'totalBudgetPrevisionnel',
+        'totalBudgetUtilise',
+        'tauxConsommationGlobal',
+        'nombreProjetsAvecBudget',
+        'projetsEnDepassement',
+        'budgetRestant',
+        'graphLabels',
+        'graphBudgetTotal',
+        'graphBudgetUtilise',
+        'donutLabels',
+        'donutValues',
+        'domainesColors'
+    ));
+}
+
+/**
+ * Met à jour le budget utilisé d'un projet.
+ */
+public function updateBudget(Request $request, Projet $projet)
+{
+    $validated = $request->validate([
+        'budget_utilise' => ['required', 'numeric', 'min:0'],
+    ], [
+        'budget_utilise.required' => 'Le budget utilisé est obligatoire.',
+        'budget_utilise.min' => 'Le budget utilisé ne peut pas être négatif.',
+    ]);
+
+    $projet->update(['budget_utilise' => $validated['budget_utilise']]);
+
+    // Message d'alerte si dépassement
+    if ($projet->budget_utilise > $projet->budget_total && $projet->budget_total > 0) {
+        $depassement = $projet->budget_utilise - $projet->budget_total;
+        return redirect()->back()
+            ->with('warning', '⚠️ Attention : le budget est dépassé de ' . number_format($depassement, 0, ',', ' ') . ' $ pour le projet "' . \Str::limit($projet->titre, 50) . '".');
+    }
+
+    return redirect()->back()
+        ->with('success', 'Le budget du projet a été mis à jour avec succès.');
+}
 }

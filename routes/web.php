@@ -16,6 +16,9 @@ use App\Http\Controllers\Admin\MembreController as AdminMembreController;
 use App\Http\Controllers\Admin\CotisationController;
 use App\Http\Controllers\Admin\GouvernanceController;
 use App\Http\Controllers\Admin\ProjetController as AdminProjetController;
+use App\Http\Controllers\Admin\IndicateurController;
+use App\Http\Controllers\Admin\DonController as AdminDonController;
+use App\Http\Controllers\Admin\FinanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -134,15 +137,25 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
     Route::middleware('check.role:admin,super_admin')->prefix('projets')->name('projets.')->group(function () {
         Route::get('/', [AdminProjetController::class, 'index'])->name('index');
         Route::get('/create', [AdminProjetController::class, 'create'])->name('create');
+        Route::get('/budgets', [AdminProjetController::class, 'budgets'])->name('budgets'); // ← ICI, AVANT {projet}
         Route::post('/', [AdminProjetController::class, 'store'])->name('store');
+        
         Route::get('/{projet}', [AdminProjetController::class, 'show'])->name('show');
         Route::get('/{projet}/edit', [AdminProjetController::class, 'edit'])->name('edit');
         Route::put('/{projet}', [AdminProjetController::class, 'update'])->name('update');
         Route::delete('/{projet}', [AdminProjetController::class, 'destroy'])->name('destroy');
         Route::put('/{projet}/change-status', [AdminProjetController::class, 'changeStatus'])->name('changeStatus');
         Route::put('/{projet}/toggle-publier', [AdminProjetController::class, 'togglePublier'])->name('togglePublier');
+        Route::put('/{projet}/budget', [AdminProjetController::class, 'updateBudget'])->name('updateBudget');
+        
+        // Indicateurs de projet
+        Route::get('/{projet}/indicateurs', [IndicateurController::class, 'index'])->name('indicateurs.index');
+        Route::post('/{projet}/indicateurs', [IndicateurController::class, 'store'])->name('indicateurs.store');
+        Route::put('/{projet}/indicateurs/{indicateur}', [IndicateurController::class, 'update'])->name('indicateurs.update');
+        Route::put('/{projet}/indicateurs/{indicateur}/value', [IndicateurController::class, 'updateValue'])->name('indicateurs.updateValue');
+        Route::delete('/{projet}/indicateurs/{indicateur}', [IndicateurController::class, 'destroy'])->name('indicateurs.destroy');
     });
-    
+
     // Gestion des membres (admin et super_admin)
     Route::middleware('check.role:admin,super_admin')->prefix('membres')->name('membres.')->group(function () {
         Route::get('/', [AdminMembreController::class, 'index'])->name('index');
@@ -167,9 +180,20 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
         Route::get('/', function () { return 'Liste articles'; })->name('index');
     });
 
+
     // Gestion des dons (admin et super_admin)
     Route::middleware('check.role:admin,super_admin')->prefix('dons')->name('dons.')->group(function () {
-        Route::get('/', function () { return 'Liste dons'; })->name('index');
+        Route::get('/', [AdminDonController::class, 'index'])->name('index');
+        Route::get('/create', [AdminDonController::class, 'create'])->name('create');
+        Route::post('/', [AdminDonController::class, 'store'])->name('store');
+        Route::get('/{don}/telecharger-recus', [AdminDonController::class, 'telechargerRecu'])->name('telechargerRecu');
+        Route::get('/{don}/recu', [AdminDonController::class, 'voirRecu'])->name('recu');
+        Route::get('/{don}', [AdminDonController::class, 'show'])->name('show');
+        Route::get('/{don}/edit', [AdminDonController::class, 'edit'])->name('edit');
+        Route::put('/{don}', [AdminDonController::class, 'update'])->name('update');
+        Route::delete('/{don}', [AdminDonController::class, 'destroy'])->name('destroy');
+        Route::put('/{don}/generer-recu', [AdminDonController::class, 'genererRecu'])->name('genererRecu');
+        Route::put('/{don}/change-status', [AdminDonController::class, 'changeStatus'])->name('changeStatus');
     });
 
     // Gestion des partenaires (admin et super_admin)
@@ -187,9 +211,17 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
         Route::get('/', function () { return 'Liste médias'; })->name('index');
     });
 
+    
+
     // Gestion financière (admin et super_admin)
     Route::middleware('check.role:admin,super_admin')->prefix('finances')->name('finances.')->group(function () {
-        Route::get('/', function () { return 'Rapports financiers'; })->name('index');
+        Route::get('/', [FinanceController::class, 'index'])->name('index');
+        Route::get('/create', [FinanceController::class, 'create'])->name('create');
+        Route::post('/', [FinanceController::class, 'store'])->name('store');
+        Route::get('/{rapport}', [FinanceController::class, 'show'])->name('show');
+        Route::put('/{rapport}/publier', [FinanceController::class, 'publier'])->name('publier');
+        Route::get('/{rapport}/pdf', [FinanceController::class, 'telechargerPdf'])->name('telechargerPdf');
+        Route::delete('/{rapport}', [FinanceController::class, 'destroy'])->name('destroy');
     });
 
     // Gouvernance (admin et super_admin)

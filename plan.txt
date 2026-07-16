@@ -148,7 +148,7 @@ Ajout d'indicateurs personnalisés par projet, mise à jour des valeurs actuelle
 
 ---
 
-ÉTAPE 25 — Gestion des bénéficiaires (admin)
+A revoir ÉTAPE 25 — Gestion des bénéficiaires (admin)
 
 Ajout de bénéficiaires liés à un projet, catégorisation, localisation, type d'aide, liste filtrable, statistiques.
 

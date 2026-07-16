@@ -47,9 +47,12 @@
                 <a href="{{ route('admin.projets.create') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.projets.create') ? 'active' : '' }}">
                     <i class="fas fa-plus-circle"></i> Ajouter un projet
                 </a>
+                <a href="{{ route('admin.projets.budgets') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.projets.budgets') ? 'active' : '' }}">
+                    <i class="fas fa-coins"></i> Budgets
+                </a>
             </div>
         </div>
-        
+
         {{-- Membres --}}
         <div class="sidebar-menu-item has-submenu {{ request()->routeIs('admin.membres.*') ? 'open' : '' }}">
             <a href="#" class="sidebar-menu-link">
