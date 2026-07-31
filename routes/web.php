@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\ProjetController as AdminProjetController;
 use App\Http\Controllers\Admin\IndicateurController;
 use App\Http\Controllers\Admin\DonController as AdminDonController;
 use App\Http\Controllers\Admin\FinanceController;
+use App\Http\Controllers\Admin\PartenaireController;
 
 /*
 |--------------------------------------------------------------------------
@@ -196,9 +197,17 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
         Route::put('/{don}/change-status', [AdminDonController::class, 'changeStatus'])->name('changeStatus');
     });
 
+    
+
     // Gestion des partenaires (admin et super_admin)
     Route::middleware('check.role:admin,super_admin')->prefix('partenaires')->name('partenaires.')->group(function () {
-        Route::get('/', function () { return 'Liste partenaires'; })->name('index');
+        Route::get('/', [PartenaireController::class, 'index'])->name('index');
+        Route::get('/create', [PartenaireController::class, 'create'])->name('create');
+        Route::post('/', [PartenaireController::class, 'store'])->name('store');
+        Route::get('/{partenaire}', [PartenaireController::class, 'show'])->name('show');
+        Route::get('/{partenaire}/edit', [PartenaireController::class, 'edit'])->name('edit');
+        Route::put('/{partenaire}', [PartenaireController::class, 'update'])->name('update');
+        Route::delete('/{partenaire}', [PartenaireController::class, 'destroy'])->name('destroy');
     });
 
     // Gestion des bénéficiaires (admin et super_admin)
