@@ -105,7 +105,7 @@
 
                     {{-- Contact --}}
                     <li class="header-menu-item">
-                        <a href="{{ url('/contact') }}" class="header-menu-link {{ request()->is('contact') ? 'active' : '' }}">
+                        <a href="{{ route('contact') }}" class="header-menu-link {{ request()->routeIs('contact') ? 'active' : '' }}">
                             <i class="fas fa-envelope-open-text"></i>
                             <span>Contact</span>
                         </a>

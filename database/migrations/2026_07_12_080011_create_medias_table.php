@@ -27,6 +27,9 @@ return new class extends Migration
             $table->string('fichier');
             $table->string('miniature')->nullable();
             
+            // Taille du fichier en octets
+            $table->unsignedBigInteger('taille')->default(0);
+            
             // Lien vers un projet (optionnel)
             $table->foreignId('projet_id')
                   ->nullable()

@@ -10,7 +10,7 @@ use App\Http\Controllers\Public\ProjetController as PublicProjetController;
 use App\Http\Controllers\Public\ActualiteController;
 use App\Http\Controllers\Public\DonController;
 use App\Http\Controllers\Public\MembreController as PublicMembreController;
-use App\Http\Controllers\Public\ContactController;
+use App\Http\Controllers\Public\ContactController as PublicContactController;
 use App\Http\Controllers\Public\RechercheController;
 use App\Http\Controllers\Admin\MembreController as AdminMembreController;
 use App\Http\Controllers\Admin\CotisationController;
@@ -20,6 +20,14 @@ use App\Http\Controllers\Admin\IndicateurController;
 use App\Http\Controllers\Admin\DonController as AdminDonController;
 use App\Http\Controllers\Admin\FinanceController;
 use App\Http\Controllers\Admin\PartenaireController;
+use App\Http\Controllers\Admin\ArticleController;
+use App\Http\Controllers\Admin\MediaController;
+use App\Http\Controllers\Admin\TemoignageController;
+use App\Http\Controllers\Admin\DocumentController;
+use App\Http\Controllers\Admin\ContactController as AdminContactController;
+use App\Http\Controllers\Admin\MessageController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -127,9 +135,19 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
         return view('admin.dashboard');
     })->name('dashboard');
 
-    // Gestion des utilisateurs (super_admin uniquement)
-    Route::middleware('check.role:super_admin')->prefix('utilisateurs')->name('utilisateurs.')->group(function () {
-        Route::get('/', function () { return 'Liste utilisateurs'; })->name('index');
+    Route::middleware('check.role:super_admin')->prefix('utilisateurs')->name('users.')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::get('/{user}', [UserController::class, 'show'])->name('show');
+        Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
+        Route::put('/{user}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+        Route::put('/{user}/activer', [UserController::class, 'activer'])->name('activer');
+        Route::put('/{user}/desactiver', [UserController::class, 'desactiver'])->name('desactiver');
+        Route::put('/{user}/suspendre', [UserController::class, 'suspendre'])->name('suspendre');
+        Route::get('/{user}/password', [UserController::class, 'editPassword'])->name('password');
+        Route::put('/{user}/password', [UserController::class, 'updatePassword'])->name('password.update');
     });
 
     
@@ -178,7 +196,15 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
 
     // Gestion des articles (tous les rôles)
     Route::prefix('articles')->name('articles.')->group(function () {
-        Route::get('/', function () { return 'Liste articles'; })->name('index');
+        Route::get('/', [ArticleController::class, 'index'])->name('index');
+        Route::get('/create', [ArticleController::class, 'create'])->name('create');
+        Route::post('/', [ArticleController::class, 'store'])->name('store');
+        Route::get('/{article}', [ArticleController::class, 'show'])->name('show');
+        Route::get('/{article}/edit', [ArticleController::class, 'edit'])->name('edit');
+        Route::put('/{article}', [ArticleController::class, 'update'])->name('update');
+        Route::delete('/{article}', [ArticleController::class, 'destroy'])->name('destroy');
+        Route::put('/{article}/toggle-publier', [ArticleController::class, 'togglePublier'])->name('togglePublier');
+        Route::put('/{article}/toggle-epingler', [ArticleController::class, 'toggleEpingler'])->name('toggleEpingler');
     });
 
 
@@ -210,14 +236,38 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
         Route::delete('/{partenaire}', [PartenaireController::class, 'destroy'])->name('destroy');
     });
 
-    // Gestion des bénéficiaires (admin et super_admin)
-    Route::middleware('check.role:admin,super_admin')->prefix('beneficiaires')->name('beneficiaires.')->group(function () {
-        Route::get('/', function () { return 'Liste bénéficiaires'; })->name('index');
+    // Gestion des témoignages (admin et super_admin)
+    Route::middleware('check.role:admin,super_admin')->prefix('temoignages')->name('temoignages.')->group(function () {
+        Route::get('/', [TemoignageController::class, 'index'])->name('index');
+        Route::get('/create', [TemoignageController::class, 'create'])->name('create');
+        Route::post('/', [TemoignageController::class, 'store'])->name('store');
+        Route::get('/{temoignage}', [TemoignageController::class, 'show'])->name('show');
+        Route::get('/{temoignage}/edit', [TemoignageController::class, 'edit'])->name('edit');
+        Route::put('/{temoignage}', [TemoignageController::class, 'update'])->name('update');
+        Route::delete('/{temoignage}', [TemoignageController::class, 'destroy'])->name('destroy');
+        Route::put('/{temoignage}/approuver', [TemoignageController::class, 'approuver'])->name('approuver');
+        Route::put('/{temoignage}/rejeter', [TemoignageController::class, 'rejeter'])->name('rejeter');
+        Route::put('/{temoignage}/archiver', [TemoignageController::class, 'archiver'])->name('archiver');
+        Route::put('/{temoignage}/desarchiver', [TemoignageController::class, 'desarchiver'])->name('desarchiver');
     });
 
     // Gestion des médias (admin et super_admin)
     Route::middleware('check.role:admin,super_admin')->prefix('medias')->name('medias.')->group(function () {
-        Route::get('/', function () { return 'Liste médias'; })->name('index');
+        Route::get('/', [MediaController::class, 'index'])->name('index');
+        Route::get('/create', [MediaController::class, 'create'])->name('create');
+        Route::post('/', [MediaController::class, 'store'])->name('store');
+        Route::get('/{media}', [MediaController::class, 'show'])->name('show');
+        Route::get('/{media}/edit', [MediaController::class, 'edit'])->name('edit');
+        Route::put('/{media}', [MediaController::class, 'update'])->name('update');
+        Route::delete('/{media}', [MediaController::class, 'destroy'])->name('destroy');
+        Route::put('/{media}/toggle-publier', [MediaController::class, 'togglePublier'])->name('togglePublier');
+        Route::put('/{media}/replace-file', [MediaController::class, 'replaceFile'])->name('replaceFile');
+        Route::post('/{media}/incrementer-vues', [MediaController::class, 'incrementerVues'])->name('incrementerVues');
+        
+        // Actions batch
+        Route::delete('/batch/delete', [MediaController::class, 'batchDelete'])->name('batchDelete');
+        Route::put('/batch/change-album', [MediaController::class, 'batchChangeAlbum'])->name('batchChangeAlbum');
+        Route::put('/batch/toggle-publier', [MediaController::class, 'batchTogglePublier'])->name('batchTogglePublier');
     });
 
     
@@ -240,12 +290,37 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
 
     // Messages de contact (admin et super_admin)
     Route::middleware('check.role:admin,super_admin')->prefix('contacts')->name('contacts.')->group(function () {
-        Route::get('/', function () { return 'Messages'; })->name('index');
+        Route::get('/', [AdminContactController::class, 'index'])->name('index');
+        Route::get('/{email}', [AdminContactController::class, 'show'])->name('show');
+        Route::put('/{contact}/lu', [AdminContactController::class, 'marquerLu'])->name('marquerLu');
+        Route::put('/{contact}/non-lu', [AdminContactController::class, 'marquerNonLu'])->name('marquerNonLu');
+        Route::put('/{contact}/statut', [AdminContactController::class, 'changeStatut'])->name('changeStatut');
+        Route::put('/{contact}/archiver', [AdminContactController::class, 'archiver'])->name('archiver');
+        Route::put('/{contact}/desarchiver', [AdminContactController::class, 'desarchiver'])->name('desarchiver');
+        Route::put('/{contact}/note', [AdminContactController::class, 'note'])->name('note');
+        Route::post('/{contact}/repondre', [AdminContactController::class, 'repondre'])->name('repondre');
+        Route::put('/{contact}/assigner', [AdminContactController::class, 'assigner'])->name('assigner');
+        Route::delete('/{contact}', [AdminContactController::class, 'destroy'])->name('destroy');
+        Route::delete('/conversation/supprimer', [AdminContactController::class, 'destroyConversation'])->name('destroyConversation');
     });
 
-    // Paramètres (super_admin uniquement)
+    // Messagerie interne (tous les utilisateurs connectés)
+    Route::middleware('auth')->prefix('messages')->name('messages.')->group(function () {
+        Route::get('/', [MessageController::class, 'index'])->name('index');
+        Route::get('/envoyes', [MessageController::class, 'envoyes'])->name('envoyes');
+        Route::get('/composer', [MessageController::class, 'composer'])->name('composer');
+        Route::post('/envoyer', [MessageController::class, 'envoyer'])->name('envoyer');
+        Route::get('/{user}', [MessageController::class, 'show'])->name('show');
+        Route::post('/{user}/repondre', [MessageController::class, 'repondre'])->name('repondre');
+        Route::put('/{message}/lu', [MessageController::class, 'marquerLu'])->name('marquerLu');
+        Route::put('/{user}/archiver', [MessageController::class, 'archiverConversation'])->name('archiverConversation');
+        Route::delete('/{message}', [MessageController::class, 'destroy'])->name('destroy');
+    });
+
     Route::middleware('check.role:super_admin')->prefix('parametres')->name('parametres.')->group(function () {
-        Route::get('/', function () { return 'Paramètres'; })->name('index');
+        Route::get('/', [SettingController::class, 'index'])->name('index');
+        Route::put('/update', [SettingController::class, 'update'])->name('update');
+        Route::post('/remove-image', [SettingController::class, 'removeImage'])->name('removeImage');
     });
 
     // Gestion des cotisations (admin et super_admin)
@@ -276,7 +351,22 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
         Route::put('/assemblies/{assembly}', [GouvernanceController::class, 'updateAssembly'])->name('assemblies.update');
         Route::delete('/assemblies/{assembly}', [GouvernanceController::class, 'destroyAssembly'])->name('assemblies.destroy');
     });
-    
+
+    // Gestion des documents (admin et super_admin)
+    Route::middleware('check.role:admin,super_admin')->prefix('documents')->name('documents.')->group(function () {
+        Route::get('/', [DocumentController::class, 'index'])->name('index');
+        Route::get('/create', [DocumentController::class, 'create'])->name('create');
+        Route::post('/', [DocumentController::class, 'store'])->name('store');
+        Route::get('/{document}', [DocumentController::class, 'show'])->name('show');
+        Route::get('/{document}/edit', [DocumentController::class, 'edit'])->name('edit');
+        Route::put('/{document}', [DocumentController::class, 'update'])->name('update');
+        Route::delete('/{document}', [DocumentController::class, 'destroy'])->name('destroy');
+        Route::put('/{document}/replace-file', [DocumentController::class, 'replaceFile'])->name('replaceFile');
+        Route::put('/{document}/toggle-public', [DocumentController::class, 'togglePublic'])->name('togglePublic');
+        Route::get('/{document}/download', [DocumentController::class, 'download'])->name('download');
+        Route::get('/{document}/preview', [DocumentController::class, 'preview'])->name('preview');
+    });
+        
 
 });
 
@@ -314,9 +404,9 @@ Route::get('/transparence/documents', function () {
 Route::get('/devenir-benevole', function () { return 'Devenir bénévole'; })->name('devenir-benevole');
 Route::get('/devenir-partenaire', function () { return 'Devenir partenaire'; })->name('devenir-partenaire');
 
-// Contact
-Route::get('/contact', [ContactController::class, 'index'])->name('contact');
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+// Contact public
+Route::get('/contactez-nous', [PublicContactController::class, 'index'])->name('contact');
+Route::post('/contactez-nous', [PublicContactController::class, 'store'])->name('contact.store');
 
 //Recherche
 Route::get('/recherche', [RechercheController::class, 'index'])->name('recherche');

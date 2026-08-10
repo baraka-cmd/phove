@@ -1,0 +1,492 @@
+/* ============================================================
+   AHD-RDC — STYLES PARAMÈTRES GÉNÉRAUX (ADMIN)
+   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. CONTAINER PRINCIPAL
+   ---------------------------------------------------------- */
+.settings-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* ----------------------------------------------------------
+   2. TABS DE NAVIGATION
+   ---------------------------------------------------------- */
+.settings-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 28px;
+    padding: 6px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    overflow-x: auto;
+    flex-wrap: nowrap;
+}
+
+.settings-tab {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.25s ease;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: var(--font-primary);
+    position: relative;
+}
+
+.settings-tab:hover {
+    background: var(--color-bg-light);
+    color: #1a1a1a;
+}
+
+.settings-tab.active {
+    background: var(--color-primary);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(22, 85, 143, 0.25);
+}
+
+.settings-tab i {
+    font-size: 15px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.05);
+    transition: all 0.25s ease;
+}
+
+.settings-tab.active i {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ----------------------------------------------------------
+   3. CARTE PRINCIPALE
+   ---------------------------------------------------------- */
+.settings-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+}
+
+.settings-card-header {
+    padding: 28px 32px;
+    border-bottom: 1px solid #eef0f4;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.settings-card-header-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 1.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.settings-card-header h2 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.settings-card-header p {
+    font-size: 13px;
+    color: #888;
+    margin: 4px 0 0 0;
+}
+
+.settings-card-body {
+    padding: 32px 36px;
+}
+
+.settings-card-footer {
+    padding: 20px 36px;
+    background: #fafbfc;
+    border-top: 1px solid #eef0f4;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* ----------------------------------------------------------
+   4. GROUPES DE CHAMPS
+   ---------------------------------------------------------- */
+.settings-field-group {
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.settings-field-group:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.settings-field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 6px;
+}
+
+.settings-field-description {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+/* ----------------------------------------------------------
+   5. INPUTS
+   ---------------------------------------------------------- */
+.settings-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: var(--font-primary);
+    font-size: 13px;
+    border: 2px solid #e0e4e8;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.25s ease;
+    background: #fafbfc;
+    color: #1a1a1a;
+}
+
+.settings-input:focus {
+    border-color: var(--color-primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.08);
+}
+
+.settings-input::placeholder {
+    color: #aaa;
+}
+
+.settings-textarea {
+    resize: vertical;
+    min-height: 140px;
+    line-height: 1.7;
+}
+
+.settings-input-icon {
+    position: relative;
+}
+
+.settings-input-icon input {
+    padding-left: 42px;
+}
+
+.settings-input-icon i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-muted);
+    font-size: 14px;
+}
+
+/* ----------------------------------------------------------
+   6. UPLOAD IMAGE
+   ---------------------------------------------------------- */
+.settings-image-upload {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.settings-image-preview {
+    width: 180px;
+    height: 120px;
+    border-radius: 12px;
+    border: 2px dashed #d0d5dd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    background: #fafbfc;
+    position: relative;
+}
+
+.settings-image-preview:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-lighter);
+}
+
+.settings-image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+}
+
+.settings-image-placeholder {
+    font-size: 2rem;
+    color: #c0c7cf;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.settings-image-placeholder span {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.settings-image-info {
+    flex: 1;
+    padding-top: 4px;
+}
+
+.settings-image-info p {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.settings-image-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.settings-image-info ul li {
+    font-size: 12px;
+    color: #888;
+    line-height: 2;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.settings-image-info ul li i {
+    font-size: 10px;
+    color: var(--color-success);
+}
+
+.settings-image-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* ----------------------------------------------------------
+   7. SWITCH (TOGGLE)
+   ---------------------------------------------------------- */
+.settings-switch {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.settings-switch-track {
+    width: 52px;
+    height: 28px;
+    background: #d0d5dd;
+    border-radius: 50px;
+    position: relative;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.settings-switch input {
+    display: none;
+}
+
+.settings-switch input:checked + .settings-switch-track {
+    background: var(--color-success);
+}
+
+.settings-switch-thumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.settings-switch input:checked + .settings-switch-track .settings-switch-thumb {
+    left: 27px;
+}
+
+.settings-switch-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.settings-switch-state {
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 8px;
+    color: var(--color-text-muted);
+}
+
+/* ----------------------------------------------------------
+   8. INFO BULLE
+   ---------------------------------------------------------- */
+.settings-info-tip {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--color-primary-lighter);
+    border-radius: 10px;
+    margin-bottom: 24px;
+}
+
+.settings-info-tip i {
+    color: var(--color-primary);
+    font-size: 16px;
+    margin-top: 1px;
+}
+
+.settings-info-tip div {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+.settings-info-tip strong {
+    color: #1a1a1a;
+}
+
+/* ----------------------------------------------------------
+   9. MESSAGE SUCCÈS FLOTTANT
+   ---------------------------------------------------------- */
+.settings-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--color-success);
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+    z-index: 1500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.settings-toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* ----------------------------------------------------------
+   10. ANIMATIONS
+   ---------------------------------------------------------- */
+.settings-card {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ----------------------------------------------------------
+   11. RESPONSIVE
+   ---------------------------------------------------------- */
+@media (max-width: 768px) {
+    .settings-tabs {
+        gap: 2px;
+        padding: 4px;
+    }
+
+    .settings-tab {
+        padding: 10px 14px;
+        font-size: 12px;
+        gap: 6px;
+    }
+
+    .settings-tab i {
+        width: 30px;
+        height: 30px;
+        font-size: 12px;
+    }
+
+    .settings-tab span {
+        display: none;
+    }
+
+    .settings-tab.active span {
+        display: inline;
+    }
+
+    .settings-card-body {
+        padding: 20px 18px;
+    }
+
+    .settings-card-header {
+        padding: 20px 18px;
+    }
+
+    .settings-card-footer {
+        padding: 16px 18px;
+    }
+
+    .settings-image-upload {
+        flex-direction: column;
+    }
+
+    .settings-image-preview {
+        width: 100%;
+        height: 150px;
+    }
+}
+
+@media (max-width: 576px) {
+    .settings-tab {
+        padding: 8px 10px;
+    }
+
+    .settings-card-footer {
+        flex-direction: column;
+    }
+
+    .settings-card-footer button {
+        width: 100%;
+    }
+}

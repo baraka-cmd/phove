@@ -64,7 +64,7 @@
                 <a href="{{ route('admin.membres.index') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.membres.index') ? 'active' : '' }}">
                     <i class="fas fa-address-book"></i> Tous les membres
                 </a>
-                <a href="/admin/membres/create" class="membres-add-btn">
+                <a href="{{ route('admin.membres.create') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.membres.create') ? 'active' : '' }}">
                     <i class="fas fa-user-plus"></i> Ajouter un membre
                 </a>
                 <a href="{{ route('admin.membres.demandes') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.membres.demandes') ? 'active' : '' }}">
@@ -80,11 +80,11 @@
             </div>
         </div>
 
-        {{-- Bénéficiaires --}}
+        {{-- Témoignages --}}
         <div class="sidebar-menu-item">
-            <a href="{{ route('admin.beneficiaires.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.beneficiaires.*') ? 'active' : '' }}">
-                <span class="sidebar-menu-icon"><i class="fas fa-hands-helping"></i></span>
-                <span class="sidebar-menu-text">Bénéficiaires</span>
+            <a href="{{ route('admin.temoignages.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.temoignages.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-quote-right"></i></span>
+                <span class="sidebar-menu-text">Témoignages</span>
             </a>
         </div>
 
@@ -94,7 +94,7 @@
         <div class="sidebar-category">Contenu</div>
 
         {{-- Publications --}}
-        <div class="sidebar-menu-item has-submenu {{ request()->routeIs('admin.articles.*') || request()->routeIs('admin.medias.*') ? 'open' : '' }}">
+        <div class="sidebar-menu-item has-submenu {{ request()->routeIs('admin.articles.*') || request()->routeIs('admin.medias.*') || request()->routeIs('admin.temoignages.*') ? 'open' : '' }}">
             <a href="#" class="sidebar-menu-link">
                 <span class="sidebar-menu-icon"><i class="fas fa-newspaper"></i></span>
                 <span class="sidebar-menu-text">Publications</span>
@@ -104,13 +104,13 @@
                 <a href="{{ route('admin.articles.index') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.articles.index') ? 'active' : '' }}">
                     <i class="fas fa-file-alt"></i> Articles
                 </a>
-                <a href="#" class="sidebar-submenu-link">
+                <a href="{{ route('admin.articles.create') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.articles.create') ? 'active' : '' }}">
                     <i class="fas fa-pen"></i> Rédiger un article
                 </a>
                 <a href="{{ route('admin.medias.index') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.medias.index') ? 'active' : '' }}">
                     <i class="fas fa-images"></i> Médiathèque
                 </a>
-                <a href="#" class="sidebar-submenu-link">
+                <a href="{{ route('admin.temoignages.index') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.temoignages.*') ? 'active' : '' }}">
                     <i class="fas fa-quote-right"></i> Témoignages
                 </a>
             </div>
@@ -126,7 +126,6 @@
             <a href="{{ route('admin.dons.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.dons.*') ? 'active' : '' }}">
                 <span class="sidebar-menu-icon"><i class="fas fa-hand-holding-heart"></i></span>
                 <span class="sidebar-menu-text">Dons reçus</span>
-                <span class="sidebar-badge sidebar-badge-success">Nouveau</span>
             </a>
         </div>
 
@@ -147,8 +146,28 @@
         <div class="sidebar-menu-item">
             <a href="{{ route('admin.contacts.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}">
                 <span class="sidebar-menu-icon"><i class="fas fa-envelope-open-text"></i></span>
-                <span class="sidebar-menu-text">Messages</span>
-                <span class="sidebar-badge sidebar-badge-primary">5</span>
+                <span class="sidebar-menu-text">Contact</span>
+                @php $messagesCount = \App\Models\Contact::where('lu', false)->count(); @endphp
+                @if($messagesCount > 0)
+                <span class="sidebar-badge sidebar-badge-primary">{{ $messagesCount }}</span>
+                @endif
+            </a>
+        </div>
+
+        {{-- Messagerie interne --}}
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.messages.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.messages.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-comments"></i></span>
+                <span class="sidebar-menu-text">Messagerie</span>
+                @php
+                    $unreadMessages = \App\Models\Message::where('destinataire_id', Auth::id())
+                        ->where('lu', false)
+                        ->where('archived_dest', false)
+                        ->count();
+                @endphp
+                @if($unreadMessages > 0)
+                    <span class="sidebar-badge sidebar-badge-danger">{{ $unreadMessages }}</span>
+                @endif
             </a>
         </div>
 
@@ -168,7 +187,7 @@
         {{-- Utilisateurs --}}
         @if(Auth::user()->role === 'super_admin')
         <div class="sidebar-menu-item">
-            <a href="#" class="sidebar-menu-link">
+            <a href="{{ route('admin.users.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                 <span class="sidebar-menu-icon"><i class="fas fa-user-shield"></i></span>
                 <span class="sidebar-menu-text">Utilisateurs</span>
             </a>
@@ -180,6 +199,14 @@
             <a href="{{ route('admin.gouvernance.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.gouvernance.*') ? 'active' : '' }}">
                 <span class="sidebar-menu-icon"><i class="fas fa-sitemap"></i></span>
                 <span class="sidebar-menu-text">Gouvernance</span>
+            </a>
+        </div>
+
+        {{-- Documents officiels --}}
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.documents.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.documents.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-folder-open"></i></span>
+                <span class="sidebar-menu-text">Documents officiels</span>
             </a>
         </div>
 

@@ -26,9 +26,15 @@ class LoginController extends Controller
      * Affiche le formulaire de connexion.
      */
     public function showLoginForm()
-    {
-        return view('auth.login');
+{
+    // Force la déconnexion si une session existe
+    if (Auth::check()) {
+        Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
     }
+    return view('auth.login');
+}
 
     /**
      * Traite la tentative de connexion.
