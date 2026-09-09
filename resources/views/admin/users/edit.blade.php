@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Modifier l\'utilisateur')
+@section('title', 'Modifier l\'utilisateur | PHOVE')
 
 @section('page_title', 'Modifier l\'utilisateur')
 @section('page_icon', 'user-edit')
@@ -20,7 +20,7 @@
             align-items: center;
             gap: 16px;
             padding: 18px 22px;
-            background: #fff;
+            background: #FFFFFF;
             border-radius: 14px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
             border: 1px solid rgba(0, 0, 0, 0.03);
@@ -39,11 +39,11 @@
             font-size: 1.2rem;
             flex-shrink: 0;
         }
-        .edit-info-bar-icon.blue { background: var(--color-primary-lighter); color: var(--color-primary); }
-        .edit-info-bar-icon.green { background: var(--color-success-light); color: var(--color-success); }
+        .edit-info-bar-icon.blue { background: #E8F0F8; color: #1A5B9C; }
+        .edit-info-bar-icon.green { background: #D1FAE5; color: #10B981; }
         .edit-info-bar-content { flex: 1; min-width: 0; }
-        .edit-info-bar-content h4 { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 2px; }
-        .edit-info-bar-content p { font-size: 12px; color: var(--color-text-muted); margin: 0; }
+        .edit-info-bar-content h4 { font-size: 14px; font-weight: 700; color: #1E293B; margin-bottom: 2px; }
+        .edit-info-bar-content p { font-size: 12px; color: #64748B; margin: 0; }
     </style>
 @endsection
 
@@ -60,12 +60,26 @@
                 <h2>Modifier {{ $user->nom }}</h2>
                 <p>
                     <span class="user-role-badge user-role-{{ $user->role }}" style="margin-right: 6px;">
-                        <i class="fas fa-{{ $user->role === 'super_admin' ? 'crown' : ($user->role === 'admin' ? 'user-shield' : 'user-edit') }}"></i>
-                        {{ $user->role === 'super_admin' ? 'Super Admin' : ($user->role === 'admin' ? 'Administrateur' : 'Éditeur') }}
+                        @php
+                            $roleIcon = match($user->role) {
+                                'super_admin' => 'crown',
+                                'dg' => 'user-tie',
+                                'chef_mission' => 'globe-africa',
+                                'charge_programme' => 'clipboard-list',
+                                'secretaire' => 'file-alt',
+                                'comptable' => 'calculator',
+                                'caissier' => 'cash-register',
+                                'editeur' => 'user-edit',
+                                'utilisateur' => 'user',
+                                default => 'user',
+                            };
+                        @endphp
+                        <i class="fas fa-{{ $roleIcon }}"></i>
+                        {{ $user->roleLibelle() }}
                     </span>
                     <span class="user-statut-badge user-statut-{{ $user->statut }}">
                         <i class="fas fa-{{ $user->statut === 'actif' ? 'check-circle' : ($user->statut === 'inactif' ? 'pause-circle' : 'ban') }}"></i>
-                        {{ $user->statut === 'actif' ? 'Actif' : ($user->statut === 'inactif' ? 'Inactif' : 'Suspendu') }}
+                        {{ $user->statutLibelle() }}
                     </span>
                 </p>
             </div>
@@ -105,7 +119,7 @@
                         <input type="text" name="nom" id="nom" 
                                class="user-form-input @error('nom') is-invalid @enderror" 
                                value="{{ old('nom', $user->nom) }}" 
-                               placeholder="Ex: Dr AKSANTI DUNIA Steeng" 
+                               placeholder="Ex: KABOYI MUSAMUGUMA Philippe" 
                                maxlength="255" required autofocus>
                         @error('nom')
                             <span class="user-form-error">
@@ -121,7 +135,7 @@
                         <input type="email" name="email" id="email" 
                                class="user-form-input @error('email') is-invalid @enderror" 
                                value="{{ old('email', $user->email) }}" 
-                               placeholder="exemple@ahd-rdc.org" 
+                               placeholder="phovemonde@gmail.com" 
                                maxlength="191" required>
                         @error('email')
                             <span class="user-form-error">
@@ -158,12 +172,12 @@
 
                 <div class="user-form-group">
                     <label class="user-form-label">
-                        Photo <small style="font-weight: 400; color: var(--color-text-muted);">(laissez vide pour conserver la photo actuelle)</small>
+                        Photo <small style="font-weight: 400; color: #64748B;">(laissez vide pour conserver la photo actuelle)</small>
                     </label>
                     <div class="user-photo-upload">
                         <label for="photo_profil" class="user-photo-preview" id="photoPreview">
                             @if($user->photo_profil)
-                                <img id="photoPreviewImg" src="{{ asset('storage/' . $user->photo_profil) }}" alt="Photo actuelle" style="display: block;">
+                                <img id="photoPreviewImg" src="{{ asset('storage/' . $user->photo_profil) }}" alt="Photo actuelle" style="display: block;" loading="lazy">
                                 <div class="user-photo-placeholder" id="photoPlaceholder" style="display: none;">
                                     <i class="fas fa-user"></i>
                                 </div>
@@ -177,15 +191,15 @@
                         <div class="user-photo-info">
                             <p>
                                 @if($user->photo_profil)
-                                    <span style="color: var(--color-success);">
+                                    <span style="color: #10B981;">
                                         <i class="fas fa-check-circle"></i> Photo actuelle
                                     </span>
                                     <br>
-                                    <a href="{{ asset('storage/' . $user->photo_profil) }}" target="_blank" style="font-size: 12px; color: var(--color-primary); text-decoration: underline;">
+                                    <a href="{{ asset('storage/' . $user->photo_profil) }}" target="_blank" style="font-size: 12px; color: #1A5B9C; text-decoration: underline;">
                                         <i class="fas fa-external-link-alt"></i> Voir la photo
                                     </a>
                                     <br>
-                                    <button type="button" id="removePhotoBtn" style="background: none; border: none; color: var(--color-accent); font-size: 12px; cursor: pointer; padding: 0; margin-top: 4px; text-decoration: underline;">
+                                    <button type="button" id="removePhotoBtn" style="background: none; border: none; color: #F59E0B; font-size: 12px; cursor: pointer; padding: 0; margin-top: 4px; text-decoration: underline;">
                                         <i class="fas fa-trash-alt"></i> Supprimer la photo
                                     </button>
                                 @else
@@ -226,9 +240,11 @@
                         </label>
                         <select name="role" id="role" class="user-form-select @error('role') is-invalid @enderror" required>
                             <option value="">-- Sélectionnez un rôle --</option>
-                            <option value="super_admin" {{ old('role', $user->role) === 'super_admin' ? 'selected' : '' }}>Super Admin — Tous les droits</option>
-                            <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>Administrateur — Gestion complète</option>
-                            <option value="editeur" {{ old('role', $user->role) === 'editeur' ? 'selected' : '' }}>Éditeur — Contenu uniquement</option>
+                            @foreach(\App\Enums\Roles::adminRoles() as $code => $libelle)
+                                <option value="{{ $code }}" {{ old('role', $user->role) === $code ? 'selected' : '' }}>
+                                    {{ $libelle }}
+                                </option>
+                            @endforeach
                         </select>
                         @error('role')
                             <span class="user-form-error">
@@ -257,9 +273,9 @@
 
                 {{-- Avertissement si modification de son propre compte --}}
                 @if($user->id === Auth::id())
-                    <div style="margin-top: 16px; padding: 14px 18px; background: #fffbfb; border: 1px solid var(--color-error-light); border-radius: 10px; display: flex; gap: 10px; align-items: flex-start;">
-                        <i class="fas fa-exclamation-triangle" style="color: var(--color-accent); font-size: 16px; margin-top: 1px;"></i>
-                        <div style="font-size: 12px; color: #721c24; line-height: 1.6;">
+                    <div style="margin-top: 16px; padding: 14px 18px; background: #FEF2F2; border: 1px solid #FEE2E2; border-radius: 10px; display: flex; gap: 10px; align-items: flex-start;">
+                        <i class="fas fa-exclamation-triangle" style="color: #F59E0B; font-size: 16px; margin-top: 1px;"></i>
+                        <div style="font-size: 12px; color: #B91C1C; line-height: 1.6;">
                             <strong>Attention :</strong> Vous modifiez votre propre compte. Évitez de changer votre rôle ou votre statut, car cela pourrait vous empêcher d'accéder à certaines fonctionnalités.
                         </div>
                     </div>
@@ -275,35 +291,35 @@
                 </div>
 
                 <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;">
-                    <div style="background: var(--color-bg-light); padding: 16px; border-radius: 12px; text-align: center;">
-                        <div style="font-size: 10px; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
-                            <i class="fas fa-sign-in-alt" style="color: var(--color-success); margin-right: 4px;"></i> Dernière connexion
+                    <div style="background: #F8FAFC; padding: 16px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 10px; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+                            <i class="fas fa-sign-in-alt" style="color: #10B981; margin-right: 4px;"></i> Dernière connexion
                         </div>
-                        <div style="font-weight: 700; font-size: 0.9rem; color: #1a1a1a;">
+                        <div style="font-weight: 700; font-size: 0.9rem; color: #1E293B;">
                             @if($user->derniere_connexion)
-                                <span style="{{ $user->derniere_connexion->diffInHours(now()) < 24 ? 'color: var(--color-success);' : '' }}">
+                                <span style="{{ $user->derniere_connexion->diffInHours(now()) < 24 ? 'color: #10B981;' : '' }}">
                                     {{ $user->derniere_connexion->diffInHours(now()) < 24 
                                         ? $user->derniere_connexion->diffForHumans() 
                                         : $user->derniere_connexion->format('d/m/Y H:i') }}
                                 </span>
                             @else
-                                <span style="color: #ccc;">Jamais</span>
+                                <span style="color: #94A3B8;">Jamais</span>
                             @endif
                         </div>
                     </div>
-                    <div style="background: var(--color-bg-light); padding: 16px; border-radius: 12px; text-align: center;">
-                        <div style="font-size: 10px; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
-                            <i class="fas fa-calendar-plus" style="color: var(--color-primary); margin-right: 4px;"></i> Créé le
+                    <div style="background: #F8FAFC; padding: 16px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 10px; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+                            <i class="fas fa-calendar-plus" style="color: #1A5B9C; margin-right: 4px;"></i> Créé le
                         </div>
-                        <div style="font-weight: 700; font-size: 0.9rem; color: #1a1a1a;">
+                        <div style="font-weight: 700; font-size: 0.9rem; color: #1E293B;">
                             {{ $user->created_at->format('d/m/Y') }}
                         </div>
                     </div>
-                    <div style="background: var(--color-bg-light); padding: 16px; border-radius: 12px; text-align: center;">
-                        <div style="font-size: 10px; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
-                            <i class="fas fa-clock" style="color: #e67e22; margin-right: 4px;"></i> Modifié le
+                    <div style="background: #F8FAFC; padding: 16px; border-radius: 12px; text-align: center;">
+                        <div style="font-size: 10px; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;">
+                            <i class="fas fa-clock" style="color: #F59E0B; margin-right: 4px;"></i> Modifié le
                         </div>
-                        <div style="font-weight: 700; font-size: 0.9rem; color: #1a1a1a;">
+                        <div style="font-weight: 700; font-size: 0.9rem; color: #1E293B;">
                             {{ $user->updated_at->format('d/m/Y') }}
                         </div>
                     </div>
@@ -318,7 +334,7 @@
                     <i class="fas fa-times"></i> Annuler
                 </a>
                 <div style="display: flex; gap: 10px;">
-                    <a href="{{ route('admin.users.password', $user) }}" class="btn btn-outline" style="border-color: #e67e22; color: #e67e22;">
+                    <a href="{{ route('admin.users.password', $user) }}" class="btn btn-outline" style="border-color: #F59E0B; color: #F59E0B;">
                         <i class="fas fa-key"></i> Changer le mot de passe
                     </a>
                     <button type="submit" class="btn btn-primary">
@@ -368,7 +384,6 @@
                         };
                         reader.readAsDataURL(file);
 
-                        // Réinitialiser le flag de suppression
                         if (removePhotoFlag) removePhotoFlag.value = '0';
                         if (removePhotoBtn) removePhotoBtn.style.display = 'inline';
                     }

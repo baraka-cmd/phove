@@ -1,5 +1,5 @@
 {{-- ============================================ --}}
-{{-- FOOTER — AHD-RDC --}}
+{{-- FOOTER — PHOVE --}}
 {{-- Logo, Liens, Domaines, Newsletter, Copyright --}}
 {{-- ============================================ --}}
 <footer class="footer" id="footer">
@@ -13,46 +13,47 @@
                 <div class="col-4 footer-col">
                     <div class="footer-brand">
                         <a href="{{ url('/') }}" class="footer-logo">
-                            <img src="{{ asset('assets/images/logo-ahd.png') }}" alt="AHD-RDC Logo" class="footer-logo-img">
+                            <img src="{{ asset('assets/images/logo-phove.png') }}" alt="PHOVE Logo" class="footer-logo-img">
                             <div class="footer-logo-text">
-                                <span class="footer-logo-name">AHD<span class="text-accent">-</span>RDC</span>
-                                <span class="footer-logo-subtitle">Action Humanitaire pour le Développement</span>
+                                <span class="footer-logo-name">PHOVE</span>
+                                <span class="footer-logo-subtitle">Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies</span>
                             </div>
                         </a>
                     </div>
                     <p class="footer-description">
-                        Organisation non gouvernementale engagée dans le développement communautaire, 
-                        la protection des personnes vulnérables, la cohésion sociale et la promotion 
-                        de la paix dans la partie Est de la République Démocratique du Congo.
+                        Organisation non gouvernementale apolitique à caractère social et spirituel, 
+                        créée le 30 août 2012 à Goma. PHOVE vient en aide aux orphelins, veuves, 
+                        personnes de 3ème âge et personnes démunies : éducation, santé, agriculture, 
+                        formation professionnelle, assistance sociale et spirituelle.
                     </p>
                     <div class="footer-contact-list">
                         <div class="footer-contact-item">
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>Minova, Territoire de Kalehe<br>Province du Sud-Kivu, RD Congo</span>
+                            <span>Rue Georges BUSHU N°092, Quartier Katoyi<br>Commune de Karisimbi, Goma, Nord-Kivu, RD Congo</span>
                         </div>
                         <div class="footer-contact-item">
                             <i class="fas fa-phone-alt"></i>
-                            <span>+243 994 656 250</span>
+                            <span>+243 970 872 910</span>
                         </div>
                         <div class="footer-contact-item">
                             <i class="fas fa-envelope"></i>
-                            <span>contact@ahd-rdc.org</span>
+                            <span>phovemonde@gmail.com</span>
                         </div>
                     </div>
                     <div class="footer-socials">
-                        <a href="https://facebook.com/ahdrdc" target="_blank" rel="noopener noreferrer" class="footer-social" title="Facebook">
+                        <a href="https://facebook.com/phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="Facebook PHOVE">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="https://twitter.com/ahdrdc" target="_blank" rel="noopener noreferrer" class="footer-social" title="Twitter / X">
+                        <a href="https://twitter.com/phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="Twitter / X PHOVE">
                             <i class="fab fa-x-twitter"></i>
                         </a>
-                        <a href="https://instagram.com/ahdrdc" target="_blank" rel="noopener noreferrer" class="footer-social" title="Instagram">
+                        <a href="https://instagram.com/phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="Instagram PHOVE">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="https://linkedin.com/company/ahdrdc" target="_blank" rel="noopener noreferrer" class="footer-social" title="LinkedIn">
+                        <a href="https://linkedin.com/company/phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="LinkedIn PHOVE">
                             <i class="fab fa-linkedin-in"></i>
                         </a>
-                        <a href="https://youtube.com/@ahdrdc" target="_blank" rel="noopener noreferrer" class="footer-social" title="YouTube">
+                        <a href="https://youtube.com/@phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="YouTube PHOVE">
                             <i class="fab fa-youtube"></i>
                         </a>
                     </div>
@@ -81,10 +82,10 @@
                     <h4 class="footer-title">Nos domaines d'intervention</h4>
                     <ul class="footer-links">
                         <li><a href="{{ url('/projets?domaine=sante_nutrition') }}"><i class="fas fa-heartbeat"></i> Santé-Nutrition</a></li>
-                        <li><a href="{{ url('/projets?domaine=education') }}"><i class="fas fa-graduation-cap"></i> Éducation</a></li>
-                        <li><a href="{{ url('/projets?domaine=protection') }}"><i class="fas fa-shield-alt"></i> Protection Enfant & Femme</a></li>
+                        <li><a href="{{ url('/projets?domaine=education') }}"><i class="fas fa-graduation-cap"></i> Éducation & Formation</a></li>
+                        <li><a href="{{ url('/projets?domaine=protection') }}"><i class="fas fa-shield-alt"></i> Protection Enfants & Femmes</a></li>
                         <li><a href="{{ url('/projets?domaine=wash') }}"><i class="fas fa-tint"></i> Eau, Hygiène & Assainissement</a></li>
-                        <li><a href="{{ url('/projets?domaine=securite_alimentaire') }}"><i class="fas fa-seedling"></i> Sécurité Alimentaire</a></li>
+                        <li><a href="{{ url('/projets?domaine=securite_alimentaire') }}"><i class="fas fa-seedling"></i> Sécurité Alimentaire & Agriculture</a></li>
                         <li><a href="{{ url('/projets?domaine=environnement') }}"><i class="fas fa-tree"></i> Environnement</a></li>
                         <li><a href="{{ url('/projets?domaine=paix') }}"><i class="fas fa-dove"></i> Paix & Cohésion sociale</a></li>
                     </ul>
@@ -129,8 +130,8 @@
         <div class="container">
             <div class="footer-bottom-inner">
                 <p class="footer-copyright">
-                    &copy; {{ date('Y') }} <strong>AHD-RDC</strong>. Tous droits réservés. 
-                    <span class="footer-slogan">« Être ensemble pour le bien de la communauté »</span>
+                    &copy; {{ date('Y') }} <strong>PHOVE</strong>. Tous droits réservés. 
+                    <span class="footer-slogan">« Compassion avec la population »</span>
                 </p>
                 <div class="footer-bottom-links">
                     <a href="{{ url('/mentions-legales') }}">Mentions légales</a>

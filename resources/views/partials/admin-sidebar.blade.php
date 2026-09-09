@@ -1,13 +1,13 @@
 {{-- ============================================ --}}
-{{-- SIDEBAR ADMINISTRATEUR — AHD-RDC --}}
+{{-- SIDEBAR ADMINISTRATEUR — PHOVE --}}
 {{-- ============================================ --}}
 <aside class="admin-sidebar" id="adminSidebar">
 
     {{-- Logo --}}
     <div class="sidebar-logo">
-        <img src="{{ asset('assets/images/logo-ahd.png') }}" alt="AHD-RDC" class="sidebar-logo-img">
+        <img src="{{ asset('assets/images/logo-phove.png') }}" alt="PHOVE" class="sidebar-logo-img">
         <div class="sidebar-logo-text">
-            <span class="sidebar-logo-name">AHD<span>-</span>RDC</span>
+            <span class="sidebar-logo-name">PHOVE</span>
             <span class="sidebar-logo-sub">Administration</span>
         </div>
     </div>
@@ -78,14 +78,6 @@
                     <i class="fas fa-coins"></i> Cotisations
                 </a>
             </div>
-        </div>
-
-        {{-- Témoignages --}}
-        <div class="sidebar-menu-item">
-            <a href="{{ route('admin.temoignages.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.temoignages.*') ? 'active' : '' }}">
-                <span class="sidebar-menu-icon"><i class="fas fa-quote-right"></i></span>
-                <span class="sidebar-menu-text">Témoignages</span>
-            </a>
         </div>
 
         {{-- ============================================ --}}
@@ -224,7 +216,7 @@
 
     {{-- Footer sidebar --}}
     <div class="sidebar-footer">
-        <div class="sidebar-version">v1.0.0 — AHD-RDC</div>
+        <div class="sidebar-version">v1.0.0 — PHOVE</div>
         <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Réduire le menu">
             <i class="fas fa-chevron-left"></i>
             <span class="sidebar-footer-text">Réduire le menu</span>

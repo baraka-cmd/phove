@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Gestion des budgets')
+@section('title', 'Gestion des budgets | PHOVE')
 
 @section('page_title', 'Budgets des projets')
 @section('page_icon', 'coins')
-@section('page_subtitle', 'Suivez et gérez les budgets de tous les projets : prévisionnel, dépensé, restant, alertes de dépassement.')
+@section('page_subtitle', 'Suivez et gérez les budgets de tous les projets PHOVE : prévisionnel, dépensé, restant, alertes de dépassement.')
 
 @php
     $breadcrumb = [
@@ -77,7 +77,7 @@
                 <h3 class="budgets-widget-title">
                     <i class="fas fa-chart-bar"></i> Budget prévisionnel vs utilisé (Top 10)
                 </h3>
-                <span class="widget-badge primary">Projets</span>
+                <span class="widget-badge primary">Projets PHOVE</span>
             </div>
             <div class="budgets-widget-body">
                 <div style="height: 380px;">
@@ -104,16 +104,16 @@
                                 data-values='@json($donutValues)'
                                 data-colors='@json(array_values($domainesColors))'></canvas>
                         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-                            <span style="font-size: 1.1rem; font-weight: 800; color: #1a1a1a; display: block;" id="donutCenterValue">0 $</span>
-                            <span style="font-size: 10px; color: #888;">total dépensé</span>
+                            <span style="font-size: 1.1rem; font-weight: 800; color: #1E293B; display: block;" id="donutCenterValue">0 $</span>
+                            <span style="font-size: 10px; color: #64748B;">total dépensé</span>
                         </div>
                     </div>
                     <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
                         @foreach($donutLabels as $index => $label)
                         <div style="display: flex; align-items: center; gap: 8px; font-size: 11px;">
-                            <span style="width: 8px; height: 8px; border-radius: 2px; background: {{ array_values($domainesColors)[$index] ?? '#ccc' }}; flex-shrink: 0;"></span>
-                            <span style="color: #555;">{{ $label }}</span>
-                            <span style="margin-left: auto; font-weight: 600; color: #1a1a1a;">{{ number_format($donutValues[$index] ?? 0, 0, ',', ' ') }} $</span>
+                            <span style="width: 8px; height: 8px; border-radius: 2px; background: {{ array_values($domainesColors)[$index] ?? '#CBD5E1' }}; flex-shrink: 0;"></span>
+                            <span style="color: #334155;">{{ $label }}</span>
+                            <span style="margin-left: auto; font-weight: 600; color: #1E293B;">{{ number_format($donutValues[$index] ?? 0, 0, ',', ' ') }} $</span>
                         </div>
                         @endforeach
                     </div>
@@ -129,18 +129,25 @@
         <div class="budgets-search">
             <i class="fas fa-search"></i>
             <input type="text" name="recherche" id="budgetSearch" value="{{ request('recherche') }}" 
-                   class="budgets-search-input" placeholder="Rechercher un projet...">
+                   class="budgets-search-input" placeholder="Rechercher un projet, un code...">
         </div>
 
         <div class="budgets-filtres">
             <select name="domaine" class="budgets-filtre-select" onchange="this.form.submit()">
                 <option value="">Tous les domaines</option>
-                <option value="sante_nutrition" {{ request('domaine') === 'sante_nutrition' ? 'selected' : '' }}>Santé-Nutrition</option>
-                <option value="education" {{ request('domaine') === 'education' ? 'selected' : '' }}>Éducation</option>
-                <option value="protection" {{ request('domaine') === 'protection' ? 'selected' : '' }}>Protection</option>
+                <option value="sante_nutrition" {{ request('domaine') === 'sante_nutrition' ? 'selected' : '' }}>Santé & Nutrition</option>
+                <option value="education" {{ request('domaine') === 'education' ? 'selected' : '' }}>Éducation & Formation</option>
+                <option value="protection" {{ request('domaine') === 'protection' ? 'selected' : '' }}>Protection Sociale</option>
                 <option value="wash" {{ request('domaine') === 'wash' ? 'selected' : '' }}>Eau & Assainissement</option>
-                <option value="securite_alimentaire" {{ request('domaine') === 'securite_alimentaire' ? 'selected' : '' }}>Sécurité Alimentaire</option>
+                <option value="securite_alimentaire" {{ request('domaine') === 'securite_alimentaire' ? 'selected' : '' }}>Sécurité Alimentaire & Agriculture</option>
+                <option value="communication" {{ request('domaine') === 'communication' ? 'selected' : '' }}>Communication</option>
+                <option value="environnement" {{ request('domaine') === 'environnement' ? 'selected' : '' }}>Environnement</option>
                 <option value="paix" {{ request('domaine') === 'paix' ? 'selected' : '' }}>Paix & Cohésion</option>
+                <option value="genre" {{ request('domaine') === 'genre' ? 'selected' : '' }}>Genre</option>
+                <option value="spirituel" {{ request('domaine') === 'spirituel' ? 'selected' : '' }}>Spirituel</option>
+                <option value="infrastructure" {{ request('domaine') === 'infrastructure' ? 'selected' : '' }}>Infrastructures</option>
+                <option value="economique" {{ request('domaine') === 'economique' ? 'selected' : '' }}>Socio-Économique</option>
+                <option value="judiciaire" {{ request('domaine') === 'judiciaire' ? 'selected' : '' }}>Judiciaire</option>
             </select>
 
             <select name="statut" class="budgets-filtre-select" onchange="this.form.submit()">
@@ -148,6 +155,7 @@
                 <option value="en_cours" {{ request('statut') === 'en_cours' ? 'selected' : '' }}>En cours</option>
                 <option value="termine" {{ request('statut') === 'termine' ? 'selected' : '' }}>Terminé</option>
                 <option value="en_preparation" {{ request('statut') === 'en_preparation' ? 'selected' : '' }}>En préparation</option>
+                <option value="suspendu" {{ request('statut') === 'suspendu' ? 'selected' : '' }}>Suspendu</option>
             </select>
         </div>
 
@@ -168,6 +176,7 @@
                 <thead>
                     <tr>
                         <th>Projet</th>
+                        <th>Code</th>
                         <th>Domaine</th>
                         <th>Budget total</th>
                         <th>Budget utilisé</th>
@@ -189,7 +198,7 @@
                             <div class="budget-cell-projet">
                                 <div class="budget-cell-image">
                                     @if($projet->image_principale)
-                                        <img src="{{ asset('storage/' . $projet->image_principale) }}" alt="{{ $projet->titre }}">
+                                        <img src="{{ asset('storage/' . $projet->image_principale) }}" alt="{{ $projet->titre }}" loading="lazy">
                                     @else
                                         <div class="budget-cell-image-placeholder">
                                             <i class="fas fa-project-diagram"></i>
@@ -203,13 +212,28 @@
                             </div>
                         </td>
 
+                        {{-- Code --}}
+                        <td>
+                            @if($projet->code_projet)
+                                <span class="projet-code-badge" title="Code officiel">
+                                    <i class="fas fa-barcode"></i> {{ $projet->code_projet }}
+                                </span>
+                            @else
+                                <span style="color: #94A3B8; font-size: 12px;">N/A</span>
+                            @endif
+                        </td>
+
                         {{-- Domaine --}}
                         <td>
                             @php
                                 $domaineClass = match($projet->domaine) {
                                     'sante_nutrition' => 'sante', 'education' => 'education',
                                     'protection' => 'protection', 'wash' => 'wash',
-                                    'securite_alimentaire' => 'alimentaire', default => 'sante'
+                                    'securite_alimentaire' => 'alimentaire', 'communication' => 'communication',
+                                    'environnement' => 'environnement', 'paix' => 'paix', 'genre' => 'genre',
+                                    'spirituel' => 'spirituel', 'infrastructure' => 'infrastructure',
+                                    'economique' => 'economique', 'judiciaire' => 'judiciaire',
+                                    default => 'sante'
                                 };
                             @endphp
                             <span class="projet-badge projet-badge-{{ $domaineClass }}">{{ $projet->domaineLibelle() }}</span>
@@ -222,7 +246,7 @@
 
                         {{-- Budget utilisé --}}
                         <td>
-                            <span class="budget-montant" style="color: {{ $pourcentage > 100 ? 'var(--color-accent)' : ($pourcentage > 80 ? '#e67e22' : 'var(--color-success)') }};">
+                            <span class="budget-montant" style="color: {{ $pourcentage > 100 ? '#EF4444' : ($pourcentage > 80 ? '#F59E0B' : '#10B981') }};">
                                 {{ number_format($projet->budget_utilise, 0, ',', ' ') }} $
                             </span>
                         </td>
@@ -245,7 +269,7 @@
 
                         {{-- Restant --}}
                         <td>
-                            <span class="budget-montant" style="color: {{ $restant < 0 ? 'var(--color-accent)' : 'var(--color-success)' }};">
+                            <span class="budget-montant" style="color: {{ $restant < 0 ? '#EF4444' : '#10B981' }};">
                                 {{ number_format($restant, 0, ',', ' ') }} $
                             </span>
                         </td>

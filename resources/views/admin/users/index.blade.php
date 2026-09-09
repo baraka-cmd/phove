@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Gestion des utilisateurs')
+@section('title', 'Gestion des utilisateurs | PHOVE')
 
 @section('page_title', 'Utilisateurs')
 @section('page_icon', 'users-cog')
-@section('page_subtitle', 'Gérez les comptes administrateurs : création, attribution de rôles, activation et suspension.')
+@section('page_subtitle', 'Gérez les comptes : création, attribution des rôles hiérarchiques PHOVE, activation et suspension.')
 
 @php
     $breadcrumb = ['Utilisateurs' => null];
@@ -71,9 +71,9 @@
         <div class="users-filtres">
             <select name="role" class="users-filtre-select">
                 <option value="">Tous les rôles</option>
-                <option value="super_admin" {{ request('role') === 'super_admin' ? 'selected' : '' }}>Super Admin</option>
-                <option value="admin" {{ request('role') === 'admin' ? 'selected' : '' }}>Administrateur</option>
-                <option value="editeur" {{ request('role') === 'editeur' ? 'selected' : '' }}>Éditeur</option>
+                @foreach(\App\Enums\Roles::all() as $code => $libelle)
+                    <option value="{{ $code }}" {{ request('role') === $code ? 'selected' : '' }}>{{ $libelle }}</option>
+                @endforeach
             </select>
 
             <select name="statut" class="users-filtre-select">
@@ -117,12 +117,6 @@
                     @php
                         $avatarColors = ['blue', 'green', 'orange', 'red', 'purple'];
                         $avatarColor = $avatarColors[crc32($utilisateur->nom) % count($avatarColors)];
-                        $initiales = strtoupper(substr($utilisateur->nom, 0, 1));
-                        $parts = explode(' ', $utilisateur->nom);
-                        $initiales = strtoupper(substr($parts[0], 0, 1));
-                        if (count($parts) > 1) {
-                            $initiales .= strtoupper(substr(end($parts), 0, 1));
-                        }
                         $isCurrentUser = $utilisateur->id === Auth::id();
                     @endphp
                     <tr>
@@ -131,16 +125,16 @@
                             <div class="user-cell">
                                 <div class="user-cell-avatar {{ $avatarColor }}">
                                     @if($utilisateur->photo_profil)
-                                        <img src="{{ asset('storage/' . $utilisateur->photo_profil) }}" alt="{{ $utilisateur->nom }}">
+                                        <img src="{{ asset('storage/' . $utilisateur->photo_profil) }}" alt="{{ $utilisateur->nom }}" loading="lazy">
                                     @else
-                                        {{ $initiales }}
+                                        {{ $utilisateur->initiales() }}
                                     @endif
                                 </div>
                                 <div class="user-cell-info">
                                     <div class="user-cell-nom">
                                         {{ $utilisateur->nom }}
                                         @if($isCurrentUser)
-                                            <span style="font-size: 10px; background: var(--color-primary-lighter); color: var(--color-primary); padding: 1px 6px; border-radius: 50px; margin-left: 4px;">Vous</span>
+                                            <span style="font-size: 10px; background: #E8F0F8; color: #1A5B9C; padding: 1px 6px; border-radius: 50px; margin-left: 4px;">Vous</span>
                                         @endif
                                     </div>
                                     <div class="user-cell-email">
@@ -152,9 +146,23 @@
 
                         {{-- Rôle --}}
                         <td>
+                            @php
+                                $roleIcon = match($utilisateur->role) {
+                                    'super_admin' => 'crown',
+                                    'dg' => 'user-tie',
+                                    'chef_mission' => 'globe-africa',
+                                    'charge_programme' => 'clipboard-list',
+                                    'secretaire' => 'file-alt',
+                                    'comptable' => 'calculator',
+                                    'caissier' => 'cash-register',
+                                    'editeur' => 'user-edit',
+                                    'utilisateur' => 'user',
+                                    default => 'user',
+                                };
+                            @endphp
                             <span class="user-role-badge user-role-{{ $utilisateur->role }}">
-                                <i class="fas fa-{{ $utilisateur->role === 'super_admin' ? 'crown' : ($utilisateur->role === 'admin' ? 'user-shield' : 'user-edit') }}"></i>
-                                {{ $utilisateur->role === 'super_admin' ? 'Super Admin' : ($utilisateur->role === 'admin' ? 'Admin' : 'Éditeur') }}
+                                <i class="fas fa-{{ $roleIcon }}"></i>
+                                {{ $utilisateur->roleLibelle() }}
                             </span>
                         </td>
 
@@ -162,7 +170,7 @@
                         <td>
                             <span class="user-statut-badge user-statut-{{ $utilisateur->statut }}">
                                 <i class="fas fa-{{ $utilisateur->statut === 'actif' ? 'check-circle' : ($utilisateur->statut === 'inactif' ? 'pause-circle' : 'ban') }}"></i>
-                                {{ $utilisateur->statut === 'actif' ? 'Actif' : ($utilisateur->statut === 'inactif' ? 'Inactif' : 'Suspendu') }}
+                                {{ $utilisateur->statutLibelle() }}
                             </span>
                         </td>
 
@@ -176,7 +184,7 @@
                                         : $utilisateur->derniere_connexion->format('d/m/Y H:i') }}
                                 </span>
                             @else
-                                <span style="font-size: 12px; color: #ccc;">Jamais connecté</span>
+                                <span style="font-size: 12px; color: #94A3B8;">Jamais connecté</span>
                             @endif
                         </td>
 
@@ -200,7 +208,6 @@
                                     <i class="fas fa-key"></i>
                                 </a>
 
-                                {{-- Activer/Désactiver/Suspendre selon le statut --}}
                                 @if(!$isCurrentUser)
                                     @if($utilisateur->statut === 'inactif' || $utilisateur->statut === 'suspendu')
                                         <form action="{{ route('admin.users.activer', $utilisateur) }}" method="POST" style="display: inline;">
@@ -237,7 +244,7 @@
                                         </button>
                                     </form>
                                 @else
-                                    <span style="font-size: 10px; color: var(--color-text-muted); padding: 6px;">Vous</span>
+                                    <span style="font-size: 10px; color: #64748B; padding: 6px;">Vous</span>
                                 @endif
                             </div>
                         </td>
@@ -283,14 +290,12 @@
 @section('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Filtres auto
             document.querySelectorAll('.users-filtre-select').forEach(select => {
                 select.addEventListener('change', function () {
                     this.closest('form').submit();
                 });
             });
 
-            // Recherche avec debounce
             const searchInput = document.getElementById('userSearch');
             let searchTimeout;
             if (searchInput) {
@@ -302,7 +307,6 @@
                 });
             }
 
-            // Confirmation suppression
             document.querySelectorAll('.btn-delete-user').forEach(btn => {
                 btn.addEventListener('click', function (e) {
                     const nom = this.getAttribute('data-nom') || 'cet utilisateur';
@@ -311,29 +315,6 @@
                     }
                 });
             });
-
-            // Animation KPI
-            const statCards = document.querySelectorAll('.user-stat-card');
-            if (statCards.length > 0 && 'IntersectionObserver' in window) {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach((entry, index) => {
-                        if (entry.isIntersecting) {
-                            const card = entry.target;
-                            setTimeout(() => {
-                                card.style.opacity = '1';
-                                card.style.transform = 'translateY(0)';
-                            }, index * 80);
-                            observer.unobserve(card);
-                        }
-                    });
-                }, { threshold: 0.2 });
-                statCards.forEach(card => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(15px)';
-                    card.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-                    observer.observe(card);
-                });
-            }
         });
     </script>
 @endsection

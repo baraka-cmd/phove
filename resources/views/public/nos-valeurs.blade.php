@@ -2,7 +2,7 @@
 
 @section('title', 'Nos Valeurs')
 
-@section('meta_description', 'Découvrez les cinq valeurs fondamentales d\'AHD-RDC : Professionnalisme, Transparence, Redevabilité, Compassion et Sensibilité au genre.')
+@section('meta_description', 'Découvrez les valeurs fondamentales de PHOVE : Compassion, Solidarité, Foi en Dieu, Charité, Intégrité et Transparence. « Aime ton prochain comme toi-même » — Romain 13:8.')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
@@ -21,7 +21,7 @@
             </div>
             <h1 class="page-header-title">Nos Valeurs</h1>
             <p class="page-header-subtitle">
-                Les principes fondamentaux qui guident chacune de nos actions et incarnent l'esprit d'AHD-RDC.
+                Les principes fondamentaux qui guident chacune de nos actions et incarnent l'esprit de PHOVE.
             </p>
             <nav class="page-breadcrumb">
                 <a href="{{ url('/') }}"><i class="fas fa-home"></i> Accueil</a>
@@ -34,190 +34,44 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 1 : INTRODUCTION — Article 10 des Statuts --}}
+    {{-- SECTION 1 : INTRODUCTION --}}
     {{-- ============================================ --}}
     <section class="page-section page-section-white">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Ce qui nous définit</span>
-                <h2 class="section-title">Les cinq piliers de notre action</h2>
+                <h2 class="section-title">Les six piliers de notre action</h2>
                 <p class="section-description">
-                    Conformément à <strong>l'article 10 de nos statuts</strong>, AHD-RDC fonde 
-                    son action sur cinq valeurs essentielles qui constituent le socle de notre 
-                    identité organisationnelle et guident notre conduite au quotidien.
+                    PHOVE fonde son action sur des valeurs essentielles inspirées des Saintes 
+                    Écritures et de notre devise : <strong>« Compassion avec la population »</strong>. 
+                    Ces valeurs constituent le socle de notre identité et guident notre conduite 
+                    au quotidien.
                 </p>
             </div>
         </div>
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 2 : VALEUR 1 — PROFESSIONNALISME --}}
+    {{-- SECTION 2 : VALEUR 1 — COMPASSION --}}
     {{-- ============================================ --}}
-    <section class="page-section page-section-light" id="professionnalisme">
+    <section class="page-section page-section-light" id="compassion">
         <div class="container">
             <div class="content-grid">
                 <div class="content-block">
                     <div class="value-number-badge">01</div>
-                    <h2 class="section-title text-left">Professionnalisme</h2>
-                    <div class="value-icon-large">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <p class="content-block-text">
-                        Nous nous engageons à accomplir notre mission avec <strong>rigueur, 
-                        compétence et excellence</strong>. Le professionnalisme chez AHD-RDC 
-                        se traduit par :
-                    </p>
-                    <ul class="check-list">
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Une <strong>gestion rigoureuse</strong> des ressources humaines, financières et matérielles</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Le <strong>respect des normes</strong> et des procédures établies</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>La <strong>formation continue</strong> de notre personnel et de nos bénévoles</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>L'<strong>évaluation régulière</strong> de nos actions pour en mesurer l'impact</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Le <strong>respect des délais</strong> et des engagements pris envers nos partenaires</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/logo-ahd.png') }}" 
-                         alt="Professionnalisme AHD-RDC" 
-                         class="content-image">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- ============================================ --}}
-    {{-- SECTION 3 : VALEUR 2 — TRANSPARENCE --}}
-    {{-- ============================================ --}}
-    <section class="page-section page-section-white" id="transparence">
-        <div class="container">
-            <div class="content-grid content-grid-reverse">
-                <div class="content-block">
-                    <div class="value-number-badge">02</div>
-                    <h2 class="section-title text-left">Transparence</h2>
-                    <div class="value-icon-large">
-                        <i class="fas fa-search"></i>
-                    </div>
-                    <p class="content-block-text">
-                        Nous croyons que la <strong>clarté et l'ouverture</strong> sont 
-                        essentielles pour établir une relation de confiance avec nos 
-                        bénéficiaires, nos partenaires et nos donateurs. Notre transparence 
-                        se manifeste par :
-                    </p>
-                    <ul class="check-list">
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>La <strong>publication régulière</strong> de nos rapports financiers et d'activités</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Une <strong>communication ouverte</strong> sur nos projets, nos réussites et nos défis</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>L'<strong>accès aux documents</strong> officiels de l'organisation</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Une <strong>gestion claire</strong> des dons et des financements reçus</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>La <strong>traçabilité</strong> complète de nos actions sur le terrain</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/logo-ahd.png') }}" 
-                         alt="Transparence AHD-RDC" 
-                         class="content-image">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- ============================================ --}}
-    {{-- SECTION 4 : VALEUR 3 — REDEVABILITÉ --}}
-    {{-- ============================================ --}}
-    <section class="page-section page-section-light" id="redevabilite">
-        <div class="container">
-            <div class="content-grid">
-                <div class="content-block">
-                    <div class="value-number-badge">03</div>
-                    <h2 class="section-title text-left">Redevabilité</h2>
-                    <div class="value-icon-large">
-                        <i class="fas fa-clipboard-check"></i>
-                    </div>
-                    <p class="content-block-text">
-                        Nous nous tenons <strong>responsables</strong> de nos actions devant 
-                        nos bénéficiaires, nos partenaires, nos bailleurs et les autorités. 
-                        La redevabilité chez AHD-RDC implique :
-                    </p>
-                    <ul class="check-list">
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>La <strong>reddition de comptes</strong> régulière à nos organes statutaires</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>L'<strong>obligation de résultats</strong> envers les communautés bénéficiaires</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Le <strong>respect des engagements</strong> contractuels avec les bailleurs</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>La <strong>mesure de l'impact</strong> réel de nos interventions</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>L'<strong>audit indépendant</strong> de nos comptes et de nos activités</span>
-                        </li>
-                    </ul>
-                </div>
-                <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/logo-ahd.png') }}" 
-                         alt="Redevabilité AHD-RDC" 
-                         class="content-image">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- ============================================ --}}
-    {{-- SECTION 5 : VALEUR 4 — COMPASSION --}}
-    {{-- ============================================ --}}
-    <section class="page-section page-section-white" id="compassion">
-        <div class="container">
-            <div class="content-grid content-grid-reverse">
-                <div class="content-block">
-                    <div class="value-number-badge">04</div>
                     <h2 class="section-title text-left">Compassion</h2>
                     <div class="value-icon-large">
                         <i class="fas fa-heart"></i>
                     </div>
                     <p class="content-block-text">
                         La <strong>compassion</strong> est au cœur de notre mission humanitaire. 
-                        Elle guide notre approche centrée sur l'humain et se traduit par :
+                        C'est notre devise : <strong>« Compassion avec la population »</strong>. 
+                        Elle se traduit par :
                     </p>
                     <ul class="check-list">
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span>Une <strong>écoute active</strong> des besoins exprimés par les communautés</span>
+                            <span>Une <strong>écoute active</strong> des besoins des orphelins, veuves et personnes démunies</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
@@ -229,7 +83,7 @@
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span>La <strong>proximité</strong> avec les communautés les plus isolées</span>
+                            <span>La <strong>proximité</strong> avec les communautés les plus vulnérables</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
@@ -238,79 +92,310 @@
                     </ul>
                 </div>
                 <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/logo-ahd.png') }}" 
-                         alt="Compassion AHD-RDC" 
-                         class="content-image">
+                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                         alt="Compassion PHOVE — Au service des plus démunis" 
+                         class="content-image"
+                         onerror="this.src='https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600'">
                 </div>
             </div>
         </div>
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 6 : VALEUR 5 — SENSIBILITÉ AU GENRE --}}
+    {{-- SECTION 3 : VALEUR 2 — SOLIDARITÉ --}}
     {{-- ============================================ --}}
-    <section class="page-section page-section-light" id="genre">
+    <section class="page-section page-section-white" id="solidarite">
         <div class="container">
-            <div class="content-grid">
+            <div class="content-grid content-grid-reverse">
                 <div class="content-block">
-                    <div class="value-number-badge">05</div>
-                    <h2 class="section-title text-left">Sensibilité au genre</h2>
+                    <div class="value-number-badge">02</div>
+                    <h2 class="section-title text-left">Solidarité</h2>
                     <div class="value-icon-large">
-                        <i class="fas fa-venus-mars"></i>
+                        <i class="fas fa-hands-helping"></i>
                     </div>
                     <p class="content-block-text">
-                        Nous intégrons la <strong>dimension du genre</strong> dans toutes nos 
-                        interventions pour garantir l'égalité et l'équité. Cette valeur se 
-                        manifeste par :
+                        La <strong>solidarité</strong> est le fondement de notre action collective. 
+                        Nous croyons en l'union des forces : <strong>« L'union fait la force et la 
+                        corde à 3 fils se rompt difficilement »</strong>. Elle se manifeste par :
                     </p>
                     <ul class="check-list">
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span>La <strong>promotion active</strong> des droits des femmes et des filles</span>
+                            <span>Le <strong>partage des ressources</strong> avec les plus démunis</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span>L'<strong>égalité des chances</strong> dans le recrutement et la gouvernance</span>
+                            <span>La <strong>mobilisation communautaire</strong> pour l'entraide</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span>La <strong>prise en compte</strong> des besoins spécifiques de chaque genre</span>
+                            <span>Le <strong>soutien mutuel</strong> entre les membres de l'organisation</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span>La <strong>lutte contre les violences</strong> basées sur le genre</span>
+                            <span>La <strong>protection des biens communs</strong> par l'assistance aux démunis</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span>L'<strong>autonomisation économique</strong> des femmes dans nos projets</span>
+                            <span>L'<strong>accompagnement des activités socio-économiques</strong> des vulnérables</span>
                         </li>
                     </ul>
                 </div>
                 <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/logo-ahd.png') }}" 
-                         alt="Sensibilité au genre AHD-RDC" 
-                         class="content-image">
+                    <img src="{{ asset('assets/images/slide2.jpg') }}" 
+                         alt="Solidarité PHOVE — Union des forces" 
+                         class="content-image"
+                         onerror="this.src='https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=600'">
                 </div>
             </div>
         </div>
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 7 : RÉCAPITULATIF — CARTES DES VALEURS --}}
+    {{-- SECTION 4 : VALEUR 3 — FOI EN DIEU --}}
     {{-- ============================================ --}}
-    <section class="page-section page-section-white">
+    <section class="page-section page-section-light" id="foi">
+        <div class="container">
+            <div class="content-grid">
+                <div class="content-block">
+                    <div class="value-number-badge">03</div>
+                    <h2 class="section-title text-left">Foi en Dieu</h2>
+                    <div class="value-icon-large">
+                        <i class="fas fa-dove"></i>
+                    </div>
+                    <p class="content-block-text">
+                        Notre <strong>foi en Dieu</strong> est le fondement spirituel de notre 
+                        organisation. Nous sommes des serviteurs de Dieu guidés par les Saintes 
+                        Écritures. Cette valeur se traduit par :
+                    </p>
+                    <ul class="check-list">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>La <strong>mise en valeur des Saintes Écritures</strong> dans toutes nos actions</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>La <strong>valorisation de notre vocation pastorale</strong></span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>L'<strong>encadrement spirituel</strong> des orphelins, veuves et personnes démunies</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>La <strong>préparation spirituelle</strong> des fidèles à rencontrer le Seigneur</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>La <strong>pratique de l'amour du prochain</strong> selon Romain 13:8</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="content-image-wrapper">
+                    <img src="{{ asset('assets/images/slide1.jpg') }}" 
+                         alt="Foi en Dieu PHOVE — Guidés par les Saintes Écritures" 
+                         class="content-image"
+                         onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ============================================ --}}
+    {{-- SECTION 5 : VALEUR 4 — CHARITÉ --}}
+    {{-- ============================================ --}}
+    <section class="page-section page-section-white" id="charite">
+        <div class="container">
+            <div class="content-grid content-grid-reverse">
+                <div class="content-block">
+                    <div class="value-number-badge">04</div>
+                    <h2 class="section-title text-left">Charité</h2>
+                    <div class="value-icon-large">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <p class="content-block-text">
+                        La <strong>charité</strong> est l'expression concrète de notre amour 
+                        du prochain. Conformément à l'article 45 des statuts, chaque membre 
+                        doit être <strong>charitable et capable de vivre selon Romain 13:8</strong>. 
+                        Elle se manifeste par :
+                    </p>
+                    <ul class="check-list">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>L'<strong>assistance alimentaire</strong> aux orphelins, veuves et personnes démunies</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>L'<strong>octroi de logements</strong> aux personnes vulnérables</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>L'<strong>assurance des soins médicaux</strong> et de l'habillement</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>La <strong>scolarisation des orphelins</strong></span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Le <strong>soutien aux veuves</strong> et aux personnes âgées</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="content-image-wrapper">
+                    <img src="{{ asset('assets/images/slide3.jpg') }}" 
+                         alt="Charité PHOVE — Amour du prochain" 
+                         class="content-image"
+                         onerror="this.src='https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=600'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ============================================ --}}
+    {{-- SECTION 6 : VALEUR 5 — INTÉGRITÉ --}}
+    {{-- ============================================ --}}
+    <section class="page-section page-section-light" id="integrite">
+        <div class="container">
+            <div class="content-grid">
+                <div class="content-block">
+                    <div class="value-number-badge">05</div>
+                    <h2 class="section-title text-left">Intégrité</h2>
+                    <div class="value-icon-large">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <p class="content-block-text">
+                        L'<strong>intégrité</strong> guide notre conduite morale et éthique. 
+                        Conformément à l'article 71 des statuts, <strong>la corruption à tout 
+                        niveau est à bannir</strong> dans l'organisation. Elle se traduit par :
+                    </p>
+                    <ul class="check-list">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Le <strong>respect strict</strong> des statuts et du Règlement d'Ordre Intérieur</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>La <strong>bonne moralité</strong> exigée de chaque membre (Article 45)</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>La <strong>lutte contre la corruption</strong> à tous les niveaux</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>L'<strong>honnêteté</strong> dans la gestion des ressources</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>La <strong>transparence financière</strong> avec la Commission de Contrôle</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="content-image-wrapper">
+                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                         alt="Intégrité PHOVE — Gestion transparente" 
+                         class="content-image"
+                         onerror="this.src='https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ============================================ --}}
+    {{-- SECTION 7 : VALEUR 6 — TRANSPARENCE --}}
+    {{-- ============================================ --}}
+    <section class="page-section page-section-white" id="transparence">
+        <div class="container">
+            <div class="content-grid content-grid-reverse">
+                <div class="content-block">
+                    <div class="value-number-badge">06</div>
+                    <h2 class="section-title text-left">Transparence</h2>
+                    <div class="value-icon-large">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <p class="content-block-text">
+                        La <strong>transparence</strong> est essentielle pour établir une relation 
+                        de confiance avec nos bénéficiaires, partenaires et donateurs. 
+                        Elle se manifeste par :
+                    </p>
+                    <ul class="check-list">
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>La <strong>publication régulière</strong> des rapports financiers</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>La <strong>Commission de Contrôle</strong> qui vérifie les opérations chaque trimestre (Article 35)</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Le <strong>rapport trimestriel et annuel</strong> du Directeur Général au CA et à l'AG (Article 18)</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>La <strong>traçabilité</strong> complète des dons et cotisations</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>L'<strong>accès aux documents</strong> officiels de l'organisation</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="content-image-wrapper">
+                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                         alt="Transparence PHOVE — Reddition de comptes" 
+                         class="content-image"
+                         onerror="this.src='https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ============================================ --}}
+    {{-- SECTION 8 : RÉCAPITULATIF — CARTES DES VALEURS --}}
+    {{-- ============================================ --}}
+    <section class="page-section page-section-light">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">En résumé</span>
-                <h2 class="section-title">Nos cinq valeurs fondamentales</h2>
+                <h2 class="section-title">Nos six valeurs fondamentales</h2>
             </div>
 
             <div class="cards-grid cards-grid-4 values-recap-grid">
                 <div class="value-recap-card">
                     <div class="value-recap-icon">
-                        <i class="fas fa-briefcase"></i>
+                        <i class="fas fa-heart"></i>
                     </div>
-                    <h3>Professionnalisme</h3>
+                    <h3>Compassion</h3>
+                </div>
+
+                <div class="value-recap-card">
+                    <div class="value-recap-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3>Solidarité</h3>
+                </div>
+
+                <div class="value-recap-card">
+                    <div class="value-recap-icon">
+                        <i class="fas fa-dove"></i>
+                    </div>
+                    <h3>Foi en Dieu</h3>
+                </div>
+
+                <div class="value-recap-card">
+                    <div class="value-recap-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3>Charité</h3>
+                </div>
+
+                <div class="value-recap-card">
+                    <div class="value-recap-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Intégrité</h3>
                 </div>
 
                 <div class="value-recap-card">
@@ -319,54 +404,35 @@
                     </div>
                     <h3>Transparence</h3>
                 </div>
-
-                <div class="value-recap-card">
-                    <div class="value-recap-icon">
-                        <i class="fas fa-clipboard-check"></i>
-                    </div>
-                    <h3>Redevabilité</h3>
-                </div>
-
-                <div class="value-recap-card">
-                    <div class="value-recap-icon">
-                        <i class="fas fa-heart"></i>
-                    </div>
-                    <h3>Compassion</h3>
-                </div>
-
-                <div class="value-recap-card value-recap-card-full">
-                    <div class="value-recap-icon">
-                        <i class="fas fa-venus-mars"></i>
-                    </div>
-                    <h3>Sensibilité au genre</h3>
-                </div>
             </div>
         </div>
     </section>
 
-   {{-- CTA --}}
-<section class="cta-section-page">
-    <div class="container">
-        <div class="cta-content-page">
-            <h2 class="cta-title-page">
-                Des <span class="highlight-page">valeurs</span> qui nous engagent
-            </h2>
-            <p class="cta-text-page">
-                Vous partagez ces valeurs de solidarité, d'intégrité et de justice sociale ? 
-                Rejoignez AHD-RDC et contribuez à une action humanitaire fondée sur des 
-                principes éthiques forts.
-            </p>
-            <div class="cta-buttons-page">
-                <a href="{{ url('/devenir-membre') }}" class="btn-page-don">
-                    <i class="fas fa-user-plus"></i> Rejoindre AHD-RDC
-                </a>
-                <a href="{{ url('/gouvernance') }}" class="btn-page-outline">
-                    <i class="fas fa-sitemap"></i> Notre gouvernance
-                </a>
+    {{-- ============================================ --}}
+    {{-- CTA --}}
+    {{-- ============================================ --}}
+    <section class="cta-section-page">
+        <div class="container">
+            <div class="cta-content-page">
+                <h2 class="cta-title-page">
+                    Des <span class="highlight-page">valeurs</span> qui nous engagent
+                </h2>
+                <p class="cta-text-page">
+                    Vous partagez ces valeurs de compassion, de solidarité et de foi ? 
+                    Rejoignez PHOVE et contribuez à une action humanitaire fondée sur 
+                    des principes éthiques forts.
+                </p>
+                <div class="cta-buttons-page">
+                    <a href="{{ url('/devenir-membre') }}" class="btn-page-don">
+                        <i class="fas fa-user-plus"></i> Rejoindre PHOVE
+                    </a>
+                    <a href="{{ url('/gouvernance') }}" class="btn-page-outline">
+                        <i class="fas fa-sitemap"></i> Notre gouvernance
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 @endsection
 

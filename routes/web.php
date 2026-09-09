@@ -14,7 +14,7 @@ use App\Http\Controllers\Public\ContactController as PublicContactController;
 use App\Http\Controllers\Public\RechercheController;
 use App\Http\Controllers\Admin\MembreController as AdminMembreController;
 use App\Http\Controllers\Admin\CotisationController;
-use App\Http\Controllers\Admin\GouvernanceController;
+use App\Http\Controllers\Admin\GouvernanceController as AdminGouvernanceController;
 use App\Http\Controllers\Admin\ProjetController as AdminProjetController;
 use App\Http\Controllers\Admin\IndicateurController;
 use App\Http\Controllers\Admin\DonController as AdminDonController;
@@ -28,6 +28,13 @@ use App\Http\Controllers\Admin\ContactController as AdminContactController;
 use App\Http\Controllers\Admin\MessageController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\StructureTerritorialeController;
+use App\Http\Controllers\Public\GouvernanceController;
+use App\Http\Controllers\Public\OrganigrammeController;
+use App\Http\Controllers\Admin\DossierPersonnelController;
+use App\Http\Controllers\Admin\StockController;
+use App\Http\Controllers\Admin\SalaireController;
+use App\Http\Controllers\Admin\ControleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -86,10 +93,17 @@ Route::get('/domaines-intervention', function () {
     return view('public.domaines-intervention');
 })->name('domaines-intervention');
 
-// Partenaires
-Route::get('/partenaires', function () {
-    return view('public.partenaires');
-})->name('partenaires');
+// Partenaires — Route dynamique (contrôleur public)
+Route::get('/partenaires', [App\Http\Controllers\Public\PartenaireController::class, 'index'])
+    ->name('partenaires');
+
+// Gouvernance — Route dynamique
+Route::get('/gouvernance', [GouvernanceController::class, 'index'])
+    ->name('gouvernance');
+
+// Organigramme — Route dynamique
+Route::get('/organigramme', [OrganigrammeController::class, 'index'])
+    ->name('organigramme');
 
 /*
 |--------------------------------------------------------------------------
@@ -336,20 +350,20 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
 
     // Gouvernance
     Route::middleware('check.role:admin,super_admin')->prefix('gouvernance')->name('gouvernance.')->group(function () {
-        Route::get('/', [GouvernanceController::class, 'index'])->name('index');
-        Route::get('/organes/{organe}', [GouvernanceController::class, 'organe'])->name('organe');
-        Route::post('/organes/store', [GouvernanceController::class, 'storeMembre'])->name('storeMembre');
-        Route::put('/organes/{organe}/update', [GouvernanceController::class, 'updateMembre'])->name('updateMembre');
-        Route::put('/organes/{organe}/retirer', [GouvernanceController::class, 'retirerMembre'])->name('retirerMembre');
+        Route::get('/', [AdminGouvernanceController::class, 'index'])->name('index');
+        Route::get('/organes/{organe}', [AdminGouvernanceController::class, 'organe'])->name('organe');
+        Route::post('/organes/store', [AdminGouvernanceController::class, 'storeMembre'])->name('storeMembre');
+        Route::put('/organes/{organe}/update', [AdminGouvernanceController::class, 'updateMembre'])->name('updateMembre');
+        Route::put('/organes/{organe}/retirer', [AdminGouvernanceController::class, 'retirerMembre'])->name('retirerMembre');
         
         // Assemblées Générales
-        Route::get('/assemblies', [GouvernanceController::class, 'assemblies'])->name('assemblies');
-        Route::get('/assemblies/create', [GouvernanceController::class, 'createAssembly'])->name('assemblies.create');
-        Route::post('/assemblies', [GouvernanceController::class, 'storeAssembly'])->name('assemblies.store');
-        Route::get('/assemblies/{assembly}', [GouvernanceController::class, 'showAssembly'])->name('assemblies.show');
-        Route::get('/assemblies/{assembly}/edit', [GouvernanceController::class, 'editAssembly'])->name('assemblies.edit');
-        Route::put('/assemblies/{assembly}', [GouvernanceController::class, 'updateAssembly'])->name('assemblies.update');
-        Route::delete('/assemblies/{assembly}', [GouvernanceController::class, 'destroyAssembly'])->name('assemblies.destroy');
+        Route::get('/assemblies', [AdminGouvernanceController::class, 'assemblies'])->name('assemblies');
+        Route::get('/assemblies/create', [AdminGouvernanceController::class, 'createAssembly'])->name('assemblies.create');
+        Route::post('/assemblies', [AdminGouvernanceController::class, 'storeAssembly'])->name('assemblies.store');
+        Route::get('/assemblies/{assembly}', [AdminGouvernanceController::class, 'showAssembly'])->name('assemblies.show');
+        Route::get('/assemblies/{assembly}/edit', [AdminGouvernanceController::class, 'editAssembly'])->name('assemblies.edit');
+        Route::put('/assemblies/{assembly}', [AdminGouvernanceController::class, 'updateAssembly'])->name('assemblies.update');
+        Route::delete('/assemblies/{assembly}', [AdminGouvernanceController::class, 'destroyAssembly'])->name('assemblies.destroy');
     });
 
     // Gestion des documents (admin et super_admin)
@@ -365,6 +379,186 @@ Route::middleware(['auth', 'check.status'])->prefix('admin')->name('admin.')->gr
         Route::put('/{document}/toggle-public', [DocumentController::class, 'togglePublic'])->name('togglePublic');
         Route::get('/{document}/download', [DocumentController::class, 'download'])->name('download');
         Route::get('/{document}/preview', [DocumentController::class, 'preview'])->name('preview');
+    });
+
+
+    // ============================================
+    // STRUCTURES TERRITORIALES
+    // ============================================
+    Route::prefix('structures')->name('structures.')->group(function () {
+        // Liste des structures
+        Route::get('/', [StructureTerritorialeController::class, 'index'])->name('index');
+
+        // Formulaire de création
+        Route::get('/create', [StructureTerritorialeController::class, 'create'])->name('create');
+
+        // Enregistrer une nouvelle structure
+        Route::post('/', [StructureTerritorialeController::class, 'store'])->name('store');
+
+        // Fiche détaillée d'une structure
+        Route::get('/{structure}', [StructureTerritorialeController::class, 'show'])->name('show');
+
+        // Formulaire de modification
+        Route::get('/{structure}/edit', [StructureTerritorialeController::class, 'edit'])->name('edit');
+
+        // Mettre à jour une structure
+        Route::put('/{structure}', [StructureTerritorialeController::class, 'update'])->name('update');
+
+        // Supprimer une structure
+        Route::delete('/{structure}', [StructureTerritorialeController::class, 'destroy'])->name('destroy');
+    });
+    
+
+    // ============================================
+    // DOSSIERS PERSONNEL
+    // ============================================
+    Route::prefix('dossiers')->name('dossiers.')->group(function () {
+        // Liste des dossiers
+        Route::get('/', [DossierPersonnelController::class, 'index'])->name('index');
+
+        // Formulaire de création
+        Route::get('/create', [DossierPersonnelController::class, 'create'])->name('create');
+
+        // Enregistrer un nouveau dossier
+        Route::post('/', [DossierPersonnelController::class, 'store'])->name('store');
+
+        // Fiche détaillée d'un dossier
+        Route::get('/{dossier}', [DossierPersonnelController::class, 'show'])->name('show');
+
+        // Upload un document pour une pièce
+        Route::post('/{dossier}/documents/{document}/upload', [DossierPersonnelController::class, 'uploadDocument'])->name('documents.upload');
+
+        // Formulaire de modification
+        Route::get('/{dossier}/edit', [DossierPersonnelController::class, 'edit'])->name('edit');
+
+        // Mettre à jour
+        Route::put('/{dossier}', [DossierPersonnelController::class, 'update'])->name('update');
+
+        // Supprimer un document
+        Route::delete('/documents/{document}', [DossierPersonnelController::class, 'destroyDocument'])->name('documents.destroy');
+
+        // Valider un dossier
+        Route::put('/{dossier}/valider', [DossierPersonnelController::class, 'valider'])->name('valider');
+
+        // Supprimer un dossier
+        Route::delete('/{dossier}', [DossierPersonnelController::class, 'destroy'])->name('destroy');
+
+        
+        // NOUVELLE ROUTE : Voir un document
+        Route::get('/documents/{document}/voir', [DossierPersonnelController::class, 'voirDocument'])
+            ->name('documents.voir');
+    });
+
+
+    // ============================================
+    // GESTION DES STOCKS
+    // ============================================
+    Route::prefix('stocks')->name('stocks.')->group(function () {
+        // Liste des articles
+        Route::get('/', [StockController::class, 'index'])->name('index');
+
+        // Formulaire de création
+        Route::get('/create', [StockController::class, 'create'])->name('create');
+
+        // Enregistrer un nouvel article
+        Route::post('/', [StockController::class, 'store'])->name('store');
+
+        // Liste des mouvements (entrées/sorties)
+        Route::get('/mouvements', [StockController::class, 'mouvements'])->name('mouvements');
+
+        // Fiche détaillée d'un article
+        Route::get('/{stock}', [StockController::class, 'show'])->name('show');
+
+        // Formulaire de modification
+        Route::get('/{stock}/edit', [StockController::class, 'edit'])->name('edit');
+
+        // Mettre à jour
+        Route::put('/{stock}', [StockController::class, 'update'])->name('update');
+
+        // Formulaire d'entrée de stock
+        Route::get('/{stock}/entree', [StockController::class, 'formEntree'])->name('formEntree');
+
+        // Enregistrer une entrée
+        Route::post('/{stock}/entree', [StockController::class, 'entree'])->name('entree');
+
+        // Formulaire de sortie de stock
+        Route::get('/{stock}/sortie', [StockController::class, 'formSortie'])->name('formSortie');
+
+        // Enregistrer une sortie
+        Route::post('/{stock}/sortie', [StockController::class, 'sortie'])->name('sortie');
+
+        // Supprimer un article
+        Route::delete('/{stock}', [StockController::class, 'destroy'])->name('destroy');
+    });
+
+    // ============================================
+    // GESTION DES SALAIRES
+    // ============================================
+    Route::prefix('salaires')->name('salaires.')->group(function () {
+        // Liste des salaires
+        Route::get('/', [SalaireController::class, 'index'])->name('index');
+
+        // Grille salariale par poste
+        Route::get('/grille', [SalaireController::class, 'grille'])->name('grille');
+
+        // Formulaire de création
+        Route::get('/create', [SalaireController::class, 'create'])->name('create');
+
+        // Enregistrer un nouveau salaire
+        Route::post('/', [SalaireController::class, 'store'])->name('store');
+
+        // Fiche détaillée d'un salaire
+        Route::get('/{salaire}', [SalaireController::class, 'show'])->name('show');
+
+        // Formulaire de modification
+        Route::get('/{salaire}/edit', [SalaireController::class, 'edit'])->name('edit');
+
+        // Mettre à jour
+        Route::put('/{salaire}', [SalaireController::class, 'update'])->name('update');
+
+        // Valider un salaire
+        Route::put('/{salaire}/valider', [SalaireController::class, 'valider'])->name('valider');
+
+        // Marquer comme payé
+        Route::put('/{salaire}/payer', [SalaireController::class, 'marquerPaye'])->name('payer');
+
+        // Annuler un salaire
+        Route::put('/{salaire}/annuler', [SalaireController::class, 'annuler'])->name('annuler');
+
+        // Supprimer un salaire
+        Route::delete('/{salaire}', [SalaireController::class, 'destroy'])->name('destroy');
+    });
+
+    // ============================================
+    // COMMISSION DE CONTRÔLE
+    // ============================================
+    Route::prefix('controles')->name('controles.')->group(function () {
+        // Liste des contrôles
+        Route::get('/', [ControleController::class, 'index'])->name('index');
+
+        // Formulaire de création
+        Route::get('/create', [ControleController::class, 'create'])->name('create');
+
+        // Enregistrer un nouveau contrôle
+        Route::post('/', [ControleController::class, 'store'])->name('store');
+
+        // Fiche détaillée d'un contrôle
+        Route::get('/{controle}', [ControleController::class, 'show'])->name('show');
+
+        // Formulaire de modification
+        Route::get('/{controle}/edit', [ControleController::class, 'edit'])->name('edit');
+
+        // Mettre à jour
+        Route::put('/{controle}', [ControleController::class, 'update'])->name('update');
+
+        // Valider un contrôle
+        Route::put('/{controle}/valider', [ControleController::class, 'valider'])->name('valider');
+
+        // Rejeter un contrôle
+        Route::put('/{controle}/rejeter', [ControleController::class, 'rejeter'])->name('rejeter');
+
+        // Supprimer un contrôle
+        Route::delete('/{controle}', [ControleController::class, 'destroy'])->name('destroy');
     });
         
 

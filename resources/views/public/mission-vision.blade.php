@@ -2,7 +2,7 @@
 
 @section('title', 'Mission & Vision')
 
-@section('meta_description', 'Découvrez la mission, la vision et les objectifs d\'AHD-RDC pour le développement communautaire, la paix et la protection des droits humains en République Démocratique du Congo.')
+@section('meta_description', 'Découvrez la mission, la vision et les objectifs de PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies. « Aime ton prochain comme toi-même » — Romain 13:8.')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
@@ -21,7 +21,7 @@
             </div>
             <h1 class="page-header-title">Mission & Vision</h1>
             <p class="page-header-subtitle">
-                Ce qui nous guide et nous inspire dans notre action humanitaire quotidienne au service des communautés vulnérables.
+                Ce qui nous guide et nous inspire dans notre action humanitaire quotidienne au service des orphelins, veuves et personnes démunies.
             </p>
             <nav class="page-breadcrumb">
                 <a href="{{ url('/') }}"><i class="fas fa-home"></i> Accueil</a>
@@ -34,105 +34,110 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 1 : NOTRE VISION — Article 7 des Statuts --}}
+    {{-- SECTION 1 : NOTRE MISSION — Article 5 des Statuts --}}
     {{-- ============================================ --}}
     <section class="page-section page-section-white">
         <div class="container">
             <div class="content-grid">
                 {{-- Texte --}}
                 <div class="content-block">
-                    <span class="section-subtitle">Ce qui nous inspire</span>
-                    <h2 class="section-title text-left">Notre Vision</h2>
+                    <span class="section-subtitle">Notre raison d'être</span>
+                    <h2 class="section-title text-left">Notre Mission</h2>
 
                     <div class="quote-block vision-quote">
                         <p>
-                            Vivre une société pacifiée sans conflits communautaires violents, 
-                            où règne l'équilibre social et où les droits des femmes sont respectés, 
-                            mais aussi dans une communauté autonome et en bonne santé.
+                            « Aime ton prochain comme toi-même » — Romain 13:8
                         </p>
                     </div>
 
                     <p class="content-block-text">
-                        Cette vision, définie à <strong>l'article 7 de nos statuts</strong>, 
-                        reflète notre aspiration profonde : bâtir un Congo où chaque communauté 
-                        vit en paix, dans la dignité et l'autonomie. Nous croyons en une société 
-                        où les conflits se résolvent par le dialogue, où les femmes sont pleinement 
-                        actrices du développement, et où chaque personne a accès aux services 
-                        essentiels pour une vie saine et épanouie.
+                        Conformément à <strong>l'article 5 des statuts</strong>, PHOVE a comme 
+                        but de <strong>venir en aide aux personnes vulnérables</strong> : 
+                        orphelins, veuves, personnes de 3ème âge et personnes démunies.
+                    </p>
+
+                    <p class="content-block-text">
+                        L'objectif principal que poursuit PHOVE est d'accomplir la mission de Dieu : 
+                        « Aimez-vous les uns les autres partout dans le monde sans distinction de 
+                        races ni de tribus » — Romain 13:8.
                     </p>
                 </div>
 
                 {{-- Image --}}
                 <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/logo-ahd.png') }}" 
-                         alt="Vision AHD-RDC — Paix et développement" 
-                         class="content-image">
+                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                         alt="Mission PHOVE — Compassion avec la population" 
+                         class="content-image"
+                         onerror="this.src='https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600'">
+                    <div class="content-image-badge">
+                        <strong>Romain 13:8</strong><br>
+                        <small>Aimez-vous les uns les autres</small>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 2 : NOTRE MISSION — Article 8 des Statuts --}}
+    {{-- SECTION 2 : NOTRE VISION --}}
     {{-- ============================================ --}}
     <section class="page-section page-section-light">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Notre raison d'être</span>
-                <h2 class="section-title">Notre Mission</h2>
+                <span class="section-subtitle">Ce qui nous inspire</span>
+                <h2 class="section-title">Notre Vision</h2>
                 <p class="section-description">
-                    Définie à l'article 8 de nos statuts, notre mission s'articule autour de trois axes fondamentaux.
+                    PHOVE aspire à un monde où chaque personne vulnérable est accompagnée, 
+                    protégée et soutenue dans sa dignité.
                 </p>
             </div>
 
             <div class="cards-grid">
-                {{-- Mission 1 --}}
+                {{-- Vision 1 --}}
                 <div class="mission-card">
                     <div class="mission-card-number">01</div>
                     <div class="mission-card-icon">
-                        <i class="fas fa-handshake"></i>
+                        <i class="fas fa-child"></i>
                     </div>
                     <h3 class="mission-card-title">
-                        Renforcer les mécanismes de prévention et de transformation positive des conflits
+                        Des orphelins encadrés et épanouis
                     </h3>
                     <p class="mission-card-text">
-                        Nous accompagnons les communautés dans la gestion pacifique des différends 
-                        à travers des mécanismes communautaires de médiation, de dialogue et de 
-                        réconciliation. Nous promouvons la cohabitation pacifique et la bonne 
-                        gouvernance comme piliers d'une paix durable.
+                        Nous œuvrons pour que chaque orphelin ait accès à l'éducation, 
+                        à l'alimentation, aux soins de santé et à un encadrement spirituel 
+                        et social qui lui permette de devenir un bon citoyen.
                     </p>
                 </div>
 
-                {{-- Mission 2 --}}
+                {{-- Vision 2 --}}
                 <div class="mission-card">
                     <div class="mission-card-number">02</div>
                     <div class="mission-card-icon">
-                        <i class="fas fa-bullhorn"></i>
+                        <i class="fas fa-female"></i>
                     </div>
                     <h3 class="mission-card-title">
-                        Assurer un plaidoyer et une sensibilisation régulière
+                        Des veuves soutenues et autonomes
                     </h3>
                     <p class="mission-card-text">
-                        Nous menons un plaidoyer constant auprès des autorités politico-administratives 
-                        pour la bonne gouvernance, la sécurisation foncière, la promotion des droits 
-                        des femmes et la participation citoyenne. Nous informons et sensibilisons les 
-                        populations sur leurs droits fondamentaux.
+                        Nous accompagnons les veuves dans leur réinsertion socio-économique 
+                        par la formation professionnelle, les activités génératrices de revenus 
+                        et le soutien spirituel.
                     </p>
                 </div>
 
-                {{-- Mission 3 --}}
+                {{-- Vision 3 --}}
                 <div class="mission-card">
                     <div class="mission-card-number">03</div>
                     <div class="mission-card-icon">
-                        <i class="fas fa-seedling"></i>
+                        <i class="fas fa-hand-holding-heart"></i>
                     </div>
                     <h3 class="mission-card-title">
-                        Informer, former et appuyer dans les techniques de production et d'auto prise en charge
+                        Des personnes démunies aidées et dignes
                     </h3>
                     <p class="mission-card-text">
-                        Nous renforçons les capacités des communautés par la formation professionnelle, 
-                        l'apprentissage des métiers et l'accompagnement aux initiatives de microfinance. 
-                        Notre objectif est l'autonomisation économique des personnes vulnérables.
+                        Nous assistons les personnes démunies par l'alimentation, l'habillement, 
+                        les soins médicaux, le logement et l'accompagnement dans leurs activités 
+                        socio-économiques.
                     </p>
                 </div>
             </div>
@@ -140,41 +145,16 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 3 : OBJECTIF GLOBAL — Article 5 des Statuts --}}
+    {{-- SECTION 3 : OBJECTIFS SPÉCIFIQUES — Article 7 des Statuts --}}
     {{-- ============================================ --}}
     <section class="page-section page-section-white">
-        <div class="container">
-            <div class="content-block text-center">
-                <span class="section-subtitle">Notre but ultime</span>
-                <h2 class="section-title">Objectif Global</h2>
-
-                <div class="objective-global-card">
-                    <div class="objective-global-icon">
-                        <i class="fas fa-globe-africa"></i>
-                    </div>
-                    <p class="objective-global-text">
-                        Contribuer à la <strong>résolution des conflits fonciers</strong> et aux 
-                        <strong>renforcements des mécanismes de la consolidation de la paix</strong> 
-                        entre les communautés, au <strong>relèvement communautaire</strong> et à la 
-                        <strong>promotion des droits de la femme</strong> en République Démocratique 
-                        du Congo en particulier et dans le monde en général.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- ============================================ --}}
-    {{-- SECTION 4 : OBJECTIFS SPÉCIFIQUES — Article 6 des Statuts --}}
-    {{-- ============================================ --}}
-    <section class="page-section page-section-light">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Nos engagements</span>
                 <h2 class="section-title">Objectifs Spécifiques</h2>
                 <p class="section-description">
-                    Conformément à l'article 6 de nos statuts, nous poursuivons dix objectifs 
-                    spécifiques pour atteindre notre mission.
+                    Conformément à <strong>l'article 7 des statuts</strong>, PHOVE poursuit 
+                    les objectifs spécifiques suivants.
                 </p>
             </div>
 
@@ -183,11 +163,10 @@
                 <div class="objective-item">
                     <div class="objective-number">1</div>
                     <div class="objective-content">
-                        <h4>Gestion et transformation positive des conflits</h4>
+                        <h4>Mettre en valeur les Saintes Écritures</h4>
                         <p>
-                            Accompagner les communautés dans la gestion et la transformation 
-                            positives des conflits à travers des mécanismes communautaires, la 
-                            promotion de la paix, la cohabitation pacifique et la bonne gouvernance.
+                            Promouvoir la parole de Dieu et donner la valeur à notre vocation 
+                            pastorale dans toutes nos actions.
                         </p>
                     </div>
                 </div>
@@ -196,10 +175,10 @@
                 <div class="objective-item">
                     <div class="objective-number">2</div>
                     <div class="objective-content">
-                        <h4>Gouvernance foncière</h4>
+                        <h4>Lutter contre les fléaux sociaux</h4>
                         <p>
-                            Informer et former les communautés sur la gouvernance foncière, 
-                            la sécurisation de la terre, l'accès à la terre et à la propriété.
+                            Lutter contre le banditisme, le vol, le viol, les avortements forcés, 
+                            les mariages précoces, le vagabondage, la pauvreté et l'oisiveté juvénile.
                         </p>
                     </div>
                 </div>
@@ -208,10 +187,12 @@
                 <div class="objective-item">
                     <div class="objective-number">3</div>
                     <div class="objective-content">
-                        <h4>Amélioration de l'habitat</h4>
+                        <h4>Encadrer et accompagner les personnes vulnérables</h4>
                         <p>
-                            Améliorer les conditions et l'accès à l'habitat pour les 
-                            communautés vulnérables.
+                            Encadrer et accompagner les orphelins, veuves et personnes démunies 
+                            dans les domaines spirituel et social : éducation, agriculture, pêche, 
+                            élevage, menuiserie, maçonnerie, mécanique, coupe et couture, art, 
+                            esthétique, art culinaire, activités socio-économiques et sanitaires.
                         </p>
                     </div>
                 </div>
@@ -220,11 +201,10 @@
                 <div class="objective-item">
                     <div class="objective-number">4</div>
                     <div class="objective-content">
-                        <h4>Promotion des droits humains et des enfants</h4>
+                        <h4>Assurer les besoins essentiels</h4>
                         <p>
-                            Sensibiliser, informer et former les leaders et la population, 
-                            et mener un plaidoyer auprès des gouvernants pour la promotion 
-                            des droits humains et des enfants.
+                            Assurer l'alimentation, les soins médicaux, l'habillement et le logement 
+                            des personnes vulnérables.
                         </p>
                     </div>
                 </div>
@@ -233,10 +213,10 @@
                 <div class="objective-item">
                     <div class="objective-number">5</div>
                     <div class="objective-content">
-                        <h4>Droits des réfugiés et déplacés</h4>
+                        <h4>Susciter l'amour du prochain</h4>
                         <p>
-                            Mener un plaidoyer en faveur des droits des réfugiés, rapatriés, 
-                            demandeurs d'asile, retournés et déplacés internes.
+                            Susciter l'amour du prochain et la protection des biens communs 
+                            par l'assistance aux plus démunis.
                         </p>
                     </div>
                 </div>
@@ -245,9 +225,10 @@
                 <div class="objective-item">
                     <div class="objective-number">6</div>
                     <div class="objective-content">
-                        <h4>Sécurité des moyens de subsistance</h4>
+                        <h4>Accompagner les activités socio-économiques</h4>
                         <p>
-                            Améliorer la sécurité des moyens de subsistance des communautés rurales.
+                            Accompagner les activités socio-économiques des personnes vulnérables 
+                            pour leur autonomisation.
                         </p>
                     </div>
                 </div>
@@ -256,10 +237,10 @@
                 <div class="objective-item">
                     <div class="objective-number">7</div>
                     <div class="objective-content">
-                        <h4>Santé familiale et lutte contre les MST/VIH-SIDA</h4>
+                        <h4>Assurer l'assistance judiciaire</h4>
                         <p>
-                            Éduquer la population sur la santé familiale et les méthodes de 
-                            lutte contre les maladies sexuellement transmissibles et le VIH/SIDA.
+                            Accompagner les délaissés juridiquement et assurer leur défense 
+                            et leur protection.
                         </p>
                     </div>
                 </div>
@@ -268,11 +249,10 @@
                 <div class="objective-item">
                     <div class="objective-number">8</div>
                     <div class="objective-content">
-                        <h4>Eau potable, assainissement et hygiène</h4>
+                        <h4>Assurer la scolarisation et la formation</h4>
                         <p>
-                            Informer et former les populations sur les techniques et méthodes 
-                            de traitement et conservation de l'eau potable, d'assainissement 
-                            et d'hygiène dans le milieu.
+                            Assurer la scolarisation des orphelins, l'alphabétisation et la 
+                            formation professionnelle des personnes vulnérables.
                         </p>
                     </div>
                 </div>
@@ -281,10 +261,10 @@
                 <div class="objective-item">
                     <div class="objective-number">9</div>
                     <div class="objective-content">
-                        <h4>Formation professionnelle et réinsertion</h4>
+                        <h4>Accompagner les malades traumatisés</h4>
                         <p>
-                            Promouvoir la formation professionnelle, l'apprentissage des métiers 
-                            et la réinsertion socioéconomique des personnes vulnérables.
+                            Accompagner les malades traumatisés pour lutter contre la stigmatisation 
+                            et la discrimination.
                         </p>
                     </div>
                 </div>
@@ -293,10 +273,11 @@
                 <div class="objective-item">
                     <div class="objective-number">10</div>
                     <div class="objective-content">
-                        <h4>Environnement et développement durable</h4>
+                        <h4>Soutenir l'agriculture et les infrastructures</h4>
                         <p>
-                            Contribuer à la lutte contre la déforestation et le réchauffement 
-                            climatique par le reboisement et l'éducation environnementale.
+                            Soutenir l'agriculture, l'élevage et la pêche. Ouvrir, tracer et 
+                            réfectionner les routes de desserte agricole. Construire et réhabiliter 
+                            les infrastructures hospitalières, scolaires et les dépôts de productions agricoles.
                         </p>
                     </div>
                 </div>
@@ -305,46 +286,148 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 5 : SLOGAN --}}
+    {{-- SECTION 4 : DOMAINES D'INTERVENTION — Articles 8 et 9 --}}
+    {{-- ============================================ --}}
+    <section class="page-section page-section-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Notre champ d'action</span>
+                <h2 class="section-title">Domaines d'Intervention</h2>
+                <p class="section-description">
+                    Conformément aux articles 8 et 9 des statuts, PHOVE intervient dans 
+                    l'encadrement des personnes vulnérables.
+                </p>
+            </div>
+
+            <div class="cards-grid cards-grid-4">
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3 class="info-card-title">Logements</h3>
+                    <p class="info-card-text">
+                        Octroi de logements aux personnes vulnérables.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="info-card-title">Scolarisation</h3>
+                    <p class="info-card-text">
+                        Scolarisation des orphelins et alphabétisation.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3 class="info-card-title">Alimentation & Santé</h3>
+                    <p class="info-card-text">
+                        Alimentation, habillement et soins médicaux.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                    <h3 class="info-card-title">Agriculture</h3>
+                    <p class="info-card-text">
+                        Agriculture, élevage, pêche et routes de desserte agricole.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <h3 class="info-card-title">Infrastructures</h3>
+                    <p class="info-card-text">
+                        Construction et réhabilitation des hôpitaux, écoles et dépôts.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3 class="info-card-title">Socio-économique</h3>
+                    <p class="info-card-text">
+                        Activités socio-économiques et assistance judiciaire.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-dove"></i>
+                    </div>
+                    <h3 class="info-card-title">Spirituel</h3>
+                    <p class="info-card-text">
+                        Vie spirituelle, formation biblique et préparation spirituelle.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="info-card-title">Psychosocial</h3>
+                    <p class="info-card-text">
+                        Accompagnement des malades traumatisés et lutte contre la stigmatisation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ============================================ --}}
+    {{-- SECTION 5 : NOTRE DEVISE --}}
     {{-- ============================================ --}}
     <section class="page-section page-section-primary">
         <div class="container text-center">
             <div class="slogan-section">
                 <i class="fas fa-quote-left slogan-quote"></i>
                 <h2 class="slogan-text">
-                    Être ensemble pour le bien de la communauté
+                    Compassion avec la population
                 </h2>
                 <i class="fas fa-quote-right slogan-quote"></i>
                 <p class="slogan-subtext">
-                    Ce slogan incarne notre philosophie d'action : la solidarité, le partage 
-                    et l'engagement collectif comme moteurs du développement communautaire.
+                    Notre devise incarne notre philosophie d'action : la compassion, 
+                    l'amour du prochain et l'engagement collectif comme moteurs de 
+                    notre mission humanitaire.
                 </p>
             </div>
         </div>
     </section>
 
+    {{-- ============================================ --}}
     {{-- CTA --}}
-<section class="cta-section-page">
-    <div class="container">
-        <div class="cta-content-page">
-            <h2 class="cta-title-page">
-                Partagez <span class="highlight-page">notre vision</span>
-            </h2>
-            <p class="cta-text-page">
-                Vous croyez en un Congo pacifié, où chaque communauté vit dans la dignité 
-                et l'autonomie ? Rejoignez-nous et contribuez à faire de cette vision une réalité.
-            </p>
-            <div class="cta-buttons-page">
-                <a href="{{ url('/faire-un-don') }}" class="btn-page-don">
-                    <i class="fas fa-heart"></i> Soutenir notre mission
-                </a>
-                <a href="{{ url('/nos-valeurs') }}" class="btn-page-outline">
-                    <i class="fas fa-gem"></i> Découvrir nos valeurs
-                </a>
+    {{-- ============================================ --}}
+    <section class="cta-section-page">
+        <div class="container">
+            <div class="cta-content-page">
+                <h2 class="cta-title-page">
+                    Partagez <span class="highlight-page">notre mission</span>
+                </h2>
+                <p class="cta-text-page">
+                    Vous croyez en un monde où chaque orphelin, chaque veuve et chaque personne 
+                    démunie vit dans la dignité ? Rejoignez-nous et contribuez à faire de 
+                    cette vision une réalité.
+                </p>
+                <div class="cta-buttons-page">
+                    <a href="{{ url('/faire-un-don') }}" class="btn-page-don">
+                        <i class="fas fa-heart"></i> Soutenir notre mission
+                    </a>
+                    <a href="{{ url('/nos-valeurs') }}" class="btn-page-outline">
+                        <i class="fas fa-gem"></i> Découvrir nos valeurs
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 @endsection
 

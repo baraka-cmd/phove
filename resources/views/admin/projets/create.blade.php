@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Ajouter un projet')
+@section('title', 'Ajouter un projet | PHOVE')
 
 @section('page_title', 'Ajouter un projet')
 @section('page_icon', 'plus-circle')
-@section('page_subtitle', 'Créez un nouveau projet humanitaire en remplissant le formulaire ci-dessous.')
+@section('page_subtitle', 'Créez un nouveau projet humanitaire PHOVE en remplissant le formulaire ci-dessous.')
 
 @php
     $breadcrumb = [
@@ -28,7 +28,7 @@
             </div>
             <div>
                 <h2>Nouveau projet</h2>
-                <p>Remplissez les informations ci-dessous pour créer un nouveau projet humanitaire.</p>
+                <p>Remplissez les informations ci-dessous pour créer un nouveau projet humanitaire PHOVE.</p>
             </div>
         </div>
 
@@ -53,9 +53,17 @@
                     <div class="projet-form-group projet-form-full">
                         <label for="titre" class="projet-form-label">Titre du projet <span class="required">*</span></label>
                         <input type="text" name="titre" id="titre" class="projet-form-input @error('titre') error @enderror" 
-                               value="{{ old('titre') }}" placeholder="Ex: Soutien à la production maraîchère pour la sécurité alimentaire" required>
+                               value="{{ old('titre') }}" placeholder="Ex: Appui nutritionnel aux orphelins du village Kiziba I" required>
                         @error('titre') <span class="projet-form-error"><i class="fas fa-exclamation-circle"></i> {{ $message }}</span> @enderror
                         <span class="projet-form-hint">Slug : <strong id="slugPreview">{{ old('titre') ? Str::slug(old('titre')) : '...' }}</strong></span>
+                    </div>
+
+                    <div class="projet-form-group">
+                        <label for="code_projet" class="projet-form-label">Code projet <span class="optional">(optionnel)</span></label>
+                        <input type="text" name="code_projet" id="code_projet" class="projet-form-input @error('code_projet') error @enderror" 
+                               value="{{ old('code_projet') }}" placeholder="Ex: UNJP/RDC/082/WFP" maxlength="50">
+                        @error('code_projet') <span class="projet-form-error"><i class="fas fa-exclamation-circle"></i> {{ $message }}</span> @enderror
+                        <span class="projet-form-hint">Code officiel du projet (bailleurs, ONU, etc.)</span>
                     </div>
 
                     <div class="projet-form-group">
@@ -92,14 +100,14 @@
                     <div class="projet-form-group">
                         <label for="zone_geographique" class="projet-form-label">Zone géographique <span class="required">*</span></label>
                         <input type="text" name="zone_geographique" id="zone_geographique" class="projet-form-input @error('zone_geographique') error @enderror" 
-                               value="{{ old('zone_geographique') }}" placeholder="Ex: Minova et Kirotshe" required>
+                               value="{{ old('zone_geographique') }}" placeholder="Ex: Village Kiziba I, Territoire de Nyiragongo" required>
                         @error('zone_geographique') <span class="projet-form-error"><i class="fas fa-exclamation-circle"></i> {{ $message }}</span> @enderror
                     </div>
 
                     <div class="projet-form-group">
                         <label for="province" class="projet-form-label">Province <span class="optional">(optionnel)</span></label>
                         <input type="text" name="province" id="province" class="projet-form-input" 
-                               value="{{ old('province') }}" placeholder="Ex: Nord-Kivu et Sud-Kivu">
+                               value="{{ old('province') }}" placeholder="Ex: Nord-Kivu">
                     </div>
 
                     <div class="projet-form-group">
@@ -140,13 +148,13 @@
                     <div class="projet-form-group">
                         <label for="bailleur" class="projet-form-label">Bailleur de fonds <span class="optional">(optionnel)</span></label>
                         <input type="text" name="bailleur" id="bailleur" class="projet-form-input" 
-                               value="{{ old('bailleur') }}" placeholder="Ex: Autofinancement du Conseil d'Administration">
+                               value="{{ old('bailleur') }}" placeholder="Ex: FAO, WFP, PHOVE">
                     </div>
 
                     <div class="projet-form-group">
                         <label for="source_financement" class="projet-form-label">Source de financement <span class="optional">(optionnel)</span></label>
                         <input type="text" name="source_financement" id="source_financement" class="projet-form-input" 
-                               value="{{ old('source_financement') }}" placeholder="Ex: Autofinancement, Partenariat, Subvention">
+                               value="{{ old('source_financement') }}" placeholder="Ex: Partenariat international, Autofinancement">
                     </div>
                 </div>
             </div>
@@ -197,7 +205,7 @@
                         </ul>
                         <input type="file" name="image_principale" id="image_principale" class="projet-image-input" 
                                accept="image/jpeg,image/jpg,image/png,image/webp" style="display: none;">
-                        <span id="imageInfo" style="font-size: 12px; color: var(--color-text-muted);">Aucun fichier sélectionné</span>
+                        <span id="imageInfo" style="font-size: 12px; color: #64748B;">Aucun fichier sélectionné</span>
                         @error('image_principale') <span class="projet-form-error"><i class="fas fa-exclamation-circle"></i> {{ $message }}</span> @enderror
                     </div>
                 </div>

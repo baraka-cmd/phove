@@ -6,35 +6,35 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     {{-- Titre dynamique --}}
-    <title>@yield('title', 'AHD-RDC') | Action Humanitaire pour le Développement en RD Congo</title>
+    <title>@yield('title', 'PHOVE') | Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies</title>
 
     {{-- Meta tags SEO --}}
-    <meta name="description" content="@yield('meta_description', 'AHD-RDC est une organisation non gouvernementale engagée dans le développement communautaire, la protection, la cohésion sociale et la promotion de la paix dans la partie Est de la RD Congo.')">
-    <meta name="keywords" content="@yield('meta_keywords', 'AHD-RDC, humanitaire, développement, RD Congo, Sud-Kivu, Nord-Kivu, paix, protection, santé, éducation, wash, sécurité alimentaire')">
-    <meta name="author" content="AHD-RDC">
+    <meta name="description" content="@yield('meta_description', 'PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies) est une ONG congolaise apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma. Sa mission : venir en aide aux orphelins, veuves, personnes de 3ème âge et personnes démunies.')">
+    <meta name="keywords" content="@yield('meta_keywords', 'PHOVE, ONG, humanitaire, orphelins, veuves, personnes démunies, RD Congo, Goma, Nord-Kivu, aide sociale, éducation, santé, agriculture, formation professionnelle, assistance spirituelle')">
+    <meta name="author" content="PHOVE">
     <meta name="robots" content="index, follow">
 
     {{-- Open Graph (partage réseaux sociaux) --}}
-    <meta property="og:title" content="@yield('title', 'AHD-RDC') | Action Humanitaire pour le Développement en RD Congo">
-    <meta property="og:description" content="@yield('meta_description', 'ONG engagée dans le développement communautaire et la promotion de la paix en RD Congo.')">
-    <meta property="og:image" content="{{ asset('assets/images/logo-ahd.png') }}">
+    <meta property="og:title" content="@yield('title', 'PHOVE') | Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies">
+    <meta property="og:description" content="@yield('meta_description', 'PHOVE — ONG humanitaire congolaise engagée dans l\'assistance aux orphelins, veuves et personnes démunies : éducation, santé, agriculture, formation professionnelle et accompagnement spirituel.')">
+    <meta property="og:image" content="{{ asset('assets/images/logo-phove.png') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="AHD-RDC">
+    <meta property="og:site_name" content="PHOVE">
     <meta property="og:locale" content="fr_FR">
 
     {{-- Twitter Card --}}
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="@yield('title', 'AHD-RDC')">
-    <meta name="twitter:description" content="@yield('meta_description', 'ONG engagée dans le développement communautaire en RD Congo.')">
-    <meta name="twitter:image" content="{{ asset('assets/images/logo-ahd.png') }}">
+    <meta name="twitter:title" content="@yield('title', 'PHOVE')">
+    <meta name="twitter:description" content="@yield('meta_description', 'PHOVE — ONG humanitaire congolaise : compassion avec la population.')">
+    <meta name="twitter:image" content="{{ asset('assets/images/logo-phove.png') }}">
 
     {{-- CSRF Token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Favicon --}}
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon-phove.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon-phove.png') }}">
 
     {{-- Police Poppins --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">

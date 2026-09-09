@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Gestion des projets')
+@section('title', 'Gestion des projets | PHOVE')
 
 @section('page_title', 'Projets')
 @section('page_icon', 'project-diagram')
-@section('page_subtitle', 'Gérez l\'ensemble des projets humanitaires : création, modification, publication.')
+@section('page_subtitle', 'Gérez l\'ensemble des projets humanitaires PHOVE : création, modification, publication.')
 
 @php
     $breadcrumb = [ 'Projets' ];
@@ -42,10 +42,10 @@
             </div>
         </div>
         <div class="projet-stat-card">
-            <div class="projet-stat-icon"><i class="fas fa-clock"></i></div>
+            <div class="projet-stat-icon"><i class="fas fa-dollar-sign"></i></div>
             <div class="projet-stat-content">
-                <div class="projet-stat-value">{{ $projetsEnPreparation }}</div>
-                <div class="projet-stat-label">En préparation</div>
+                <div class="projet-stat-value">{{ number_format($totalBudget, 0, ',', ' ') }} $</div>
+                <div class="projet-stat-label">Budget total</div>
             </div>
         </div>
     </div>
@@ -57,21 +57,25 @@
         <div class="projets-search">
             <i class="fas fa-search"></i>
             <input type="text" name="recherche" id="projetSearch" value="{{ request('recherche') }}" 
-                   class="projets-search-input" placeholder="Rechercher un projet...">
+                   class="projets-search-input" placeholder="Rechercher un projet, un code, une zone...">
         </div>
 
         <div class="projets-filtres">
             <select name="domaine" class="projets-filtre-select" onchange="this.form.submit()">
                 <option value="">Tous les domaines</option>
-                <option value="sante_nutrition" {{ request('domaine') === 'sante_nutrition' ? 'selected' : '' }}>Santé-Nutrition</option>
-                <option value="education" {{ request('domaine') === 'education' ? 'selected' : '' }}>Éducation</option>
-                <option value="protection" {{ request('domaine') === 'protection' ? 'selected' : '' }}>Protection</option>
+                <option value="sante_nutrition" {{ request('domaine') === 'sante_nutrition' ? 'selected' : '' }}>Santé & Nutrition</option>
+                <option value="education" {{ request('domaine') === 'education' ? 'selected' : '' }}>Éducation & Formation</option>
+                <option value="protection" {{ request('domaine') === 'protection' ? 'selected' : '' }}>Protection Sociale</option>
                 <option value="wash" {{ request('domaine') === 'wash' ? 'selected' : '' }}>Eau & Assainissement</option>
-                <option value="securite_alimentaire" {{ request('domaine') === 'securite_alimentaire' ? 'selected' : '' }}>Sécurité Alimentaire</option>
+                <option value="securite_alimentaire" {{ request('domaine') === 'securite_alimentaire' ? 'selected' : '' }}>Sécurité Alimentaire & Agriculture</option>
                 <option value="communication" {{ request('domaine') === 'communication' ? 'selected' : '' }}>Communication</option>
                 <option value="environnement" {{ request('domaine') === 'environnement' ? 'selected' : '' }}>Environnement</option>
                 <option value="paix" {{ request('domaine') === 'paix' ? 'selected' : '' }}>Paix & Cohésion</option>
                 <option value="genre" {{ request('domaine') === 'genre' ? 'selected' : '' }}>Genre</option>
+                <option value="spirituel" {{ request('domaine') === 'spirituel' ? 'selected' : '' }}>Accompagnement Spirituel</option>
+                <option value="infrastructure" {{ request('domaine') === 'infrastructure' ? 'selected' : '' }}>Infrastructures</option>
+                <option value="economique" {{ request('domaine') === 'economique' ? 'selected' : '' }}>Activités Socio-Économiques</option>
+                <option value="judiciaire" {{ request('domaine') === 'judiciaire' ? 'selected' : '' }}>Assistance Judiciaire</option>
             </select>
 
             <select name="statut" class="projets-filtre-select" onchange="this.form.submit()">
@@ -111,6 +115,7 @@
                 <thead>
                     <tr>
                         <th>Projet</th>
+                        <th>Code</th>
                         <th>Domaine</th>
                         <th>Zone</th>
                         <th>Période</th>
@@ -128,7 +133,7 @@
                             <div class="projet-cell-titre">
                                 <div class="projet-cell-image">
                                     @if($projet->image_principale)
-                                        <img src="{{ asset('storage/' . $projet->image_principale) }}" alt="{{ $projet->titre }}">
+                                        <img src="{{ asset('storage/' . $projet->image_principale) }}" alt="{{ $projet->titre }}" loading="lazy">
                                     @else
                                         <div class="projet-cell-image-placeholder">
                                             <i class="fas fa-project-diagram"></i>
@@ -144,6 +149,17 @@
                             </div>
                         </td>
 
+                        {{-- Code projet --}}
+                        <td>
+                            @if($projet->code_projet)
+                                <span class="projet-code-badge" title="Code officiel du projet">
+                                    <i class="fas fa-barcode"></i> {{ $projet->code_projet }}
+                                </span>
+                            @else
+                                <span style="color: #94A3B8; font-size: 12px;">N/A</span>
+                            @endif
+                        </td>
+
                         {{-- Domaine --}}
                         <td>
                             @php
@@ -152,6 +168,8 @@
                                     'protection' => 'protection', 'wash' => 'wash',
                                     'securite_alimentaire' => 'alimentaire', 'communication' => 'communication',
                                     'environnement' => 'environnement', 'paix' => 'paix', 'genre' => 'genre',
+                                    'spirituel' => 'spirituel', 'infrastructure' => 'infrastructure',
+                                    'economique' => 'economique', 'judiciaire' => 'judiciaire',
                                     default => 'sante'
                                 };
                             @endphp
@@ -162,14 +180,14 @@
                         <td>
                             <span style="font-size: 13px;">{{ $projet->zone_geographique }}</span>
                             @if($projet->province)
-                                <br><small style="color: #888;">{{ $projet->province }}</small>
+                                <br><small style="color: #64748B;">{{ $projet->province }}</small>
                             @endif
                         </td>
 
                         {{-- Période --}}
                         <td>
                             <span style="font-size: 13px; white-space: nowrap;">
-                                <i class="fas fa-calendar-alt" style="color: var(--color-text-muted); font-size: 11px;"></i> 
+                                <i class="fas fa-calendar-alt" style="color: #64748B; font-size: 11px;"></i> 
                                 {{ $projet->date_debut->format('m/Y') }}
                                 @if($projet->date_fin) — {{ $projet->date_fin->format('m/Y') }} @endif
                             </span>
@@ -181,6 +199,11 @@
                                 {{ number_format($projet->budget_utilise, 0, ',', ' ') }} $
                             </span>
                             <small>sur {{ number_format($projet->budget_total, 0, ',', ' ') }} $</small>
+                            <br>
+                            <div class="projet-progress-mini">
+                                <div class="projet-progress-mini-bar" style="width: {{ $projet->pourcentageBudget() }}%"></div>
+                            </div>
+                            <small>{{ $projet->pourcentageBudget() }}%</small>
                         </td>
 
                         {{-- Statut --}}

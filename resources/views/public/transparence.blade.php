@@ -2,7 +2,7 @@
 
 @section('title', 'Transparence')
 
-@section('meta_description', 'Consultez les rapports financiers, rapports annuels et documents officiels d\'AHD-RDC. La transparence est une de nos valeurs fondamentales.')
+@section('meta_description', 'Consultez les rapports financiers, rapports annuels et documents officiels de PHOVE. La transparence et la redevabilité sont au cœur de notre gouvernance.')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
@@ -21,7 +21,7 @@
             </div>
             <h1 class="page-header-title">Transparence</h1>
             <p class="page-header-subtitle">
-                Conformément à nos valeurs de transparence et de redevabilité, nous publions nos rapports financiers, rapports annuels et documents officiels.
+                Conformément à nos valeurs d'intégrité et de transparence, nous publions nos rapports financiers, rapports annuels et documents officiels.
             </p>
             <nav class="page-breadcrumb">
                 <a href="{{ url('/') }}"><i class="fas fa-home"></i> Accueil</a>
@@ -40,10 +40,11 @@
                 <span class="section-subtitle">Nos engagements</span>
                 <h2 class="section-title">Une gestion transparente</h2>
                 <p class="section-description">
-                    La <strong>transparence</strong> et la <strong>redevabilité</strong> sont deux 
-                    des cinq valeurs fondamentales d'AHD-RDC définies à l'article 10 de nos statuts. 
-                    Nous rendons compte de notre gestion financière et administrative à travers 
-                    des rapports réguliers accessibles à tous.
+                    La <strong>transparence</strong> et la <strong>redevabilité</strong> sont 
+                    des valeurs fondamentales de PHOVE. Conformément aux <strong>articles 35 
+                    et 38 des statuts</strong>, la Commission de Contrôle vérifie les opérations 
+                    chaque trimestre et le Directeur Général dresse un rapport trimestriel et 
+                    annuel au Conseil d'Administration et à l'Assemblée Générale.
                 </p>
             </div>
 
@@ -54,8 +55,8 @@
                     <span>Transparence</span>
                 </div>
                 <div class="transparence-value-item">
-                    <i class="fas fa-clipboard-check"></i>
-                    <span>Redevabilité</span>
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Intégrité</span>
                 </div>
                 <div class="transparence-value-item">
                     <i class="fas fa-file-alt"></i>
@@ -154,7 +155,7 @@
                             <h3>Aucun rapport financier disponible</h3>
                             <p>
                                 Les rapports financiers seront publiés ici dès qu'ils seront 
-                                validés par la Direction Exécutive.
+                                validés par la Commission de Contrôle et le Directeur Général.
                             </p>
                         </div>
                     @endif
@@ -278,8 +279,8 @@
                             </div>
                             <h3>Aucun document officiel disponible</h3>
                             <p>
-                                Les documents officiels (statuts, règlement intérieur, procès-verbaux) 
-                                seront publiés ici prochainement.
+                                Les documents officiels (statuts du 30 août 2012, Règlement 
+                                d'Ordre Intérieur, procès-verbaux) seront publiés ici prochainement.
                             </p>
                         </div>
                     @endif
@@ -300,10 +301,11 @@
                     <i class="fas fa-quote-left"></i>
                 </div>
                 <p class="engagement-text">
-                    « La transparence et la redevabilité sont les piliers de la confiance 
+                    « La corruption à tout niveau est à bannir dans l'organisation. 
+                    La transparence et l'intégrité sont les piliers de la confiance 
                     que nous accordent nos bénéficiaires, nos partenaires et nos donateurs. »
                 </p>
-                <span class="engagement-author">— Dr AKSANTI DUNIA Steeng, Coordonnateur National</span>
+                <span class="engagement-author">— Apôtre Philippe KABOYI MUSAMUGUMA, Directeur Général</span>
             </div>
         </div>
     </section>

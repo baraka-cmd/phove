@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Paramètres généraux')
+@section('title', 'Paramètres généraux | PHOVE')
 
 @section('page_title', 'Paramètres')
 @section('page_icon', 'cog')
-@section('page_subtitle', 'Configurez l\'identité visuelle, les coordonnées, les réseaux sociaux et le contenu des pages statiques du site.')
+@section('page_subtitle', 'Configurez l\'identité visuelle, les coordonnées, les réseaux sociaux et le contenu des pages statiques de PHOVE.')
 
 @php
     $breadcrumb = ['Paramètres' => null];
@@ -19,8 +19,8 @@
     ];
 
     $groupDescriptions = [
-        'identite' => 'Nom, logo, favicon, slogan et description de l\'organisation.',
-        'contact' => 'Adresse postale, téléphone, email et boîte postale.',
+        'identite' => 'Nom, logo, favicon, slogan et description de l\'organisation PHOVE.',
+        'contact' => 'Adresse postale, téléphones, email et boîte postale du siège de Goma.',
         'social' => 'Liens vers les comptes Facebook, Twitter, LinkedIn, YouTube, Instagram et WhatsApp.',
         'pages' => 'Contenu des pages institutionnelles : Qui sommes-nous, Mission & Vision, Nos valeurs, Mentions légales.',
         'seo' => 'Optimisation pour les moteurs de recherche : méta-titres, descriptions et mots-clés.',
@@ -90,7 +90,8 @@
                             <input type="text" name="setting_{{ $setting->key }}" 
                                    class="settings-input" 
                                    value="{{ old('setting_' . $setting->key, $setting->value) }}" 
-                                   placeholder="{{ $setting->description }}">
+                                   placeholder="{{ $setting->description }}"
+                                   maxlength="255">
 
                         @elseif($setting->type === 'textarea')
                             <textarea name="setting_{{ $setting->key }}" 
@@ -105,7 +106,8 @@
                                         <img id="preview_{{ $setting->key }}" 
                                              src="{{ asset('storage/' . $setting->value) }}" 
                                              alt="{{ $setting->label }}" 
-                                             style="display: block;">
+                                             style="display: block;"
+                                             loading="lazy">
                                         <div id="placeholder_{{ $setting->key }}" class="settings-image-placeholder" style="display: none;">
                                             <i class="fas fa-image"></i>
                                             <span>{{ $setting->key === 'site_favicon' ? '32×32 px' : '200×60 px' }}</span>
@@ -129,7 +131,7 @@
                                         @endif
                                     </p>
                                     <ul>
-                                        <li><i class="fas fa-check-circle"></i> JPG, PNG, WebP ou ICO</li>
+                                        <li><i class="fas fa-check-circle"></i> JPG, PNG, WebP, ICO ou SVG</li>
                                         <li><i class="fas fa-check-circle"></i> Taille max : 2 Mo</li>
                                     </ul>
                                     <div class="settings-image-actions">
@@ -140,7 +142,7 @@
                                             <button type="button" 
                                                     id="removeBtn_{{ $setting->key }}" 
                                                     class="btn btn-outline btn-sm btn-remove-image"
-                                                    style="border-color: var(--color-accent); color: var(--color-accent);"
+                                                    style="border-color: #EF4444; color: #EF4444;"
                                                     data-preview="preview_{{ $setting->key }}"
                                                     data-placeholder="placeholder_{{ $setting->key }}"
                                                     data-input="file_{{ $setting->key }}"
@@ -151,7 +153,7 @@
                                             <button type="button" 
                                                     id="removeBtn_{{ $setting->key }}" 
                                                     class="btn btn-outline btn-sm btn-remove-image"
-                                                    style="border-color: var(--color-accent); color: var(--color-accent); display: none;"
+                                                    style="border-color: #EF4444; color: #EF4444; display: none;"
                                                     data-preview="preview_{{ $setting->key }}"
                                                     data-placeholder="placeholder_{{ $setting->key }}"
                                                     data-input="file_{{ $setting->key }}"
@@ -168,7 +170,7 @@
                                            data-placeholder="placeholder_{{ $setting->key }}"
                                            data-remove-btn="removeBtn_{{ $setting->key }}"
                                            data-remove-flag="remove_{{ $setting->key }}"
-                                           accept="image/jpeg,image/jpg,image/png,image/webp,image/x-icon,image/vnd.microsoft.icon"
+                                           accept="image/jpeg,image/jpg,image/png,image/webp,image/x-icon,image/vnd.microsoft.icon,image/svg+xml"
                                            style="display: none;">
                                     <input type="hidden" name="remove_{{ $setting->key }}" id="remove_{{ $setting->key }}" value="0">
                                 </div>
@@ -180,7 +182,8 @@
                                 <input type="url" name="setting_{{ $setting->key }}" 
                                        class="settings-input" 
                                        value="{{ old('setting_' . $setting->key, $setting->value) }}" 
-                                       placeholder="https://">
+                                       placeholder="https://"
+                                       maxlength="255">
                             </div>
 
                         @elseif($setting->type === 'email')
@@ -189,7 +192,8 @@
                                 <input type="email" name="setting_{{ $setting->key }}" 
                                        class="settings-input" 
                                        value="{{ old('setting_' . $setting->key, $setting->value) }}" 
-                                       placeholder="exemple@ahd-rdc.org">
+                                       placeholder="phovemonde@gmail.com"
+                                       maxlength="255">
                             </div>
 
                         @elseif($setting->type === 'phone')
@@ -198,7 +202,8 @@
                                 <input type="text" name="setting_{{ $setting->key }}" 
                                        class="settings-input" 
                                        value="{{ old('setting_' . $setting->key, $setting->value) }}" 
-                                       placeholder="+243 000 000 000">
+                                       placeholder="+243 000 000 000"
+                                       maxlength="30">
                             </div>
 
                         @elseif($setting->type === 'switch')
@@ -214,7 +219,7 @@
                                     </div>
                                 </label>
                                 <span class="settings-switch-state" id="state_{{ $setting->key }}" 
-                                      style="color: {{ old('setting_' . $setting->key, $setting->value) === '1' ? 'var(--color-success)' : 'var(--color-text-muted)' }};">
+                                      style="color: {{ old('setting_' . $setting->key, $setting->value) === '1' ? '#10B981' : '#64748B' }};">
                                     {{ old('setting_' . $setting->key, $setting->value) === '1' ? 'Activé' : 'Désactivé' }}
                                 </span>
                             </div>
@@ -233,7 +238,7 @@
                     </div>
                 </div>
 
-                {{-- Boutons cachés dans le footer de la carte --}}
+                {{-- Bouton caché dans le footer de la carte --}}
                 <div style="display: none;">
                     <button type="submit" id="hiddenSubmit"></button>
                 </div>

@@ -1,5 +1,5 @@
 {{-- ============================================ --}}
-{{-- TOP BAR — AHD-RDC --}}
+{{-- TOP BAR — PHOVE --}}
 {{-- Contacts, Réseaux sociaux, Langues --}}
 {{-- ============================================ --}}
 <div class="topbar" id="topbar">
@@ -8,17 +8,17 @@
 
             {{-- Gauche : Contacts --}}
             <div class="topbar-left">
-                <a href="tel:+243994656250" class="topbar-contact" title="Appeler AHD-RDC">
+                <a href="tel:+243970872910" class="topbar-contact" title="Appeler PHOVE">
                     <i class="fas fa-phone-alt"></i>
-                    <span>+243 994 656 250</span>
+                    <span>+243 970 872 910</span>
                 </a>
-                <a href="mailto:contact@ahd-rdc.org" class="topbar-contact" title="Envoyer un email">
+                <a href="mailto:phovemonde@gmail.com" class="topbar-contact" title="Envoyer un email">
                     <i class="fas fa-envelope"></i>
-                    <span>contact@ahd-rdc.org</span>
+                    <span>phovemonde@gmail.com</span>
                 </a>
                 <span class="topbar-contact" title="Localisation du siège">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>Minova, Kalehe, Sud-Kivu, RD Congo</span>
+                    <span>Goma, Nord-Kivu, RD Congo</span>
                 </span>
             </div>
 
@@ -27,19 +27,19 @@
 
                 {{-- Réseaux sociaux --}}
                 <div class="topbar-socials">
-                    <a href="https://facebook.com/ahdrdc" target="_blank" rel="noopener noreferrer" class="topbar-social" title="Facebook AHD-RDC">
+                    <a href="https://facebook.com/phovemonde" target="_blank" rel="noopener noreferrer" class="topbar-social" title="Facebook PHOVE">
                         <i class="fab fa-facebook-f"></i>
                     </a>
-                    <a href="https://twitter.com/ahdrdc" target="_blank" rel="noopener noreferrer" class="topbar-social" title="Twitter AHD-RDC">
+                    <a href="https://twitter.com/phovemonde" target="_blank" rel="noopener noreferrer" class="topbar-social" title="Twitter PHOVE">
                         <i class="fab fa-x-twitter"></i>
                     </a>
-                    <a href="https://instagram.com/ahdrdc" target="_blank" rel="noopener noreferrer" class="topbar-social" title="Instagram AHD-RDC">
+                    <a href="https://instagram.com/phovemonde" target="_blank" rel="noopener noreferrer" class="topbar-social" title="Instagram PHOVE">
                         <i class="fab fa-instagram"></i>
                     </a>
-                    <a href="https://linkedin.com/company/ahdrdc" target="_blank" rel="noopener noreferrer" class="topbar-social" title="LinkedIn AHD-RDC">
+                    <a href="https://linkedin.com/company/phovemonde" target="_blank" rel="noopener noreferrer" class="topbar-social" title="LinkedIn PHOVE">
                         <i class="fab fa-linkedin-in"></i>
                     </a>
-                    <a href="https://youtube.com/@ahdrdc" target="_blank" rel="noopener noreferrer" class="topbar-social" title="YouTube AHD-RDC">
+                    <a href="https://youtube.com/@phovemonde" target="_blank" rel="noopener noreferrer" class="topbar-social" title="YouTube PHOVE">
                         <i class="fab fa-youtube"></i>
                     </a>
                 </div>
@@ -47,7 +47,7 @@
                 {{-- Séparateur --}}
                 <span class="topbar-divider"></span>
 
-                {{-- Sélecteur de langues nettoyé --}}
+                {{-- Sélecteur de langues --}}
                 <div class="topbar-languages">
                     <button class="topbar-lang-btn" id="langToggle" title="Changer de langue">
                         <i class="fas fa-globe"></i>
@@ -72,9 +72,7 @@
                             <span>Lingála</span>
                         </a>
                     </div>
-
                 </div>
-
 
             </div>
         </div>

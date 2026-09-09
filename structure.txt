@@ -1,0 +1,250 @@
+?? PLAN DIRECTEUR FINAL — MISE EN PLACE PHOVE
+
+---
+
+PHASE 1 : SAUVEGARDE & PRÉPARATION
+
+1. Sauvegarde complète du projet
+2. Sauvegarde de la base de données
+3. Vérification de l'environnement
+
+---
+
+PHASE 2 : IDENTITÉ VISUELLE & DESIGN
+
+1. Mise à jour du fichier CSS racine (variables couleurs)
+2. Mise à jour de la palette dans tous les fichiers CSS (public, admin, auth)
+3. Remplacement du logo PHOVE
+4. Mise à jour des images (slides, about, projets)
+5. Mise à jour du favicon
+6. Vérification de la cohérence visuelle globale
+
+---
+
+PHASE 3 : PARAMÈTRES GÉNÉRAUX (SETTINGS)
+
+1. Mise à jour de la migration settings
+2. Mise à jour du seeder SettingSeeder
+3. Mise à jour du contrôleur SettingController
+4. Mise à jour des vues admin settings
+5. Mise à jour du layout public (coordonnées, contacts, devise)
+
+---
+
+PHASE 4 : CONTENUS PUBLICS
+
+1. Mise à jour de la page d'accueil (home)
+2. Mise à jour de la page "Qui sommes-nous"
+3. Mise à jour de la page "Mission & Vision"
+4. Mise à jour de la page "Nos Valeurs"
+5. Mise à jour de la page "Domaines d'intervention"
+6. Mise à jour de la page "Gouvernance"
+7. Mise à jour de la page "Organigramme"
+8. Mise à jour de la page "Transparence"
+9. Mise à jour de la page "Mentions légales"
+10. Mise à jour de la page "Contact"
+
+---
+
+PHASE 5 : PROJETS & PARTENAIRES
+
+1. Mise à jour de la migration projets (code_projet)
+2. Mise à jour de la migration partenaires (sigle, type, site_web)
+3. Mise à jour des modèles Projet et Partenaire
+4. Mise à jour des contrôleurs ProjetController et PartenaireController
+5. Création du seeder des 4 projets réels
+6. Création du seeder des 6 partenaires réels
+7. Mise à jour des vues admin (projets, partenaires)
+8. Mise à jour des pages publiques (projets, partenaires)
+
+---
+
+PHASE 6 : MEMBRES & TYPES STATUTAIRES
+
+1. Mise à jour de la migration membres (types PHOVE)
+2. Mise à jour du modèle Membre
+3. Mise à jour du contrôleur MembreController
+4. Mise à jour des vues admin (membres)
+5. Mise à jour du formulaire d'adhésion public
+6. Création du seeder des 10 membres fondateurs
+7. Gestion des 4 types (fondateur, adhérent, honneur, sympathisant)
+
+---
+
+PHASE 7 : ORGANIGRAMME & STRUCTURE TERRITORIALE
+
+1. Création de la migration structures_territoriales
+2. Création du modèle StructureTerritoriale
+3. Mise à jour du contrôleur GouvernanceController
+4. Mise à jour de la migration organes (22 postes PHOVE)
+5. Mise à jour du modèle Organe
+6. Création des vues admin (structures, organes)
+7. Création de l'organigramme dynamique public
+8. Liaison membres ? postes ? structures
+
+---
+
+PHASE 8 : CARTE DE MEMBRE
+
+1. Ajout du champ carte_membre dans membres
+2. Mise à jour du modèle Membre
+3. Création du service de génération PDF (carte)
+4. Création du contrôleur CarteMembreController
+5. Création de la vue PDF de la carte
+6. Création de la vue admin (génération cartes)
+7. Gestion du paiement des 10$ US
+
+---
+
+PHASE 9 : DOSSIER DU PERSONNEL
+
+1. Création de la migration dossiers_personnel
+2. Création du modèle DossierPersonnel
+3. Création du contrôleur DossierPersonnelController
+4. Création des vues admin (suivi des 12 pièces)
+5. Upload des documents requis
+6. Vérification de la complétude des dossiers
+7. Liaison avec les membres et le personnel
+
+---
+
+PHASE 10 : GESTION DES STOCKS
+
+1. Création de la migration stocks
+2. Création de la migration mouvements_stocks
+3. Création du modèle Stock
+4. Création du modèle MouvementStock
+5. Création du contrôleur StockController
+6. Création des vues admin (CRUD stocks)
+7. Gestion des entrées et sorties
+8. Bons de sortie et bordereaux
+9. Inventaire et rapports
+
+---
+
+PHASE 11 : GESTION DES SALAIRES
+
+1. Création de la migration salaires
+2. Création du modèle Salaire
+3. Mise à jour du contrôleur FinanceController
+4. Création des vues admin (gestion salaires)
+5. Calcul par poste et fonction
+6. Liaison avec les rapports financiers
+
+---
+
+PHASE 12 : RÔLES & PERMISSIONS HIÉRARCHIQUES
+
+1. Mise à jour de la migration users (rôles PHOVE)
+2. Mise à jour du modèle User
+3. Mise à jour des middlewares CheckRole et CheckStatus
+4. Création des rôles (DG, Chef Mission, Chargé Programme, Secrétaire, Comptable, etc.)
+5. Mise à jour des vues admin (gestion utilisateurs)
+6. Test des accès par rôle
+
+---
+
+PHASE 13 : RAPPORTS EN CASCADE
+
+1. Mise à jour de la migration messages (types de rapports)
+2. Mise à jour du modèle Message
+3. Création du système de rapports 48h/mensuel/trimestriel/annuel
+4. Mise à jour des vues admin (suivi des rapports)
+5. Notifications automatiques
+
+---
+
+PHASE 14 : INDICATEURS PAR DOMAINE
+
+1. Mise à jour de la migration indicateurs_projet
+2. Mise à jour du modèle IndicateurProjet
+3. Création des indicateurs par domaine PHOVE
+4. Mise à jour du tableau de bord admin
+5. Graphiques et statistiques
+
+---
+
+PHASE 15 : COMMISSION DE CONTRÔLE
+
+1. Création de la migration controles_trimestriels
+2. Création du modèle ControleTrimestriel
+3. Création du contrôleur ControleController
+4. Création des vues admin (rapports de contrôle)
+5. Vérification trimestrielle des finances
+
+---
+
+PHASE 16 : EMAILS & NOTIFICATIONS
+
+1. Mise à jour des templates d'emails (identité PHOVE)
+2. Ajout des notifications pour les nouveaux modules
+3. Test des envois automatiques
+
+---
+
+PHASE 17 : TESTS & VALIDATION
+
+1. Tests unitaires
+2. Tests fonctionnels
+3. Tests de données
+4. Tests de sécurité
+5. Validation par l'équipe PHOVE
+
+---
+
+PHASE 18 : DÉPLOIEMENT
+
+1. Préparation de l'environnement de production
+2. Migration de la base de données
+3. Upload des fichiers
+4. Configuration du serveur
+5. Mise en ligne
+
+---
+
+PHASE 19 : FORMATION & DOCUMENTATION
+
+1. Formation des utilisateurs
+2. Documentation utilisateur
+3. Documentation technique
+4. Support initial
+
+---
+
+? ORDRE D'EXÉCUTION
+
+Priorité Phase Durée estimée
+?? URGENT Phase 1 : Sauvegarde 1h
+?? URGENT Phase 2 : Identité visuelle 1 jour
+?? URGENT Phase 3 : Settings 1 jour
+?? URGENT Phase 4 : Contenus publics 1-2 jours
+?? IMPORTANT Phase 5 : Projets & Partenaires 1-2 jours
+?? IMPORTANT Phase 6 : Membres 1-2 jours
+?? IMPORTANT Phase 7 : Organigramme & Structures 2-3 jours
+?? STANDARD Phase 8 : Carte de membre 1-2 jours
+?? STANDARD Phase 9 : Dossier personnel 1-2 jours
+?? STANDARD Phase 10 : Stocks 2-3 jours
+?? STANDARD Phase 11 : Salaires 1 jour
+?? OPTIONNEL Phase 12 : Rôles 1-2 jours
+?? OPTIONNEL Phase 13 : Rapports cascade 1-2 jours
+?? OPTIONNEL Phase 14 : Indicateurs 1 jour
+?? OPTIONNEL Phase 15 : Commission contrôle 1-2 jours
+?? OPTIONNEL Phase 16 : Emails 1 jour
+?? FINAL Phase 17 : Tests 2 jours
+?? FINAL Phase 18 : Déploiement 1 jour
+?? FINAL Phase 19 : Formation 1 jour
+
+---
+
+C'est le plan complet, structuré et réaliste. Nous commencerons par la Phase 1 dès que vous êtes prêt. ??
+
+
+
+
+
+
+
+
+
+
+

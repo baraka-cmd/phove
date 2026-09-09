@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', $projet->titre)
+@section('title', $projet->titre . ' | PHOVE')
 
 @section('page_title', Str::limit($projet->titre, 60))
 @section('page_icon', 'project-diagram')
@@ -23,7 +23,7 @@
     <div class="projet-show-header">
         <div class="projet-show-image">
             @if($projet->image_principale)
-                <img src="{{ asset('storage/' . $projet->image_principale) }}" alt="{{ $projet->titre }}">
+                <img src="{{ asset('storage/' . $projet->image_principale) }}" alt="{{ $projet->titre }}" loading="lazy">
             @else
                 <div class="projet-show-image-placeholder"><i class="fas fa-project-diagram"></i></div>
             @endif
@@ -35,6 +35,11 @@
                 <span class="projet-show-badge {{ $projet->statut === 'en_cours' ? 'projet-show-badge-danger' : ($projet->statut === 'termine' ? 'projet-show-badge-success' : 'projet-show-badge-info') }}">
                     {{ $projet->statutLibelle() }}
                 </span>
+                @if($projet->code_projet)
+                    <span class="projet-show-badge projet-show-badge-dark" title="Code officiel du projet">
+                        <i class="fas fa-barcode"></i> {{ $projet->code_projet }}
+                    </span>
+                @endif
                 @if($projet->publier)
                     <span class="projet-show-badge projet-show-badge-success"><i class="fas fa-eye"></i> Publié</span>
                 @else
@@ -59,6 +64,10 @@
             <div class="projet-detail-card">
                 <div class="projet-detail-card-header"><i class="fas fa-info-circle"></i> Informations générales</div>
                 <div class="projet-detail-card-body">
+                    <div class="projet-detail-row">
+                        <span class="projet-detail-label">Code projet</span>
+                        <span class="projet-detail-value">{{ $projet->code_projet ?: 'N/A' }}</span>
+                    </div>
                     <div class="projet-detail-row">
                         <span class="projet-detail-label">Domaine</span>
                         <span class="projet-detail-value">{{ $projet->domaineLibelle() }}</span>
@@ -88,7 +97,7 @@
                     </div>
                     <div class="projet-detail-row">
                         <span class="projet-detail-label">Slug</span>
-                        <span class="projet-detail-value" style="font-size: 12px; color: #888;">{{ $projet->slug }}</span>
+                        <span class="projet-detail-value" style="font-size: 12px; color: #64748B;">{{ $projet->slug }}</span>
                     </div>
                 </div>
             </div>
@@ -124,6 +133,36 @@
                     </div>
                 </div>
             </div>
+
+            {{-- Partenaires --}}
+            @if($projet->partenaires->count() > 0)
+            <div class="projet-detail-card" style="margin-top: 24px;">
+                <div class="projet-detail-card-header">
+                    <i class="fas fa-handshake"></i> Partenaires ({{ $projet->partenaires->count() }})
+                </div>
+                <div class="projet-detail-card-body">
+                    @foreach($projet->partenaires as $partenaire)
+                    <div class="projet-partenaire-item">
+                        <div class="projet-partenaire-logo">
+                            {{ $partenaire->sigleOuInitiales() }}
+                        </div>
+                        <div>
+                            <div style="font-size: 13px; font-weight: 600; color: #1E293B;">{{ $partenaire->nom }}</div>
+                            <div style="font-size: 11px; color: #64748B;">
+                                {{ $partenaire->typeLibelle() }}
+                                @if($partenaire->pivot->role)
+                                    — {{ $partenaire->pivot->role }}
+                                @endif
+                                @if($partenaire->pivot->contribution > 0)
+                                    — {{ number_format($partenaire->pivot->contribution, 0, ',', ' ') }} $
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
         </div>
 
         {{-- Colonne droite --}}
@@ -138,14 +177,14 @@
             <div class="projet-detail-card" style="margin-top: 24px;">
                 <div class="projet-detail-card-header"><i class="fas fa-bullseye"></i> Objectifs</div>
                 <div class="projet-detail-card-body">
-                    <div class="projet-text-block">{{ $projet->objectifs }}</div>
+                    <div class="projet-text-block">{{ $projet->objectifs ?? 'Non définis' }}</div>
                 </div>
             </div>
 
             <div class="projet-detail-card" style="margin-top: 24px;">
                 <div class="projet-detail-card-header"><i class="fas fa-chart-bar"></i> Résultats attendus</div>
                 <div class="projet-detail-card-body">
-                    <div class="projet-text-block">{{ $projet->resultats_attendus }}</div>
+                    <div class="projet-text-block">{{ $projet->resultats_attendus ?? 'Non définis' }}</div>
                 </div>
             </div>
 
@@ -165,7 +204,7 @@
                             <div class="projet-kpi-fill {{ $kpi->objectifAtteint() ? 'achieved' : '' }}" 
                                  style="width: {{ $kpi->pourcentage() }}%"></div>
                         </div>
-                        <div style="font-size: 11px; color: #888; margin-top: 4px;">
+                        <div style="font-size: 11px; color: #64748B; margin-top: 4px;">
                             {{ $kpi->valeur_actuelle }}/{{ $kpi->valeur_cible }} {{ $kpi->unite }}
                         </div>
                     </div>

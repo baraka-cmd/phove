@@ -2,7 +2,7 @@
 
 @section('title', 'Contact')
 
-@section('meta_description', 'Contactez AHD-RDC pour toute question, partenariat, don ou adhésion. Siège social : Minova, Territoire de Kalehe, Sud-Kivu, RD Congo.')
+@section('meta_description', 'Contactez PHOVE pour toute question, partenariat, don ou adhésion. Siège social : Rue Georges BUSHU N°092, Q. Katoyi, Commune de Karisimbi, Goma, Nord-Kivu, RD Congo.')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
@@ -44,10 +44,14 @@
                     <div class="contact-coord-content">
                         <h4>Adresse</h4>
                         <p>
-                            Minova, Territoire de Kalehe<br>
-                            Province du Sud-Kivu<br>
+                            Rue Georges BUSHU N°092<br>
+                            Quartier Katoyi, Commune de Karisimbi<br>
+                            Goma, Nord-Kivu<br>
                             République Démocratique du Congo
                         </p>
+                        <small style="color: #64748B; font-style: italic;">
+                            Repère : UACO / Maranata, entrée président
+                        </small>
                     </div>
                 </div>
 
@@ -56,10 +60,12 @@
                         <i class="fas fa-phone-alt"></i>
                     </div>
                     <div class="contact-coord-content">
-                        <h4>Téléphone</h4>
+                        <h4>Téléphones</h4>
                         <p>
-                            <a href="tel:+243994656250">+243 994 656 250</a><br>
-                            <a href="tel:+243973307807">+243 973 307 807</a>
+                            <a href="tel:+243970872910">+243 970 872 910</a><br>
+                            <a href="tel:+243819009131">+243 819 009 131</a><br>
+                            <a href="tel:+243893844776">+243 893 844 776</a><br>
+                            <a href="tel:+243902512262">+243 902 512 262</a>
                         </p>
                     </div>
                 </div>
@@ -71,7 +77,7 @@
                     <div class="contact-coord-content">
                         <h4>Email</h4>
                         <p>
-                            <a href="mailto:contact@ahd-rdc.org">contact@ahd-rdc.org</a>
+                            <a href="mailto:phovemonde@gmail.com">phovemonde@gmail.com</a>
                         </p>
                     </div>
                 </div>
@@ -83,8 +89,8 @@
                     <div class="contact-coord-content">
                         <h4>Heures d'ouverture</h4>
                         <p>
-                            Lundi — Vendredi<br>
-                            8h00 — 16h00<br>
+                            Lundi — Samedi<br>
+                            8h00 — 17h00<br>
                             <small>Heure de Kinshasa (GMT+1)</small>
                         </p>
                     </div>
@@ -228,7 +234,7 @@
                             </li>
                             <li>
                                 <i class="fas fa-check-circle"></i>
-                                <span>Pour une demande urgente, appelez-nous au <strong>+243 994 656 250</strong>.</span>
+                                <span>Pour une demande urgente, appelez-nous au <strong>+243 970 872 910</strong>.</span>
                             </li>
                             <li>
                                 <i class="fas fa-check-circle"></i>
@@ -244,19 +250,19 @@
                     <div class="contact-sidebar-card">
                         <h3><i class="fas fa-share-alt"></i> Suivez-nous</h3>
                         <div class="contact-socials">
-                            <a href="https://facebook.com/ahdrdc" target="_blank" rel="noopener" class="contact-social" title="Facebook">
+                            <a href="https://facebook.com/phovemonde" target="_blank" rel="noopener noreferrer" class="contact-social" title="Facebook PHOVE">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a href="https://twitter.com/ahdrdc" target="_blank" rel="noopener" class="contact-social" title="Twitter/X">
+                            <a href="https://twitter.com/phovemonde" target="_blank" rel="noopener noreferrer" class="contact-social" title="Twitter/X PHOVE">
                                 <i class="fab fa-x-twitter"></i>
                             </a>
-                            <a href="https://instagram.com/ahdrdc" target="_blank" rel="noopener" class="contact-social" title="Instagram">
+                            <a href="https://instagram.com/phovemonde" target="_blank" rel="noopener noreferrer" class="contact-social" title="Instagram PHOVE">
                                 <i class="fab fa-instagram"></i>
                             </a>
-                            <a href="https://linkedin.com/company/ahdrdc" target="_blank" rel="noopener" class="contact-social" title="LinkedIn">
+                            <a href="https://linkedin.com/company/phovemonde" target="_blank" rel="noopener noreferrer" class="contact-social" title="LinkedIn PHOVE">
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
-                            <a href="https://youtube.com/@ahdrdc" target="_blank" rel="noopener" class="contact-social" title="YouTube">
+                            <a href="https://youtube.com/@phovemonde" target="_blank" rel="noopener noreferrer" class="contact-social" title="YouTube PHOVE">
                                 <i class="fab fa-youtube"></i>
                             </a>
                         </div>
@@ -265,7 +271,7 @@
                     {{-- Slogan --}}
                     <div class="contact-slogan">
                         <i class="fas fa-quote-left"></i>
-                        <p>« Être ensemble pour le bien de la communauté »</p>
+                        <p>« Compassion avec la population »</p>
                     </div>
                 </div>
             </div>
@@ -282,7 +288,8 @@
                     Votre <span class="highlight-page">soutien</span> fait la différence
                 </h2>
                 <p class="cta-text-page">
-                    Chaque message, chaque don, chaque adhésion nous rapproche d'un Congo plus solidaire et plus pacifique.
+                    Chaque message, chaque don, chaque adhésion nous rapproche d'un Congo 
+                    plus solidaire et plus compatissant envers les orphelins, veuves et personnes démunies.
                 </p>
                 <div class="cta-buttons-page">
                     <a href="{{ url('/faire-un-don') }}" class="btn-page-don">

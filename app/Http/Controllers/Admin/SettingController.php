@@ -6,22 +6,26 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class SettingController extends Controller
 {
     /**
      * Groupes de paramètres disponibles.
+     *
+     * @var array<string, array<string, string>>
      */
     protected array $groups = [
         'identite' => [
             'label' => 'Identité',
             'icon' => 'fa-building',
-            'description' => 'Nom, logo, slogan et description de l\'organisation.',
+            'description' => 'Nom, logo, slogan et description de l\'organisation PHOVE.',
         ],
         'contact' => [
             'label' => 'Contact',
             'icon' => 'fa-address-book',
-            'description' => 'Adresse, téléphone, email et autres coordonnées.',
+            'description' => 'Adresse, téléphones, email et autres coordonnées du siège de Goma.',
         ],
         'social' => [
             'label' => 'Réseaux sociaux',
@@ -47,6 +51,9 @@ class SettingController extends Controller
 
     /**
      * Affiche le panneau de configuration avec tous les paramètres.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -74,6 +81,9 @@ class SettingController extends Controller
 
     /**
      * Met à jour tous les paramètres d'un groupe.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request)
     {
@@ -88,6 +98,39 @@ class SettingController extends Controller
         $existingSettings = Setting::where('group', $activeGroup)->get();
 
         $updatedCount = 0;
+        $validationRules = [];
+        $validationMessages = [];
+
+        // Préparer les règles de validation dynamiques
+        foreach ($existingSettings as $setting) {
+            $inputName = 'setting_' . $setting->key;
+
+            if ($setting->type === 'image') {
+                if ($request->hasFile($inputName)) {
+                    $validationRules[$inputName] = ['image', 'mimes:jpeg,jpg,png,webp,ico,svg', 'max:2048'];
+                    $validationMessages[$inputName . '.image'] = 'Le fichier doit être une image.';
+                    $validationMessages[$inputName . '.mimes'] = 'Le fichier doit être au format JPG, PNG, WebP, ICO ou SVG.';
+                    $validationMessages[$inputName . '.max'] = 'L\'image ne doit pas dépasser 2 Mo.';
+                }
+            } elseif ($setting->type === 'email') {
+                $validationRules[$inputName] = ['nullable', 'email'];
+                $validationMessages[$inputName . '.email'] = 'Veuillez saisir une adresse email valide.';
+            } elseif ($setting->type === 'url') {
+                $validationRules[$inputName] = ['nullable', 'url'];
+                $validationMessages[$inputName . '.url'] = 'Veuillez saisir une URL valide (commençant par https://).';
+            } elseif ($setting->type === 'phone') {
+                $validationRules[$inputName] = ['nullable', 'string', 'max:30', 'regex:/^[+0-9\s\-\(\)]+$/'];
+                $validationMessages[$inputName . '.regex'] = 'Veuillez saisir un numéro de téléphone valide.';
+            } elseif ($setting->type === 'number') {
+                $validationRules[$inputName] = ['nullable', 'numeric'];
+                $validationMessages[$inputName . '.numeric'] = 'Veuillez saisir un nombre valide.';
+            }
+        }
+
+        // Valider les données avant tout traitement
+        if (!empty($validationRules)) {
+            $request->validate($validationRules, $validationMessages);
+        }
 
         foreach ($existingSettings as $setting) {
             $inputName = 'setting_' . $setting->key;
@@ -95,15 +138,6 @@ class SettingController extends Controller
             // Si c'est une image
             if ($setting->type === 'image') {
                 if ($request->hasFile($inputName)) {
-                    // Valider l'image
-                    $request->validate([
-                        $inputName => ['image', 'mimes:jpeg,jpg,png,webp,ico', 'max:2048'],
-                    ], [
-                        $inputName . '.image' => 'Le fichier doit être une image.',
-                        $inputName . '.mimes' => 'L\'image doit être au format JPG, PNG, WebP ou ICO.',
-                        $inputName . '.max' => 'L\'image ne doit pas dépasser 2 Mo.',
-                    ]);
-
                     // Supprimer l'ancienne image
                     if ($setting->value) {
                         Storage::disk('public')->delete($setting->value);
@@ -137,22 +171,6 @@ class SettingController extends Controller
             else {
                 $newValue = $request->input($inputName);
                 if ($newValue !== null && $newValue !== $setting->value) {
-                    // Validation selon le type
-                    if ($setting->type === 'email' && $newValue) {
-                        $request->validate([
-                            $inputName => ['email'],
-                        ], [
-                            $inputName . '.email' => 'Veuillez saisir une adresse email valide.',
-                        ]);
-                    }
-                    if ($setting->type === 'url' && $newValue) {
-                        $request->validate([
-                            $inputName => ['url'],
-                        ], [
-                            $inputName . '.url' => 'Veuillez saisir une URL valide (commençant par https://).',
-                        ]);
-                    }
-
                     $setting->update(['value' => $newValue]);
                     $updatedCount++;
                 }
@@ -171,30 +189,80 @@ class SettingController extends Controller
     }
 
     /**
-     * Supprime le logo.
+     * Supprime l'image d'un paramètre (AJAX).
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function removeImage(Request $request)
     {
+        // Validation sécurisée
+        $validator = Validator::make($request->all(), [
+            'key' => ['required', 'string', 'max:100', Rule::exists('settings', 'key')],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Clé de paramètre invalide.',
+            ], 422);
+        }
+
         $key = $request->input('key');
         $setting = Setting::where('key', $key)->first();
 
-        if ($setting && $setting->value) {
-            Storage::disk('public')->delete($setting->value);
-            $setting->update(['value' => null]);
-
-            Setting::clearCache();
-
-            return response()->json(['success' => true, 'message' => 'Image supprimée.']);
+        // Vérifier que c'est bien une image
+        if ($setting->type !== 'image') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ce paramètre n\'est pas une image.',
+            ], 400);
         }
 
-        return response()->json(['success' => false, 'message' => 'Aucune image trouvée.'], 404);
+        if ($setting && $setting->value) {
+            // Supprimer le fichier physique
+            if (Storage::disk('public')->exists($setting->value)) {
+                Storage::disk('public')->delete($setting->value);
+            }
+
+            // Mettre à jour la base de données
+            $setting->update(['value' => null]);
+
+            // Vider le cache
+            Setting::clearCache();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Image supprimée avec succès.',
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Aucune image trouvée.',
+        ], 404);
     }
 
     /**
      * Affiche un paramètre spécifique (pour preview AJAX).
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Request $request)
     {
+        // Validation sécurisée
+        $validator = Validator::make($request->all(), [
+            'key' => ['required', 'string', 'max:100', Rule::exists('settings', 'key')],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Clé de paramètre invalide.',
+            ], 422);
+        }
+
         $key = $request->input('key');
         $setting = Setting::where('key', $key)->first();
 
@@ -205,10 +273,13 @@ class SettingController extends Controller
                     'key' => $setting->key,
                     'value' => $setting->value,
                     'url' => $setting->type === 'image' ? $setting->urlValue() : null,
-                ]
+                ],
             ]);
         }
 
-        return response()->json(['success' => false], 404);
+        return response()->json([
+            'success' => false,
+            'message' => 'Paramètre introuvable.',
+        ], 404);
     }
 }

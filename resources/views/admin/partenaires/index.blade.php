@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Gestion des partenaires')
+@section('title', 'Gestion des partenaires | PHOVE')
 
 @section('page_title', 'Partenaires')
 @section('page_icon', 'handshake')
-@section('page_subtitle', 'Gérez les partenaires de l\'organisation : ajout, modification, association aux projets.')
+@section('page_subtitle', 'Gérez les partenaires de PHOVE : FAO, WFP, OCHA, UNESCO, GPE, RDC et plus.')
 
 @php
     $breadcrumb = [ 'Partenaires' ];
@@ -17,7 +17,7 @@
 @section('content')
 
     {{-- ============================================ --}}
-    {{-- KPI — 3 CARTES --}}
+    {{-- KPI — 4 CARTES --}}
     {{-- ============================================ --}}
     <div class="partenaires-stats-grid">
         <div class="partenaire-stat-card">
@@ -32,6 +32,13 @@
             <div class="partenaire-stat-content">
                 <div class="partenaire-stat-value">{{ $partenairesActifs }}</div>
                 <div class="partenaire-stat-label">Partenaires actifs</div>
+            </div>
+        </div>
+        <div class="partenaire-stat-card">
+            <div class="partenaire-stat-icon"><i class="fas fa-globe-africa"></i></div>
+            <div class="partenaire-stat-content">
+                <div class="partenaire-stat-value">{{ $partenairesInternationaux }}</div>
+                <div class="partenaire-stat-label">Internationaux</div>
             </div>
         </div>
         <div class="partenaire-stat-card">
@@ -50,7 +57,7 @@
         <div class="partenaires-search">
             <i class="fas fa-search"></i>
             <input type="text" name="recherche" id="partenaireSearch" value="{{ request('recherche') }}" 
-                   class="partenaires-search-input" placeholder="Rechercher un partenaire...">
+                   class="partenaires-search-input" placeholder="Rechercher un partenaire, un sigle...">
         </div>
 
         <div class="partenaires-filtres">
@@ -92,13 +99,18 @@
             <div class="partenaire-card-header">
                 <div class="partenaire-logo">
                     @if($partenaire->logo)
-                        <img src="{{ asset('storage/' . $partenaire->logo) }}" alt="{{ $partenaire->nom }}">
+                        <img src="{{ asset('storage/' . $partenaire->logo) }}" alt="{{ $partenaire->nom }}" loading="lazy">
                     @else
-                        <span>{{ Str::upper(Str::substr($partenaire->nom, 0, 2)) }}</span>
+                        <span>{{ $partenaire->sigleOuInitiales() }}</span>
                     @endif
                 </div>
                 <div class="partenaire-info">
-                    <h3 class="partenaire-nom">{{ $partenaire->nom }}</h3>
+                    <h3 class="partenaire-nom">
+                        {{ $partenaire->nom }}
+                        @if($partenaire->sigle)
+                            <small class="partenaire-sigle">({{ $partenaire->sigle }})</small>
+                        @endif
+                    </h3>
                     <span class="partenaire-type partenaire-type-{{ $partenaire->type }}">
                         <i class="fas fa-tag"></i> {{ $partenaire->typeLibelle() }}
                     </span>
@@ -111,7 +123,7 @@
             {{-- Corps --}}
             <div class="partenaire-card-body">
                 @if($partenaire->description)
-                <p class="partenaire-description">{{ $partenaire->description }}</p>
+                <p class="partenaire-description">{{ Str::limit($partenaire->description, 100) }}</p>
                 @endif
                 <div class="partenaire-meta">
                     @if($partenaire->email)
@@ -121,7 +133,7 @@
                     <span><i class="fas fa-phone-alt"></i> {{ $partenaire->telephone }}</span>
                     @endif
                     @if($partenaire->site_web)
-                    <span><i class="fas fa-globe"></i> {{ $partenaire->site_web }}</span>
+                    <span><i class="fas fa-globe"></i> {{ Str::limit($partenaire->site_web, 30) }}</span>
                     @endif
                     @if($partenaire->date_debut)
                     <span><i class="fas fa-calendar-alt"></i> Depuis {{ $partenaire->date_debut->format('d/m/Y') }}</span>

@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Détail du partenaire — ' . $partenaire->nom)
+@section('title', 'Détail du partenaire — ' . $partenaire->nom . ' | PHOVE')
 
 @section('page_title', 'Détail du partenaire')
 @section('page_icon', 'handshake')
-@section('page_subtitle', 'Fiche détaillée du partenaire : ' . $partenaire->nom)
+@section('page_subtitle', 'Fiche détaillée du partenaire : ' . $partenaire->nom . ($partenaire->sigle ? ' (' . $partenaire->sigle . ')' : ''))
 
 @php
     $breadcrumb = [
@@ -25,13 +25,18 @@
     <div class="partenaire-show-header">
         <div class="partenaire-show-logo">
             @if($partenaire->logo)
-                <img src="{{ asset('storage/' . $partenaire->logo) }}" alt="{{ $partenaire->nom }}">
+                <img src="{{ asset('storage/' . $partenaire->logo) }}" alt="{{ $partenaire->nom }}" loading="lazy">
             @else
-                <span>{{ Str::upper(Str::substr($partenaire->nom, 0, 2)) }}</span>
+                <span>{{ $partenaire->sigleOuInitiales() }}</span>
             @endif
         </div>
         <div class="partenaire-show-info">
-            <h2>{{ $partenaire->nom }}</h2>
+            <h2>
+                {{ $partenaire->nom }}
+                @if($partenaire->sigle)
+                    <small style="font-size: 14px; color: #64748B;">({{ $partenaire->sigle }})</small>
+                @endif
+            </h2>
             <p>
                 <span class="partenaire-type partenaire-type-{{ $partenaire->type }}" style="margin-right: 8px;">
                     <i class="fas fa-tag"></i> {{ $partenaire->typeLibelle() }}
@@ -40,9 +45,17 @@
                     <i class="fas fa-circle"></i> {{ $partenaire->statut === 'actif' ? 'Actif' : 'Inactif' }}
                 </span>
                 &nbsp;|&nbsp;
-                <span style="font-size: 13px; color: #888;">
+                <span style="font-size: 13px; color: #64748B;">
                     <i class="fas fa-calendar-alt"></i> Partenaire depuis {{ $partenaire->created_at->format('d/m/Y') }}
                 </span>
+                @if($partenaire->site_web)
+                &nbsp;|&nbsp;
+                <span style="font-size: 13px;">
+                    <a href="{{ $partenaire->urlSiteWeb() }}" target="_blank" rel="noopener noreferrer" style="color: #1A5B9C;">
+                        <i class="fas fa-globe"></i> {{ Str::limit($partenaire->site_web, 30) }}
+                    </a>
+                </span>
+                @endif
             </p>
         </div>
         <div style="display: flex; gap: 8px; flex-shrink: 0;">
@@ -70,6 +83,10 @@
                     <div class="partenaire-detail-row">
                         <span class="partenaire-detail-label"><i class="fas fa-building"></i> Nom</span>
                         <span class="partenaire-detail-value">{{ $partenaire->nom }}</span>
+                    </div>
+                    <div class="partenaire-detail-row">
+                        <span class="partenaire-detail-label"><i class="fas fa-barcode"></i> Sigle</span>
+                        <span class="partenaire-detail-value">{{ $partenaire->sigle ?: 'N/A' }}</span>
                     </div>
                     <div class="partenaire-detail-row">
                         <span class="partenaire-detail-label"><i class="fas fa-tag"></i> Type</span>
@@ -115,7 +132,7 @@
                         <span class="partenaire-detail-label"><i class="fas fa-globe"></i> Site web</span>
                         <span class="partenaire-detail-value">
                             @if($partenaire->site_web)
-                                <a href="{{ $partenaire->site_web }}" target="_blank" style="color: var(--color-primary);">
+                                <a href="{{ $partenaire->urlSiteWeb() }}" target="_blank" rel="noopener noreferrer" style="color: #1A5B9C;">
                                     {{ $partenaire->site_web }} <i class="fas fa-external-link-alt" style="font-size: 10px;"></i>
                                 </a>
                             @else
@@ -132,7 +149,7 @@
                     <i class="fas fa-sticky-note"></i> Description
                 </div>
                 <div class="partenaire-detail-card-body">
-                    <div style="font-size: 13px; color: #555; line-height: 1.8; white-space: pre-line;">
+                    <div style="font-size: 13px; color: #334155; line-height: 1.8; white-space: pre-line;">
                         {{ $partenaire->description }}
                     </div>
                 </div>
@@ -145,7 +162,7 @@
             <div class="partenaire-detail-card">
                 <div class="partenaire-detail-card-header">
                     <i class="fas fa-project-diagram"></i> Projets associés 
-                    <span style="font-size: 11px; color: #888; margin-left: 4px;">({{ $partenaire->projets->count() }})</span>
+                    <span style="font-size: 11px; color: #64748B; margin-left: 4px;">({{ $partenaire->projets->count() }})</span>
                 </div>
                 <div class="partenaire-detail-card-body">
                     @if($partenaire->projets->count() > 0)
@@ -153,24 +170,34 @@
                         @foreach($partenaire->projets as $projet)
                         <div class="partenaire-projet-item">
                             <div style="min-width: 0;">
-                                <a href="{{ route('admin.projets.show', $projet) }}" style="font-weight: 600;">
+                                <a href="{{ route('admin.projets.show', $projet) }}" style="font-weight: 600; color: #1E293B;">
                                     {{ Str::limit($projet->titre, 50) }}
                                 </a>
-                                <div style="font-size: 11px; color: #888; margin-top: 2px;">
+                                @if($projet->code_projet)
+                                <div style="font-size: 10px; color: #94A3B8; margin-top: 2px;">
+                                    <i class="fas fa-barcode"></i> {{ $projet->code_projet }}
+                                </div>
+                                @endif
+                                <div style="font-size: 11px; color: #64748B; margin-top: 2px;">
                                     <i class="fas fa-map-marker-alt"></i> {{ $projet->zone_geographique }} &nbsp;|&nbsp;
                                     <span class="projet-statut-badge projet-statut-{{ $projet->statut }}" style="font-size: 10px;">
                                         {{ $projet->statutLibelle() }}
                                     </span>
                                 </div>
+                                @if($projet->pivot && $projet->pivot->role)
+                                <div style="font-size: 11px; color: #F59E0B; margin-top: 2px;">
+                                    <i class="fas fa-user-tag"></i> Rôle : {{ $projet->pivot->role }}
+                                </div>
+                                @endif
                             </div>
-                            <span style="font-size: 12px; font-weight: 600; color: var(--color-primary); white-space: nowrap;">
+                            <span style="font-size: 12px; font-weight: 600; color: #1A5B9C; white-space: nowrap;">
                                 {{ number_format($projet->budget_utilise, 0, ',', ' ') }} / {{ number_format($projet->budget_total, 0, ',', ' ') }} $
                             </span>
                         </div>
                         @endforeach
                     </div>
                     @else
-                    <div style="text-align: center; padding: 30px 20px; color: #999;">
+                    <div style="text-align: center; padding: 30px 20px; color: #94A3B8;">
                         <i class="fas fa-project-diagram" style="font-size: 2rem; display: block; margin-bottom: 8px; opacity: 0.4;"></i>
                         <p style="font-size: 13px;">Aucun projet associé à ce partenaire.</p>
                     </div>

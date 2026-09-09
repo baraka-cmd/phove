@@ -34,6 +34,11 @@
                     <span class="projet-header-badge projet-header-badge-domain">
                         <i class="fas fa-tag"></i> {{ $projet->domaineLibelle() }}
                     </span>
+                    @if($projet->code_projet)
+                    <span class="projet-header-badge projet-header-badge-code">
+                        <i class="fas fa-barcode"></i> {{ $projet->code_projet }}
+                    </span>
+                    @endif
                 </div>
 
                 {{-- Titre --}}
@@ -139,11 +144,12 @@
                     <div class="projet-main-image">
                         <img src="{{ asset('storage/' . $projet->image_principale) }}" 
                              alt="{{ $projet->titre }}" 
-                             class="projet-featured-image">
+                             class="projet-featured-image"
+                             loading="lazy">
                     </div>
                     @else
                     <div class="projet-main-image projet-main-image-placeholder">
-                        <img src="{{ asset('assets/images/logo-ahd.png') }}" 
+                        <img src="{{ asset('assets/images/logo-phove.png') }}" 
                              alt="{{ $projet->titre }}" 
                              class="projet-featured-image">
                     </div>
@@ -224,15 +230,15 @@
                                           d="M18 2.0845
                                              a 15.9155 15.9155 0 0 1 0 31.831
                                              a 15.9155 15.9155 0 0 1 0 -31.831"
-                                          fill="none" stroke="#eee" stroke-width="3" />
+                                          fill="none" stroke="#E2E8F0" stroke-width="3" />
                                     <path class="budget-circle-fill"
                                           d="M18 2.0845
                                              a 15.9155 15.9155 0 0 1 0 31.831
                                              a 15.9155 15.9155 0 0 1 0 -31.831"
                                           fill="none" 
-                                          stroke="{{ $projet->pourcentageBudget() >= 100 ? '#28a745' : '#16558F' }}" 
+                                          stroke="{{ $projet->pourcentageBudget() >= 100 ? '#10B981' : '#1A5B9C' }}" 
                                           stroke-width="3"
-                                          stroke-dasharray="{{ $projet->pourcentageBudget() }}, 100" />
+                                          stroke-dasharray="{{ min($projet->pourcentageBudget(), 100) }}, 100" />
                                 </svg>
                                 <div class="budget-circle-text">
                                     <span class="budget-circle-percent">{{ $projet->pourcentageBudget() }}%</span>
@@ -277,7 +283,7 @@
                                 </div>
                                 <div class="kpi-bar">
                                     <div class="kpi-fill {{ $indicateur->objectifAtteint() ? 'kpi-achieved' : '' }}" 
-                                         style="width: {{ $indicateur->pourcentage() }}%"
+                                         style="width: {{ min($indicateur->pourcentage(), 100) }}%"
                                          data-width="{{ $indicateur->pourcentage() }}%">
                                     </div>
                                 </div>
@@ -300,10 +306,15 @@
                             @foreach($projet->partenaires as $partenaire)
                             <div class="partner-item">
                                 <div class="partner-item-avatar">
-                                    <span>{{ Str::upper(Str::substr($partenaire->nom, 0, 2)) }}</span>
+                                    <span>{{ $partenaire->sigleOuInitiales() }}</span>
                                 </div>
                                 <div class="partner-item-info">
-                                    <span class="partner-item-name">{{ $partenaire->nom }}</span>
+                                    <span class="partner-item-name">
+                                        {{ $partenaire->nom }}
+                                        @if($partenaire->sigle)
+                                            <small style="color: #64748B;">({{ $partenaire->sigle }})</small>
+                                        @endif
+                                    </span>
                                     <span class="partner-item-role">
                                         {{ $partenaire->pivot->role ? str_replace('_', ' ', ucfirst($partenaire->pivot->role)) : 'Partenaire' }}
                                     </span>
@@ -323,7 +334,7 @@
                     <div class="sidebar-actions">
                         <button class="sidebar-action-btn btn-share" 
                                 data-title="{{ $projet->titre }}" 
-                                data-text="Découvrez le projet {{ $projet->titre }} de AHD-RDC"
+                                data-text="Découvrez le projet {{ $projet->titre }} de PHOVE"
                                 title="Partager">
                             <i class="fas fa-share-alt"></i> Partager
                         </button>
@@ -402,7 +413,7 @@
                 </h2>
                 <p class="cta-text">
                     Votre don nous permet de continuer à mener des projets comme celui-ci 
-                    et d'étendre notre impact auprès des communautés vulnérables.
+                    et d'étendre notre impact auprès des orphelins, veuves et personnes démunies.
                 </p>
                 <div class="cta-buttons">
                     <a href="{{ url('/faire-un-don') }}" class="btn-cta-don">

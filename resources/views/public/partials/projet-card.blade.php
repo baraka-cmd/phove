@@ -1,5 +1,5 @@
 {{-- ============================================ --}}
-{{-- COMPOSANT CARTE PROJET RÉUTILISABLE --}}
+{{-- COMPOSANT CARTE PROJET RÉUTILISABLE — PHOVE --}}
 {{-- Utilisé dans : liste projets, page d'accueil, projets connexes --}}
 {{-- ============================================ --}}
 
@@ -7,10 +7,11 @@
     
     {{-- Image du projet --}}
     <div class="projet-card-image">
-        <img src="{{ $projet->image_principale ? asset('storage/' . $projet->image_principale) : asset('assets/images/logo-ahd.png') }}" 
+        <img src="{{ $projet->image_principale ? asset('storage/' . $projet->image_principale) : asset('assets/images/logo-phove.png') }}" 
              alt="{{ $projet->titre }}" 
              loading="lazy"
-             class="projet-card-img">
+             class="projet-card-img"
+             onerror="this.src='{{ asset('assets/images/logo-phove.png') }}'">
         
         {{-- Badge statut --}}
         <span class="projet-card-badge projet-badge-{{ $projet->statut }}">

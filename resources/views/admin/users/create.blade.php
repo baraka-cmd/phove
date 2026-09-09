@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Créer un utilisateur')
+@section('title', 'Créer un utilisateur | PHOVE')
 
 @section('page_title', 'Nouvel utilisateur')
 @section('page_icon', 'user-plus')
-@section('page_subtitle', 'Créez un nouveau compte administrateur. Tous les champs marqués d\'un astérisque (*) sont obligatoires.')
+@section('page_subtitle', 'Créez un nouveau compte avec un rôle hiérarchique PHOVE. Tous les champs marqués d\'un astérisque (*) sont obligatoires.')
 
 @php
     $breadcrumb = ['Utilisateurs' => route('admin.users.index'), 'Créer' => null];
@@ -25,7 +25,7 @@
             </div>
             <div>
                 <h2>Créer un utilisateur</h2>
-                <p>Remplissez les informations pour créer un nouveau compte administrateur.</p>
+                <p>Remplissez les informations pour créer un nouveau compte avec un rôle PHOVE.</p>
             </div>
         </div>
 
@@ -49,7 +49,7 @@
                         <input type="text" name="nom" id="nom" 
                                class="user-form-input @error('nom') is-invalid @enderror" 
                                value="{{ old('nom') }}" 
-                               placeholder="Ex: Dr AKSANTI DUNIA Steeng" 
+                               placeholder="Ex: KABOYI MUSAMUGUMA Philippe" 
                                maxlength="255" required autofocus>
                         @error('nom')
                             <span class="user-form-error">
@@ -65,7 +65,7 @@
                         <input type="email" name="email" id="email" 
                                class="user-form-input @error('email') is-invalid @enderror" 
                                value="{{ old('email') }}" 
-                               placeholder="exemple@ahd-rdc.org" 
+                               placeholder="phovemonde@gmail.com" 
                                maxlength="191" required>
                         @error('email')
                             <span class="user-form-error">
@@ -102,7 +102,7 @@
 
                 <div class="user-form-group">
                     <label class="user-form-label">
-                        Photo <small style="font-weight: 400; color: var(--color-text-muted);">(optionnelle)</small>
+                        Photo <small style="font-weight: 400; color: #64748B;">(optionnelle)</small>
                     </label>
                     <div class="user-photo-upload">
                         <label for="photo_profil" class="user-photo-preview" id="photoPreview">
@@ -182,9 +182,11 @@
                         </label>
                         <select name="role" id="role" class="user-form-select @error('role') is-invalid @enderror" required>
                             <option value="">-- Sélectionnez un rôle --</option>
-                            <option value="super_admin" {{ old('role') === 'super_admin' ? 'selected' : '' }}>Super Admin — Tous les droits</option>
-                            <option value="admin" {{ old('role', 'admin') === 'admin' ? 'selected' : '' }}>Administrateur — Gestion complète</option>
-                            <option value="editeur" {{ old('role') === 'editeur' ? 'selected' : '' }}>Éditeur — Contenu uniquement</option>
+                            @foreach(\App\Enums\Roles::adminRoles() as $code => $libelle)
+                                <option value="{{ $code }}" {{ old('role', 'editeur') === $code ? 'selected' : '' }}>
+                                    {{ $libelle }}
+                                </option>
+                            @endforeach
                         </select>
                         @error('role')
                             <span class="user-form-error">
@@ -212,18 +214,23 @@
             </div>
 
             {{-- ============================================ --}}
-            {{-- INFO --}}
+            {{-- INFO PERMISSIONS PAR RÔLE --}}
             {{-- ============================================ --}}
-            <div style="padding: 16px 20px; background: var(--color-primary-lighter); border-radius: 12px; display: flex; gap: 12px; align-items: flex-start;">
-                <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--color-primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">
+            <div style="padding: 16px 20px; background: #E8F0F8; border-radius: 12px; display: flex; gap: 12px; align-items: flex-start;">
+                <div style="width: 36px; height: 36px; border-radius: 50%; background: #1A5B9C; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;">
                     <i class="fas fa-info-circle"></i>
                 </div>
-                <div style="font-size: 13px; color: var(--color-text-secondary); line-height: 1.6;">
-                    <strong style="color: #1a1a1a;">Permissions par rôle :</strong>
+                <div style="font-size: 13px; color: #334155; line-height: 1.6;">
+                    <strong style="color: #1E293B;">Permissions par rôle :</strong>
                     <ul style="margin: 8px 0 0 0; padding-left: 18px; list-style: disc;">
                         <li><strong>Super Admin</strong> : Accès total, gestion des utilisateurs et paramètres.</li>
-                        <li><strong>Administrateur</strong> : Gestion des projets, membres, dons, articles, documents.</li>
-                        <li><strong>Éditeur</strong> : Gestion des articles, médias et témoignages uniquement.</li>
+                        <li><strong>Directeur Général</strong> : Coordination globale, validation des salaires et rapports.</li>
+                        <li><strong>Chef de Mission</strong> : Coordination continentale, suivi des projets.</li>
+                        <li><strong>Chargé de Programme</strong> : Coordination nationale, création de projets.</li>
+                        <li><strong>Secrétaire</strong> : Gestion des documents et dossiers du personnel.</li>
+                        <li><strong>Comptable</strong> : Gestion financière, salaires, cotisations.</li>
+                        <li><strong>Caissier</strong> : Encaissements, paiements.</li>
+                        <li><strong>Éditeur</strong> : Rédaction des articles et contenus.</li>
                     </ul>
                 </div>
             </div>

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Exécuter la migration (créer la table).
+     * Exécuter la migration (créer la table users avec les 9 rôles PHOVE).
      */
     public function up(): void
     {
@@ -23,9 +23,19 @@ return new class extends Migration
             $table->string('mot_de_passe');
             $table->rememberToken();
             
-            // Rôle et statut
-            $table->enum('role', ['super_admin', 'admin', 'editeur'])
-                  ->default('admin');
+            // Rôle et statut — 9 rôles PHOVE directement inclus
+            $table->enum('role', [
+                'super_admin',
+                'dg',
+                'chef_mission',
+                'charge_programme',
+                'secretaire',
+                'comptable',
+                'caissier',
+                'editeur',
+                'utilisateur',
+            ])->default('utilisateur');
+            
             $table->enum('statut', ['actif', 'inactif', 'suspendu'])
                   ->default('actif');
             
@@ -37,6 +47,9 @@ return new class extends Migration
             
             // Horodatage
             $table->timestamps();
+            
+            // Index
+            $table->index('role');
         });
     }
 

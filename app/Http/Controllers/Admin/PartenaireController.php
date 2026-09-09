@@ -6,17 +6,24 @@ use App\Http\Controllers\Controller;
 use App\Models\Partenaire;
 use App\Models\Projet;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class PartenaireController extends Controller
 {
     /**
      * Nombre de partenaires par page.
+     *
+     * @var int
      */
     protected int $perPage = 15;
 
     /**
      * Types de partenaires.
+     *
+     * @var array<string, string>
      */
     protected array $types = [
         'bailleur_fonds' => 'Bailleur de fonds',
@@ -27,7 +34,20 @@ class PartenaireController extends Controller
     ];
 
     /**
-     * Affiche la liste paginée et filtrée des partenaires.
+     * Statuts des partenaires.
+     *
+     * @var array<string, string>
+     */
+    protected array $statuts = [
+        'actif' => 'Actif',
+        'inactif' => 'Inactif',
+    ];
+
+    /**
+     * Affiche la liste paginée et filtrée des partenaires PHOVE.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -43,11 +63,12 @@ class PartenaireController extends Controller
             $query->where('statut', $request->statut);
         }
 
-        // Recherche
+        // Recherche (nom, sigle, description, email)
         if ($request->filled('recherche')) {
             $recherche = $request->recherche;
             $query->where(function ($q) use ($recherche) {
                 $q->where('nom', 'like', '%' . $recherche . '%')
+                  ->orWhere('sigle', 'like', '%' . $recherche . '%')
                   ->orWhere('description', 'like', '%' . $recherche . '%')
                   ->orWhere('email', 'like', '%' . $recherche . '%');
             });
@@ -60,47 +81,63 @@ class PartenaireController extends Controller
         // Statistiques
         $totalPartenaires = Partenaire::count();
         $partenairesActifs = Partenaire::where('statut', 'actif')->count();
-        $totalCollaborations = \DB::table('projet_partenaire')->count();
+        $partenairesInternationaux = Partenaire::where('statut', 'actif')->where('type', 'international')->count();
+        $totalCollaborations = DB::table('projet_partenaire')->count();
 
         return view('admin.partenaires.index', compact(
             'partenaires',
             'totalPartenaires',
             'partenairesActifs',
+            'partenairesInternationaux',
             'totalCollaborations'
         ));
     }
 
     /**
      * Affiche le formulaire de création d'un partenaire.
+     *
+     * @return \Illuminate\View\View
      */
     public function create()
     {
         $projets = Projet::orderBy('titre')->get();
-        return view('admin.partenaires.create', compact('projets'));
+        $types = $this->types;
+        return view('admin.partenaires.create', compact('projets', 'types'));
     }
 
     /**
      * Enregistre un nouveau partenaire.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'nom' => ['required', 'string', 'max:255'],
+            'sigle' => ['nullable', 'string', 'max:20', 'unique:partenaires,sigle'],
             'type' => ['required', 'in:bailleur_fonds,technique,local,international,institutionnel'],
             'email' => ['nullable', 'email', 'max:191'],
-            'telephone' => ['nullable', 'string', 'max:20'],
+            'telephone' => ['nullable', 'string', 'max:30', 'regex:/^[+0-9\s\-\(\)]+$/'],
             'adresse' => ['nullable', 'string', 'max:255'],
             'site_web' => ['nullable', 'url', 'max:255'],
             'description' => ['nullable', 'string', 'max:5000'],
             'statut' => ['required', 'in:actif,inactif'],
             'date_debut' => ['nullable', 'date'],
             'date_fin' => ['nullable', 'date', 'after_or_equal:date_debut'],
-            'logo' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
+            'logo' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp,svg', 'max:2048'],
             'projet_ids' => ['nullable', 'array'],
             'projet_ids.*' => ['exists:projets,id'],
         ], [
             'nom.required' => 'Le nom du partenaire est obligatoire.',
+            'nom.max' => 'Le nom ne doit pas dépasser 255 caractères.',
+            'sigle.unique' => 'Ce sigle est déjà utilisé par un autre partenaire.',
             'type.required' => 'Le type de partenaire est obligatoire.',
+            'email.email' => 'Veuillez saisir une adresse email valide.',
+            'telephone.regex' => 'Veuillez saisir un numéro de téléphone valide.',
+            'site_web.url' => 'Veuillez saisir une URL valide (commençant par https://).',
+            'logo.max' => 'Le logo ne doit pas dépasser 2 Mo.',
+            'date_fin.after_or_equal' => 'La date de fin doit être postérieure ou égale à la date de début.',
         ]);
 
         // Upload logo
@@ -110,20 +147,27 @@ class PartenaireController extends Controller
 
         $partenaire = Partenaire::create($validated);
 
-        // Associer aux projets
+        // Associer aux projets avec contribution
         if ($request->has('projet_ids')) {
-            $partenaire->projets()->attach($request->projet_ids, [
-                'role' => $validated['type'],
-                'date_debut' => $validated['date_debut'] ?? now(),
-            ]);
+            foreach ($request->projet_ids as $projetId) {
+                $partenaire->projets()->attach($projetId, [
+                    'role' => $validated['type'],
+                    'date_debut' => $validated['date_debut'] ?? now(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
         }
 
         return redirect()->route('admin.partenaires.index')
-            ->with('success', 'Le partenaire a été ajouté avec succès.');
+            ->with('success', 'Le partenaire « ' . $partenaire->nom . ' » a été ajouté avec succès.');
     }
 
     /**
      * Affiche la fiche détaillée d'un partenaire.
+     *
+     * @param Partenaire $partenaire
+     * @return \Illuminate\View\View
      */
     public function show(Partenaire $partenaire)
     {
@@ -133,33 +177,52 @@ class PartenaireController extends Controller
 
     /**
      * Affiche le formulaire de modification d'un partenaire.
+     *
+     * @param Partenaire $partenaire
+     * @return \Illuminate\View\View
      */
     public function edit(Partenaire $partenaire)
     {
         $projets = Projet::orderBy('titre')->get();
+        $types = $this->types;
+        $statuts = $this->statuts;
         $partenaire->load('projets');
-        return view('admin.partenaires.edit', compact('partenaire', 'projets'));
+        return view('admin.partenaires.edit', compact('partenaire', 'projets', 'types', 'statuts'));
     }
 
     /**
      * Met à jour un partenaire.
+     *
+     * @param Request $request
+     * @param Partenaire $partenaire
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, Partenaire $partenaire)
     {
         $validated = $request->validate([
             'nom' => ['required', 'string', 'max:255'],
+            'sigle' => ['nullable', 'string', 'max:20', Rule::unique('partenaires', 'sigle')->ignore($partenaire->id)],
             'type' => ['required', 'in:bailleur_fonds,technique,local,international,institutionnel'],
             'email' => ['nullable', 'email', 'max:191'],
-            'telephone' => ['nullable', 'string', 'max:20'],
+            'telephone' => ['nullable', 'string', 'max:30', 'regex:/^[+0-9\s\-\(\)]+$/'],
             'adresse' => ['nullable', 'string', 'max:255'],
             'site_web' => ['nullable', 'url', 'max:255'],
             'description' => ['nullable', 'string', 'max:5000'],
             'statut' => ['required', 'in:actif,inactif'],
             'date_debut' => ['nullable', 'date'],
             'date_fin' => ['nullable', 'date', 'after_or_equal:date_debut'],
-            'logo' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
+            'logo' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp,svg', 'max:2048'],
             'projet_ids' => ['nullable', 'array'],
             'projet_ids.*' => ['exists:projets,id'],
+        ], [
+            'nom.required' => 'Le nom du partenaire est obligatoire.',
+            'sigle.unique' => 'Ce sigle est déjà utilisé par un autre partenaire.',
+            'type.required' => 'Le type de partenaire est obligatoire.',
+            'email.email' => 'Veuillez saisir une adresse email valide.',
+            'telephone.regex' => 'Veuillez saisir un numéro de téléphone valide.',
+            'site_web.url' => 'Veuillez saisir une URL valide (commençant par https://).',
+            'logo.max' => 'Le logo ne doit pas dépasser 2 Mo.',
+            'date_fin.after_or_equal' => 'La date de fin doit être postérieure ou égale à la date de début.',
         ]);
 
         // Upload logo
@@ -172,31 +235,55 @@ class PartenaireController extends Controller
 
         $partenaire->update($validated);
 
-        // Synchroniser les projets
+        // Synchroniser les projets avec les pivots
         if ($request->has('projet_ids')) {
-            $partenaire->projets()->sync($request->projet_ids);
+            $syncData = [];
+            foreach ($request->projet_ids as $projetId) {
+                $syncData[$projetId] = [
+                    'role' => $validated['type'],
+                    'date_debut' => $validated['date_debut'] ?? now(),
+                    'updated_at' => now(),
+                ];
+            }
+            $partenaire->projets()->sync($syncData);
         } else {
             $partenaire->projets()->detach();
         }
 
         return redirect()->route('admin.partenaires.index')
-            ->with('success', 'Le partenaire a été mis à jour avec succès.');
+            ->with('success', 'Le partenaire « ' . $partenaire->nom . ' » a été mis à jour avec succès.');
     }
 
     /**
      * Supprime un partenaire.
+     *
+     * @param Partenaire $partenaire
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(Partenaire $partenaire)
     {
+        // Vérifier si le partenaire a des projets associés
+        $nombreProjets = $partenaire->projets()->count();
+
+        // Supprimer le logo
         if ($partenaire->logo) {
-            Storage::disk('public')->delete($partenaire->logo);
+            if (Storage::disk('public')->exists($partenaire->logo)) {
+                Storage::disk('public')->delete($partenaire->logo);
+            }
         }
 
         // Détacher les projets
         $partenaire->projets()->detach();
+
+        // Supprimer le partenaire
         $partenaire->delete();
 
+        $message = 'Le partenaire « ' . $partenaire->nom . ' » a été supprimé définitivement.';
+        if ($nombreProjets > 0) {
+            $message .= ' ' . $nombreProjets . ' association(s) projet(s) supprimée(s).';
+        }
+
         return redirect()->route('admin.partenaires.index')
-            ->with('success', 'Le partenaire a été supprimé définitivement.');
+            ->with('success', $message);
     }
 }

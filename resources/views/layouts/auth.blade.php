@@ -6,18 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
     {{-- Titre dynamique --}}
-    <title>@yield('title', 'AHD-RDC') | Action Humanitaire pour le Développement</title>
+    <title>@yield('title', 'PHOVE') | Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies</title>
     
     {{-- Meta description --}}
-    <meta name="description" content="Plateforme de gestion de l'ONG Action Humanitaire pour le Développement en RD Congo - AHD-RDC.">
-    <meta name="author" content="AHD-RDC">
+    <meta name="description" content="Plateforme de gestion de l'ONG PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies.">
+    <meta name="author" content="PHOVE">
     <meta name="robots" content="noindex, nofollow">
     
     {{-- CSRF Token pour les formulaires --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     {{-- Favicon --}}
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon-phove.png') }}">
     
     {{-- Police Poppins depuis Google Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,49 +41,49 @@
     {{-- Conteneur principal --}}
     <div class="auth-wrapper">
         
-        {{-- Colonne gauche : branding AHD-RDC --}}
+        {{-- Colonne gauche : branding PHOVE --}}
         <div class="auth-branding">
             <div class="auth-branding-content">
                 {{-- Logo --}}
                 <div class="auth-logo">
-                    <img src="{{ asset('assets/images/logo-ahd.png') }}" alt="AHD-RDC Logo" class="auth-logo-img">
+                    <img src="{{ asset('assets/images/logo-phove.png') }}" alt="PHOVE Logo" class="auth-logo-img">
                 </div>
                 
                 {{-- Nom de l'organisation --}}
                 <h1 class="auth-org-name">
-                    AHD<span class="text-accent">-</span>RDC
+                    PHOVE
                 </h1>
                 
                 {{-- Nom complet --}}
                 <p class="auth-org-fullname">
-                    Action Humanitaire pour le Développement en RD Congo
+                    Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies
                 </p>
                 
                 {{-- Slogan --}}
                 <p class="auth-slogan">
                     <i class="fas fa-quote-left"></i>
-                    Être ensemble pour le bien de la communauté
+                    Compassion avec la population
                     <i class="fas fa-quote-right"></i>
                 </p>
                 
                 {{-- Valeurs --}}
                 <div class="auth-values">
                     <span class="auth-value-badge">
-                        <i class="fas fa-check-circle"></i> Transparence
+                        <i class="fas fa-check-circle"></i> Compassion
                     </span>
                     <span class="auth-value-badge">
-                        <i class="fas fa-check-circle"></i> Redevabilité
+                        <i class="fas fa-check-circle"></i> Solidarité
                     </span>
                     <span class="auth-value-badge">
-                        <i class="fas fa-check-circle"></i> Professionnalisme
+                        <i class="fas fa-check-circle"></i> Foi en Dieu
                     </span>
                 </div>
                 
                 {{-- Footer branding --}}
                 <div class="auth-branding-footer">
-                    <p>&copy; {{ date('Y') }} AHD-RDC. Tous droits réservés.</p>
+                    <p>&copy; {{ date('Y') }} PHOVE. Tous droits réservés.</p>
                     <p class="auth-location">
-                        <i class="fas fa-map-marker-alt"></i> Minova, Kalehe, Sud-Kivu, RD Congo
+                        <i class="fas fa-map-marker-alt"></i> Rue Georges BUSHU N°092, Katoyi, Karisimbi, Goma, RD Congo
                     </p>
                 </div>
             </div>

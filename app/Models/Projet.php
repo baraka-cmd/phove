@@ -9,15 +9,20 @@ class Projet extends Model
 {
     /**
      * La table associée au modèle.
+     *
+     * @var string
      */
     protected $table = 'projets';
 
     /**
      * Les attributs modifiables en masse.
+     *
+     * @var array<int, string>
      */
     protected $fillable = [
         'titre',
         'slug',
+        'code_projet',
         'domaine',
         'zone_geographique',
         'province',
@@ -37,6 +42,8 @@ class Projet extends Model
 
     /**
      * Cast des attributs.
+     *
+     * @return array<string, string>
      */
     protected function casts(): array
     {
@@ -57,6 +64,8 @@ class Projet extends Model
 
     /**
      * Les indicateurs de performance (KPI) du projet.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function indicateurs()
     {
@@ -65,6 +74,8 @@ class Projet extends Model
 
     /**
      * Les bénéficiaires aidés par ce projet.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function beneficiaires()
     {
@@ -73,6 +84,8 @@ class Projet extends Model
 
     /**
      * Les dons reçus pour ce projet.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function dons()
     {
@@ -81,6 +94,8 @@ class Projet extends Model
 
     /**
      * Les partenaires associés à ce projet.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function partenaires()
     {
@@ -91,6 +106,8 @@ class Projet extends Model
 
     /**
      * Les médias (photos, vidéos) liés à ce projet.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function medias()
     {
@@ -99,10 +116,75 @@ class Projet extends Model
 
     /**
      * Les articles qui mentionnent ce projet.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function articles()
     {
         return $this->hasMany(Article::class);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPES
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Scope : uniquement les projets publiés.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePublie($query)
+    {
+        return $query->where('publier', true);
+    }
+
+    /**
+     * Scope : projets en cours.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeEnCours($query)
+    {
+        return $query->where('statut', 'en_cours');
+    }
+
+    /**
+     * Scope : projets terminés.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeTermines($query)
+    {
+        return $query->where('statut', 'termine');
+    }
+
+    /**
+     * Scope : filtrer par domaine.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $domaine
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeDomaine($query, string $domaine)
+    {
+        return $query->where('domaine', $domaine);
+    }
+
+    /**
+     * Scope : filtrer par zone géographique.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string $zone
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeZone($query, string $zone)
+    {
+        return $query->where('zone_geographique', 'like', '%' . $zone . '%');
     }
 
     /*
@@ -113,6 +195,8 @@ class Projet extends Model
 
     /**
      * Calcule le pourcentage d'avancement du budget.
+     *
+     * @return float
      */
     public function pourcentageBudget(): float
     {
@@ -124,6 +208,8 @@ class Projet extends Model
 
     /**
      * Calcule la durée du projet en mois.
+     *
+     * @return int
      */
     public function dureeEnMois(): int
     {
@@ -132,6 +218,8 @@ class Projet extends Model
 
     /**
      * Vérifie si le projet est en cours.
+     *
+     * @return bool
      */
     public function estEnCours(): bool
     {
@@ -140,6 +228,8 @@ class Projet extends Model
 
     /**
      * Vérifie si le projet est terminé.
+     *
+     * @return bool
      */
     public function estTermine(): bool
     {
@@ -147,26 +237,54 @@ class Projet extends Model
     }
 
     /**
+     * Vérifie si le projet est publié publiquement.
+     *
+     * @return bool
+     */
+    public function estPublie(): bool
+    {
+        return $this->publier;
+    }
+
+    /**
+     * Retourne le code du projet ou "N/A" si non défini.
+     *
+     * @return string
+     */
+    public function codeProjetOuDefaut(): string
+    {
+        return $this->code_projet ?: 'N/A';
+    }
+
+    /**
      * Libellé du domaine d'intervention en français.
+     *
+     * @return string
      */
     public function domaineLibelle(): string
     {
         return match($this->domaine) {
             'sante_nutrition' => 'Santé-Nutrition',
-            'education' => 'Éducation',
-            'protection' => 'Protection de l\'enfant et de la femme',
-            'wash' => 'Eau, Assainissement et Hygiène',
-            'securite_alimentaire' => 'Sécurité Alimentaire',
+            'education' => 'Éducation & Formation',
+            'protection' => 'Protection Sociale',
+            'wash' => 'Eau, Hygiène & Assainissement',
+            'securite_alimentaire' => 'Sécurité Alimentaire & Agriculture',
             'communication' => 'Communication',
             'environnement' => 'Protection de l\'environnement',
             'paix' => 'Promotion de la Paix',
             'genre' => 'Sensibilité au genre',
+            'spirituel' => 'Accompagnement Spirituel',
+            'infrastructure' => 'Infrastructures',
+            'economique' => 'Activités Socio-Économiques',
+            'judiciaire' => 'Assistance Judiciaire',
             default => $this->domaine,
         };
     }
 
     /**
      * Libellé du statut en français.
+     *
+     * @return string
      */
     public function statutLibelle(): string
     {
@@ -180,7 +298,38 @@ class Projet extends Model
     }
 
     /**
-     * Génère le slug automatiquement à partir du titre.
+     * Retourne l'URL de l'image principale ou le logo PHOVE par défaut.
+     *
+     * @return string
+     */
+    public function urlImage(): string
+    {
+        if ($this->image_principale) {
+            return asset('storage/' . $this->image_principale);
+        }
+        return asset('assets/images/logo-phove.png');
+    }
+
+    /**
+     * Retourne le nombre total de bénéficiaires du projet.
+     *
+     * @return int
+     */
+    public function nombreBeneficiaires(): int
+    {
+        return $this->beneficiaires()->count();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | BOOT
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Boot : génère le slug automatiquement à partir du titre.
+     *
+     * @return void
      */
     protected static function booted(): void
     {

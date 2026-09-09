@@ -1,5 +1,5 @@
 {{-- ============================================ --}}
-{{-- HEADER — AHD-RDC --}}
+{{-- HEADER — PHOVE --}}
 {{-- Logo + Menu navigation + Bouton Don --}}
 {{-- ============================================ --}}
 <header class="header" id="header">
@@ -7,11 +7,11 @@
         <div class="header-inner">
 
             {{-- Logo --}}
-            <a href="{{ url('/') }}" class="header-logo" title="AHD-RDC — Retour à l'accueil">
-                <img src="{{ asset('assets/images/logo-ahd.png') }}" alt="Logo AHD-RDC" class="header-logo-img">
+            <a href="{{ url('/') }}" class="header-logo" title="PHOVE — Retour à l'accueil">
+                <img src="{{ asset('assets/images/logo-phove.png') }}" alt="Logo PHOVE" class="header-logo-img">
                 <div class="header-logo-text">
-                    <span class="header-logo-name">AHD<span class="text-accent">-</span>RDC</span>
-                    <span class="header-logo-subtitle">Action Humanitaire pour le Développement</span>
+                    <span class="header-logo-name">PHOVE</span>
+                    <span class="header-logo-subtitle">Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies</span>
                 </div>
             </a>
 

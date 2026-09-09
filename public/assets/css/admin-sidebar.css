@@ -1,6 +1,7 @@
 /* ============================================================
-   AHD-RDC — STYLES SIDEBAR ADMINISTRATEUR
-   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   PHOVE — STYLES SIDEBAR ADMINISTRATEUR
+   Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies
+   Palette : Bleu Principal #1A5B9C | Bleu Nuit #1E293B | Ambre #F59E0B
    ============================================================ */
 
 /* ----------------------------------------------------------
@@ -44,7 +45,7 @@
 }
 
 .sidebar-logo-name span {
-    color: var(--color-accent);
+    color: #F59E0B;
 }
 
 .sidebar-logo-sub {
@@ -133,7 +134,7 @@
     transform: translateY(-50%);
     width: 3px;
     height: 20px;
-    background: var(--color-accent);
+    background: #F59E0B;
     border-radius: 0 3px 3px 0;
 }
 
@@ -285,17 +286,17 @@
 
 .sidebar-badge-primary {
     background: var(--color-primary);
-    color: #fff;
+    color: #FFFFFF;
 }
 
 .sidebar-badge-danger {
-    background: var(--color-accent);
-    color: #fff;
+    background: #EF4444;
+    color: #FFFFFF;
 }
 
 .sidebar-badge-success {
     background: var(--color-success);
-    color: #fff;
+    color: #FFFFFF;
 }
 
 .admin-sidebar.collapsed .sidebar-badge {

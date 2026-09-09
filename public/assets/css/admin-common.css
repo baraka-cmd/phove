@@ -1,6 +1,7 @@
 /* ============================================================
-   AHD-RDC — STYLES COMMUNS DASHBOARD ADMINISTRATEUR
-   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   PHOVE — STYLES COMMUNS DASHBOARD ADMINISTRATEUR
+   Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies
+   Palette : Bleu Principal #1A5B9C | Bleu Foncé #2C3E50 | Ambre #F59E0B
    ============================================================ */
 
 /* ----------------------------------------------------------
@@ -8,54 +9,54 @@
    ---------------------------------------------------------- */
 :root {
     /* Couleurs principales */
-    --color-primary: #16558F;
-    --color-primary-dark: #0f3f6b;
-    --color-primary-light: #2874b8;
-    --color-primary-lighter: #e8f0f8;
-    --color-accent: #D32F2F;
-    --color-accent-hover: #b71c1c;
-    --color-accent-light: #fce8e8;
+    --color-primary: #1A5B9C;
+    --color-primary-dark: #124270;
+    --color-primary-light: #3A7BC8;
+    --color-primary-lighter: #E8F0F8;
+    --color-accent: #F59E0B;
+    --color-accent-hover: #D97706;
+    --color-accent-light: #FEF3C7;
 
     /* Sidebar */
     --sidebar-width: 260px;
     --sidebar-collapsed-width: 70px;
-    --sidebar-bg: #0f1a2e;
-    --sidebar-hover: #1a2d47;
-    --sidebar-active: #16558F;
-    --sidebar-text: #a8b8cc;
-    --sidebar-text-hover: #ffffff;
+    --sidebar-bg: #1E293B;
+    --sidebar-hover: #2C3E50;
+    --sidebar-active: #1A5B9C;
+    --sidebar-text: #94A3B8;
+    --sidebar-text-hover: #FFFFFF;
     --sidebar-border: rgba(255, 255, 255, 0.05);
 
     /* Topbar */
     --topbar-height: 65px;
-    --topbar-bg: #ffffff;
-    --topbar-border: #e8ecf1;
+    --topbar-bg: #FFFFFF;
+    --topbar-border: #E2E8F0;
     --topbar-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
 
     /* Couleurs de fond */
-    --color-bg-body: #f0f2f5;
-    --color-bg-white: #ffffff;
-    --color-bg-light: #f8f9fa;
+    --color-bg-body: #F1F5F9;
+    --color-bg-white: #FFFFFF;
+    --color-bg-light: #F8FAFC;
 
     /* Couleurs de texte */
-    --color-text-primary: #1A1A1A;
-    --color-text-secondary: #555555;
-    --color-text-muted: #888888;
-    --color-text-white: #ffffff;
+    --color-text-primary: #1E293B;
+    --color-text-secondary: #334155;
+    --color-text-muted: #64748B;
+    --color-text-white: #FFFFFF;
 
     /* Couleurs fonctionnelles */
-    --color-success: #28a745;
-    --color-success-light: #d4edda;
-    --color-error: #dc3545;
-    --color-error-light: #f8d7da;
-    --color-warning: #ffc107;
-    --color-warning-light: #fff3cd;
-    --color-info: #17a2b8;
-    --color-info-light: #d1ecf1;
+    --color-success: #10B981;
+    --color-success-light: #D1FAE5;
+    --color-error: #EF4444;
+    --color-error-light: #FEE2E2;
+    --color-warning: #F59E0B;
+    --color-warning-light: #FEF3C7;
+    --color-info: #3B82F6;
+    --color-info-light: #DBEAFE;
 
     /* Bordures */
-    --border-color: #e0e0e0;
-    --border-color-light: #eeeeee;
+    --border-color: #CBD5E1;
+    --border-color-light: #E2E8F0;
     --border-radius: 10px;
     --border-radius-sm: 6px;
     --border-radius-lg: 14px;
@@ -337,6 +338,7 @@ img {
     border-color: var(--color-accent-hover);
     box-shadow: var(--shadow-md);
     transform: translateY(-1px);
+    color: var(--color-text-white);
 }
 
 .btn-outline {
@@ -430,17 +432,17 @@ img {
 
 .badge-success {
     background: var(--color-success-light);
-    color: var(--color-success);
+    color: #065F46;
 }
 
 .badge-danger {
     background: var(--color-error-light);
-    color: var(--color-error);
+    color: #B91C1C;
 }
 
 .badge-warning {
     background: var(--color-warning-light);
-    color: #856404;
+    color: #92400E;
 }
 
 .badge-info {
@@ -464,7 +466,7 @@ img {
 }
 
 .form-label .required {
-    color: var(--color-accent);
+    color: #EF4444;
 }
 
 .form-input,
@@ -486,11 +488,11 @@ img {
 .form-select:focus,
 .form-textarea:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.1);
+    box-shadow: 0 0 0 3px rgba(26, 91, 156, 0.1);
 }
 
 .form-input::placeholder {
-    color: #aaa;
+    color: #94A3B8;
 }
 
 .form-textarea {
@@ -513,20 +515,20 @@ img {
 
 .alert-success {
     background: var(--color-success-light);
-    color: #155724;
-    border: 1px solid #c3e6cb;
+    color: #065F46;
+    border: 1px solid #6EE7B7;
 }
 
 .alert-error {
     background: var(--color-error-light);
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    color: #B91C1C;
+    border: 1px solid #FCA5A5;
 }
 
 .alert-info {
     background: var(--color-info-light);
-    color: #0c5460;
-    border: 1px solid #bee5eb;
+    color: #1E40AF;
+    border: 1px solid #93C5FD;
 }
 
 /* ----------------------------------------------------------
@@ -596,7 +598,7 @@ img {
 
 .modal-close:hover {
     background: var(--color-accent);
-    color: #fff;
+    color: #FFFFFF;
 }
 
 /* ----------------------------------------------------------
@@ -633,7 +635,7 @@ img {
 .pagination .active .page-link {
     background: var(--color-primary);
     border-color: var(--color-primary);
-    color: #fff;
+    color: #FFFFFF;
 }
 
 /* ----------------------------------------------------------

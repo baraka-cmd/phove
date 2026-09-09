@@ -1,5 +1,5 @@
 {{-- ============================================ --}}
-{{-- COMPOSANT CARTE ARTICLE RÉUTILISABLE --}}
+{{-- COMPOSANT CARTE ARTICLE RÉUTILISABLE — PHOVE --}}
 {{-- Utilisé dans : liste actualités, page d'accueil --}}
 {{-- ============================================ --}}
 

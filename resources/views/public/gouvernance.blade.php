@@ -2,7 +2,7 @@
 
 @section('title', 'Gouvernance')
 
-@section('meta_description', 'Découvrez la structure de gouvernance d\'AHD-RDC : Assemblée Générale, Conseil d\'Administration, Direction Exécutive et Commission de Contrôle.')
+@section('meta_description', 'Découvrez la structure de gouvernance de PHOVE : Assemblée Générale, Conseil d\'Administration, Direction Générale, Commission de Contrôle, Comité de Suivi et Comité de Gestion.')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
@@ -34,17 +34,18 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 1 : INTRODUCTION — Articles 22-23 des Statuts --}}
+    {{-- SECTION 1 : INTRODUCTION — Article 10 des Statuts --}}
     {{-- ============================================ --}}
     <section class="page-section page-section-white">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Notre organisation</span>
-                <h2 class="section-title">Une structure à quatre organes</h2>
+                <h2 class="section-title">Une structure à six organes</h2>
                 <p class="section-description">
-                    Conformément à <strong>l'article 22 de nos statuts</strong>, AHD-RDC est 
-                    composée de quatre organes distincts qui assurent une gouvernance 
-                    démocratique, transparente et efficace.
+                    Conformément à <strong>l'article 10 des statuts</strong>, PHOVE est 
+                    constituée des organes suivants : l'Assemblée Générale (AG), le Conseil 
+                    d'Administration (CA), la Commission de Contrôle, le Comité de Suivi, 
+                    le Comité de Gestion, les Stations, les Bases et les Antennes.
                 </p>
             </div>
 
@@ -55,7 +56,7 @@
                         <i class="fas fa-users-cog"></i>
                     </div>
                     <h3>Assemblée Générale</h3>
-                    <p>Organe suprême d'orientation et de décision</p>
+                    <p>Organe suprême qui prend les décisions</p>
                     <a href="#assemblee-generale" class="organ-preview-link">
                         En savoir plus <i class="fas fa-arrow-down"></i>
                     </a>
@@ -67,32 +68,56 @@
                         <i class="fas fa-user-tie"></i>
                     </div>
                     <h3>Conseil d'Administration</h3>
-                    <p>Organe de pilotage et de suivi</p>
+                    <p>Organe qui exécute les décisions de l'AG</p>
                     <a href="#conseil-administration" class="organ-preview-link">
                         En savoir plus <i class="fas fa-arrow-down"></i>
                     </a>
                 </div>
 
-                {{-- Organe 3 : DE --}}
-                <div class="organ-preview-card">
-                    <div class="organ-preview-icon">
-                        <i class="fas fa-tasks"></i>
-                    </div>
-                    <h3>Direction Exécutive</h3>
-                    <p>Organe d'exécution et de gestion quotidienne</p>
-                    <a href="#direction-executive" class="organ-preview-link">
-                        En savoir plus <i class="fas fa-arrow-down"></i>
-                    </a>
-                </div>
-
-                {{-- Organe 4 : CC --}}
+                {{-- Organe 3 : CC --}}
                 <div class="organ-preview-card">
                     <div class="organ-preview-icon">
                         <i class="fas fa-search-dollar"></i>
                     </div>
                     <h3>Commission de Contrôle</h3>
-                    <p>Organe de vérification et de conformité</p>
+                    <p>Organe qui supervise les activités sur terrain</p>
                     <a href="#commission-controle" class="organ-preview-link">
+                        En savoir plus <i class="fas fa-arrow-down"></i>
+                    </a>
+                </div>
+
+                {{-- Organe 4 : CS --}}
+                <div class="organ-preview-card">
+                    <div class="organ-preview-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3>Comité de Suivi</h3>
+                    <p>Travaille en collaboration avec la Commission de Contrôle</p>
+                    <a href="#comite-suivi" class="organ-preview-link">
+                        En savoir plus <i class="fas fa-arrow-down"></i>
+                    </a>
+                </div>
+
+                {{-- Organe 5 : CG --}}
+                <div class="organ-preview-card">
+                    <div class="organ-preview-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3>Comité de Gestion</h3>
+                    <p>Travaille sous la responsabilité du Directeur Général</p>
+                    <a href="#comite-gestion" class="organ-preview-link">
+                        En savoir plus <i class="fas fa-arrow-down"></i>
+                    </a>
+                </div>
+
+                {{-- Organe 6 : Structures territoriales --}}
+                <div class="organ-preview-card">
+                    <div class="organ-preview-icon">
+                        <i class="fas fa-globe-africa"></i>
+                    </div>
+                    <h3>Stations, Bases & Antennes</h3>
+                    <p>Exécutent les activités dans les pays, territoires et communes</p>
+                    <a href="#structures-territoriales" class="organ-preview-link">
                         En savoir plus <i class="fas fa-arrow-down"></i>
                     </a>
                 </div>
@@ -101,238 +126,152 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 2 : ASSEMBLÉE GÉNÉRALE — Articles 23-25 --}}
+    {{-- SECTION 2 : ASSEMBLÉE GÉNÉRALE — Articles 11-13 --}}
     {{-- ============================================ --}}
     <section class="page-section page-section-light" id="assemblee-generale">
         <div class="container">
             <div class="content-grid">
                 <div class="content-block">
                     <span class="section-subtitle">Organe suprême</span>
-                    <h2 class="section-title text-left">Assemblée Générale</h2>
+                    <h2 class="section-title text-left">Assemblée Générale (AG)</h2>
 
                     <div class="quote-block">
                         <p>
-                            L'Assemblée Générale est l'organe suprême d'orientation et de décision 
-                            de l'organisation. Elle est composée de tous les membres effectifs.
+                            L'Assemblée Générale est l'organe suprême de l'ONG qui prend les décisions.
                         </p>
                     </div>
 
                     <p class="content-block-text">
-                        Conformément à <strong>l'article 23 des statuts</strong>, l'Assemblée 
-                        Générale (AG) est dirigée par des personnes physiques choisies lors d'une 
-                        session ordinaire. Elle incarne la souveraineté de l'organisation.
+                        Conformément à <strong>l'article 11 des statuts</strong>, l'AG est 
+                        l'organe suprême de PHOVE. Elle est composée de tous les membres 
+                        effectifs (fondateurs et adhérents) qui ont une voix délibérative. 
+                        Les membres d'honneur et sympathisants ont une voix consultative.
                     </p>
 
                     <h4 class="content-block-title">
-                        <i class="fas fa-list-ul"></i> Attributions (Article 24)
+                        <i class="fas fa-list-ul"></i> Fonctionnement (Articles 12-13)
                     </h4>
                     <ul class="check-list">
                         <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Adopter et amender les statuts et le Règlement d'Ordre Intérieur</span>
+                            <i class="fas fa-user-tie"></i>
+                            <span><strong>Président de l'AG</strong> : voté par l'assemblée, mandat de 2 ans renouvelable deux fois</span>
                         </li>
                         <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Fixer le programme d'activités annuelles</span>
+                            <i class="fas fa-user"></i>
+                            <span><strong>Secrétaire Général</strong> : assure le secrétariat de l'AG</span>
                         </li>
                         <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Approuver le budget et le rapport d'activités présentés par la Direction Exécutive</span>
+                            <i class="fas fa-coins"></i>
+                            <span><strong>Trésorier</strong> : gère les finances de l'organisation</span>
                         </li>
                         <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Donner un mandat au Conseil d'Administration et recevoir de lui le rapport</span>
+                            <i class="fas fa-users"></i>
+                            <span><strong>Trois Conseillers</strong> : assistent le Président</span>
                         </li>
                     </ul>
 
                     <h4 class="content-block-title">
-                        <i class="fas fa-calendar-alt"></i> Fonctionnement (Article 25)
+                        <i class="fas fa-calendar-alt"></i> Sessions
                     </h4>
                     <ul class="check-list">
                         <li>
                             <i class="fas fa-calendar-check"></i>
-                            <span>Session <strong>ordinaire</strong> : chaque année au mois de janvier</span>
+                            <span>Le Conseil d'Administration prépare les assemblées générales <strong>une fois par an</strong> (Article 40)</span>
                         </li>
                         <li>
                             <i class="fas fa-calendar-plus"></i>
-                            <span>Session <strong>extraordinaire</strong> : chaque fois que l'urgence s'impose</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-users"></i>
-                            <span><strong>Quorum</strong> : majorité simple des membres effectifs</span>
+                            <span>Session <strong>extraordinaire</strong> : convoquée pour la révision des statuts (2/3 de l'AG)</span>
                         </li>
                         <li>
                             <i class="fas fa-vote-yea"></i>
-                            <span><strong>Décisions</strong> : prises à la majorité des 2/3 des membres présents</span>
+                            <span><strong>Décisions</strong> : prises à la majorité des 2/3 (Articles 77, 79, 81)</span>
                         </li>
                     </ul>
                 </div>
                 <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/logo-ahd.png') }}" 
-                         alt="Assemblée Générale AHD-RDC" 
-                         class="content-image">
+                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                         alt="Assemblée Générale PHOVE" 
+                         class="content-image"
+                         onerror="this.src='https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600'">
                 </div>
             </div>
         </div>
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 3 : CONSEIL D'ADMINISTRATION — Articles 26-27 --}}
+    {{-- SECTION 3 : CONSEIL D'ADMINISTRATION — DYNAMIQUE --}}
     {{-- ============================================ --}}
     <section class="page-section page-section-white" id="conseil-administration">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Organe de pilotage</span>
-                <h2 class="section-title">Conseil d'Administration</h2>
-                <p class="section-description">
-                    Le Conseil d'Administration est l'organe de pilotage de l'association. 
-                    Il est composé de <strong>7 membres</strong> élus par l'Assemblée Générale 
-                    pour un mandat de <strong>3 ans renouvelable une fois</strong> (Articles 26-27).
-                </p>
-            </div>
-
-            {{-- Membres actuels du CA — Source : PV d'élection du 7 janvier 2017 --}}
-            <div class="team-grid">
-                {{-- Membre 1 --}}
-                <div class="team-card">
-                    <div class="team-avatar">
-                        <span>MD</span>
-                    </div>
-                    <div class="team-info">
-                        <h4 class="team-name">Judith MAJINA DUNIA</h4>
-                        <span class="team-role">Présidente du Conseil d'Administration</span>
-                        <span class="team-contact">
-                            <i class="fas fa-phone-alt"></i> +243 972 059 604
-                        </span>
-                    </div>
-                </div>
-
-                {{-- Membre 2 --}}
-                <div class="team-card">
-                    <div class="team-avatar">
-                        <span>CM</span>
-                    </div>
-                    <div class="team-info">
-                        <h4 class="team-name">CHRISTIAN MIRINDI</h4>
-                        <span class="team-role">Vice-Président du Conseil d'Administration</span>
-                        <span class="team-contact">
-                            <i class="fas fa-phone-alt"></i> +243 999 210 576
-                        </span>
-                    </div>
-                </div>
-
-                {{-- Membre 3 --}}
-                <div class="team-card">
-                    <div class="team-avatar">
-                        <span>BB</span>
-                    </div>
-                    <div class="team-info">
-                        <h4 class="team-name">BISIMWA BASHONGA Riphin</h4>
-                        <span class="team-role">Membre du Conseil d'Administration</span>
-                        <span class="team-contact">
-                            <i class="fas fa-phone-alt"></i> +243 973 307 807
-                        </span>
-                    </div>
-                </div>
-
-                {{-- Membre 4 --}}
-                <div class="team-card">
-                    <div class="team-avatar">
-                        <span>OM</span>
-                    </div>
-                    <div class="team-info">
-                        <h4 class="team-name">OLEMBE MUSANGI Grace</h4>
-                        <span class="team-role">Membre du Conseil d'Administration</span>
-                        <span class="team-contact">
-                            <i class="fas fa-phone-alt"></i> +243 971 346 492
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content-block mt-5">
-                <h4 class="content-block-title">
-                    <i class="fas fa-list-ul"></i> Attributions du Conseil d'Administration
-                </h4>
-                <ul class="check-list">
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span>Veiller au bon déroulement de l'ensemble des activités de l'association</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span>Exploiter et analyser le rapport de la Direction Exécutive</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span>Donner des orientations à la Direction Exécutive</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span>Siéger une fois tous les 3 mois sur convocation du Président</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    {{-- ============================================ --}}
-    {{-- SECTION 4 : DIRECTION EXÉCUTIVE — Articles 28-31 --}}
-    {{-- ============================================ --}}
-    <section class="page-section page-section-light" id="direction-executive">
-        <div class="container">
-            <div class="section-header">
                 <span class="section-subtitle">Organe d'exécution</span>
-                <h2 class="section-title">Direction Exécutive</h2>
+                <h2 class="section-title">Conseil d'Administration (CA)</h2>
                 <p class="section-description">
-                    La Direction Exécutive est l'organe d'exécution de toutes les décisions 
-                    prises par le Conseil d'Administration. Elle gère quotidiennement 
-                    l'association et engage celle-ci dans tous les contacts avec les 
-                    partenaires locaux et internationaux (Articles 28-31).
+                    Conformément à <strong>l'article 11b des statuts</strong>, le Conseil 
+                    d'Administration est l'organe qui <strong>exécute les décisions prises 
+                    par l'Assemblée Générale</strong>. Il assume l'administration de l'organisation.
                 </p>
             </div>
 
-            {{-- Coordonnateur National — Source : PV de nomination du 7 janvier 2017 --}}
-            <div class="team-grid team-grid-single">
-                <div class="team-card team-card-featured">
-                    <div class="team-avatar team-avatar-featured">
-                        <span>AD</span>
+            {{-- Membres dynamiques du CA --}}
+            @if($membresCA->count() > 0)
+            <div class="team-grid">
+                @foreach($membresCA as $organe)
+                <div class="team-card">
+                    <div class="team-avatar">
+                        @if($organe->membre && $organe->membre->photo)
+                            <img src="{{ asset('storage/' . $organe->membre->photo) }}" alt="{{ $organe->membre->nomComplet() }}" loading="lazy">
+                        @else
+                            <span>{{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}</span>
+                        @endif
                     </div>
                     <div class="team-info">
-                        <h4 class="team-name">Dr AKSANTI DUNIA Steeng</h4>
-                        <span class="team-role">Coordonnateur National</span>
+                        <h4 class="team-name">{{ $organe->membre ? $organe->membre->nomComplet() : '—' }}</h4>
+                        <span class="team-role">{{ $organe->poste }}</span>
+                        @if($organe->membre && $organe->membre->telephone)
                         <span class="team-contact">
-                            <i class="fas fa-phone-alt"></i> +243 994 656 250
+                            <i class="fas fa-phone-alt"></i> {{ $organe->membre->telephone }}
                         </span>
-                        <p class="team-bio">
-                            Initiateur de l'organisation, le Coordonnateur National est le 
-                            gestionnaire et mandataire légal qui représente l'association 
-                            vis-à-vis des tiers de droit public ou de droit privé.
-                        </p>
+                        @endif
                     </div>
                 </div>
+                @endforeach
             </div>
+            @else
+            <div style="text-align: center; padding: 30px; color: #94A3B8;">
+                <i class="fas fa-user-tie" style="font-size: 2rem; display: block; margin-bottom: 10px; opacity: 0.4;"></i>
+                <p style="font-size: 13px;">Aucun membre au Conseil d'Administration pour le moment.</p>
+            </div>
+            @endif
 
             <div class="content-block mt-5">
                 <h4 class="content-block-title">
-                    <i class="fas fa-list-ul"></i> Composition et attributions
+                    <i class="fas fa-list-ul"></i> Attributions du Directeur Général (Article 18)
                 </h4>
                 <ul class="check-list">
                     <li>
                         <i class="fas fa-check-circle"></i>
-                        <span>La Direction Exécutive est composée d'un <strong>Directeur Exécutif</strong>, d'un <strong>Coordonnateur des programmes</strong> et d'un <strong>Responsable de l'Administration et Finances</strong></span>
+                        <span>Représente PHOVE auprès des tiers et partout</span>
                     </li>
                     <li>
                         <i class="fas fa-check-circle"></i>
-                        <span>Elle exécute les décisions du Conseil d'Administration conformément aux programmes d'activités</span>
+                        <span>Veille sur la gestion de l'économie et étudie les voies et moyens de régénérer les ressources</span>
                     </li>
                     <li>
                         <i class="fas fa-check-circle"></i>
-                        <span>Elle recrute, engage ou révoque la main d'œuvre nécessaire après débat et délibération avec le CA</span>
+                        <span>Veille sur le bon fonctionnement du programme partout dans le monde et fixe les salaires de base</span>
                     </li>
                     <li>
                         <i class="fas fa-check-circle"></i>
-                        <span>Le Directeur Exécutif peut déléguer une partie de son pouvoir de gestion à un membre de l'association</span>
+                        <span>Dresse un rapport trimestriel et annuel à l'intention du CA et de l'AG</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Engage et révoque les agents en collaboration avec le CA et l'AG</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span><strong>Mandat</strong> : 6 ans renouvelable</span>
                     </li>
                 </ul>
             </div>
@@ -340,96 +279,186 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 5 : COMMISSION DE CONTRÔLE — Article 32 --}}
+    {{-- SECTION 4 : COMMISSION DE CONTRÔLE — DYNAMIQUE --}}
     {{-- ============================================ --}}
-    <section class="page-section page-section-white" id="commission-controle">
+    <section class="page-section page-section-light" id="commission-controle">
         <div class="container">
             <div class="section-header">
-                <span class="section-subtitle">Organe de vérification</span>
+                <span class="section-subtitle">Organe de supervision</span>
                 <h2 class="section-title">Commission de Contrôle</h2>
                 <p class="section-description">
-                    La Commission de Contrôle est constituée de trois commissaires aux comptes 
-                    élus en Assemblée Générale ordinaire pour un mandat de <strong>3 ans 
-                    renouvelable une fois</strong>. Elle fait respecter les recommandations 
-                    de l'AG (Article 32).
+                    Conformément à <strong>l'article 11c des statuts</strong>, le Comité de 
+                    Contrôle est l'organe qui <strong>supervise les activités sur terrain</strong> 
+                    de l'ONG et fait rapport à l'Assemblée Générale.
                 </p>
             </div>
 
-            {{-- Membres actuels de la CC — Source : PV d'élection du 7 janvier 2017 --}}
-            <div class="team-grid team-grid-cc">
-                {{-- Membre 1 --}}
+            {{-- Membres dynamiques de la CC --}}
+            @if($membresCC->count() > 0)
+            <div class="team-grid">
+                @foreach($membresCC as $organe)
                 <div class="team-card">
                     <div class="team-avatar">
-                        <span>NB</span>
+                        @if($organe->membre && $organe->membre->photo)
+                            <img src="{{ asset('storage/' . $organe->membre->photo) }}" alt="{{ $organe->membre->nomComplet() }}" loading="lazy">
+                        @else
+                            <span>{{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}</span>
+                        @endif
                     </div>
                     <div class="team-info">
-                        <h4 class="team-name">NATHALIE BISIMWA Julienne</h4>
-                        <span class="team-role">Présidente de la Commission de Contrôle</span>
-                        <span class="team-contact">
-                            <i class="fas fa-phone-alt"></i> +243 970 138 592
-                        </span>
+                        <h4 class="team-name">{{ $organe->membre ? $organe->membre->nomComplet() : '—' }}</h4>
+                        <span class="team-role">{{ $organe->poste }}</span>
                     </div>
                 </div>
-
-                {{-- Membre 2 --}}
-                <div class="team-card">
-                    <div class="team-avatar">
-                        <span>MB</span>
-                    </div>
-                    <div class="team-info">
-                        <h4 class="team-name">MUGARUKA BASHANGWA Léon</h4>
-                        <span class="team-role">Secrétaire de la Commission de Contrôle</span>
-                        <span class="team-contact">
-                            <i class="fas fa-phone-alt"></i> +243 975 105 996
-                        </span>
-                    </div>
-                </div>
+                @endforeach
             </div>
+            @endif
 
             <div class="content-block mt-5">
                 <h4 class="content-block-title">
-                    <i class="fas fa-list-ul"></i> Attributions
+                    <i class="fas fa-list-ul"></i> Attributions (Article 35)
                 </h4>
                 <ul class="check-list">
                     <li>
                         <i class="fas fa-check-circle"></i>
-                        <span>Faire respecter les recommandations de l'Assemblée Générale</span>
+                        <span>Une Commission de Contrôle est constituée <strong>à la fin de chaque trimestre</strong></span>
                     </li>
                     <li>
                         <i class="fas fa-check-circle"></i>
-                        <span>Faire rapport à l'Assemblée Générale avec copie au Conseil d'Administration</span>
+                        <span>Elle <strong>vérifie les opérations passées</strong> et surtout celles qui traitent des finances</span>
                     </li>
                     <li>
                         <i class="fas fa-check-circle"></i>
-                        <span>Veiller à la conformité de la gestion financière et administrative</span>
+                        <span>Elle travaille en collaboration avec le Comité de Suivi (Article 38)</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <span>Elle donne rapport au Directeur Général et Coordonnateur du programme</span>
                     </li>
                 </ul>
             </div>
         </div>
     </section>
 
-   {{-- CTA --}}
-<section class="cta-section-page">
-    <div class="container">
-        <div class="cta-content-page">
-            <h2 class="cta-title-page">
-                Une <span class="highlight-page">gouvernance</span> transparente
-            </h2>
-            <p class="cta-text-page">
-                La transparence et la redevabilité sont au cœur de notre fonctionnement. 
-                Consultez nos documents officiels et nos rapports pour mieux comprendre notre action.
-            </p>
-            <div class="cta-buttons-page">
-                <a href="{{ url('/transparence/documents-officiels') }}" class="btn-page-don">
-                    <i class="fas fa-file-alt"></i> Documents officiels
-                </a>
-                <a href="{{ url('/organigramme') }}" class="btn-page-outline">
-                    <i class="fas fa-project-diagram"></i> Voir l'organigramme
-                </a>
+    {{-- ============================================ --}}
+    {{-- SECTION 5 : COMITÉ DE SUIVI — Article 38 --}}
+    {{-- ============================================ --}}
+    <section class="page-section page-section-white" id="comite-suivi">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Organe d'accompagnement</span>
+                <h2 class="section-title">Comité de Suivi</h2>
+                <p class="section-description">
+                    Conformément à <strong>l'article 38 des statuts</strong>, les Comités de 
+                    Suivi travaillent en collaboration avec la Commission de Contrôle et tous 
+                    donnent rapport au Directeur Général et Coordonnateur du programme.
+                </p>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    {{-- ============================================ --}}
+    {{-- SECTION 6 : COMITÉ DE GESTION — Article 39 --}}
+    {{-- ============================================ --}}
+    <section class="page-section page-section-light" id="comite-gestion">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Organe de gestion</span>
+                <h2 class="section-title">Comité de Gestion</h2>
+                <p class="section-description">
+                    Conformément à <strong>l'article 39 des statuts</strong>, le Conseil 
+                    d'Administration travaille en collaboration avec le Conseil de Gestion 
+                    sous la responsabilité du Directeur Général.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    {{-- ============================================ --}}
+    {{-- SECTION 7 : STRUCTURES TERRITORIALES — DYNAMIQUE --}}
+    {{-- ============================================ --}}
+    <section class="page-section page-section-white" id="structures-territoriales">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Notre présence</span>
+                <h2 class="section-title">Stations, Bases & Antennes</h2>
+                <p class="section-description">
+                    Conformément aux <strong>articles 2c et 11d-g des statuts</strong>, PHOVE 
+                    déploie sa structure sur trois niveaux territoriaux.
+                </p>
+            </div>
+
+            @if($structures->count() > 0)
+            <div class="cards-grid">
+                @foreach($structures->where('type', 'station') as $station)
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-flag"></i>
+                    </div>
+                    <h3 class="info-card-title">{{ $station->nom }}</h3>
+                    <p class="info-card-text">
+                        Station — {{ $station->pays ?? 'Pays non spécifié' }}
+                    </p>
+                </div>
+                @endforeach
+
+                @foreach($structures->where('type', 'base') as $base)
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3 class="info-card-title">{{ $base->nom }}</h3>
+                    <p class="info-card-text">
+                        Base — {{ $base->province ?? 'Province non spécifiée' }}
+                    </p>
+                </div>
+                @endforeach
+
+                @foreach($structures->where('type', 'antenne') as $antenne)
+                <div class="info-card">
+                    <div class="info-card-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3 class="info-card-title">{{ $antenne->nom }}</h3>
+                    <p class="info-card-text">
+                        Antenne — {{ $antenne->territoire ?? 'Territoire non spécifié' }}
+                    </p>
+                </div>
+                @endforeach
+            </div>
+            @else
+            <div style="text-align: center; padding: 30px; color: #94A3B8;">
+                <i class="fas fa-sitemap" style="font-size: 2rem; display: block; margin-bottom: 10px; opacity: 0.4;"></i>
+                <p style="font-size: 13px;">Aucune structure territoriale pour le moment.</p>
+            </div>
+            @endif
+        </div>
+    </section>
+
+    {{-- ============================================ --}}
+    {{-- CTA --}}
+    {{-- ============================================ --}}
+    <section class="cta-section-page">
+        <div class="container">
+            <div class="cta-content-page">
+                <h2 class="cta-title-page">
+                    Une <span class="highlight-page">gouvernance</span> transparente
+                </h2>
+                <p class="cta-text-page">
+                    La transparence et la redevabilité sont au cœur de notre fonctionnement. 
+                    Consultez nos documents officiels et nos rapports pour mieux comprendre notre action.
+                </p>
+                <div class="cta-buttons-page">
+                    <a href="{{ url('/transparence/documents-officiels') }}" class="btn-page-don">
+                        <i class="fas fa-file-alt"></i> Documents officiels
+                    </a>
+                    <a href="{{ url('/organigramme') }}" class="btn-page-outline">
+                        <i class="fas fa-project-diagram"></i> Voir l'organigramme
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
 
 @endsection
 

@@ -8,11 +8,15 @@ class Membre extends Model
 {
     /**
      * La table associée au modèle.
+     *
+     * @var string
      */
     protected $table = 'membres';
 
     /**
      * Les attributs modifiables en masse.
+     *
+     * @var array<int, string>
      */
     protected $fillable = [
         'user_id',
@@ -35,6 +39,8 @@ class Membre extends Model
 
     /**
      * Cast des attributs.
+     *
+     * @return array<string, string>
      */
     protected function casts(): array
     {
@@ -54,6 +60,8 @@ class Membre extends Model
 
     /**
      * Un membre peut être lié à un compte utilisateur.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
@@ -62,6 +70,8 @@ class Membre extends Model
 
     /**
      * Un membre peut occuper plusieurs postes dans les organes (historique).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function organes()
     {
@@ -70,10 +80,83 @@ class Membre extends Model
 
     /**
      * Un membre a plusieurs cotisations (une par mois).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function cotisations()
     {
         return $this->hasMany(Cotisation::class);
+    }
+
+    /**
+     * Le dossier personnel du membre (12 pièces exigées).
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function dossierPersonnel()
+    {
+        return $this->hasOne(DossierPersonnel::class, 'membre_id');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPES
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Scope : uniquement les membres actifs.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActif($query)
+    {
+        return $query->where('statut', 'actif');
+    }
+
+    /**
+     * Scope : membres fondateurs.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFondateurs($query)
+    {
+        return $query->where('categorie', 'fondateur');
+    }
+
+    /**
+     * Scope : membres adhérents.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeAdherents($query)
+    {
+        return $query->where('categorie', 'adherent');
+    }
+
+    /**
+     * Scope : membres d'honneur.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeHonneur($query)
+    {
+        return $query->where('categorie', 'honneur');
+    }
+
+    /**
+     * Scope : membres sympathisants.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSympathisants($query)
+    {
+        return $query->where('categorie', 'sympathisant');
     }
 
     /*
@@ -83,15 +166,21 @@ class Membre extends Model
     */
 
     /**
-     * Récupère le nom complet du membre (format congolais).
+     * Récupère le nom complet du membre (format congolais : Nom Post-nom Prénom).
+     *
+     * @return string
      */
     public function nomComplet(): string
     {
-        return $this->nom . ' ' . $this->post_nom . ' ' . $this->prenom;
+        $parties = array_filter([$this->nom, $this->post_nom, $this->prenom]);
+        return implode(' ', $parties);
     }
 
     /**
      * Vérifie si le membre est à jour de ses cotisations pour un mois donné.
+     *
+     * @param string $mois
+     * @return bool
      */
     public function cotisationPayeePour(string $mois): bool
     {
@@ -100,11 +189,95 @@ class Membre extends Model
 
     /**
      * Calcule le total des cotisations payées pour l'année en cours.
+     *
+     * @param int $annee
+     * @return float
      */
     public function totalCotisationsAnnee(int $annee): float
     {
         return $this->cotisations()
             ->where('mois', 'like', $annee . '-%')
             ->sum('montant');
+    }
+
+    /**
+     * Libellé de la catégorie du membre en français.
+     *
+     * @return string
+     */
+    public function categorieLibelle(): string
+    {
+        return match($this->categorie) {
+            'fondateur' => 'Membre fondateur',
+            'adherent' => 'Membre adhérent',
+            'honneur' => 'Membre d\'honneur',
+            'sympathisant' => 'Membre sympathisant',
+            default => $this->categorie ?? 'Non défini',
+        };
+    }
+
+    /**
+     * Libellé du statut du membre en français.
+     *
+     * @return string
+     */
+    public function statutLibelle(): string
+    {
+        return match($this->statut) {
+            'actif' => 'Actif',
+            'inactif' => 'Inactif',
+            'suspendu' => 'Suspendu',
+            'exclu' => 'Exclu',
+            'decede' => 'Décédé',
+            'en_attente' => 'En attente',
+            default => $this->statut ?? 'Non défini',
+        };
+    }
+
+    /**
+     * Vérifie si le membre a un dossier personnel.
+     *
+     * @return bool
+     */
+    public function aDossierPersonnel(): bool
+    {
+        return $this->dossierPersonnel()->exists();
+    }
+
+    /**
+     * Vérifie si le membre est à jour de sa cotisation mensuelle.
+     *
+     * @return bool
+     */
+    public function cotisationAJour(): bool
+    {
+        $moisCourant = now()->format('Y-m');
+        return $this->cotisationPayeePour($moisCourant);
+    }
+
+    /**
+     * Retourne les initiales du membre pour les avatars.
+     *
+     * @return string
+     */
+    public function initiales(): string
+    {
+        $initiales = '';
+        if ($this->prenom) $initiales .= strtoupper(mb_substr($this->prenom, 0, 1));
+        if ($this->nom) $initiales .= strtoupper(mb_substr($this->nom, 0, 1));
+        return $initiales ?: '?';
+    }
+
+    /**
+     * Retourne l'URL de la photo du membre ou null.
+     *
+     * @return string|null
+     */
+    public function urlPhoto(): ?string
+    {
+        if ($this->photo) {
+            return asset('storage/' . $this->photo);
+        }
+        return null;
     }
 }

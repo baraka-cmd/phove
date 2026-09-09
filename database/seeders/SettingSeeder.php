@@ -8,7 +8,11 @@ use App\Models\Setting;
 class SettingSeeder extends Seeder
 {
     /**
-     * Paramètres par défaut de l'application.
+     * Paramètres par défaut de l'application PHOVE.
+     *
+     * PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies
+     * Siège : Rue Georges BUSHU N°092, Q. Katoyi, Commune de Karisimbi, Goma, Nord-Kivu, RD Congo
+     * Devise : « Compassion avec la population »
      */
     protected array $defaults = [
         // ============================================
@@ -16,48 +20,57 @@ class SettingSeeder extends Seeder
         // ============================================
         [
             'key' => 'site_name',
-            'value' => 'AHD-RDC',
+            'value' => 'PHOVE',
             'type' => 'text',
             'group' => 'identite',
             'label' => 'Nom du site',
-            'description' => 'Le nom officiel de l\'organisation affiché dans le header et le footer.',
+            'description' => 'Le sigle officiel de l\'organisation affiché dans le header et le footer.',
             'ordre' => 1,
         ],
         [
-            'key' => 'site_slogan',
-            'value' => 'Être ensemble pour le bien de la communauté',
+            'key' => 'site_full_name',
+            'value' => 'Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies',
             'type' => 'text',
             'group' => 'identite',
-            'label' => 'Slogan',
-            'description' => 'Le slogan de l\'organisation.',
+            'label' => 'Nom complet',
+            'description' => 'La dénomination complète officielle de l\'ONG.',
             'ordre' => 2,
         ],
         [
-            'key' => 'site_description',
-            'value' => 'Action Humanitaire pour le Développement en République Démocratique du Congo (AHD-RDC) est une organisation non gouvernementale engagée dans le développement communautaire, la protection, la cohésion sociale et la promotion de la paix.',
-            'type' => 'textarea',
+            'key' => 'site_slogan',
+            'value' => 'Compassion avec la population',
+            'type' => 'text',
             'group' => 'identite',
-            'label' => 'Description du site',
-            'description' => 'Une courte description de l\'organisation pour le SEO et les partages.',
+            'label' => 'Devise / Slogan',
+            'description' => 'La devise officielle de l\'organisation.',
             'ordre' => 3,
         ],
         [
-            'key' => 'site_logo',
-            'value' => null,
-            'type' => 'image',
+            'key' => 'site_description',
+            'value' => 'PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies) est une organisation non gouvernementale apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma. Sa mission est de venir en aide aux personnes vulnérables : orphelins, veuves, personnes de 3ème âge et personnes démunies, en leur offrant un accompagnement spirituel, social, éducatif, sanitaire et économique.',
+            'type' => 'textarea',
             'group' => 'identite',
-            'label' => 'Logo du site',
-            'description' => 'Logo principal affiché dans le header. Format recommandé : PNG, 200×60 px.',
+            'label' => 'Description du site',
+            'description' => 'Une description complète de l\'organisation pour le SEO et les partages.',
             'ordre' => 4,
         ],
         [
+            'key' => 'site_logo',
+            'value' => 'logo-phove.png',
+            'type' => 'image',
+            'group' => 'identite',
+            'label' => 'Logo du site',
+            'description' => 'Logo officiel PHOVE. Format recommandé : PNG, fond transparent.',
+            'ordre' => 5,
+        ],
+        [
             'key' => 'site_favicon',
-            'value' => null,
+            'value' => 'favicon-phove.png',
             'type' => 'image',
             'group' => 'identite',
             'label' => 'Favicon',
             'description' => 'Icône du site affichée dans l\'onglet du navigateur. Format : PNG ou ICO, 32×32 px.',
-            'ordre' => 5,
+            'ordre' => 6,
         ],
 
         // ============================================
@@ -65,7 +78,7 @@ class SettingSeeder extends Seeder
         // ============================================
         [
             'key' => 'contact_adresse',
-            'value' => 'Minova, Territoire de Kalehe, Province du Sud-Kivu, République Démocratique du Congo',
+            'value' => 'Rue Georges BUSHU N°092, Quartier Katoyi, Commune de Karisimbi, Goma, Nord-Kivu, République Démocratique du Congo',
             'type' => 'text',
             'group' => 'contact',
             'label' => 'Adresse',
@@ -73,22 +86,58 @@ class SettingSeeder extends Seeder
             'ordre' => 1,
         ],
         [
-            'key' => 'contact_telephone',
-            'value' => '+243 994 656 250',
-            'type' => 'phone',
+            'key' => 'contact_repere',
+            'value' => 'UACO / Maranata, entrée président',
+            'type' => 'text',
             'group' => 'contact',
-            'label' => 'Téléphone',
-            'description' => 'Numéro de téléphone principal.',
+            'label' => 'Repère géographique',
+            'description' => 'Point de repère pour faciliter la localisation du siège.',
             'ordre' => 2,
         ],
         [
+            'key' => 'contact_telephone_1',
+            'value' => '+243 970 872 910',
+            'type' => 'phone',
+            'group' => 'contact',
+            'label' => 'Téléphone principal 1',
+            'description' => 'Numéro de téléphone principal de l\'organisation.',
+            'ordre' => 3,
+        ],
+        [
+            'key' => 'contact_telephone_2',
+            'value' => '+243 819 009 131',
+            'type' => 'phone',
+            'group' => 'contact',
+            'label' => 'Téléphone principal 2',
+            'description' => 'Numéro de téléphone secondaire.',
+            'ordre' => 4,
+        ],
+        [
+            'key' => 'contact_telephone_3',
+            'value' => '+243 893 844 776',
+            'type' => 'phone',
+            'group' => 'contact',
+            'label' => 'Téléphone secondaire 1',
+            'description' => 'Numéro de téléphone supplémentaire.',
+            'ordre' => 5,
+        ],
+        [
+            'key' => 'contact_telephone_4',
+            'value' => '+243 902 512 262',
+            'type' => 'phone',
+            'group' => 'contact',
+            'label' => 'Téléphone secondaire 2',
+            'description' => 'Numéro de téléphone supplémentaire.',
+            'ordre' => 6,
+        ],
+        [
             'key' => 'contact_email',
-            'value' => 'contact@ahd-rdc.org',
+            'value' => 'phovemonde@gmail.com',
             'type' => 'email',
             'group' => 'contact',
             'label' => 'Email de contact',
-            'description' => 'Adresse email affichée publiquement.',
-            'ordre' => 3,
+            'description' => 'Adresse email officielle affichée publiquement.',
+            'ordre' => 7,
         ],
         [
             'key' => 'contact_bp',
@@ -97,7 +146,7 @@ class SettingSeeder extends Seeder
             'group' => 'contact',
             'label' => 'Boîte Postale',
             'description' => 'Numéro de boîte postale (optionnel).',
-            'ordre' => 4,
+            'ordre' => 8,
         ],
 
         // ============================================
@@ -109,7 +158,7 @@ class SettingSeeder extends Seeder
             'type' => 'url',
             'group' => 'social',
             'label' => 'Facebook',
-            'description' => 'URL de la page Facebook.',
+            'description' => 'URL de la page Facebook officielle.',
             'ordre' => 1,
         ],
         [
@@ -118,7 +167,7 @@ class SettingSeeder extends Seeder
             'type' => 'url',
             'group' => 'social',
             'label' => 'Twitter / X',
-            'description' => 'URL du compte Twitter/X.',
+            'description' => 'URL du compte Twitter/X officiel.',
             'ordre' => 2,
         ],
         [
@@ -127,7 +176,7 @@ class SettingSeeder extends Seeder
             'type' => 'url',
             'group' => 'social',
             'label' => 'LinkedIn',
-            'description' => 'URL de la page LinkedIn.',
+            'description' => 'URL de la page LinkedIn officielle.',
             'ordre' => 3,
         ],
         [
@@ -136,7 +185,7 @@ class SettingSeeder extends Seeder
             'type' => 'url',
             'group' => 'social',
             'label' => 'YouTube',
-            'description' => 'URL de la chaîne YouTube.',
+            'description' => 'URL de la chaîne YouTube officielle.',
             'ordre' => 4,
         ],
         [
@@ -145,16 +194,16 @@ class SettingSeeder extends Seeder
             'type' => 'url',
             'group' => 'social',
             'label' => 'Instagram',
-            'description' => 'URL du compte Instagram.',
+            'description' => 'URL du compte Instagram officiel.',
             'ordre' => 5,
         ],
         [
             'key' => 'social_whatsapp',
-            'value' => '+243 994 656 250',
+            'value' => '+243 970 872 910',
             'type' => 'phone',
             'group' => 'social',
             'label' => 'WhatsApp',
-            'description' => 'Numéro WhatsApp (format international).',
+            'description' => 'Numéro WhatsApp officiel (format international).',
             'ordre' => 6,
         ],
 
@@ -163,7 +212,7 @@ class SettingSeeder extends Seeder
         // ============================================
         [
             'key' => 'page_qui_sommes_nous',
-            'value' => 'Action Humanitaire pour le Développement en République Démocratique du Congo « AHD-RDC » est une organisation non gouvernementale engagée dans le développement communautaire, la protection, la cohésion sociale et la promotion de la paix dans la partie Est de la RD Congo et dans tout le pays en général. Elle a été créée dans la région marquée par des conflits intercommunautaires, les guerres et les crises humanitaires, où elle travaille pour renforcer la résilience communautaire par l\'auto prise en charge communautaire.',
+            'value' => 'PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies) est une organisation non gouvernementale apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma, en République Démocratique du Congo. Fondée par l\'Apôtre Philippe KABOY M. après 40 jours de jeûne et de prière sur la montagne KALAGANE à Bukavu, l\'organisation est née d\'une inspiration divine reçue le 20 avril 2012. Sa mission est de venir en aide aux personnes vulnérables : orphelins, veuves, personnes de 3ème âge et personnes démunies.',
             'type' => 'textarea',
             'group' => 'pages',
             'label' => 'Page "Qui sommes-nous ?"',
@@ -172,7 +221,7 @@ class SettingSeeder extends Seeder
         ],
         [
             'key' => 'page_mission_vision',
-            'value' => 'Notre mission est de contribuer à la résolution des conflits fonciers et au renforcement des mécanismes de consolidation de la paix entre les communautés, au relèvement communautaire et à la promotion des droits de la femme en République Démocratique du Congo. Notre vision est de vivre dans une société pacifiée sans conflits communautaires violents, où règne l\'équilibre social et où les droits des femmes sont respectés.',
+            'value' => 'Notre mission est d\'accomplir la mission de Dieu : « Aime ton prochain comme toi-même » (Romain 13:8). Nous encadrons et accompagnons les orphelins, veuves et personnes démunies dans les domaines spirituel et social tels que : éducation, agriculture, pêche, élevage, menuiserie, maçonnerie, mécanique, coupe et couture, art, esthétique, art culinaire, activités socio-économiques et sanitaires. Notre vision est de construire de bons citoyens qui servent leur pays et le monde entier.',
             'type' => 'textarea',
             'group' => 'pages',
             'label' => 'Page "Mission & Vision"',
@@ -181,7 +230,7 @@ class SettingSeeder extends Seeder
         ],
         [
             'key' => 'page_nos_valeurs',
-            'value' => 'Les valeurs d\'AHD-RDC sont : le professionnalisme, la transparence, la redevabilité, la compassion et la sensibilité au genre.',
+            'value' => 'Les valeurs fondamentales de PHOVE sont : la compassion, l\'amour du prochain, la charité, la solidarité, la foi en Dieu, l\'intégrité, la transparence et le service aux plus démunis. Notre devise est : « Compassion avec la population ».',
             'type' => 'textarea',
             'group' => 'pages',
             'label' => 'Page "Nos valeurs"',
@@ -190,7 +239,7 @@ class SettingSeeder extends Seeder
         ],
         [
             'key' => 'page_mentions_legales',
-            'value' => 'AHD-RDC est une association sans but lucratif de droit congolais créée le 7 janvier 2017 à Minova, Territoire de Kalehe, Province du Sud-Kivu, République Démocratique du Congo. Directeur de publication : Dr AKSANTI DUNIA Steeng. Hébergement : [à compléter].',
+            'value' => 'PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies) est une organisation non gouvernementale apolitique à caractère social, créée le 30 août 2012 à Goma, République Démocratique du Congo. Siège social : Rue Georges BUSHU N°092, Quartier Katoyi, Commune de Karisimbi, Goma, Nord-Kivu, RD Congo. Directeur Général et Coordonnateur : Apôtre Philippe KABOYI MUSAMUGUMA. Email : phovemonde@gmail.com.',
             'type' => 'textarea',
             'group' => 'pages',
             'label' => 'Page "Mentions légales"',
@@ -203,7 +252,7 @@ class SettingSeeder extends Seeder
         // ============================================
         [
             'key' => 'meta_title',
-            'value' => 'AHD-RDC — Action Humanitaire pour le Développement en RD Congo',
+            'value' => 'PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies',
             'type' => 'text',
             'group' => 'seo',
             'label' => 'Meta titre',
@@ -212,7 +261,7 @@ class SettingSeeder extends Seeder
         ],
         [
             'key' => 'meta_description',
-            'value' => 'AHD-RDC est une ONG humanitaire engagée dans le développement communautaire, la protection des femmes et enfants, la consolidation de la paix et la sécurité alimentaire en République Démocratique du Congo.',
+            'value' => 'PHOVE est une ONG humanitaire congolaise qui vient en aide aux orphelins, veuves et personnes démunies : éducation, santé, agriculture, formation professionnelle, assistance sociale et spirituelle en RD Congo.',
             'type' => 'textarea',
             'group' => 'seo',
             'label' => 'Meta description',
@@ -221,7 +270,7 @@ class SettingSeeder extends Seeder
         ],
         [
             'key' => 'meta_keywords',
-            'value' => 'ONG, humanitaire, développement, RDC, Congo, paix, sécurité alimentaire, protection, femmes, enfants',
+            'value' => 'PHOVE, ONG, humanitaire, orphelins, veuves, personnes démunies, RDC, Congo, Goma, Nord-Kivu, aide sociale, agriculture, éducation, santé',
             'type' => 'text',
             'group' => 'seo',
             'label' => 'Mots-clés',
@@ -243,7 +292,7 @@ class SettingSeeder extends Seeder
         ],
         [
             'key' => 'maintenance_message',
-            'value' => 'Notre site est actuellement en maintenance. Nous serons de retour très bientôt. Merci de votre patience.',
+            'value' => 'Notre site est actuellement en maintenance. Nous serons de retour très bientôt. Merci de votre patience. Que Dieu vous bénisse.',
             'type' => 'textarea',
             'group' => 'maintenance',
             'label' => 'Message de maintenance',
@@ -254,6 +303,9 @@ class SettingSeeder extends Seeder
 
     /**
      * Exécuter le seeder.
+     *
+     * Crée ou met à jour tous les paramètres par défaut de PHOVE
+     * dans la table `settings`.
      */
     public function run(): void
     {
@@ -264,6 +316,6 @@ class SettingSeeder extends Seeder
             );
         }
 
-        $this->command->info('Paramètres par défaut créés avec succès (' . count($this->defaults) . ' paramètres).');
+        $this->command->info('Paramètres PHOVE créés avec succès (' . count($this->defaults) . ' paramètres).');
     }
 }

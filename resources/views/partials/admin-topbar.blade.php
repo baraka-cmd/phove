@@ -1,188 +1,287 @@
 {{-- ============================================ --}}
-{{-- TOPBAR ADMINISTRATEUR — AHD-RDC --}}
+{{-- SIDEBAR ADMINISTRATEUR — PHOVE --}}
 {{-- ============================================ --}}
-<header class="admin-topbar" id="adminTopbar">
+<aside class="admin-sidebar" id="adminSidebar">
 
-    {{-- Bouton toggle mobile --}}
-    <button class="topbar-toggle-btn" id="sidebarToggleMobile" title="Menu">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    {{-- Bouton réduire sidebar (desktop) --}}
-    <button class="topbar-toggle-btn" id="sidebarToggle" title="Réduire la barre latérale">
-        <i class="fas fa-indent"></i>
-    </button>
-
-    {{-- Fil d'Ariane --}}
-    <nav class="topbar-breadcrumb" aria-label="Fil d'Ariane">
-        <a href="{{ route('admin.dashboard') }}" class="breadcrumb-home" title="Tableau de bord">
-            <i class="fas fa-home"></i>
-        </a>
-        <i class="fas fa-chevron-right"></i>
-        @if(isset($breadcrumb))
-            @foreach($breadcrumb as $key => $item)
-                @if(is_array($item))
-                    <a href="{{ $item['url'] }}">{{ $item['label'] }}</a>
-                @else
-                    <span>{{ $item }}</span>
-                @endif
-                @if(!$loop->last)
-                    <i class="fas fa-chevron-right"></i>
-                @endif
-            @endforeach
-        @else
-            <span>Tableau de bord</span>
-        @endif
-    </nav>
-
-    {{-- Section droite --}}
-    <div class="topbar-right">
-
-        {{-- Recherche rapide --}}
-        <div class="topbar-search">
-            <button class="topbar-search-btn" id="topbarSearchBtn" title="Rechercher (Ctrl+K)">
-                <i class="fas fa-search"></i>
-            </button>
-            <div class="topbar-search-input-wrapper" id="topbarSearchWrapper">
-                <input type="text" class="topbar-search-input" id="topbarSearchInput" placeholder="Rechercher un projet, un membre, un article...">
-                <button class="topbar-search-close" id="topbarSearchClose" title="Fermer">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        </div>
-
-        {{-- Mode sombre --}}
-        <button class="topbar-darkmode-btn" id="darkModeBtn" title="Mode sombre / Mode clair">
-            <i class="fas fa-moon"></i>
-        </button>
-
-        {{-- Notifications --}}
-        <div class="topbar-notifications">
-            <button class="topbar-notif-btn" id="notifBtn" title="Notifications">
-                <i class="fas fa-bell"></i>
-                <span class="notif-badge">8</span>
-            </button>
-
-            {{-- Dropdown notifications --}}
-            <div class="notif-dropdown" id="notifDropdown">
-                <div class="notif-dropdown-header">
-                    <span class="notif-dropdown-title">Notifications</span>
-                    <a href="#" class="notif-dropdown-mark">Tout marquer comme lu</a>
-                </div>
-                <div class="notif-dropdown-list">
-                    {{-- Notification 1 --}}
-                    <div class="notif-item unread">
-                        <div class="notif-item-icon notif-icon-don">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <div class="notif-item-content">
-                            <p class="notif-item-text"><strong>Nouveau don</strong> de 50 $ reçu de Jean M.</p>
-                            <span class="notif-item-time">Il y a 10 minutes</span>
-                        </div>
-                        <span class="notif-item-dot"></span>
-                    </div>
-
-                    {{-- Notification 2 --}}
-                    <div class="notif-item unread">
-                        <div class="notif-item-icon notif-icon-membre">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <div class="notif-item-content">
-                            <p class="notif-item-text"><strong>Nouvelle adhésion</strong> de Marie K.</p>
-                            <span class="notif-item-time">Il y a 1 heure</span>
-                        </div>
-                        <span class="notif-item-dot"></span>
-                    </div>
-
-                    {{-- Notification 3 --}}
-                    <div class="notif-item">
-                        <div class="notif-item-icon notif-icon-message">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="notif-item-content">
-                            <p class="notif-item-text"><strong>Nouveau message</strong> de DMP-RDC</p>
-                            <span class="notif-item-time">Il y a 3 heures</span>
-                        </div>
-                    </div>
-
-                    {{-- Notification 4 --}}
-                    <div class="notif-item unread">
-                        <div class="notif-item-icon notif-icon-alert">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div class="notif-item-content">
-                            <p class="notif-item-text"><strong>Cotisation en retard</strong> pour 3 membres</p>
-                            <span class="notif-item-time">Il y a 5 heures</span>
-                        </div>
-                        <span class="notif-item-dot"></span>
-                    </div>
-
-                    {{-- Notification 5 --}}
-                    <div class="notif-item">
-                        <div class="notif-item-icon notif-icon-don">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <div class="notif-item-content">
-                            <p class="notif-item-text"><strong>Nouveau don</strong> de 100 $ reçu anonyme</p>
-                            <span class="notif-item-time">Hier</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="notif-dropdown-footer">
-                    <a href="#"><i class="fas fa-arrow-right"></i> Voir toutes les notifications</a>
-                </div>
-            </div>
-        </div>
-
-        {{-- Profil utilisateur --}}
-        <div class="topbar-user">
-            <button class="topbar-user-btn" id="userBtn" title="Mon profil">
-                <div class="user-avatar">
-                    <span>{{ Str::upper(Str::substr(Auth::user()->nom ?? 'AD', 0, 2)) }}</span>
-                </div>
-                <div class="user-info">
-                    <span class="user-name">{{ Str::limit(Auth::user()->nom ?? 'Admin', 15) }}</span>
-                    <span class="user-role">
-                        @if(Auth::user()->role === 'super_admin')
-                            Super Admin
-                        @elseif(Auth::user()->role === 'admin')
-                            Administrateur
-                        @else
-                            Éditeur
-                        @endif
-                    </span>
-                </div>
-            </button>
-
-            {{-- Dropdown profil --}}
-            <div class="user-dropdown" id="userDropdown">
-                <div class="user-dropdown-header">
-                    <div class="user-dropdown-avatar">
-                        <span>{{ Str::upper(Str::substr(Auth::user()->nom ?? 'AD', 0, 2)) }}</span>
-                    </div>
-                    <div class="user-dropdown-info">
-                        <span class="user-dropdown-name">{{ Auth::user()->nom ?? 'Administrateur' }}</span>
-                        <span class="user-dropdown-email">{{ Auth::user()->email ?? 'admin@ahd-rdc.org' }}</span>
-                    </div>
-                </div>
-                <a href="#" class="user-dropdown-link">
-                    <i class="fas fa-user-circle"></i> Mon profil
-                </a>
-                <a href="#" class="user-dropdown-link">
-                    <i class="fas fa-cog"></i> Paramètres du compte
-                </a>
-                <div class="user-dropdown-divider"></div>
-                <a href="{{ url('/') }}" class="user-dropdown-link" target="_blank">
-                    <i class="fas fa-external-link-alt"></i> Voir le site
-                </a>
-                <div class="user-dropdown-divider"></div>
-                <form action="{{ route('logout') }}" method="POST" id="logoutForm">
-                    @csrf
-                    <a href="#" class="user-dropdown-link logout" onclick="document.getElementById('logoutForm').submit(); return false;">
-                        <i class="fas fa-sign-out-alt"></i> Déconnexion
-                    </a>
-                </form>
-            </div>
+    {{-- Logo --}}
+    <div class="sidebar-logo">
+        <img src="{{ asset('assets/images/logo-phove.png') }}" alt="PHOVE" class="sidebar-logo-img">
+        <div class="sidebar-logo-text">
+            <span class="sidebar-logo-name">PHOVE</span>
+            <span class="sidebar-logo-sub">Administration</span>
         </div>
     </div>
-</header>
+
+    {{-- Menu de navigation --}}
+    <nav class="sidebar-menu" id="sidebarMenu">
+
+        {{-- ============================================ --}}
+        {{-- CATÉGORIE : GÉNÉRAL --}}
+        {{-- ============================================ --}}
+        <div class="sidebar-category">Général</div>
+
+        {{-- Tableau de bord --}}
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.dashboard') }}" class="sidebar-menu-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-tachometer-alt"></i></span>
+                <span class="sidebar-menu-text">Tableau de bord</span>
+            </a>
+        </div>
+
+        {{-- ============================================ --}}
+        {{-- CATÉGORIE : GESTION --}}
+        {{-- ============================================ --}}
+        <div class="sidebar-category">Gestion</div>
+
+        {{-- Projets --}}
+        <div class="sidebar-menu-item has-submenu {{ request()->routeIs('admin.projets.*') ? 'open' : '' }}">
+            <a href="#" class="sidebar-menu-link">
+                <span class="sidebar-menu-icon"><i class="fas fa-project-diagram"></i></span>
+                <span class="sidebar-menu-text">Projets</span>
+                <span class="sidebar-menu-arrow"><i class="fas fa-chevron-right"></i></span>
+            </a>
+            <div class="sidebar-submenu">
+                <a href="{{ route('admin.projets.index') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.projets.index') ? 'active' : '' }}">
+                    <i class="fas fa-list-ul"></i> Tous les projets
+                </a>
+                <a href="{{ route('admin.projets.create') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.projets.create') ? 'active' : '' }}">
+                    <i class="fas fa-plus-circle"></i> Ajouter un projet
+                </a>
+                <a href="{{ route('admin.projets.budgets') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.projets.budgets') ? 'active' : '' }}">
+                    <i class="fas fa-coins"></i> Budgets
+                </a>
+            </div>
+        </div>
+
+        {{-- Membres --}}
+        <div class="sidebar-menu-item has-submenu {{ request()->routeIs('admin.membres.*') ? 'open' : '' }}">
+            <a href="#" class="sidebar-menu-link">
+                <span class="sidebar-menu-icon"><i class="fas fa-users"></i></span>
+                <span class="sidebar-menu-text">Membres</span>
+                <span class="sidebar-menu-arrow"><i class="fas fa-chevron-right"></i></span>
+            </a>
+            <div class="sidebar-submenu">
+                <a href="{{ route('admin.membres.index') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.membres.index') ? 'active' : '' }}">
+                    <i class="fas fa-address-book"></i> Tous les membres
+                </a>
+                <a href="{{ route('admin.membres.create') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.membres.create') ? 'active' : '' }}">
+                    <i class="fas fa-user-plus"></i> Ajouter un membre
+                </a>
+                <a href="{{ route('admin.membres.demandes') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.membres.demandes') ? 'active' : '' }}">
+                    <i class="fas fa-clock"></i> Demandes d'adhésion
+                    @php $demandesCount = \App\Models\Membre::where('statut', 'en_attente')->count(); @endphp
+                    @if($demandesCount > 0)
+                    <span class="sidebar-badge sidebar-badge-danger">{{ $demandesCount }}</span>
+                    @endif
+                </a>
+                <a href="{{ route('admin.cotisations.index') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.cotisations.*') ? 'active' : '' }}">
+                    <i class="fas fa-coins"></i> Cotisations
+                </a>
+            </div>
+        </div>
+
+        {{-- Dossiers du personnel --}}
+        @if(Auth::user()->peutGererDossiers())
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.dossiers.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.dossiers.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-folder-open"></i></span>
+                <span class="sidebar-menu-text">Dossiers personnel</span>
+            </a>
+        </div>
+        @endif
+
+        {{-- ============================================ --}}
+        {{-- CATÉGORIE : FINANCES --}}
+        {{-- ============================================ --}}
+        <div class="sidebar-category">Finances</div>
+
+        {{-- Dons --}}
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.dons.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.dons.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-hand-holding-heart"></i></span>
+                <span class="sidebar-menu-text">Dons reçus</span>
+            </a>
+        </div>
+
+        {{-- Rapports financiers --}}
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.finances.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.finances.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-chart-pie"></i></span>
+                <span class="sidebar-menu-text">Rapports financiers</span>
+            </a>
+        </div>
+
+        {{-- Salaires --}}
+        @if(Auth::user()->peutGererFinances())
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.salaires.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.salaires.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-money-bill-wave"></i></span>
+                <span class="sidebar-menu-text">Salaires</span>
+            </a>
+        </div>
+        @endif
+
+        {{-- Stocks --}}
+        @if(Auth::user()->peutGererStocks())
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.stocks.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.stocks.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-boxes"></i></span>
+                <span class="sidebar-menu-text">Stocks</span>
+            </a>
+        </div>
+        @endif
+
+        {{-- Commission de Contrôle --}}
+        @if(Auth::user()->peutGererFinances())
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.controles.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.controles.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-search-dollar"></i></span>
+                <span class="sidebar-menu-text">Commission de Contrôle</span>
+            </a>
+        </div>
+        @endif
+
+        {{-- ============================================ --}}
+        {{-- CATÉGORIE : CONTENU --}}
+        {{-- ============================================ --}}
+        <div class="sidebar-category">Contenu</div>
+
+        {{-- Publications --}}
+        <div class="sidebar-menu-item has-submenu {{ request()->routeIs('admin.articles.*') || request()->routeIs('admin.medias.*') || request()->routeIs('admin.temoignages.*') ? 'open' : '' }}">
+            <a href="#" class="sidebar-menu-link">
+                <span class="sidebar-menu-icon"><i class="fas fa-newspaper"></i></span>
+                <span class="sidebar-menu-text">Publications</span>
+                <span class="sidebar-menu-arrow"><i class="fas fa-chevron-right"></i></span>
+            </a>
+            <div class="sidebar-submenu">
+                <a href="{{ route('admin.articles.index') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.articles.index') ? 'active' : '' }}">
+                    <i class="fas fa-file-alt"></i> Articles
+                </a>
+                <a href="{{ route('admin.articles.create') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.articles.create') ? 'active' : '' }}">
+                    <i class="fas fa-pen"></i> Rédiger un article
+                </a>
+                <a href="{{ route('admin.medias.index') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.medias.index') ? 'active' : '' }}">
+                    <i class="fas fa-images"></i> Médiathèque
+                </a>
+                <a href="{{ route('admin.temoignages.index') }}" class="sidebar-submenu-link {{ request()->routeIs('admin.temoignages.*') ? 'active' : '' }}">
+                    <i class="fas fa-quote-right"></i> Témoignages
+                </a>
+            </div>
+        </div>
+
+        {{-- ============================================ --}}
+        {{-- CATÉGORIE : COMMUNICATION --}}
+        {{-- ============================================ --}}
+        <div class="sidebar-category">Communication</div>
+
+        {{-- Messages --}}
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.contacts.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-envelope-open-text"></i></span>
+                <span class="sidebar-menu-text">Contact</span>
+                @php $messagesCount = \App\Models\Contact::where('lu', false)->count(); @endphp
+                @if($messagesCount > 0)
+                <span class="sidebar-badge sidebar-badge-primary">{{ $messagesCount }}</span>
+                @endif
+            </a>
+        </div>
+
+        {{-- Messagerie interne --}}
+        @if(Auth::user()->aAccesMessagerie())
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.messages.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.messages.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-comments"></i></span>
+                <span class="sidebar-menu-text">Messagerie</span>
+                @php
+                    $unreadMessages = \App\Models\Message::where('destinataire_id', Auth::id())
+                        ->where('lu', false)
+                        ->where('archived_dest', false)
+                        ->count();
+                @endphp
+                @if($unreadMessages > 0)
+                    <span class="sidebar-badge sidebar-badge-danger">{{ $unreadMessages }}</span>
+                @endif
+            </a>
+        </div>
+        @endif
+
+        {{-- Partenaires --}}
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.partenaires.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.partenaires.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-handshake"></i></span>
+                <span class="sidebar-menu-text">Partenaires</span>
+            </a>
+        </div>
+
+        {{-- ============================================ --}}
+        {{-- CATÉGORIE : ORGANISATION --}}
+        {{-- ============================================ --}}
+        <div class="sidebar-category">Organisation</div>
+
+        {{-- Gouvernance --}}
+        @if(Auth::user()->peutGererGouvernance())
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.gouvernance.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.gouvernance.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-sitemap"></i></span>
+                <span class="sidebar-menu-text">Gouvernance</span>
+            </a>
+        </div>
+        @endif
+
+        {{-- Structures territoriales --}}
+        @if(Auth::user()->peutGererStructures())
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.structures.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.structures.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-globe-africa"></i></span>
+                <span class="sidebar-menu-text">Structures territoriales</span>
+            </a>
+        </div>
+        @endif
+
+        {{-- Documents officiels --}}
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.documents.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.documents.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-folder"></i></span>
+                <span class="sidebar-menu-text">Documents officiels</span>
+            </a>
+        </div>
+
+        {{-- ============================================ --}}
+        {{-- CATÉGORIE : PARAMÈTRES --}}
+        {{-- ============================================ --}}
+        <div class="sidebar-category">Paramètres</div>
+
+        {{-- Utilisateurs --}}
+        @if(Auth::user()->peutGererUtilisateurs())
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.users.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-user-shield"></i></span>
+                <span class="sidebar-menu-text">Utilisateurs</span>
+            </a>
+        </div>
+        @endif
+
+        {{-- Paramètres du site --}}
+        @if(Auth::user()->peutGererParametres())
+        <div class="sidebar-menu-item">
+            <a href="{{ route('admin.parametres.index') }}" class="sidebar-menu-link {{ request()->routeIs('admin.parametres.*') ? 'active' : '' }}">
+                <span class="sidebar-menu-icon"><i class="fas fa-cog"></i></span>
+                <span class="sidebar-menu-text">Paramètres</span>
+            </a>
+        </div>
+        @endif
+
+    </nav>
+
+    {{-- Footer sidebar --}}
+    <div class="sidebar-footer">
+        <div class="sidebar-version">v1.0.0 — PHOVE</div>
+        <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" title="Réduire le menu">
+            <i class="fas fa-chevron-left"></i>
+            <span class="sidebar-footer-text">Réduire le menu</span>
+        </button>
+    </div>
+</aside>
+
+{{-- Overlay mobile --}}
+<div class="sidebar-overlay" id="sidebarOverlay"></div>

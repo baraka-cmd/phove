@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Changer le mot de passe')
+@section('title', 'Changer le mot de passe | PHOVE')
 
 @section('page_title', 'Changer le mot de passe')
 @section('page_icon', 'key')
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/admin-users.css') }}">
     <style>
         .password-card {
-            background: #fff;
+            background: #FFFFFF;
             border-radius: 18px;
             padding: 36px 40px;
             max-width: 550px;
@@ -29,15 +29,15 @@
             gap: 16px;
             margin-bottom: 28px;
             padding-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid #E2E8F0;
         }
 
         .password-header-icon {
             width: 50px;
             height: 50px;
             border-radius: 14px;
-            background: #e67e22;
-            color: #fff;
+            background: #F59E0B;
+            color: #FFFFFF;
             font-size: 1.3rem;
             display: flex;
             align-items: center;
@@ -48,13 +48,13 @@
         .password-header h2 {
             font-size: 1.3rem;
             font-weight: 700;
-            color: #1a1a1a;
+            color: #1E293B;
             margin: 0;
         }
 
         .password-header p {
             font-size: 13px;
-            color: #888;
+            color: #64748B;
             margin: 4px 0 0 0;
         }
 
@@ -63,9 +63,9 @@
             align-items: center;
             gap: 14px;
             padding: 16px 18px;
-            background: var(--color-primary-lighter);
+            background: #E8F0F8;
             border-radius: 12px;
-            border: 1px solid rgba(22, 85, 143, 0.15);
+            border: 1px solid rgba(26, 91, 156, 0.15);
             margin-bottom: 24px;
         }
 
@@ -79,8 +79,8 @@
             font-weight: 700;
             font-size: 1.1rem;
             flex-shrink: 0;
-            background: var(--color-primary);
-            color: #fff;
+            background: #1A5B9C;
+            color: #FFFFFF;
         }
 
         .password-user-avatar img {
@@ -98,12 +98,12 @@
         .password-user-nom {
             font-size: 14px;
             font-weight: 700;
-            color: #1a1a1a;
+            color: #1E293B;
         }
 
         .password-user-email {
             font-size: 12px;
-            color: var(--color-text-muted);
+            color: #64748B;
         }
 
         .password-form-group {
@@ -114,12 +114,12 @@
             display: block;
             font-size: 13px;
             font-weight: 600;
-            color: #1a1a1a;
+            color: #1E293B;
             margin-bottom: 7px;
         }
 
         .password-form-label .required {
-            color: var(--color-accent);
+            color: #EF4444;
         }
 
         .password-form-input {
@@ -127,19 +127,19 @@
             padding: 12px 16px;
             font-family: var(--font-primary);
             font-size: 14px;
-            border: 2px solid #e0e4e8;
+            border: 2px solid #CBD5E1;
             border-radius: 10px;
             outline: none;
             transition: all 0.25s ease;
-            background: #fafbfc;
-            color: #1a1a1a;
+            background: #F8FAFC;
+            color: #1E293B;
             letter-spacing: 2px;
         }
 
         .password-form-input:focus {
-            border-color: var(--color-primary);
-            background: #fff;
-            box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.08);
+            border-color: #1A5B9C;
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(26, 91, 156, 0.08);
         }
 
         .password-form-input::placeholder {
@@ -148,7 +148,7 @@
 
         .password-form-error {
             font-size: 11px;
-            color: var(--color-accent);
+            color: #EF4444;
             margin-top: 5px;
             display: flex;
             align-items: center;
@@ -161,7 +161,7 @@
 
         .password-strength-bar {
             height: 4px;
-            background: #e0e4e8;
+            background: #CBD5E1;
             border-radius: 2px;
             overflow: hidden;
             transition: all 0.3s ease;
@@ -181,7 +181,7 @@
         }
 
         .password-requirements {
-            background: #fafbfc;
+            background: #F8FAFC;
             border-radius: 10px;
             padding: 16px 18px;
             margin-bottom: 24px;
@@ -190,7 +190,7 @@
         .password-requirements h4 {
             font-size: 12px;
             font-weight: 700;
-            color: #1a1a1a;
+            color: #1E293B;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
@@ -205,7 +205,7 @@
 
         .password-requirements ul li {
             font-size: 12px;
-            color: var(--color-text-muted);
+            color: #64748B;
             line-height: 2;
             display: flex;
             align-items: center;
@@ -214,7 +214,7 @@
         }
 
         .password-requirements ul li.valid {
-            color: var(--color-success);
+            color: #10B981;
         }
 
         .password-requirements ul li i {
@@ -227,7 +227,7 @@
             gap: 10px;
             margin-top: 28px;
             padding-top: 22px;
-            border-top: 2px solid #f0f0f0;
+            border-top: 2px solid #E2E8F0;
         }
 
         @media (max-width: 768px) {
@@ -257,15 +257,9 @@
         <div class="password-info-card">
             <div class="password-user-avatar">
                 @if($user->photo_profil)
-                    <img src="{{ asset('storage/' . $user->photo_profil) }}" alt="{{ $user->nom }}">
+                    <img src="{{ asset('storage/' . $user->photo_profil) }}" alt="{{ $user->nom }}" loading="lazy">
                 @else
-                    @php
-                        $initiales = strtoupper(substr($user->nom, 0, 1));
-                        $parts = explode(' ', $user->nom);
-                        $initiales = strtoupper(substr($parts[0], 0, 1));
-                        if (count($parts) > 1) $initiales .= strtoupper(substr(end($parts), 0, 1));
-                    @endphp
-                    {{ $initiales }}
+                    {{ $user->initiales() }}
                 @endif
             </div>
             <div class="password-user-info">
@@ -317,13 +311,13 @@
 
             {{-- Exigences --}}
             <div class="password-requirements">
-                <h4><i class="fas fa-shield-alt" style="color: var(--color-primary);"></i> Exigences de sécurité</h4>
+                <h4><i class="fas fa-shield-alt" style="color: #1A5B9C;"></i> Exigences de sécurité</h4>
                 <ul>
-                    <li id="req-length"><i class="fas fa-times-circle" style="color: #ccc;"></i> Au moins 8 caractères</li>
-                    <li id="req-uppercase"><i class="fas fa-times-circle" style="color: #ccc;"></i> Au moins une lettre majuscule</li>
-                    <li id="req-lowercase"><i class="fas fa-times-circle" style="color: #ccc;"></i> Au moins une lettre minuscule</li>
-                    <li id="req-number"><i class="fas fa-times-circle" style="color: #ccc;"></i> Au moins un chiffre</li>
-                    <li id="req-special"><i class="fas fa-times-circle" style="color: #ccc;"></i> Au moins un caractère spécial (@$!%*?&)</li>
+                    <li id="req-length"><i class="fas fa-times-circle" style="color: #94A3B8;"></i> Au moins 8 caractères</li>
+                    <li id="req-uppercase"><i class="fas fa-times-circle" style="color: #94A3B8;"></i> Au moins une lettre majuscule</li>
+                    <li id="req-lowercase"><i class="fas fa-times-circle" style="color: #94A3B8;"></i> Au moins une lettre minuscule</li>
+                    <li id="req-number"><i class="fas fa-times-circle" style="color: #94A3B8;"></i> Au moins un chiffre</li>
+                    <li id="req-special"><i class="fas fa-times-circle" style="color: #94A3B8;"></i> Au moins un caractère spécial (@$!%*?&)</li>
                 </ul>
             </div>
 
@@ -352,7 +346,6 @@
             const strengthText = document.getElementById('passwordStrengthText');
             const matchText = document.getElementById('passwordMatchText');
 
-            // Éléments des exigences
             const reqLength = document.getElementById('req-length');
             const reqUppercase = document.getElementById('req-uppercase');
             const reqLowercase = document.getElementById('req-lowercase');
@@ -363,44 +356,41 @@
                 passwordInput.addEventListener('input', function () {
                     const password = this.value;
                     
-                    // Vérifications
                     const hasLength = password.length >= 8;
                     const hasUppercase = /[A-Z]/.test(password);
                     const hasLowercase = /[a-z]/.test(password);
                     const hasNumber = /[0-9]/.test(password);
                     const hasSpecial = /[@$!%*?&]/.test(password);
 
-                    // Score (0-5)
                     const score = [hasLength, hasUppercase, hasLowercase, hasNumber, hasSpecial].filter(Boolean).length;
 
-                    // Mettre à jour la barre de force
                     const percentage = (score / 5) * 100;
                     strengthFill.style.width = percentage + '%';
 
                     let color, text;
                     switch (true) {
                         case score <= 1:
-                            color = '#dc3545';
+                            color = '#EF4444';
                             text = 'Très faible';
                             break;
                         case score === 2:
-                            color = '#e67e22';
+                            color = '#F59E0B';
                             text = 'Faible';
                             break;
                         case score === 3:
-                            color = '#ffc107';
+                            color = '#F59E0B';
                             text = 'Moyen';
                             break;
                         case score === 4:
-                            color = '#28a745';
+                            color = '#10B981';
                             text = 'Fort';
                             break;
                         case score === 5:
-                            color = '#16558F';
+                            color = '#1A5B9C';
                             text = 'Très fort';
                             break;
                         default:
-                            color = '#e0e4e8';
+                            color = '#CBD5E1';
                             text = '';
                     }
 
@@ -408,14 +398,12 @@
                     strengthText.textContent = text;
                     strengthText.style.color = color;
 
-                    // Mettre à jour les exigences
                     updateRequirement(reqLength, hasLength);
                     updateRequirement(reqUppercase, hasUppercase);
                     updateRequirement(reqLowercase, hasLowercase);
                     updateRequirement(reqNumber, hasNumber);
                     updateRequirement(reqSpecial, hasSpecial);
 
-                    // Vérifier la correspondance
                     checkPasswordMatch();
                 });
             }
@@ -430,11 +418,11 @@
                 if (isValid) {
                     element.classList.add('valid');
                     icon.className = 'fas fa-check-circle';
-                    icon.style.color = 'var(--color-success)';
+                    icon.style.color = '#10B981';
                 } else {
                     element.classList.remove('valid');
                     icon.className = 'fas fa-times-circle';
-                    icon.style.color = '#ccc';
+                    icon.style.color = '#94A3B8';
                 }
             }
 
@@ -452,16 +440,15 @@
 
                 if (password === confirm) {
                     matchText.textContent = '✅ Les mots de passe correspondent';
-                    matchText.style.color = 'var(--color-success)';
-                    confirmInput.style.borderColor = 'var(--color-success)';
+                    matchText.style.color = '#10B981';
+                    confirmInput.style.borderColor = '#10B981';
                 } else {
                     matchText.textContent = '❌ Les mots de passe ne correspondent pas';
-                    matchText.style.color = 'var(--color-accent)';
-                    confirmInput.style.borderColor = 'var(--color-accent)';
+                    matchText.style.color = '#EF4444';
+                    confirmInput.style.borderColor = '#EF4444';
                 }
             }
 
-            // Validation au submit
             const form = document.getElementById('passwordForm');
             if (form) {
                 form.addEventListener('submit', function (e) {
@@ -480,7 +467,6 @@
                 });
             }
 
-            // Initialiser l'état si mot de passe pré-rempli (cas d'erreur de validation)
             if (passwordInput && passwordInput.value) {
                 passwordInput.dispatchEvent(new Event('input'));
             }

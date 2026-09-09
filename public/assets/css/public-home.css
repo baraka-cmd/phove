@@ -1,18 +1,12 @@
 /* ============================================================
-   AHD-RDC — STYLES PAGE D'ACCUEIL
-   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   PHOVE — STYLES PAGE D'ACCUEIL
+   Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies
+   Palette : Bleu Principal #1A5B9C | Bleu Foncé #2C3E50 | Ambre #F59E0B
    ============================================================ */
 
 /* ----------------------------------------------------------
    1. HERO SECTION — SLIDER PLEIN ÉCRAN
-   ---------------------------------------------------------- */
-/* ============================================================
-   FICHIER : public-home.css
-   SECTION : 1. HERO SECTION
    ============================================================ */
-/* ----------------------------------------------------------
-   1. HERO SECTION — SLIDER PLEIN ÉCRAN (CORRIGÉ)
-   ---------------------------------------------------------- */
 .hero {
     position: relative;
     height: 90vh;
@@ -58,7 +52,7 @@
     transform: scale(1);
 }
 
-/* Overlay gradient — CORRIGÉ : plus sombre pour lisibilité */
+/* Overlay gradient — plus sombre pour lisibilité */
 .hero-overlay {
     position: absolute;
     top: 0;
@@ -68,7 +62,7 @@
     background: linear-gradient(
         135deg,
         rgba(0, 0, 0, 0.85) 0%,
-        rgba(22, 85, 143, 0.65) 40%,
+        rgba(26, 91, 156, 0.65) 40%,
         rgba(0, 0, 0, 0.80) 100%
     );
 }
@@ -82,8 +76,8 @@
     width: 100%;
     height: 100%;
     background: 
-        radial-gradient(circle at 20% 80%, rgba(211, 47, 47, 0.06) 0%, transparent 40%),
-        radial-gradient(circle at 80% 20%, rgba(22, 85, 143, 0.10) 0%, transparent 40%),
+        radial-gradient(circle at 20% 80%, rgba(245, 158, 11, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(26, 91, 156, 0.10) 0%, transparent 40%),
         radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.01) 0%, transparent 70%);
     pointer-events: none;
     z-index: 1;
@@ -117,10 +111,10 @@
 }
 
 .hero-indicator.active {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
+    background: #F59E0B;
+    border-color: #F59E0B;
     transform: scale(1.35);
-    box-shadow: 0 0 12px rgba(211, 47, 47, 0.5);
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
 }
 
 /* Flèches de navigation */
@@ -158,13 +152,13 @@
 }
 
 .hero-arrow:hover {
-    background: var(--color-accent);
-    border-color: var(--color-accent);
+    background: #F59E0B;
+    border-color: #F59E0B;
     transform: translateY(-50%) scale(1.1);
-    box-shadow: 0 8px 25px rgba(211, 47, 47, 0.4);
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
 }
 
-/* Contenu du hero — CORRIGÉ : centré */
+/* Contenu du hero — centré */
 .hero-content {
     position: relative;
     z-index: 2;
@@ -179,7 +173,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(211, 47, 47, 0.9);
+    background: rgba(245, 158, 11, 0.9);
     color: var(--color-text-white);
     padding: 8px 20px;
     border-radius: var(--border-radius-full);
@@ -201,19 +195,18 @@
 /* --- SECTION HERO CENTRALISÉE --- */
 .hero-section {
     position: relative;
-    /* Ajuste cette valeur selon la hauteur de ton header + topbar (ex: 40px + 80px) */
     padding-top: calc(var(--topbar-height, 40px) + var(--header-height, 80px) + 60px) !important;
     padding-bottom: 80px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center; /* Centre parfaitement tout le texte horizontalement */
+    text-align: center;
 }
 
-/* Diminution et centrage du titre principal */
+/* Titre principal */
 .hero-title {
-    font-size: 2.8rem !important; /* Diminue légèrement la police (adapte si nécessaire) */
+    font-size: 2.8rem !important;
     line-height: 1.2;
     margin-bottom: 20px;
     max-width: 800px;
@@ -222,7 +215,7 @@
 }
 
 .hero-title .highlight {
-    color: var(--color-accent);
+    color: #F59E0B;
     position: relative;
     display: inline-block;
 }
@@ -234,24 +227,20 @@
     left: 0;
     width: 100%;
     height: 3px;
-    background: var(--color-accent);
+    background: #F59E0B;
     border-radius: 2px;
     opacity: 0.7;
 }
 
 .hero-description {
-    font-size: var(--font-size-md, 1.05rem); /* Diminué légèrement pour éviter d'occuper trop d'espace vertical */
-    color: rgba(255, 255, 255, 0.9);        /* Légèrement opacifié pour un meilleur contraste */
-    line-height: 1.6;                        /* Hauteur de ligne resserrée pour compacter le texte */
-    max-width: 750px;                        /* Légèrement élargi pour réduire le nombre de lignes */
-    
-    /* Centrage horizontal parfait et gestion des espaces (haut, droite, bas, gauche) */
-    margin: 0 auto var(--spacing-xl, 30px) auto; 
-    
+    font-size: var(--font-size-md, 1.05rem);
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    max-width: 750px;
+    margin: 0 auto var(--spacing-xl, 30px) auto;
     text-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
-    text-align: center;                      /* Assure le centrage parfait du texte */
+    text-align: center;
 }
-
 
 .hero-buttons {
     display: flex;
@@ -261,9 +250,9 @@
 }
 
 .hero-btn-primary {
-    background: var(--color-accent);
+    background: #F59E0B;
     color: var(--color-text-white);
-    border: 2px solid var(--color-accent);
+    border: 2px solid #F59E0B;
     padding: 16px 34px;
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-bold);
@@ -297,10 +286,10 @@
 }
 
 .hero-btn-primary:hover {
-    background: var(--color-accent-hover);
-    border-color: var(--color-accent-hover);
+    background: #D97706;
+    border-color: #D97706;
     transform: translateY(-3px);
-    box-shadow: 0 15px 35px rgba(211, 47, 47, 0.45);
+    box-shadow: 0 15px 35px rgba(245, 158, 11, 0.45);
     color: var(--color-text-white);
 }
 
@@ -328,8 +317,9 @@
     transform: translateY(-3px);
     box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2);
 }
+
 /* ----------------------------------------------------------
-   2. SECTION COMPTEURS — IMPACT (CORRIGÉE)
+   2. SECTION COMPTEURS — IMPACT
    ---------------------------------------------------------- */
 .counters-section {
     padding: 0;
@@ -352,7 +342,7 @@
 .counter-item {
     text-align: center;
     padding: 36px 20px 30px;
-    background: #fff;
+    background: #FFFFFF;
     border-radius: 16px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
     transition: all 0.3s ease;
@@ -361,13 +351,11 @@
     overflow: hidden;
 }
 
-/* Effet de hover subtil */
 .counter-item:hover {
     transform: translateY(-8px);
     box-shadow: 0 16px 45px rgba(0, 0, 0, 0.14);
 }
 
-/* Barre colorée en haut au hover */
 .counter-item::after {
     content: '';
     position: absolute;
@@ -375,7 +363,7 @@
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    background: linear-gradient(90deg, var(--color-primary) 0%, #F59E0B 100%);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.3s ease;
@@ -385,7 +373,6 @@
     transform: scaleX(1);
 }
 
-/* Icône */
 .counter-icon {
     font-size: 2.2rem;
     color: var(--color-primary);
@@ -405,16 +392,15 @@
 
 .counter-item:hover .counter-icon {
     background: var(--color-primary);
-    color: #fff;
+    color: #FFFFFF;
     transform: scale(1.08);
-    box-shadow: 0 8px 20px rgba(22, 85, 143, 0.3);
+    box-shadow: 0 8px 20px rgba(26, 91, 156, 0.3);
 }
 
-/* Nombre */
 .counter-number {
     font-size: 2.6rem;
     font-weight: var(--font-weight-extrabold);
-    color: #1a1a1a;
+    color: #1E293B;
     line-height: 1;
     margin-bottom: 6px;
     display: flex;
@@ -426,20 +412,18 @@
 .counter-plus {
     font-size: 1.8rem;
     font-weight: var(--font-weight-bold);
-    color: var(--color-accent);
+    color: #F59E0B;
 }
 
-/* Label */
 .counter-label {
     font-size: 13px;
-    color: #1a1a1a;
+    color: #1E293B;
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
     letter-spacing: 0.6px;
     margin-bottom: 6px;
 }
 
-/* Description */
 .counter-desc {
     font-size: 11px;
     color: var(--color-text-muted);
@@ -515,7 +499,7 @@
     width: 400px;
     height: 400px;
     border-radius: var(--border-radius-circle);
-    background: radial-gradient(circle, rgba(22, 85, 143, 0.04) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(26, 91, 156, 0.04) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -559,7 +543,7 @@
     font-weight: var(--font-weight-extrabold);
     display: block;
     line-height: 1;
-    color: var(--color-accent);
+    color: #F59E0B;
 }
 
 .badge-text {
@@ -595,7 +579,7 @@
     background: var(--color-bg-white);
     padding: var(--spacing-lg);
     border-radius: var(--border-radius);
-    border-left: 4px solid var(--color-accent);
+    border-left: 4px solid #F59E0B;
     box-shadow: var(--shadow-sm);
 }
 
@@ -612,10 +596,10 @@
 }
 
 .about-value-item i {
-    color: var(--color-accent);
+    color: #F59E0B;
     font-size: var(--font-size-md);
     margin-top: 2px;
-    background: var(--color-bg-accent-light);
+    background: #FEF3C7;
     padding: 8px;
     border-radius: var(--border-radius-circle);
 }
@@ -667,7 +651,7 @@
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    background: linear-gradient(90deg, var(--color-primary) 0%, #F59E0B 100%);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform var(--transition-base);
@@ -776,7 +760,7 @@
 }
 
 .project-card-badge.en-cours {
-    background: rgba(211, 47, 47, 0.9);
+    background: rgba(26, 91, 156, 0.9);
     color: var(--color-text-white);
 }
 
@@ -785,7 +769,7 @@
 }
 
 .project-card-badge.termine {
-    background: rgba(40, 167, 69, 0.9);
+    background: rgba(16, 185, 129, 0.9);
     color: var(--color-text-white);
 }
 
@@ -841,7 +825,7 @@
 }
 
 .project-card-meta i {
-    color: var(--color-accent);
+    color: #F59E0B;
     font-size: 11px;
 }
 
@@ -874,7 +858,7 @@
 }
 
 .progress-fill.completed {
-    background: linear-gradient(90deg, var(--color-success) 0%, #34ce57 100%);
+    background: linear-gradient(90deg, var(--color-success) 0%, #34D399 100%);
 }
 
 .project-card-footer {
@@ -898,7 +882,7 @@
 
 .project-card-link:hover {
     gap: 10px;
-    color: var(--color-accent);
+    color: #F59E0B;
 }
 
 .project-card-link i {
@@ -914,6 +898,9 @@
     text-align: center;
     margin-top: var(--spacing-3xl);
 }
+
+
+
 
 /* ----------------------------------------------------------
    6. SECTION TÉMOIGNAGES
@@ -934,7 +921,7 @@
     height: 100%;
     background: 
         radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.04) 0%, transparent 60%),
-        radial-gradient(circle at 80% 20%, rgba(211, 47, 47, 0.1) 0%, transparent 50%);
+        radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
     pointer-events: none;
 }
 
@@ -976,7 +963,7 @@
 
 .testimonial-quote {
     font-size: 3rem;
-    color: var(--color-accent);
+    color: #F59E0B;
     margin-bottom: var(--spacing-md);
     line-height: 0.4;
     opacity: 0.8;
@@ -1002,7 +989,7 @@
     width: 50px;
     height: 50px;
     border-radius: var(--border-radius-circle);
-    background: var(--color-accent);
+    background: #F59E0B;
     color: var(--color-text-white);
     display: flex;
     align-items: center;
@@ -1075,13 +1062,13 @@
 
 .partner-become {
     border-style: solid;
-    border-color: var(--color-accent);
+    border-color: #F59E0B;
     cursor: pointer;
 }
 
 .partner-become:hover {
-    background: var(--color-bg-accent-light);
-    border-color: var(--color-accent-hover);
+    background: #FEF3C7;
+    border-color: #D97706;
 }
 
 /* ----------------------------------------------------------
@@ -1089,7 +1076,7 @@
    ---------------------------------------------------------- */
 .cta-section {
     padding: var(--spacing-6xl) 0;
-    background: linear-gradient(135deg, var(--color-bg-dark) 0%, #0a0a0a 100%);
+    background: linear-gradient(135deg, var(--color-bg-dark) 0%, #0F172A 100%);
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -1103,8 +1090,8 @@
     width: 100%;
     height: 100%;
     background: 
-        radial-gradient(circle at 50% 50%, rgba(211, 47, 47, 0.06) 0%, transparent 60%),
-        radial-gradient(circle at 20% 80%, rgba(22, 85, 143, 0.1) 0%, transparent 50%);
+        radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.06) 0%, transparent 60%),
+        radial-gradient(circle at 20% 80%, rgba(26, 91, 156, 0.1) 0%, transparent 50%);
     pointer-events: none;
 }
 
@@ -1124,7 +1111,7 @@
 }
 
 .cta-title .highlight {
-    color: var(--color-accent);
+    color: #F59E0B;
 }
 
 .cta-text {

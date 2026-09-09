@@ -1,5 +1,5 @@
 {{-- ============================================ --}}
-{{-- FOOTER ADMINISTRATEUR — AHD-RDC --}}
+{{-- FOOTER ADMINISTRATEUR — PHOVE --}}
 {{-- ============================================ --}}
 <footer class="admin-footer">
     
@@ -12,8 +12,20 @@
                     Super Administrateur
                 @elseif(Auth::user()->role === 'admin')
                     Administrateur
-                @else
+                @elseif(Auth::user()->role === 'editeur')
                     Éditeur
+                @elseif(Auth::user()->role === 'dg')
+                    Directeur Général
+                @elseif(Auth::user()->role === 'chef_mission')
+                    Chef de Mission
+                @elseif(Auth::user()->role === 'charge_programme')
+                    Chargé de Programme
+                @elseif(Auth::user()->role === 'secretaire')
+                    Secrétaire
+                @elseif(Auth::user()->role === 'comptable')
+                    Comptable
+                @else
+                    Utilisateur
                 @endif
             </strong></span>
         </div>
@@ -25,8 +37,8 @@
 
     {{-- Copyright + Heure --}}
     <div class="footer-copyright">
-        <span>&copy; {{ date('Y') }} <strong>AHD-RDC</strong></span>
-        <span class="footer-slogan">« Être ensemble pour le bien de la communauté »</span>
+        <span>&copy; {{ date('Y') }} <strong>PHOVE</strong></span>
+        <span class="footer-slogan">« Compassion avec la population »</span>
         <span style="margin-left: 12px;">
             <i class="fas fa-clock"></i> 
             <span class="footer-clock-time" id="footerClock">00:00:00</span>

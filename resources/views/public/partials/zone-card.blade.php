@@ -1,5 +1,5 @@
 {{-- ============================================ --}}
-{{-- COMPOSANT CARTE ZONE D'INTERVENTION --}}
+{{-- COMPOSANT CARTE ZONE D'INTERVENTION — PHOVE --}}
 {{-- Utilisé dans : page liste projets, page d'accueil --}}
 {{-- ============================================ --}}
 
@@ -10,14 +10,18 @@
     
     {{-- Icône de la zone --}}
     <div class="zone-card-icon">
-        @if($zoneIcon === 'minova')
-            <i class="fas fa-mountain"></i>
-        @elseif($zoneIcon === 'kirotshe')
-            <i class="fas fa-hill-rockslide"></i>
-        @elseif($zoneIcon === 'kalehe')
-            <i class="fas fa-tree"></i>
-        @elseif($zoneIcon === 'goma')
+        @if($zoneIcon === 'goma')
             <i class="fas fa-city"></i>
+        @elseif($zoneIcon === 'nyiragongo')
+            <i class="fas fa-volcano"></i>
+        @elseif($zoneIcon === 'kiziba')
+            <i class="fas fa-mountain"></i>
+        @elseif($zoneIcon === 'muja')
+            <i class="fas fa-seedling"></i>
+        @elseif($zoneIcon === 'karisimbi')
+            <i class="fas fa-building"></i>
+        @elseif($zoneIcon === 'international')
+            <i class="fas fa-globe-africa"></i>
         @else
             <i class="fas fa-map-pin"></i>
         @endif
@@ -29,7 +33,7 @@
         
         <span class="zone-card-province">
             <i class="fas fa-location-dot"></i>
-            {{ $zoneProvince ?? 'Sud-Kivu / Nord-Kivu' }}
+            {{ $zoneProvince ?? 'Nord-Kivu' }}
         </span>
 
         <div class="zone-card-stats">

@@ -30,6 +30,7 @@ return new class extends Migration
                 'co_financeur',
                 'partenaire_technique',
                 'partenaire_mise_en_oeuvre',
+                'partenaire_institutionnel',
                 'donateur',
                 'sponsor',
                 'conseil',

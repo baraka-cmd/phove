@@ -2,7 +2,7 @@
 
 @section('title', 'Nos Projets')
 
-@section('meta_description', 'Découvrez tous les projets humanitaires d\'AHD-RDC au Sud-Kivu et Nord-Kivu : santé, éducation, protection, eau, sécurité alimentaire, environnement et paix.')
+@section('meta_description', 'Découvrez tous les projets humanitaires de PHOVE au Nord-Kivu : santé, nutrition, éducation, agriculture, protection sociale, accompagnement spirituel et psychosocial.')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
@@ -21,7 +21,7 @@
             </div>
             <h1 class="page-header-title">Nos Projets</h1>
             <p class="page-header-subtitle">
-                Découvrez l'ensemble de nos actions humanitaires menées sur le terrain pour le développement des communautés vulnérables.
+                Découvrez l'ensemble de nos actions humanitaires menées sur le terrain pour les orphelins, veuves et personnes démunies.
             </p>
             <nav class="page-breadcrumb">
                 <a href="{{ url('/') }}"><i class="fas fa-home"></i> Accueil</a>
@@ -65,12 +65,12 @@
                     </div>
                 </div>
                 <div class="projet-stat-card">
-                    <div class="projet-stat-icon stat-icon-zones">
-                        <i class="fas fa-map-marked-alt"></i>
+                    <div class="projet-stat-icon stat-icon-budget">
+                        <i class="fas fa-coins"></i>
                     </div>
                     <div class="projet-stat-info">
-                        <span class="projet-stat-number">{{ $zones->count() }}</span>
-                        <span class="projet-stat-label">Zones d'intervention</span>
+                        <span class="projet-stat-number">{{ number_format($totalBudget, 0, ',', ' ') }} $</span>
+                        <span class="projet-stat-label">Budget total</span>
                     </div>
                 </div>
             </div>
@@ -93,18 +93,24 @@
             <div class="zones-grid">
                 @foreach($zones as $zoneName)
                     @php
-                        $zoneIcon = 'minova';
-                        $zoneProvince = 'Sud-Kivu';
+                        $zoneIcon = 'goma';
+                        $zoneProvince = 'Nord-Kivu';
                         
-                        if (stripos($zoneName, 'kirotshe') !== false) {
-                            $zoneIcon = 'kirotshe';
+                        if (stripos($zoneName, 'nyiragongo') !== false) {
+                            $zoneIcon = 'nyiragongo';
                             $zoneProvince = 'Nord-Kivu';
-                        } elseif (stripos($zoneName, 'kalehe') !== false) {
-                            $zoneIcon = 'kalehe';
-                            $zoneProvince = 'Sud-Kivu';
-                        } elseif (stripos($zoneName, 'goma') !== false) {
-                            $zoneIcon = 'goma';
+                        } elseif (stripos($zoneName, 'kiziba') !== false) {
+                            $zoneIcon = 'kiziba';
                             $zoneProvince = 'Nord-Kivu';
+                        } elseif (stripos($zoneName, 'muja') !== false) {
+                            $zoneIcon = 'muja';
+                            $zoneProvince = 'Nord-Kivu';
+                        } elseif (stripos($zoneName, 'karisimbi') !== false) {
+                            $zoneIcon = 'karisimbi';
+                            $zoneProvince = 'Nord-Kivu';
+                        } elseif (stripos($zoneName, 'international') !== false || stripos($zoneName, 'monde') !== false) {
+                            $zoneIcon = 'international';
+                            $zoneProvince = 'International';
                         }
                         
                         $zoneProjetsCount = $zonesStats[$zoneName] ?? 0;
@@ -165,7 +171,7 @@
                         <input type="text" 
                                name="recherche" 
                                value="{{ $recherche }}" 
-                               placeholder="Rechercher un projet..." 
+                               placeholder="Rechercher un projet, un code..." 
                                class="filtre-input filtre-input-search"
                                id="projetSearch">
                     </div>
@@ -316,7 +322,7 @@
                 </h2>
                 <p class="cta-text">
                     Chaque contribution nous permet de continuer notre action humanitaire 
-                    auprès des communautés vulnérables de l'Est de la RD Congo.
+                    auprès des orphelins, veuves et personnes démunies de la RD Congo.
                 </p>
                 <div class="cta-buttons">
                     <a href="{{ url('/faire-un-don') }}" class="btn btn-accent btn-lg">
@@ -335,9 +341,4 @@
 @section('scripts')
     <script src="{{ asset('assets/js/public-pages-common.js') }}"></script>
     <script src="{{ asset('assets/js/projets-index.js') }}"></script>
-@endsection
-
-
-@section('scripts')
-    <script src="{{ asset('assets/js/admin-gouvernance-index.js') }}"></script>
 @endsection

@@ -1,51 +1,52 @@
 /* ============================================================
-   AHD-RDC — STYLES COMMUNS SITE PUBLIC
-   Action Humanitaire pour le Développement en RD Congo
-   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   PHOVE — STYLES COMMUNS SITE PUBLIC
+   Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies
+   Palette : Bleu Principal #1A5B9C | Bleu Foncé #2C3E50 | Gris #F8FAFC
+   Devise : « Compassion avec la population »
    ============================================================ */
 
 /* ----------------------------------------------------------
    1. VARIABLES CSS
    ---------------------------------------------------------- */
 :root {
-    /* Couleurs principales — Logo AHD-RDC */
-    --color-primary: #16558F;
-    --color-primary-dark: #0f3f6b;
-    --color-primary-light: #2874b8;
-    --color-primary-lighter: #e8f0f8;
-    --color-accent: #D32F2F;
-    --color-accent-hover: #b71c1c;
-    --color-accent-light: #fce8e8;
+    /* Couleurs principales — Identité PHOVE */
+    --color-primary: #1A5B9C;
+    --color-primary-dark: #124270;
+    --color-primary-light: #3A7BC8;
+    --color-primary-lighter: #E8F0F8;
+    --color-accent: #2C3E50;
+    --color-accent-hover: #1E293B;
+    --color-accent-light: #E2E8F0;
 
     /* Couleurs de fond */
-    --color-bg-body: #ffffff;
-    --color-bg-light: #f8f9fa;
-    --color-bg-lighter: #f0f2f5;
-    --color-bg-dark: #1A1A1A;
-    --color-bg-primary-light: #e8f0f8;
-    --color-bg-accent-light: #fce8e8;
+    --color-bg-body: #FFFFFF;
+    --color-bg-light: #F8FAFC;
+    --color-bg-lighter: #F1F5F9;
+    --color-bg-dark: #1E293B;
+    --color-bg-primary-light: #E8F0F8;
+    --color-bg-accent-light: #E2E8F0;
 
     /* Couleurs de texte */
-    --color-text-primary: #1A1A1A;
-    --color-text-secondary: #444444;
-    --color-text-muted: #777777;
-    --color-text-light: #999999;
-    --color-text-white: #ffffff;
+    --color-text-primary: #1E293B;
+    --color-text-secondary: #334155;
+    --color-text-muted: #64748B;
+    --color-text-light: #94A3B8;
+    --color-text-white: #FFFFFF;
 
     /* Couleurs fonctionnelles */
-    --color-success: #28a745;
-    --color-success-light: #d4edda;
-    --color-error: #dc3545;
-    --color-error-light: #f8d7da;
-    --color-warning: #ffc107;
-    --color-warning-light: #fff3cd;
-    --color-info: #17a2b8;
-    --color-info-light: #d1ecf1;
+    --color-success: #10B981;
+    --color-success-light: #D1FAE5;
+    --color-error: #EF4444;
+    --color-error-light: #FEE2E2;
+    --color-warning: #F59E0B;
+    --color-warning-light: #FEF3C7;
+    --color-info: #3B82F6;
+    --color-info-light: #DBEAFE;
 
     /* Bordures */
-    --border-color: #e0e0e0;
-    --border-color-light: #eeeeee;
-    --border-focus: #16558F;
+    --border-color: #CBD5E1;
+    --border-color-light: #E2E8F0;
+    --border-focus: #1A5B9C;
     --border-radius-xs: 4px;
     --border-radius-sm: 6px;
     --border-radius: 10px;
@@ -60,7 +61,7 @@
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
     --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
     --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.15);
-    --shadow-focus: 0 0 0 3px rgba(22, 85, 143, 0.15);
+    --shadow-focus: 0 0 0 3px rgba(26, 91, 156, 0.15);
 
     /* Typographie */
     --font-primary: 'Poppins', sans-serif;
@@ -109,8 +110,6 @@
     --transition-base: 0.3s ease;
     --transition-slow: 0.5s ease;
 
-
-
     /* Z-index (Échelle globale harmonisée) */
     --z-search-bar: 995;
     --z-overlay: 1000;
@@ -118,10 +117,9 @@
     --z-header: 1020;
     --z-dropdown: 1030;
     --z-topbar: 1040;
-    --z-sticky: 1050; /* Pour le bouton Scroll To Top afin qu'il reste cliquable au-dessus de tout */
+    --z-sticky: 1050;
     --z-modal: 1100;
     --z-toast: 1200;
-
 }
 
 /* ----------------------------------------------------------
@@ -142,8 +140,6 @@ html {
     -webkit-tap-highlight-color: transparent;
 }
 
-
-
 body {
     font-family: var(--font-primary);
     font-size: var(--font-size-base);
@@ -155,11 +151,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     padding-top: calc(var(--topbar-height) + var(--header-height));
-    
-    /* CORRECTION : Supprimer position: relative et z-index: 0 */
-    /* Cela permet aux éléments 'fixed' (Header/Topbar) de s'aligner sur l'écran */
 }
-
 
 .main-content {
     position: relative;
@@ -343,7 +335,7 @@ p {
     transform: translateY(0);
 }
 
-/* Bouton accent (don) */
+/* Bouton accent */
 .btn-accent {
     background: var(--color-accent);
     color: var(--color-text-white);
@@ -378,16 +370,16 @@ p {
 /* Bouton outline blanc */
 .btn-outline-white {
     background: rgba(255, 255, 255, 0.12);
-    color: #ffffff;
+    color: #FFFFFF;
     border: 2px solid rgba(255, 255, 255, 0.6);
     opacity: 1 !important;
     visibility: visible !important;
 }
 
 .btn-outline-white:hover {
-    background: #ffffff;
+    background: #FFFFFF;
     color: var(--color-primary);
-    border-color: #ffffff;
+    border-color: #FFFFFF;
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
 }
@@ -495,7 +487,7 @@ p {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.05) 0%, transparent 60%);
+    background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 60%);
     pointer-events: none;
 }
 
@@ -561,12 +553,12 @@ p {
 
 .badge-success {
     background: var(--color-success-light);
-    color: var(--color-success);
+    color: #065F46;
 }
 
 .badge-warning {
     background: var(--color-warning-light);
-    color: #856404;
+    color: #92400E;
 }
 
 /* ----------------------------------------------------------

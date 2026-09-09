@@ -1,6 +1,7 @@
 /* ============================================================
-   AHD-RDC — STYLES TOPBAR + HEADER (CORRIGÉ)
-   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   PHOVE — STYLES TOPBAR + HEADER (CORRIGÉ)
+   Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies
+   Palette : Bleu Principal #1A5B9C | Bleu Foncé #2C3E50 | Gris #F8FAFC
    Corrections : z-index header, dropdowns opaques, espacement
    ============================================================ */
 
@@ -18,7 +19,6 @@
     transition: transform var(--transition-base);
     transform: translateZ(0);
 }
-
 
 .topbar.hidden {
     transform: translateY(-100%);
@@ -55,7 +55,7 @@
 
 .topbar-contact i {
     font-size: 11px;
-    color: var(--color-accent);
+    color: #F59E0B;
     width: 14px;
     text-align: center;
 }
@@ -127,7 +127,7 @@
 
 .topbar-lang-btn .fa-globe {
     font-size: 12px;
-    color: var(--color-accent);
+    color: #F59E0B;
 }
 
 .topbar-lang-btn .fa-chevron-down {
@@ -139,15 +139,12 @@
     transform: rotate(180deg);
 }
 
-/* ============================================================
-   MODIFICATION DANS : public/assets/css/public-header.css
-   ============================================================ */
-
+/* Dropdown langues */
 .topbar-lang-dropdown {
     position: absolute;
     top: calc(100% + 8px);
     right: 0;
-    background: #ffffff !important;  /* Force le fond blanc totalement opaque */
+    background: #FFFFFF !important;  /* Force le fond blanc totalement opaque */
     border-radius: var(--border-radius-sm);
     box-shadow: var(--shadow-lg);
     min-width: 150px;
@@ -156,11 +153,8 @@
     visibility: hidden;
     transform: translateY(-5px);
     transition: all var(--transition-fast);
-    
-    /* CORRECTION ICI : On lui donne un z-index ultra élevé */
     z-index: 99999 !important;
 }
-
 
 .topbar-lang-dropdown.active {
     opacity: 1;
@@ -168,23 +162,18 @@
     transform: translateY(0);
 }
 
-/* ============================================================
-   CORRECTION ALIGNEMENT DES LANGUES DANS : public-header.css
-   ============================================================ */
-
 .topbar-lang-option {
     display: flex;
     align-items: center;
-    gap: 10px;                  /* Crée un espace propre entre le drapeau et le texte */
+    gap: 10px;
     padding: 10px 16px;
     font-size: var(--font-size-xs);
     color: var(--color-text-secondary);
     text-decoration: none;
     transition: all var(--transition-fast);
-    background: #ffffff;        /* Assure l'opacité */
-    white-space: nowrap;        /* Force le texte à rester sur une seule ligne */
+    background: #FFFFFF;
+    white-space: nowrap;
 }
-
 
 .topbar-lang-option i.fa-flag {
     font-size: 12px;
@@ -192,10 +181,9 @@
 }
 
 /* Couleurs personnalisées pour chaque pays */
-.flag-fr { color: #16558F; } /* Bleu */
+.flag-fr { color: #1A5B9C; } /* Bleu PHOVE */
 .flag-en { color: #D32F2F; } /* Rouge */
 .flag-rdc { color: #007FFF; } /* Bleu RDC */
-
 
 .topbar-lang-option:hover {
     background: var(--color-bg-light);
@@ -216,13 +204,10 @@
     object-fit: cover;
     flex-shrink: 0;
     display: inline-block;
-    /* Sécurité si l'image est cassée : évite d'afficher le texte alt de façon moche */
     font-size: 0;
     color: transparent;
     text-indent: -9999px;
 }
-
-
 
 /* ----------------------------------------------------------
    2. HEADER — CORRIGÉ (Forçage de l'empilement)
@@ -233,29 +218,21 @@
     left: 0;
     width: 100%;
     height: var(--header-height);
-    background: #ffffff !important; /* Force l'opacité totale blanche */
+    background: #FFFFFF !important; /* Force l'opacité totale blanche */
     border-bottom: 1px solid var(--border-color-light);
-    z-index: 9999 !important; /* On met une valeur brute ultra haute temporairement */
+    z-index: 9999 !important;
     transition: all var(--transition-base);
     box-shadow: var(--shadow-xs);
-    
-    /* Force le navigateur à détacher le header du flux du Hero */
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
 }
 
-
-/* ============================================================
-   MODIFICATION À FAIRE DANS : public/assets/css/public-header.css
-   ============================================================ */
-
 .header.scrolled {
-    top: 0 !important;             /* Supprime l'espace laissé par la topbar */
-    background: #ffffff !important; /* Garde le fond blanc opaque */
-    box-shadow: var(--shadow-md);   /* Ajoute une ombre légère sous le menu */
-    height: 70px;                   /* Réduit légèrement la hauteur du menu au scroll */
+    top: 0 !important;
+    background: #FFFFFF !important;
+    box-shadow: var(--shadow-md);
+    height: 70px;
 }
-
 
 .header.scrolled .header-logo-img {
     width: 40px;
@@ -404,7 +381,7 @@
     top: calc(100% + 5px);
     left: 50%;
     transform: translateX(-50%) translateY(10px);
-    background: var(--color-bg-white);
+    background: #FFFFFF;
     min-width: 240px;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-xl);
@@ -414,7 +391,7 @@
     transition: all var(--transition-base);
     z-index: var(--z-dropdown);
     border: 1px solid var(--border-color-light);
-    background-color: #ffffff;
+    background-color: #FFFFFF;
 }
 
 .header-menu-item:hover .header-dropdown {
@@ -436,7 +413,7 @@
     color: var(--color-text-secondary);
     text-decoration: none;
     transition: all var(--transition-fast);
-    background: #ffffff;
+    background: #FFFFFF;
 }
 
 .dropdown-link i {
@@ -529,7 +506,7 @@
     top: 100%;
     left: 0;
     width: 100%;
-    background: var(--color-bg-white);
+    background: #FFFFFF;
     border-bottom: 3px solid var(--color-primary);
     box-shadow: var(--shadow-lg);
     padding: var(--spacing-lg) 0;
@@ -683,7 +660,7 @@
         right: -320px;
         width: 300px;
         height: 100vh;
-        background: var(--color-bg-white);
+        background: #FFFFFF;
         box-shadow: var(--shadow-xl);
         padding: var(--spacing-xl);
         padding-top: calc(var(--topbar-height) + var(--header-height) + var(--spacing-xl));

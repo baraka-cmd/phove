@@ -10,11 +10,16 @@ class ProjetController extends Controller
 {
     /**
      * Nombre de projets par page.
+     *
+     * @var int
      */
     protected int $perPage = 9;
 
     /**
-     * Affiche la liste paginée et filtrée des projets.
+     * Affiche la liste paginée et filtrée des projets PHOVE.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
@@ -49,7 +54,8 @@ class ProjetController extends Controller
             $query->where(function ($q) use ($recherche) {
                 $q->where('titre', 'like', '%' . $recherche . '%')
                   ->orWhere('description', 'like', '%' . $recherche . '%')
-                  ->orWhere('zone_geographique', 'like', '%' . $recherche . '%');
+                  ->orWhere('zone_geographique', 'like', '%' . $recherche . '%')
+                  ->orWhere('code_projet', 'like', '%' . $recherche . '%');
             });
         }
 
@@ -91,18 +97,23 @@ class ProjetController extends Controller
         $totalProjets = Projet::where('publier', true)->count();
         $projetsEnCours = Projet::where('publier', true)->where('statut', 'en_cours')->count();
         $projetsTermines = Projet::where('publier', true)->where('statut', 'termine')->count();
+        $totalBudget = Projet::where('publier', true)->sum('budget_total');
 
-        // 10. Domaines pour le filtre
+        // 10. Domaines pour le filtre (adaptés PHOVE)
         $domaines = [
-            'sante_nutrition' => 'Santé-Nutrition',
-            'education' => 'Éducation',
-            'protection' => 'Protection',
+            'sante_nutrition' => 'Santé & Nutrition',
+            'education' => 'Éducation & Formation',
+            'protection' => 'Protection Sociale',
             'wash' => 'Eau & Assainissement',
-            'securite_alimentaire' => 'Sécurité Alimentaire',
+            'securite_alimentaire' => 'Sécurité Alimentaire & Agriculture',
             'communication' => 'Communication',
             'environnement' => 'Environnement',
             'paix' => 'Paix & Cohésion',
             'genre' => 'Genre',
+            'spirituel' => 'Accompagnement Spirituel',
+            'infrastructure' => 'Infrastructures',
+            'economique' => 'Activités Socio-Économiques',
+            'judiciaire' => 'Assistance Judiciaire',
         ];
 
         // 11. Statuts pour le filtre
@@ -127,14 +138,17 @@ class ProjetController extends Controller
             'recherche',
             'totalProjets',
             'projetsEnCours',
-            'projetsTermines'
+            'projetsTermines',
+            'totalBudget'
         ));
     }
 
     /**
-     * Affiche le détail d'un projet.
+     * Affiche le détail d'un projet PHOVE.
+     *
+     * @param string $slug
+     * @return \Illuminate\View\View
      */
-   
     public function show(string $slug)
     {
         // 1. Trouver le projet par son slug

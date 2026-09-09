@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Détail de l\'utilisateur')
+@section('title', 'Détail de l\'utilisateur | PHOVE')
 
 @section('page_title', 'Détail utilisateur')
 @section('page_icon', 'eye')
@@ -10,10 +10,19 @@
     $breadcrumb = ['Utilisateurs' => route('admin.users.index'), $user->nom => null];
     $avatarColors = ['blue', 'green', 'orange', 'red', 'purple'];
     $avatarColor = $avatarColors[crc32($user->nom) % count($avatarColors)];
-    $initiales = strtoupper(substr($user->nom, 0, 1));
-    $parts = explode(' ', $user->nom);
-    $initiales = strtoupper(substr($parts[0], 0, 1));
-    if (count($parts) > 1) $initiales .= strtoupper(substr(end($parts), 0, 1));
+    
+    $roleIcon = match($user->role) {
+        'super_admin' => 'crown',
+        'dg' => 'user-tie',
+        'chef_mission' => 'globe-africa',
+        'charge_programme' => 'clipboard-list',
+        'secretaire' => 'file-alt',
+        'comptable' => 'calculator',
+        'caissier' => 'cash-register',
+        'editeur' => 'user-edit',
+        'utilisateur' => 'user',
+        default => 'user',
+    };
 @endphp
 
 @section('styles')
@@ -38,9 +47,9 @@
             <div class="user-show-header">
                 <div class="user-show-avatar">
                     @if($user->photo_profil)
-                        <img src="{{ asset('storage/' . $user->photo_profil) }}" alt="{{ $user->nom }}">
+                        <img src="{{ asset('storage/' . $user->photo_profil) }}" alt="{{ $user->nom }}" loading="lazy">
                     @else
-                        {{ $initiales }}
+                        {{ $user->initiales() }}
                     @endif
                 </div>
                 <div class="user-show-header-info">
@@ -51,13 +60,13 @@
                         @endif
                     </h2>
                     <div class="user-show-header-meta">
-                        <span class="user-role-badge user-role-{{ $user->role }}" style="background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.2);">
-                            <i class="fas fa-{{ $user->role === 'super_admin' ? 'crown' : ($user->role === 'admin' ? 'user-shield' : 'user-edit') }}"></i>
-                            {{ $user->role === 'super_admin' ? 'Super Admin' : ($user->role === 'admin' ? 'Administrateur' : 'Éditeur') }}
+                        <span class="user-role-badge user-role-{{ $user->role }}" style="background: rgba(255,255,255,0.15); color: #FFFFFF; border-color: rgba(255,255,255,0.2);">
+                            <i class="fas fa-{{ $roleIcon }}"></i>
+                            {{ $user->roleLibelle() }}
                         </span>
-                        <span class="user-statut-badge user-statut-{{ $user->statut }}" style="background: rgba(255,255,255,0.15); color: #fff;">
+                        <span class="user-statut-badge user-statut-{{ $user->statut }}" style="background: rgba(255,255,255,0.15); color: #FFFFFF;">
                             <i class="fas fa-{{ $user->statut === 'actif' ? 'check-circle' : ($user->statut === 'inactif' ? 'pause-circle' : 'ban') }}"></i>
-                            {{ $user->statut === 'actif' ? 'Actif' : ($user->statut === 'inactif' ? 'Inactif' : 'Suspendu') }}
+                            {{ $user->statutLibelle() }}
                         </span>
                     </div>
                 </div>
@@ -123,7 +132,7 @@
                             </div>
 
                             <div class="user-show-field">
-                                <div class="user-show-field-icon" style="background: var(--color-primary-lighter); color: var(--color-primary);">
+                                <div class="user-show-field-icon" style="background: #E8F0F8; color: #1A5B9C;">
                                     <i class="fas fa-user"></i>
                                 </div>
                                 <div>
@@ -133,13 +142,13 @@
                             </div>
 
                             <div class="user-show-field">
-                                <div class="user-show-field-icon" style="background: var(--color-info-light); color: var(--color-info);">
+                                <div class="user-show-field-icon" style="background: #DBEAFE; color: #3B82F6;">
                                     <i class="fas fa-envelope"></i>
                                 </div>
                                 <div>
                                     <div class="user-show-field-label">Adresse email</div>
                                     <div class="user-show-field-value">
-                                        <a href="mailto:{{ $user->email }}" style="color: var(--color-primary); text-decoration: underline;">
+                                        <a href="mailto:{{ $user->email }}" style="color: #1A5B9C; text-decoration: underline;">
                                             {{ $user->email }}
                                         </a>
                                     </div>
@@ -147,14 +156,14 @@
                             </div>
 
                             <div class="user-show-field">
-                                <div class="user-show-field-icon" style="background: var(--color-success-light); color: var(--color-success);">
+                                <div class="user-show-field-icon" style="background: #D1FAE5; color: #10B981;">
                                     <i class="fas fa-phone"></i>
                                 </div>
                                 <div>
                                     <div class="user-show-field-label">Téléphone</div>
                                     <div class="user-show-field-value {{ $user->telephone ? '' : 'empty' }}">
                                         @if($user->telephone)
-                                            <a href="tel:{{ $user->telephone }}" style="color: var(--color-primary); text-decoration: underline;">
+                                            <a href="tel:{{ $user->telephone }}" style="color: #1A5B9C; text-decoration: underline;">
                                                 {{ $user->telephone }}
                                             </a>
                                         @else
@@ -174,23 +183,23 @@
                             </div>
 
                             <div class="user-show-field">
-                                <div class="user-show-field-icon" style="background: #f3e5f5; color: #8e44ad;">
-                                    <i class="fas fa-{{ $user->role === 'super_admin' ? 'crown' : ($user->role === 'admin' ? 'user-shield' : 'user-edit') }}"></i>
+                                <div class="user-show-field-icon" style="background: #E8F0F8; color: #1A5B9C;">
+                                    <i class="fas fa-{{ $roleIcon }}"></i>
                                 </div>
                                 <div>
                                     <div class="user-show-field-label">Rôle</div>
                                     <div class="user-show-field-value">
                                         <span class="user-role-badge user-role-{{ $user->role }}">
-                                            <i class="fas fa-{{ $user->role === 'super_admin' ? 'crown' : ($user->role === 'admin' ? 'user-shield' : 'user-edit') }}"></i>
-                                            {{ $user->role === 'super_admin' ? 'Super Admin' : ($user->role === 'admin' ? 'Administrateur' : 'Éditeur') }}
+                                            <i class="fas fa-{{ $roleIcon }}"></i>
+                                            {{ $user->roleLibelle() }}
                                         </span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="user-show-field">
-                                <div class="user-show-field-icon" style="background: var(--color-{{ $user->statut === 'actif' ? 'success' : ($user->statut === 'inactif' ? 'warning' : 'error') }}-light); 
-                                    color: var(--color-{{ $user->statut === 'actif' ? 'success' : ($user->statut === 'inactif' ? 'warning' : 'error') }});">
+                                <div class="user-show-field-icon" style="background: {{ $user->statut === 'actif' ? '#D1FAE5' : ($user->statut === 'inactif' ? '#FEF3C7' : '#FEE2E2') }}; 
+                                    color: {{ $user->statut === 'actif' ? '#10B981' : ($user->statut === 'inactif' ? '#F59E0B' : '#EF4444') }};">
                                     <i class="fas fa-{{ $user->statut === 'actif' ? 'check-circle' : ($user->statut === 'inactif' ? 'pause-circle' : 'ban') }}"></i>
                                 </div>
                                 <div>
@@ -198,20 +207,20 @@
                                     <div class="user-show-field-value">
                                         <span class="user-statut-badge user-statut-{{ $user->statut }}">
                                             <i class="fas fa-{{ $user->statut === 'actif' ? 'check-circle' : ($user->statut === 'inactif' ? 'pause-circle' : 'ban') }}"></i>
-                                            {{ $user->statut === 'actif' ? 'Actif' : ($user->statut === 'inactif' ? 'Inactif' : 'Suspendu') }}
+                                            {{ $user->statutLibelle() }}
                                         </span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="user-show-field">
-                                <div class="user-show-field-icon" style="background: var(--color-info-light); color: var(--color-info);">
+                                <div class="user-show-field-icon" style="background: #DBEAFE; color: #3B82F6;">
                                     <i class="fas fa-fingerprint"></i>
                                 </div>
                                 <div>
                                     <div class="user-show-field-label">ID utilisateur</div>
                                     <div class="user-show-field-value">
-                                        <code style="background: #f5f5f5; padding: 2px 8px; border-radius: 4px; font-size: 12px;">#{{ $user->id }}</code>
+                                        <code style="background: #F1F5F9; padding: 2px 8px; border-radius: 4px; font-size: 12px;">#{{ $user->id }}</code>
                                     </div>
                                 </div>
                             </div>
@@ -228,7 +237,7 @@
                             </div>
 
                             <div class="user-show-field">
-                                <div class="user-show-field-icon" style="background: var(--color-success-light); color: var(--color-success);">
+                                <div class="user-show-field-icon" style="background: #D1FAE5; color: #10B981;">
                                     <i class="fas fa-calendar-plus"></i>
                                 </div>
                                 <div>
@@ -238,7 +247,7 @@
                             </div>
 
                             <div class="user-show-field">
-                                <div class="user-show-field-icon" style="background: #fff3cd; color: #e67e22;">
+                                <div class="user-show-field-icon" style="background: #FEF3C7; color: #F59E0B;">
                                     <i class="fas fa-clock"></i>
                                 </div>
                                 <div>
@@ -248,14 +257,14 @@
                             </div>
 
                             <div class="user-show-field">
-                                <div class="user-show-field-icon" style="background: var(--color-primary-lighter); color: var(--color-primary);">
+                                <div class="user-show-field-icon" style="background: #E8F0F8; color: #1A5B9C;">
                                     <i class="fas fa-sign-in-alt"></i>
                                 </div>
                                 <div>
                                     <div class="user-show-field-label">Dernière connexion</div>
                                     <div class="user-show-field-value {{ $user->derniere_connexion ? '' : 'empty' }}">
                                         @if($user->derniere_connexion)
-                                            <span style="{{ $user->derniere_connexion->diffInHours(now()) < 24 ? 'color: var(--color-success); font-weight: 700;' : '' }}">
+                                            <span style="{{ $user->derniere_connexion->diffInHours(now()) < 24 ? 'color: #10B981; font-weight: 700;' : '' }}">
                                                 {{ $user->derniere_connexion->diffInHours(now()) < 24 
                                                     ? $user->derniere_connexion->diffForHumans() 
                                                     : $user->derniere_connexion->format('d/m/Y à H:i') }}
@@ -276,42 +285,62 @@
                             </div>
 
                             <div class="user-show-field">
-                                <div class="user-show-field-icon" style="background: var(--color-success-light); color: var(--color-success);">
+                                <div class="user-show-field-icon" style="background: #D1FAE5; color: #10B981;">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div>
                                     <div class="user-show-field-label">Projets</div>
-                                    <div class="user-show-field-value">{{ in_array($user->role, ['super_admin', 'admin']) ? '✅ Gestion complète' : '❌ Lecture seule' }}</div>
+                                    <div class="user-show-field-value">
+                                        {{ $user->peutGererProjets() ? '✅ Gestion complète' : '❌ Lecture seule' }}
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="user-show-field">
-                                <div class="user-show-field-icon" style="background: var(--color-success-light); color: var(--color-success);">
+                                <div class="user-show-field-icon" style="background: #D1FAE5; color: #10B981;">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div>
-                                    <div class="user-show-field-label">Membres & Dons</div>
-                                    <div class="user-show-field-value">{{ in_array($user->role, ['super_admin', 'admin']) ? '✅ Gestion complète' : '❌ Aucun accès' }}</div>
+                                    <div class="user-show-field-label">Membres</div>
+                                    <div class="user-show-field-value">
+                                        {{ $user->peutGererMembres() ? '✅ Gestion complète' : '❌ Aucun accès' }}
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="user-show-field">
-                                <div class="user-show-field-icon" style="background: var(--color-success-light); color: var(--color-success);">
+                                <div class="user-show-field-icon" style="background: #D1FAE5; color: #10B981;">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div>
+                                    <div class="user-show-field-label">Finances</div>
+                                    <div class="user-show-field-value">
+                                        {{ $user->peutGererFinances() ? '✅ Gestion complète' : '❌ Aucun accès' }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="user-show-field">
+                                <div class="user-show-field-icon" style="background: #D1FAE5; color: #10B981;">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div>
                                     <div class="user-show-field-label">Contenu</div>
-                                    <div class="user-show-field-value">✅ Articles, Médias, Témoignages</div>
+                                    <div class="user-show-field-value">
+                                        {{ $user->peutRedigerContenu() ? '✅ Articles, Médias, Témoignages' : '❌ Aucun accès' }}
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="user-show-field">
-                                <div class="user-show-field-icon" style="background: var(--color-success-light); color: var(--color-success);">
+                                <div class="user-show-field-icon" style="background: #D1FAE5; color: #10B981;">
                                     <i class="fas fa-check"></i>
                                 </div>
                                 <div>
                                     <div class="user-show-field-label">Paramètres</div>
-                                    <div class="user-show-field-value">{{ $user->role === 'super_admin' ? '✅ Accès complet' : '❌ Aucun accès' }}</div>
+                                    <div class="user-show-field-value">
+                                        {{ $user->peutGererParametres() ? '✅ Accès complet' : '❌ Aucun accès' }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -347,13 +376,13 @@
                             <form action="{{ route('admin.users.suspendre', $user) }}" method="POST">
                                 @csrf
                                 @method('PUT')
-                                <button type="submit" class="btn btn-outline btn-sm" style="border-color: var(--color-accent); color: var(--color-accent);">
+                                <button type="submit" class="btn btn-outline btn-sm" style="border-color: #F59E0B; color: #F59E0B;">
                                     <i class="fas fa-ban"></i> Suspendre
                                 </button>
                             </form>
                         @endif
                     @else
-                        <span style="font-size: 12px; color: var(--color-text-muted); padding: 8px;">
+                        <span style="font-size: 12px; color: #64748B; padding: 8px;">
                             <i class="fas fa-info-circle"></i> Vous ne pouvez pas modifier votre propre statut.
                         </span>
                     @endif

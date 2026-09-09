@@ -9,11 +9,15 @@ class Setting extends Model
 {
     /**
      * La table associée au modèle.
+     *
+     * @var string
      */
     protected $table = 'settings';
 
     /**
      * Les attributs modifiables en masse.
+     *
+     * @var array<int, string>
      */
     protected $fillable = [
         'key',
@@ -26,9 +30,11 @@ class Setting extends Model
     ];
 
     /**
-     * Cache duration in seconds.
+     * Durée du cache en secondes (24 heures).
+     *
+     * @var int
      */
-    protected static int $cacheDuration = 86400; // 24 heures
+    protected static int $cacheDuration = 86400;
 
     /*
     |--------------------------------------------------------------------------
@@ -38,6 +44,10 @@ class Setting extends Model
 
     /**
      * Récupère la valeur d'un paramètre par sa clé.
+     *
+     * @param string $key
+     * @param mixed $default
+     * @return mixed
      */
     public static function get(string $key, mixed $default = null): mixed
     {
@@ -49,6 +59,10 @@ class Setting extends Model
 
     /**
      * Définit la valeur d'un paramètre.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return void
      */
     public static function set(string $key, mixed $value): void
     {
@@ -62,6 +76,9 @@ class Setting extends Model
 
     /**
      * Récupère tous les paramètres d'un groupe.
+     *
+     * @param string $group
+     * @return array<string, mixed>
      */
     public static function getGroup(string $group): array
     {
@@ -76,26 +93,33 @@ class Setting extends Model
 
     /**
      * Récupère tous les paramètres sous forme de tableau clé-valeur.
+     *
+     * @return array
      */
     public static function allSettings(): array
     {
         return Cache::remember('settings.all', self::$cacheDuration, function () {
-            return self::orderBy('group')->orderBy('ordre')->get()->toArray();
+            return self::orderBy('group')
+                ->orderBy('ordre')
+                ->get()
+                ->toArray();
         });
     }
 
     /**
      * Vide le cache des paramètres.
+     *
+     * @return void
      */
     public static function clearCache(): void
     {
         Cache::forget('settings.all');
-        
+
         $groups = ['identite', 'contact', 'social', 'pages', 'seo', 'maintenance'];
         foreach ($groups as $group) {
             Cache::forget('settings.group.' . $group);
         }
-        
+
         self::pluck('key')->each(function ($key) {
             Cache::forget('setting.' . $key);
         });
@@ -108,7 +132,9 @@ class Setting extends Model
     */
 
     /**
-     * Retourne l'URL complète si c'est une image.
+     * Retourne l'URL complète si le paramètre est une image.
+     *
+     * @return string|null
      */
     public function urlValue(): ?string
     {
@@ -118,8 +144,16 @@ class Setting extends Model
         return $this->value;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | BOOT
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Boot : vider le cache après chaque modification.
+     *
+     * @return void
      */
     protected static function booted(): void
     {

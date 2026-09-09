@@ -2,7 +2,7 @@
 
 @section('title', 'Organigramme')
 
-@section('meta_description', 'Découvrez la structure organisationnelle complète d\'AHD-RDC : Assemblée Générale, Conseil d\'Administration, Direction Exécutive et Commission de Contrôle.')
+@section('meta_description', 'Découvrez la structure organisationnelle complète de PHOVE : Assemblée Générale, Conseil d\'Administration, Direction Générale, Chefs de Missions, Chargés de Programmes et les 24 postes opérationnels.')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
@@ -21,7 +21,7 @@
             </div>
             <h1 class="page-header-title">Organigramme</h1>
             <p class="page-header-subtitle">
-                La structure organisationnelle complète d'AHD-RDC, conformément au Règlement d'Ordre Intérieur.
+                La structure organisationnelle complète de PHOVE, conformément aux articles 10 à 17 des statuts.
             </p>
             <nav class="page-breadcrumb">
                 <a href="{{ url('/') }}"><i class="fas fa-home"></i> Accueil</a>
@@ -36,16 +36,16 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 1 : ORGANIGRAMME VISUEL --}}
+    {{-- SECTION 1 : ORGANIGRAMME VISUEL — Pyramide PHOVE --}}
     {{-- ============================================ --}}
     <section class="page-section page-section-white">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Structure organisationnelle</span>
-                <h2 class="section-title">Notre organisation</h2>
+                <h2 class="section-title">Notre organisation pyramidale</h2>
                 <p class="section-description">
-                    Conformément au <strong>Titre V du Règlement d'Ordre Intérieur</strong>, 
-                    voici la structure hiérarchique et fonctionnelle d'AHD-RDC.
+                    Conformément aux <strong>articles 10 à 17 des statuts</strong>, voici la 
+                    structure hiérarchique complète de PHOVE, du sommet stratégique à la base opérationnelle.
                 </p>
             </div>
 
@@ -59,8 +59,8 @@
                         </div>
                         <div class="org-box-content">
                             <h3 class="org-box-title">Assemblée Générale</h3>
-                            <p class="org-box-subtitle">Organe suprême d'orientation et de décision</p>
-                            <span class="org-box-info">Tous les membres effectifs</span>
+                            <p class="org-box-subtitle">Organe suprême qui prend les décisions</p>
+                            <span class="org-box-info">Tous les membres effectifs — Article 11a</span>
                         </div>
                     </div>
                 </div>
@@ -74,48 +74,68 @@
                     </div>
                 </div>
 
-                {{-- Niveau 2 : CA et CC --}}
-                <div class="org-level org-level-2">
-                    {{-- Conseil d'Administration --}}
+                {{-- Niveau 2 : CA, CC, CS, CG --}}
+                <div class="org-level org-level-4">
                     <div class="org-box org-box-ca">
-                        <div class="org-box-icon">
-                            <i class="fas fa-user-tie"></i>
-                        </div>
+                        <div class="org-box-icon"><i class="fas fa-user-tie"></i></div>
                         <div class="org-box-content">
                             <h3 class="org-box-title">Conseil d'Administration</h3>
-                            <p class="org-box-subtitle">Organe de pilotage</p>
-                            <span class="org-box-info">7 membres — Mandat 3 ans</span>
+                            <p class="org-box-subtitle">
+                                {{ $membresCA->count() }} membre(s) actif(s)
+                            </p>
+                            <span class="org-box-info">Article 11b</span>
                         </div>
                     </div>
 
-                    {{-- Commission de Contrôle --}}
                     <div class="org-box org-box-cc">
-                        <div class="org-box-icon">
-                            <i class="fas fa-search-dollar"></i>
-                        </div>
+                        <div class="org-box-icon"><i class="fas fa-search-dollar"></i></div>
                         <div class="org-box-content">
                             <h3 class="org-box-title">Commission de Contrôle</h3>
-                            <p class="org-box-subtitle">Organe de vérification</p>
-                            <span class="org-box-info">3 commissaires aux comptes</span>
+                            <p class="org-box-subtitle">
+                                {{ $membresCC->count() }} membre(s) actif(s)
+                            </p>
+                            <span class="org-box-info">Article 11c — Trimestrielle</span>
+                        </div>
+                    </div>
+
+                    <div class="org-box org-box-cs">
+                        <div class="org-box-icon"><i class="fas fa-clipboard-check"></i></div>
+                        <div class="org-box-content">
+                            <h3 class="org-box-title">Comité de Suivi</h3>
+                            <p class="org-box-subtitle">Collabore avec la CC</p>
+                            <span class="org-box-info">Article 38</span>
+                        </div>
+                    </div>
+
+                    <div class="org-box org-box-cg">
+                        <div class="org-box-icon"><i class="fas fa-tasks"></i></div>
+                        <div class="org-box-content">
+                            <h3 class="org-box-title">Comité de Gestion</h3>
+                            <p class="org-box-subtitle">Travaille sous le DG</p>
+                            <span class="org-box-info">Article 39</span>
                         </div>
                     </div>
                 </div>
 
-                {{-- Ligne vers DE --}}
+                {{-- Ligne vers DG --}}
                 <div class="org-connector">
                     <div class="org-line org-line-single"></div>
                 </div>
 
-                {{-- Niveau 3 : Direction Exécutive --}}
+                {{-- Niveau 3 : Direction Générale --}}
                 <div class="org-level">
-                    <div class="org-box org-box-de">
-                        <div class="org-box-icon">
-                            <i class="fas fa-tasks"></i>
-                        </div>
+                    <div class="org-box org-box-dg">
+                        <div class="org-box-icon"><i class="fas fa-user-tie"></i></div>
                         <div class="org-box-content">
-                            <h3 class="org-box-title">Direction Exécutive</h3>
-                            <p class="org-box-subtitle">Coordonnateur National</p>
-                            <span class="org-box-info">Dr AKSANTI DUNIA Steeng</span>
+                            <h3 class="org-box-title">Directeur Général & Coordonnateur</h3>
+                            <p class="org-box-subtitle">
+                                @if($directeurGeneral)
+                                    {{ $directeurGeneral->membre->nomComplet() }}
+                                @else
+                                    Apôtre Philippe KABOYI MUSAMUGUMA
+                                @endif
+                            </p>
+                            <span class="org-box-info">Mandat 6 ans renouvelable — Article 18</span>
                         </div>
                     </div>
                 </div>
@@ -129,32 +149,32 @@
                     </div>
                 </div>
 
-                {{-- Niveau 4 : Départements --}}
+                {{-- Niveau 4 : Chefs de Missions et Chargés de Programmes --}}
                 <div class="org-level org-level-2">
-                    {{-- Bureau des Programmes --}}
-                    <div class="org-box org-box-prog">
-                        <div class="org-box-icon">
-                            <i class="fas fa-clipboard-list"></i>
-                        </div>
+                    <div class="org-box org-box-mission">
+                        <div class="org-box-icon"><i class="fas fa-globe-africa"></i></div>
                         <div class="org-box-content">
-                            <h3 class="org-box-title">Bureau des Programmes</h3>
-                            <p class="org-box-subtitle">Coordination des projets</p>
+                            <h3 class="org-box-title">Chefs de Missions</h3>
+                            <p class="org-box-subtitle">
+                                {{ $chefsMissions->count() }} membre(s)
+                            </p>
+                            <span class="org-box-info">Article 19 — Rapports 48h</span>
                         </div>
                     </div>
 
-                    {{-- Administration et Finance --}}
-                    <div class="org-box org-box-admin">
-                        <div class="org-box-icon">
-                            <i class="fas fa-calculator"></i>
-                        </div>
+                    <div class="org-box org-box-programme">
+                        <div class="org-box-icon"><i class="fas fa-clipboard-list"></i></div>
                         <div class="org-box-content">
-                            <h3 class="org-box-title">Administration & Finance</h3>
-                            <p class="org-box-subtitle">Gestion administrative et financière</p>
+                            <h3 class="org-box-title">Chargés des Programmes</h3>
+                            <p class="org-box-subtitle">
+                                {{ $chargesProgrammes->count() }} membre(s)
+                            </p>
+                            <span class="org-box-info">Article 20 — Rapports 48h</span>
                         </div>
                     </div>
                 </div>
 
-                {{-- Lignes vers sous-départements --}}
+                {{-- Ligne vers services --}}
                 <div class="org-connector">
                     <div class="org-line"></div>
                     <div class="org-split org-split-4">
@@ -165,56 +185,138 @@
                     </div>
                 </div>
 
-                {{-- Niveau 5 : Sous-départements --}}
+                {{-- Niveau 5 : Services administratifs et financiers --}}
                 <div class="org-level org-level-4">
                     <div class="org-box org-box-sub">
-                        <div class="org-box-icon org-box-icon-sm">
-                            <i class="fas fa-user-friends"></i>
-                        </div>
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-file-alt"></i></div>
                         <div class="org-box-content">
-                            <h3 class="org-box-title">Assistants Programmes</h3>
+                            <h3 class="org-box-title">Secrétaires Exécutifs</h3>
+                            <span class="org-box-info">Article 21</span>
                         </div>
                     </div>
                     <div class="org-box org-box-sub">
-                        <div class="org-box-icon org-box-icon-sm">
-                            <i class="fas fa-chalkboard-teacher"></i>
-                        </div>
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-calculator"></i></div>
                         <div class="org-box-content">
-                            <h3 class="org-box-title">Animateurs</h3>
+                            <h3 class="org-box-title">Comptables Sectionnaires</h3>
+                            <span class="org-box-info">Article 22</span>
                         </div>
                     </div>
                     <div class="org-box org-box-sub">
-                        <div class="org-box-icon org-box-icon-sm">
-                            <i class="fas fa-book"></i>
-                        </div>
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-cash-register"></i></div>
                         <div class="org-box-content">
-                            <h3 class="org-box-title">Comptabilité</h3>
+                            <h3 class="org-box-title">Trésoriers & Caissiers</h3>
+                            <span class="org-box-info">Article 24</span>
                         </div>
                     </div>
                     <div class="org-box org-box-sub">
-                        <div class="org-box-icon org-box-icon-sm">
-                            <i class="fas fa-cash-register"></i>
-                        </div>
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-user-cog"></i></div>
                         <div class="org-box-content">
-                            <h3 class="org-box-title">Caisse</h3>
+                            <h3 class="org-box-title">Secrétaires Administratifs</h3>
+                            <span class="org-box-info">Article 23</span>
                         </div>
                     </div>
                 </div>
 
-                {{-- Ligne vers la base --}}
+                {{-- Ligne vers opérations terrain --}}
                 <div class="org-connector">
                     <div class="org-line org-line-single"></div>
                 </div>
 
-                {{-- Niveau 6 : Structures de base --}}
-                <div class="org-level">
-                    <div class="org-box org-box-base">
-                        <div class="org-box-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
+                {{-- Niveau 6 : Opérations terrain --}}
+                <div class="org-level org-level-4">
+                    <div class="org-box org-box-terrain">
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-chalkboard-teacher"></i></div>
                         <div class="org-box-content">
-                            <h3 class="org-box-title">Structures de Base Communautaire</h3>
-                            <p class="org-box-subtitle">Relais communautaires sur le terrain</p>
+                            <h3 class="org-box-title">Encadreurs Moniteurs</h3>
+                            <span class="org-box-info">Article 25</span>
+                        </div>
+                    </div>
+                    <div class="org-box org-box-terrain">
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-brain"></i></div>
+                        <div class="org-box-content">
+                            <h3 class="org-box-title">Psychologues</h3>
+                            <span class="org-box-info">Article 26</span>
+                        </div>
+                    </div>
+                    <div class="org-box org-box-terrain">
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-stethoscope"></i></div>
+                        <div class="org-box-content">
+                            <h3 class="org-box-title">Médecins</h3>
+                            <span class="org-box-info">Article 27</span>
+                        </div>
+                    </div>
+                    <div class="org-box org-box-terrain">
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-dove"></i></div>
+                        <div class="org-box-content">
+                            <h3 class="org-box-title">Prédicateurs</h3>
+                            <span class="org-box-info">Article 28 — Bénévoles</span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Ligne vers logistique --}}
+                <div class="org-connector">
+                    <div class="org-line org-line-single"></div>
+                </div>
+
+                {{-- Niveau 7 : Logistique --}}
+                <div class="org-level org-level-4">
+                    <div class="org-box org-box-logistique">
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-box"></i></div>
+                        <div class="org-box-content">
+                            <h3 class="org-box-title">Chargés de Ravitaillement</h3>
+                            <span class="org-box-info">Article 29</span>
+                        </div>
+                    </div>
+                    <div class="org-box org-box-logistique">
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-warehouse"></i></div>
+                        <div class="org-box-content">
+                            <h3 class="org-box-title">Chargés de Magasins/Dépôts</h3>
+                            <span class="org-box-info">Article 30</span>
+                        </div>
+                    </div>
+                    <div class="org-box org-box-logistique">
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-truck"></i></div>
+                        <div class="org-box-content">
+                            <h3 class="org-box-title">Chargés de Transport</h3>
+                            <span class="org-box-info">Article 31</span>
+                        </div>
+                    </div>
+                    <div class="org-box org-box-logistique">
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-shield-alt"></i></div>
+                        <div class="org-box-content">
+                            <h3 class="org-box-title">Protocole & Sécurité</h3>
+                            <span class="org-box-info">Article 32</span>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Ligne vers intendance --}}
+                <div class="org-connector">
+                    <div class="org-line org-line-single"></div>
+                </div>
+
+                {{-- Niveau 8 : Intendance --}}
+                <div class="org-level org-level-3">
+                    <div class="org-box org-box-intendance">
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-utensils"></i></div>
+                        <div class="org-box-content">
+                            <h3 class="org-box-title">Cuisiniers</h3>
+                            <span class="org-box-info">Article 33</span>
+                        </div>
+                    </div>
+                    <div class="org-box org-box-intendance">
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-tshirt"></i></div>
+                        <div class="org-box-content">
+                            <h3 class="org-box-title">Lavadeurs</h3>
+                            <span class="org-box-info">Article 34</span>
+                        </div>
+                    </div>
+                    <div class="org-box org-box-intendance">
+                        <div class="org-box-icon org-box-icon-sm"><i class="fas fa-tree"></i></div>
+                        <div class="org-box-content">
+                            <h3 class="org-box-title">Jardiniers</h3>
+                            <span class="org-box-info">Article 34</span>
                         </div>
                     </div>
                 </div>
@@ -237,56 +339,77 @@
                     <div class="legend-color legend-ag"></div>
                     <div class="legend-text">
                         <strong>Assemblée Générale</strong>
-                        <span>Organe suprême — Tous les membres effectifs</span>
+                        <span>Organe suprême — Article 11a</span>
                     </div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color legend-ca"></div>
                     <div class="legend-text">
                         <strong>Conseil d'Administration</strong>
-                        <span>Organe de pilotage — 7 membres</span>
+                        <span>Exécute les décisions — Article 11b</span>
                     </div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color legend-cc"></div>
                     <div class="legend-text">
                         <strong>Commission de Contrôle</strong>
-                        <span>Organe de vérification — 3 commissaires</span>
+                        <span>Supervise — Article 11c</span>
                     </div>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color legend-de"></div>
+                    <div class="legend-color legend-cs"></div>
                     <div class="legend-text">
-                        <strong>Direction Exécutive</strong>
-                        <span>Organe d'exécution — Coordonnateur National</span>
+                        <strong>Comité de Suivi</strong>
+                        <span>Collabore avec la CC — Article 38</span>
                     </div>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color legend-prog"></div>
+                    <div class="legend-color legend-cg"></div>
                     <div class="legend-text">
-                        <strong>Bureau des Programmes</strong>
-                        <span>Coordination des projets et activités</span>
+                        <strong>Comité de Gestion</strong>
+                        <span>Travaille sous le DG — Article 39</span>
                     </div>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color legend-admin"></div>
+                    <div class="legend-color legend-dg"></div>
                     <div class="legend-text">
-                        <strong>Administration & Finance</strong>
-                        <span>Gestion administrative, financière et logistique</span>
+                        <strong>Directeur Général</strong>
+                        <span>Mandat 6 ans — Article 18</span>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-mission"></div>
+                    <div class="legend-text">
+                        <strong>Chefs de Missions & Chargés de Programmes</strong>
+                        <span>Articles 19-20</span>
                     </div>
                 </div>
                 <div class="legend-item">
                     <div class="legend-color legend-sub"></div>
                     <div class="legend-text">
-                        <strong>Sous-départements</strong>
-                        <span>Assistants, Animateurs, Comptabilité, Caisse</span>
+                        <strong>Services administratifs et financiers</strong>
+                        <span>Articles 21-24</span>
                     </div>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color legend-base"></div>
+                    <div class="legend-color legend-terrain"></div>
                     <div class="legend-text">
-                        <strong>Structures de Base</strong>
-                        <span>Relais communautaires sur le terrain</span>
+                        <strong>Opérations terrain</strong>
+                        <span>Articles 25-28</span>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-logistique"></div>
+                    <div class="legend-text">
+                        <strong>Logistique</strong>
+                        <span>Articles 29-32</span>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-intendance"></div>
+                    <div class="legend-text">
+                        <strong>Intendance</strong>
+                        <span>Articles 33-34</span>
                     </div>
                 </div>
             </div>
@@ -306,57 +429,68 @@
                     <ul class="check-list">
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span><strong>L'Assemblée Générale</strong> se réunit chaque année en janvier et prend les grandes décisions</span>
+                            <span><strong>L'Assemblée Générale</strong> est l'organe suprême qui prend les décisions (Article 11a)</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span><strong>Le Conseil d'Administration</strong> siège tous les 3 mois pour piloter l'association</span>
+                            <span><strong>Le Conseil d'Administration</strong> exécute les décisions de l'AG (Article 11b)</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span><strong>La Direction Exécutive</strong> gère le quotidien et exécute les décisions</span>
+                            <span><strong>Le Directeur Général</strong> coordonne toutes les activités et représente PHOVE partout (Article 18)</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span><strong>La Commission de Contrôle</strong> vérifie la conformité et fait rapport à l'AG</span>
+                            <span><strong>Les Chefs de Missions</strong> coordonnent par continent et transmettent les rapports en 48h (Article 19)</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span>Les <strong>Structures de Base</strong> assurent le relais direct avec les communautés</span>
+                            <span><strong>Les Chargés de Programmes</strong> coordonnent par pays sous mandat du CA (Article 20)</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span><strong>La Commission de Contrôle</strong> vérifie les opérations chaque trimestre (Article 35)</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-check-circle"></i>
+                            <span>Les <strong>Structures territoriales</strong> (Stations, Bases, Antennes) exécutent sur le terrain (Article 11d-g)</span>
                         </li>
                     </ul>
                 </div>
                 <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/logo-ahd.png') }}" 
-                         alt="Structure AHD-RDC" 
-                         class="content-image">
+                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                         alt="Structure PHOVE" 
+                         class="content-image"
+                         onerror="this.src='https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600'">
                 </div>
             </div>
         </div>
     </section>
 
+    {{-- ============================================ --}}
     {{-- CTA --}}
-<section class="cta-section-page">
-    <div class="container">
-        <div class="cta-content-page">
-            <h2 class="cta-title-page">
-                Une <span class="highlight-page">structure</span> au service des communautés
-            </h2>
-            <p class="cta-text-page">
-                Notre organisation est conçue pour garantir l'efficacité, la transparence 
-                et la redevabilité dans toutes nos actions humanitaires.
-            </p>
-            <div class="cta-buttons-page">
-                <a href="{{ url('/gouvernance') }}" class="btn-page-don">
-                    <i class="fas fa-sitemap"></i> Voir la gouvernance
-                </a>
-                <a href="{{ url('/transparence/documents-officiels') }}" class="btn-page-outline">
-                    <i class="fas fa-file-alt"></i> Documents officiels
-                </a>
+    {{-- ============================================ --}}
+    <section class="cta-section-page">
+        <div class="container">
+            <div class="cta-content-page">
+                <h2 class="cta-title-page">
+                    Une <span class="highlight-page">structure</span> au service des plus démunis
+                </h2>
+                <p class="cta-text-page">
+                    Notre organisation est conçue pour garantir l'efficacité, la transparence 
+                    et la redevabilité dans toutes nos actions humanitaires.
+                </p>
+                <div class="cta-buttons-page">
+                    <a href="{{ url('/gouvernance') }}" class="btn-page-don">
+                        <i class="fas fa-sitemap"></i> Voir la gouvernance
+                    </a>
+                    <a href="{{ url('/transparence/documents-officiels') }}" class="btn-page-outline">
+                        <i class="fas fa-file-alt"></i> Documents officiels
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 @endsection
 

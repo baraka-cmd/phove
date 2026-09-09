@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
 
-            // Clé unique du paramètre
+            // Clé unique du paramètre (ex: site_name, slogan, email, phone_1)
             $table->string('key', 100)->unique();
 
-            // Valeur du paramètre
+            // Valeur du paramètre (texte long pour gérer les adresses, descriptions)
             $table->text('value')->nullable();
 
-            // Type de champ (détermine l'affichage dans le formulaire)
+            // Type de champ (détermine l'affichage dans le formulaire admin)
             $table->enum('type', [
                 'text',
                 'textarea',
@@ -33,7 +33,7 @@ return new class extends Migration
                 'switch',
             ])->default('text');
 
-            // Groupe de paramètres (onglet dans l'interface)
+            // Groupe de paramètres (onglet dans l'interface admin)
             $table->enum('group', [
                 'identite',
                 'contact',
@@ -43,26 +43,26 @@ return new class extends Migration
                 'maintenance',
             ])->default('identite');
 
-            // Libellé affiché dans le formulaire
+            // Libellé affiché dans le formulaire admin
             $table->string('label', 100);
 
-            // Description / texte d'aide
+            // Description / texte d'aide pour guider l'administrateur
             $table->string('description', 255)->nullable();
 
             // Ordre d'affichage dans le groupe
             $table->integer('ordre')->default(0);
 
-            // Horodatage
+            // Horodatage (created_at, updated_at)
             $table->timestamps();
 
-            // Index
+            // Index pour optimiser les requêtes
             $table->index('group');
             $table->index('ordre');
         });
     }
 
     /**
-     * Annuler la migration.
+     * Annuler la migration (supprimer la table).
      */
     public function down(): void
     {

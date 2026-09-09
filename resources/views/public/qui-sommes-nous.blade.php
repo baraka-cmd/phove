@@ -2,7 +2,7 @@
 
 @section('title', 'Qui sommes-nous ?')
 
-@section('meta_description', 'AHD-RDC est une organisation non gouvernementale de droit congolais créée le 7 janvier 2017 à Minova, Sud-Kivu. Découvrez notre histoire, notre engagement et notre équipe.')
+@section('meta_description', 'PHOVE est une organisation non gouvernementale apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma. Découvrez notre histoire, notre fondateur et nos 10 membres fondateurs.')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
@@ -21,7 +21,7 @@
             </div>
             <h1 class="page-header-title">Qui sommes-nous ?</h1>
             <p class="page-header-subtitle">
-                Découvrez l'histoire, la mission et l'engagement d'AHD-RDC au service des communautés vulnérables de l'Est de la République Démocratique du Congo.
+                Découvrez l'histoire, la mission et l'engagement de PHOVE au service des orphelins, veuves et personnes démunies de la République Démocratique du Congo.
             </p>
             <nav class="page-breadcrumb">
                 <a href="{{ url('/') }}"><i class="fas fa-home"></i> Accueil</a>
@@ -40,45 +40,45 @@
                 {{-- Texte --}}
                 <div class="content-block">
                     <span class="section-subtitle">Notre histoire</span>
-                    <h2 class="section-title text-left">Une organisation née de la volonté d'agir</h2>
+                    <h2 class="section-title text-left">Une organisation née d'une inspiration divine</h2>
                     
                     <p class="content-block-text">
-                        <strong>Action Humanitaire pour le Développement en République Démocratique du Congo (AHD-RDC)</strong> 
-                        est une organisation non gouvernementale de droit congolais créée le 
-                        <strong>7 janvier 2017</strong> à Minova, dans le territoire de Kalehe, 
-                        province du Sud-Kivu, en République Démocratique du Congo.
+                        <strong>PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies)</strong> 
+                        est une organisation non gouvernementale apolitique à caractère social et spirituel, 
+                        créée le <strong>30 août 2012</strong> à Goma, dans la province du Nord-Kivu, 
+                        en République Démocratique du Congo.
                     </p>
 
                     <p class="content-block-text">
-                        Nous sommes nés dans une région marquée par des conflits intercommunautaires, 
-                        des guerres à répétition et des crises humanitaires qui ont causé des milliers 
-                        de morts, des déplacements massifs de populations et une paupérisation 
-                        généralisée des communautés.
+                        L'organisation a été conçue par le serviteur de Dieu <strong>l'Apôtre Philippe 
+                        KABOYI MUSAMUGUMA</strong> après avoir fait <strong>40 jours de jeûne et de prière</strong>. 
+                        Il reçut une inspiration divine du Seigneur en date du <strong>20 avril 2012</strong> 
+                        sur la montagne appelée <strong>KALAGANE</strong> à Bukavu, au Sud-Kivu.
                     </p>
 
                     <p class="content-block-text">
-                        Face à cette situation, un groupe de <strong>7 membres fondateurs</strong>, 
-                        mus par le souci et la volonté de contribuer à l'éradication ou à l'atténuation 
-                        des misères des personnes vulnérables, a décidé de créer cette association 
-                        sans but lucratif.
+                        Le message s'est répandu dans toutes les églises de la province du Sud-Kivu et partout 
+                        en RD Congo. Il fut bien accueilli à son passage, même dans les pays limitrophes : 
+                        Rwanda, Uganda, Kenya, Tanzanie, Burundi, Zambie, Angola, Soudan et Afrique du Sud.
                     </p>
 
                     <div class="quote-block">
                         <p>
-                            « Mus par le souci et la volonté de contribuer à l'éradication ou à l'atténuation 
-                            des misères des personnes vulnérables victimes d'atrocités des guerres qui ont 
-                            secoué toute la partie de l'Est de la République Démocratique du Congo. »
+                            « Nous serviteurs de Dieu, conscients de nos responsabilités spirituelles, 
+                            avons l'obligation de mettre en pratique la parole de Dieu : 
+                            « Aimez-vous les uns les autres » — Romain 13:8. »
                         </p>
                     </div>
                 </div>
 
                 {{-- Image --}}
                 <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/logo-ahd.png') }}" 
-                         alt="AHD-RDC — Action humanitaire en RD Congo" 
-                         class="content-image">
+                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                         alt="PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies" 
+                         class="content-image"
+                         onerror="this.src='https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600'">
                     <div class="content-image-badge">
-                        <strong>{{ date('Y') - 2017 }}+</strong><br>
+                        <strong>{{ date('Y') - 2012 }}+</strong><br>
                         <small>années d'action</small>
                     </div>
                 </div>
@@ -87,16 +87,58 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 2 : NOS FONDATEURS --}}
+    {{-- SECTION 2 : NOTRE FONDATEUR --}}
     {{-- ============================================ --}}
-    <section class="page-section page-section-light" id="fondateurs">
+    <section class="page-section page-section-light" id="fondateur">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Le visionnaire</span>
+                <h2 class="section-title">Notre Fondateur</h2>
+                <p class="section-description">
+                    L'homme de Dieu qui a reçu l'inspiration divine de créer PHOVE.
+                </p>
+            </div>
+
+            <div class="founder-highlight">
+                <div class="founder-highlight-avatar">
+                    <img src="{{ asset('assets/images/membres/kaboyi-philippe.jpg') }}" 
+                         alt="Apôtre Philippe KABOYI MUSAMUGUMA — Fondateur de PHOVE"
+                         class="founder-highlight-img"
+                         onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'founder-highlight-initials\'>PK</span>';">
+                </div>
+                <div class="founder-highlight-info">
+                    <h3 class="founder-highlight-name">Apôtre Philippe KABOYI MUSAMUGUMA</h3>
+                    <span class="founder-highlight-role">Fondateur & Directeur Général</span>
+                    <p class="founder-highlight-bio">
+                        Apôtre missionnaire, serviteur de Dieu. Après 40 jours de jeûne et de prière 
+                        sur la montagne KALAGANE à Bukavu, il reçut l'inspiration divine de créer 
+                        PHOVE le 20 avril 2012. Depuis, il coordonne le programme et veille sur 
+                        son bon fonctionnement partout dans le monde.
+                    </p>
+                    <div class="founder-highlight-actions">
+                        <a href="{{ url('/gouvernance') }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-sitemap"></i> Voir la gouvernance
+                        </a>
+                        <a href="{{ url('/contact') }}" class="btn btn-outline btn-sm">
+                            <i class="fas fa-envelope"></i> Contacter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- ============================================ --}}
+    {{-- SECTION 3 : LES 10 MEMBRES FONDATEURS --}}
+    {{-- ============================================ --}}
+    <section class="page-section page-section-white" id="fondateurs">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Les pionniers</span>
                 <h2 class="section-title">Nos membres fondateurs</h2>
                 <p class="section-description">
-                    Le 7 janvier 2017, sept personnes engagées se sont réunies à Minova pour donner 
-                    naissance à AHD-RDC.
+                    Le 30 août 2012, dix serviteurs de Dieu engagés se sont réunis à Goma pour 
+                    signer les statuts de PHOVE.
                 </p>
             </div>
 
@@ -104,13 +146,17 @@
                 {{-- Fondateur 1 --}}
                 <div class="founder-card">
                     <div class="founder-avatar">
-                        <span>AD</span>
+                        <img src="{{ asset('assets/images/membres/kaboyi-philippe.jpg') }}" 
+                             alt="KABOYI MUSAMUGUMA Philippe"
+                             class="founder-img"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<span>PK</span>';">
                     </div>
                     <div class="founder-info">
-                        <h4 class="founder-name">Dr AKSANTI DUNIA Steeng</h4>
-                        <span class="founder-role">Initiateur & Coordonnateur National</span>
+                        <h4 class="founder-name">KABOYI MUSAMUGUMA Philippe</h4>
+                        <span class="founder-role">Apôtre missionnaire</span>
+                        <span class="founder-function">Directeur Général et Coordonnateur du Programme</span>
                         <span class="founder-location">
-                            <i class="fas fa-map-marker-alt"></i> Minova
+                            <i class="fas fa-map-marker-alt"></i> Goma
                         </span>
                     </div>
                 </div>
@@ -118,13 +164,17 @@
                 {{-- Fondateur 2 --}}
                 <div class="founder-card">
                     <div class="founder-avatar">
-                        <span>BB</span>
+                        <img src="{{ asset('assets/images/membres/lumoo-justine.jpg') }}" 
+                             alt="LUMOO WETEMWAMI Justine"
+                             class="founder-img"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<span>LJ</span>';">
                     </div>
                     <div class="founder-info">
-                        <h4 class="founder-name">BISIMWA BASHONGA Riphin</h4>
-                        <span class="founder-role">Membre Fondateur</span>
+                        <h4 class="founder-name">LUMOO WETEMWAMI Justine</h4>
+                        <span class="founder-role">Intercesseur</span>
+                        <span class="founder-function">Chef de Mission</span>
                         <span class="founder-location">
-                            <i class="fas fa-map-marker-alt"></i> Minova
+                            <i class="fas fa-map-marker-alt"></i> Goma
                         </span>
                     </div>
                 </div>
@@ -132,11 +182,15 @@
                 {{-- Fondateur 3 --}}
                 <div class="founder-card">
                     <div class="founder-avatar">
-                        <span>CM</span>
+                        <img src="{{ asset('assets/images/membres/kambale-nestor.jpg') }}" 
+                             alt="KAMBALE KAMATHE Nestor"
+                             class="founder-img"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<span>KN</span>';">
                     </div>
                     <div class="founder-info">
-                        <h4 class="founder-name">CHRISTIAN MIRINDI</h4>
-                        <span class="founder-role">Membre Fondateur</span>
+                        <h4 class="founder-name">KAMBALE KAMATHE Nestor</h4>
+                        <span class="founder-role">Révérend Pasteur</span>
+                        <span class="founder-function">Chef de Programme</span>
                         <span class="founder-location">
                             <i class="fas fa-map-marker-alt"></i> Goma
                         </span>
@@ -146,11 +200,15 @@
                 {{-- Fondateur 4 --}}
                 <div class="founder-card">
                     <div class="founder-avatar">
-                        <span>MD</span>
+                        <img src="{{ asset('assets/images/membres/mugisho-christian.jpg') }}" 
+                             alt="MUGISHO Christian"
+                             class="founder-img"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<span>MC</span>';">
                     </div>
                     <div class="founder-info">
-                        <h4 class="founder-name">MAJINA DUNIA Judith</h4>
-                        <span class="founder-role">Membre Fondateur</span>
+                        <h4 class="founder-name">MUGISHO Christian</h4>
+                        <span class="founder-role">Pasteur</span>
+                        <span class="founder-function">Secrétaire Administratif</span>
                         <span class="founder-location">
                             <i class="fas fa-map-marker-alt"></i> Goma
                         </span>
@@ -160,13 +218,17 @@
                 {{-- Fondateur 5 --}}
                 <div class="founder-card">
                     <div class="founder-avatar">
-                        <span>MB</span>
+                        <img src="{{ asset('assets/images/membres/kahambu-julienne.jpg') }}" 
+                             alt="KAHAMBU MUTANGI Julienne"
+                             class="founder-img"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<span>KJ</span>';">
                     </div>
                     <div class="founder-info">
-                        <h4 class="founder-name">MUGARUKA BASHANGWA Léon</h4>
-                        <span class="founder-role">Membre Fondateur</span>
+                        <h4 class="founder-name">KAHAMBU MUTANGI Julienne</h4>
+                        <span class="founder-role">Prophétesse</span>
+                        <span class="founder-function">Chargé de Finance</span>
                         <span class="founder-location">
-                            <i class="fas fa-map-marker-alt"></i> Minova
+                            <i class="fas fa-map-marker-alt"></i> Goma
                         </span>
                     </div>
                 </div>
@@ -174,11 +236,15 @@
                 {{-- Fondateur 6 --}}
                 <div class="founder-card">
                     <div class="founder-avatar">
-                        <span>OM</span>
+                        <img src="{{ asset('assets/images/membres/mugoli-lydie.jpg') }}" 
+                             alt="MUGOLI NKINDI Lydie"
+                             class="founder-img"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<span>ML</span>';">
                     </div>
                     <div class="founder-info">
-                        <h4 class="founder-name">OLEMBE MUSANGI Grace</h4>
-                        <span class="founder-role">Membre Fondateur</span>
+                        <h4 class="founder-name">MUGOLI NKINDI Lydie</h4>
+                        <span class="founder-role">Évangéliste</span>
+                        <span class="founder-function">Chargé de la Logistique</span>
                         <span class="founder-location">
                             <i class="fas fa-map-marker-alt"></i> Goma
                         </span>
@@ -188,13 +254,71 @@
                 {{-- Fondateur 7 --}}
                 <div class="founder-card">
                     <div class="founder-avatar">
-                        <span>NB</span>
+                        <img src="{{ asset('assets/images/membres/rex-lutgarde.jpg') }}" 
+                             alt="REX MUNGUIKO Lutgarde"
+                             class="founder-img"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<span>RL</span>';">
                     </div>
                     <div class="founder-info">
-                        <h4 class="founder-name">NATHALIE BISIMWA Julienne</h4>
-                        <span class="founder-role">Membre Fondateur</span>
+                        <h4 class="founder-name">REX MUNGUIKO Lutgarde</h4>
+                        <span class="founder-role">Pasteur</span>
+                        <span class="founder-function">Chargé de Transport</span>
                         <span class="founder-location">
-                            <i class="fas fa-map-marker-alt"></i> Minova
+                            <i class="fas fa-map-marker-alt"></i> Goma
+                        </span>
+                    </div>
+                </div>
+
+                {{-- Fondateur 8 --}}
+                <div class="founder-card">
+                    <div class="founder-avatar">
+                        <img src="{{ asset('assets/images/membres/mwayuma-lydia.jpg') }}" 
+                             alt="MWAYUMA BYAKITA Lydia"
+                             class="founder-img"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<span>ML</span>';">
+                    </div>
+                    <div class="founder-info">
+                        <h4 class="founder-name">MWAYUMA BYAKITA Lydia</h4>
+                        <span class="founder-role">Docteur</span>
+                        <span class="founder-function">Chargé des Programmes Sanitaires</span>
+                        <span class="founder-location">
+                            <i class="fas fa-map-marker-alt"></i> Goma
+                        </span>
+                    </div>
+                </div>
+
+                {{-- Fondateur 9 --}}
+                <div class="founder-card">
+                    <div class="founder-avatar">
+                        <img src="{{ asset('assets/images/membres/kuburhanwa-denis.jpg') }}" 
+                             alt="KUBURHANWA TSHENTWALI Dénis"
+                             class="founder-img"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<span>KD</span>';">
+                    </div>
+                    <div class="founder-info">
+                        <h4 class="founder-name">KUBURHANWA TSHENTWALI Dénis</h4>
+                        <span class="founder-role">Fonctionnaire</span>
+                        <span class="founder-function">Chargé des Affaires Sociales</span>
+                        <span class="founder-location">
+                            <i class="fas fa-map-marker-alt"></i> Goma
+                        </span>
+                    </div>
+                </div>
+
+                {{-- Fondateur 10 --}}
+                <div class="founder-card">
+                    <div class="founder-avatar">
+                        <img src="{{ asset('assets/images/membres/kisimba-francois.jpg') }}" 
+                             alt="KISIMBA KIS François"
+                             class="founder-img"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='<span>KF</span>';">
+                    </div>
+                    <div class="founder-info">
+                        <h4 class="founder-name">KISIMBA KIS François</h4>
+                        <span class="founder-role">Fonctionnaire</span>
+                        <span class="founder-function">Chargé des Affaires Juridiques</span>
+                        <span class="founder-location">
+                            <i class="fas fa-map-marker-alt"></i> Goma
                         </span>
                     </div>
                 </div>
@@ -203,9 +327,9 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 3 : NOTRE IDENTITÉ --}}
+    {{-- SECTION 4 : NOTRE IDENTITÉ --}}
     {{-- ============================================ --}}
-    <section class="page-section page-section-white">
+    <section class="page-section page-section-light">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Notre identité</span>
@@ -220,10 +344,9 @@
                     </div>
                     <h3 class="info-card-title">Statut juridique</h3>
                     <p class="info-card-text">
-                        AHD-RDC est une <strong>Association Sans But Lucratif (ASBL)</strong> 
-                        de droit congolais, régie par la loi n°004-2001 du 20 juillet 2001 
-                        portant dispositions générales applicables aux associations sans but 
-                        lucratif et aux établissements d'utilité publique.
+                        PHOVE est une <strong>Organisation Non Gouvernementale (ONG)</strong> 
+                        apolitique à caractère social, créée le 30 août 2012 à Goma, 
+                        régie par les présents statuts et le Règlement d'Ordre Intérieur (ROI).
                     </p>
                 </div>
 
@@ -234,10 +357,9 @@
                     </div>
                     <h3 class="info-card-title">Caractère</h3>
                     <p class="info-card-text">
-                        Conformément à l'article 3 de nos statuts, AHD-RDC est une organisation 
-                        <strong>apolitique et non confessionnelle</strong>. Nous intervenons 
-                        sans discrimination de race, de religion, d'ethnie ou d'appartenance 
-                        politique.
+                        Conformément à l'article 1 des statuts, PHOVE est une organisation 
+                        <strong>apolitique et à caractère social</strong>. Nous intervenons 
+                        sans distinction de race, de religion, d'ethnie ou d'appartenance politique.
                     </p>
                 </div>
 
@@ -248,9 +370,9 @@
                     </div>
                     <h3 class="info-card-title">Durée</h3>
                     <p class="info-card-text">
-                        Conformément à l'article 4 de nos statuts, AHD-RDC est créée pour 
+                        Conformément à l'article 2 des statuts, PHOVE est créée pour 
                         une <strong>durée indéterminée</strong>. Notre engagement est permanent 
-                        et s'inscrit dans le long terme auprès des communautés.
+                        et s'inscrit dans le long terme auprès des personnes vulnérables.
                     </p>
                 </div>
             </div>
@@ -258,16 +380,17 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 4 : ZONES D'INTERVENTION --}}
+    {{-- SECTION 5 : ZONES D'INTERVENTION --}}
     {{-- ============================================ --}}
-    <section class="page-section page-section-light">
+    <section class="page-section page-section-white">
         <div class="container">
             <div class="content-grid">
-                {{-- Carte ou image --}}
+                {{-- Image --}}
                 <div>
-                    <img src="{{ asset('assets/images/logo-ahd.png') }}" 
-                         alt="Zones d'intervention AHD-RDC" 
-                         class="content-image">
+                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                         alt="Zones d'intervention PHOVE" 
+                         class="content-image"
+                         onerror="this.src='https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=600'">
                 </div>
 
                 {{-- Texte --}}
@@ -276,35 +399,33 @@
                     <h2 class="section-title text-left">Zones d'intervention</h2>
                     
                     <p class="content-block-text">
-                        Conformément à l'article 11 de nos statuts, AHD-RDC a comme rayon 
-                        d'action les provinces du <strong>Sud-Kivu</strong> et du 
-                        <strong>Nord-Kivu</strong>, avec une capacité d'extension sur toute 
-                        l'étendue de la République Démocratique du Congo.
+                        Conformément à l'article 4 des statuts, PHOVE exerce ses activités 
+                        à <strong>Goma</strong> en RD Congo en particulier et peut étendre 
+                        ses activités <strong>partout dans le monde</strong> en cas de nécessité.
                     </p>
 
                     <p class="content-block-text">
-                        Notre siège social est établi à <strong>Minova</strong>, dans le 
-                        territoire de Kalehe, province du Sud-Kivu. Nous intervenons 
-                        également dans les zones de <strong>Kirotshe</strong> et 
-                        <strong>Goma</strong>.
+                        Notre siège social est établi <strong>Rue Georges BUSHU N°092, Quartier Katoyi, 
+                        Commune de Karisimbi, Goma, Nord-Kivu</strong>. Le siège peut être transféré 
+                        sur décision motivée des 2/3 des membres effectifs.
                     </p>
 
                     <ul class="check-list">
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span><strong>Minova</strong> — Territoire de Kalehe, Sud-Kivu (Siège social)</span>
+                            <span><strong>Goma</strong> — Nord-Kivu, RD Congo (Siège social)</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span><strong>Kirotshe</strong> — Territoire de Masisi, Nord-Kivu</span>
+                            <span><strong>Extensions nationales</strong> — Sur toute l'étendue de la RDC</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span><strong>Goma</strong> — Chef-lieu du Nord-Kivu</span>
+                            <span><strong>Extensions internationales</strong> — Rwanda, Uganda, Kenya, Tanzanie, Burundi, Zambie, Angola, Soudan, Afrique du Sud</span>
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span><strong>Extension prévue</strong> — Sur toute l'étendue de la RDC</span>
+                            <span><strong>Stations, Bases et Antennes</strong> — Dans les pays, territoires et communes</span>
                         </li>
                     </ul>
                 </div>
@@ -313,15 +434,15 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION 5 : PUBLIC CIBLE --}}
+    {{-- SECTION 6 : PUBLIC CIBLE --}}
     {{-- ============================================ --}}
-    <section class="page-section page-section-white">
+    <section class="page-section page-section-light">
         <div class="container">
             <div class="section-header">
                 <span class="section-subtitle">Notre raison d'être</span>
                 <h2 class="section-title">Notre public cible</h2>
                 <p class="section-description">
-                    AHD-RDC se focalise sur la protection et l'accompagnement des personnes 
+                    PHOVE se focalise sur l'assistance et l'accompagnement des personnes 
                     les plus vulnérables de nos communautés.
                 </p>
             </div>
@@ -329,21 +450,21 @@
             <div class="cards-grid cards-grid-4">
                 <div class="info-card">
                     <div class="info-card-icon">
-                        <i class="fas fa-female"></i>
+                        <i class="fas fa-child"></i>
                     </div>
-                    <h3 class="info-card-title">Femmes</h3>
+                    <h3 class="info-card-title">Orphelins</h3>
                     <p class="info-card-text">
-                        Protection, autonomisation et promotion des droits des femmes.
+                        Scolarisation, alimentation, habillement et encadrement spirituel.
                     </p>
                 </div>
 
                 <div class="info-card">
                     <div class="info-card-icon">
-                        <i class="fas fa-child"></i>
+                        <i class="fas fa-female"></i>
                     </div>
-                    <h3 class="info-card-title">Enfants</h3>
+                    <h3 class="info-card-title">Veuves</h3>
                     <p class="info-card-text">
-                        Protection de l'enfance et promotion des droits des enfants.
+                        Assistance sociale, accompagnement économique et soutien spirituel.
                     </p>
                 </div>
 
@@ -351,19 +472,19 @@
                     <div class="info-card-icon">
                         <i class="fas fa-wheelchair"></i>
                     </div>
-                    <h3 class="info-card-title">Handicapés</h3>
+                    <h3 class="info-card-title">Personnes démunies</h3>
                     <p class="info-card-text">
-                        Inclusion et accompagnement des personnes vivant avec un handicap.
+                        Aide alimentaire, soins médicaux, logement et activités socio-économiques.
                     </p>
                 </div>
 
                 <div class="info-card">
                     <div class="info-card-icon">
-                        <i class="fas fa-home"></i>
+                        <i class="fas fa-users"></i>
                     </div>
-                    <h3 class="info-card-title">Orphelins & 3ème âge</h3>
+                    <h3 class="info-card-title">3ème âge</h3>
                     <p class="info-card-text">
-                        Protection des orphelins et des personnes du troisième âge.
+                        Protection, assistance et accompagnement des personnes âgées.
                     </p>
                 </div>
             </div>
@@ -371,30 +492,30 @@
     </section>
 
     {{-- ============================================ --}}
-{{-- CTA --}}
-{{-- ============================================ --}}
-<section class="cta-section-page">
-    <div class="container">
-        <div class="cta-content-page">
-            <h2 class="cta-title-page">
-                Rejoignez notre <span class="highlight-page">mission humanitaire</span>
-            </h2>
-            <p class="cta-text-page">
-                Vous partagez nos valeurs de solidarité et de justice sociale ? 
-                Impliquez-vous à nos côtés pour faire la différence dans la vie 
-                des communautés vulnérables de la RD Congo.
-            </p>
-            <div class="cta-buttons-page">
-                <a href="{{ url('/devenir-membre') }}" class="btn-page-don">
-                    <i class="fas fa-user-plus"></i> Devenir membre
-                </a>
-                <a href="{{ url('/contact') }}" class="btn-page-outline">
-                    <i class="fas fa-envelope"></i> Nous contacter
-                </a>
+    {{-- CTA --}}
+    {{-- ============================================ --}}
+    <section class="cta-section-page">
+        <div class="container">
+            <div class="cta-content-page">
+                <h2 class="cta-title-page">
+                    Rejoignez notre <span class="highlight-page">mission humanitaire</span>
+                </h2>
+                <p class="cta-text-page">
+                    Vous partagez nos valeurs de compassion et de solidarité ? 
+                    Impliquez-vous à nos côtés pour faire la différence dans la vie 
+                    des orphelins, veuves et personnes démunies de la RD Congo.
+                </p>
+                <div class="cta-buttons-page">
+                    <a href="{{ url('/devenir-membre') }}" class="btn-page-don">
+                        <i class="fas fa-user-plus"></i> Devenir membre
+                    </a>
+                    <a href="{{ url('/contact') }}" class="btn-page-outline">
+                        <i class="fas fa-envelope"></i> Nous contacter
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 @endsection
 

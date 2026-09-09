@@ -6,16 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     
     {{-- Titre dynamique --}}
-    <title>@yield('title', 'Tableau de bord') | AHD-RDC Administration</title>
+    <title>@yield('title', 'Tableau de bord') | PHOVE Administration</title>
     
     {{-- Meta --}}
-    <meta name="description" content="Interface d'administration AHD-RDC — Action Humanitaire pour le Développement en RD Congo.">
+    <meta name="description" content="Interface d'administration PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies.">
     <meta name="robots" content="noindex, nofollow">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     {{-- Favicon --}}
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon-phove.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon-phove.png') }}">
     
     {{-- Police Poppins --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">

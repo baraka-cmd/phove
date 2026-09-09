@@ -6,17 +6,28 @@ use App\Http\Controllers\Controller;
 use App\Models\AssembleeGenerale;
 use App\Models\Membre;
 use App\Models\Organe;
+use App\Models\StructureTerritoriale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class GouvernanceController extends Controller
 {
     /**
-     * Affiche la vue d'ensemble des 4 organes de gouvernance.
+     * Affiche la vue d'ensemble des organes de gouvernance PHOVE.
+     *
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        $organes = ['conseil_administration', 'direction_executive', 'commission_controle', 'assemblee_generale'];
+        $organes = [
+            'assemblee_generale',
+            'conseil_administration',
+            'commission_controle',
+            'comite_suivi',
+            'comite_gestion',
+            'direction_executive',
+        ];
+
         $stats = [];
 
         foreach ($organes as $organe) {
@@ -31,6 +42,11 @@ class GouvernanceController extends Controller
             ];
         }
 
+        // Structures territoriales
+        $stations = StructureTerritoriale::where('type', 'station')->where('statut', 'actif')->count();
+        $bases = StructureTerritoriale::where('type', 'base')->where('statut', 'actif')->count();
+        $antennes = StructureTerritoriale::where('type', 'antenne')->where('statut', 'actif')->count();
+
         // Dernière AG
         $derniereAG = AssembleeGenerale::where('statut', 'tenue')
             ->orderBy('date_reunion', 'desc')
@@ -41,49 +57,86 @@ class GouvernanceController extends Controller
             ->orderBy('date_reunion', 'asc')
             ->first();
 
-        return view('admin.gouvernance.index', compact('stats', 'derniereAG', 'prochaineAG'));
+        return view('admin.gouvernance.index', compact(
+            'stats',
+            'stations',
+            'bases',
+            'antennes',
+            'derniereAG',
+            'prochaineAG'
+        ));
     }
 
     /**
      * Affiche le détail d'un organe spécifique.
+     *
+     * @param string $organe
+     * @return \Illuminate\View\View
      */
     public function organe(string $organe)
     {
-        $organesValides = ['conseil_administration', 'direction_executive', 'commission_controle', 'assemblee_generale'];
+        $organesValides = [
+            'assemblee_generale',
+            'conseil_administration',
+            'commission_controle',
+            'comite_suivi',
+            'comite_gestion',
+            'direction_executive',
+        ];
 
         if (!in_array($organe, $organesValides)) {
             abort(404);
         }
 
         $membres = Organe::where('organe', $organe)
-            ->with('membre')
+            ->with(['membre', 'structure'])
             ->orderBy('actif', 'desc')
             ->orderBy('ordre')
             ->get();
 
         $membresDisponibles = Membre::where('statut', 'actif')->orderBy('nom')->get();
+        $structures = StructureTerritoriale::where('statut', 'actif')->orderBy('nom')->get();
+        $niveaux = [
+            'international' => 'International',
+            'national' => 'National',
+            'provincial' => 'Provincial',
+            'local' => 'Local',
+        ];
 
         $organeLibelle = match ($organe) {
-            'conseil_administration' => 'Conseil d\'Administration',
-            'direction_executive' => 'Direction Exécutive',
-            'commission_controle' => 'Commission de Contrôle',
             'assemblee_generale' => 'Assemblée Générale',
+            'conseil_administration' => 'Conseil d\'Administration',
+            'commission_controle' => 'Commission de Contrôle',
+            'comite_suivi' => 'Comité de Suivi',
+            'comite_gestion' => 'Comité de Gestion',
+            'direction_executive' => 'Direction Générale',
             default => $organe,
         };
 
-        return view('admin.gouvernance.organe', compact('organe', 'organeLibelle', 'membres', 'membresDisponibles'));
+        return view('admin.gouvernance.organe', compact(
+            'organe',
+            'organeLibelle',
+            'membres',
+            'membresDisponibles',
+            'structures',
+            'niveaux'
+        ));
     }
 
     /**
      * Ajoute un membre à un organe.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function storeMembre(Request $request)
     {
-        
         $validated = $request->validate([
             'membre_id' => ['required', 'exists:membres,id'],
-            'organe' => ['required', 'in:conseil_administration,direction_executive,commission_controle,assemblee_generale'],
+            'organe' => ['required', 'in:assemblee_generale,conseil_administration,commission_controle,comite_suivi,comite_gestion,direction_executive'],
             'poste' => ['required', 'string', 'max:255'],
+            'structure_id' => ['nullable', 'exists:structures_territoriales,id'],
+            'niveau' => ['nullable', 'in:international,national,provincial,local'],
             'date_debut' => ['required', 'date'],
             'date_fin' => ['nullable', 'date', 'after:date_debut'],
             'ordre' => ['nullable', 'integer', 'min:0'],
@@ -99,6 +152,8 @@ class GouvernanceController extends Controller
             'membre_id' => $validated['membre_id'],
             'organe' => $validated['organe'],
             'poste' => $validated['poste'],
+            'structure_id' => $validated['structure_id'] ?? null,
+            'niveau' => $validated['niveau'] ?? null,
             'date_debut' => $validated['date_debut'],
             'date_fin' => $validated['date_fin'] ?? null,
             'actif' => true,
@@ -111,11 +166,17 @@ class GouvernanceController extends Controller
 
     /**
      * Met à jour un poste dans un organe.
+     *
+     * @param Request $request
+     * @param Organe $organe
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function updateMembre(Request $request, Organe $organe)
     {
         $validated = $request->validate([
             'poste' => ['required', 'string', 'max:255'],
+            'structure_id' => ['nullable', 'exists:structures_territoriales,id'],
+            'niveau' => ['nullable', 'in:international,national,provincial,local'],
             'date_debut' => ['required', 'date'],
             'date_fin' => ['nullable', 'date', 'after:date_debut'],
             'actif' => ['nullable', 'boolean'],
@@ -128,6 +189,8 @@ class GouvernanceController extends Controller
 
         $organe->update([
             'poste' => $validated['poste'],
+            'structure_id' => $validated['structure_id'] ?? $organe->structure_id,
+            'niveau' => $validated['niveau'] ?? $organe->niveau,
             'date_debut' => $validated['date_debut'],
             'date_fin' => $validated['date_fin'] ?? null,
             'actif' => $validated['actif'] ?? $organe->actif,
@@ -140,6 +203,9 @@ class GouvernanceController extends Controller
 
     /**
      * Retire un membre d'un organe (désactive le mandat).
+     *
+     * @param Organe $organe
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function retirerMembre(Organe $organe)
     {
@@ -154,6 +220,9 @@ class GouvernanceController extends Controller
 
     /**
      * Affiche la liste des Assemblées Générales.
+     *
+     * @param Request $request
+     * @return \Illuminate\View\View
      */
     public function assemblies(Request $request)
     {
@@ -191,6 +260,9 @@ class GouvernanceController extends Controller
 
     /**
      * Enregistre une nouvelle Assemblée Générale.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function storeAssembly(Request $request)
     {
@@ -214,12 +286,10 @@ class GouvernanceController extends Controller
             'pv_fichier.max' => 'Le PV ne doit pas dépasser 10 Mo.',
         ]);
 
-        // Gérer l'upload du PV
         if ($request->hasFile('pv_fichier')) {
             $validated['pv_fichier'] = $request->file('pv_fichier')->store('assemblees/pv', 'public');
         }
 
-        // Calculer le quorum (majorité simple = 50% + 1)
         if (!empty($validated['membres_total']) && !empty($validated['membres_presents'])) {
             $validated['quorum_atteint'] = $validated['membres_presents'] >= ($validated['membres_total'] / 2);
         }
@@ -232,6 +302,10 @@ class GouvernanceController extends Controller
 
     /**
      * Met à jour une Assemblée Générale.
+     *
+     * @param Request $request
+     * @param AssembleeGenerale $assembly
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function updateAssembly(Request $request, AssembleeGenerale $assembly)
     {
@@ -249,7 +323,6 @@ class GouvernanceController extends Controller
             'pv_fichier' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
         ]);
 
-        // Gérer l'upload du PV
         if ($request->hasFile('pv_fichier')) {
             if ($assembly->pv_fichier) {
                 Storage::disk('public')->delete($assembly->pv_fichier);
@@ -257,7 +330,6 @@ class GouvernanceController extends Controller
             $validated['pv_fichier'] = $request->file('pv_fichier')->store('assemblees/pv', 'public');
         }
 
-        // Calculer le quorum
         if (!empty($validated['membres_total']) && !empty($validated['membres_presents'])) {
             $validated['quorum_atteint'] = $validated['membres_presents'] >= ($validated['membres_total'] / 2);
         }
@@ -268,31 +340,51 @@ class GouvernanceController extends Controller
             ->with('success', 'L\'Assemblée Générale a été mise à jour avec succès.');
     }
 
+    /**
+     * Affiche le formulaire de création d'une AG.
+     *
+     * @return \Illuminate\View\View
+     */
     public function createAssembly()
-{
-    return view('admin.gouvernance.assembly-create');
-}
-
-public function editAssembly(AssembleeGenerale $assembly)
-{
-    return view('admin.gouvernance.assembly-edit', compact('assembly'));
-}
-
-public function destroyAssembly(AssembleeGenerale $assembly)
-{
-    if ($assembly->pv_fichier) {
-        Storage::disk('public')->delete($assembly->pv_fichier);
+    {
+        return view('admin.gouvernance.assembly-create');
     }
-    $assembly->delete();
-    return redirect()->route('admin.gouvernance.assemblies')
-        ->with('success', 'L\'Assemblée Générale a été supprimée.');
-}
 
-/**
- * Affiche le détail d'une Assemblée Générale.
- */
-public function showAssembly(AssembleeGenerale $assembly)
-{
-    return view('admin.gouvernance.assembly-show', compact('assembly'));
-}
+    /**
+     * Affiche le formulaire de modification d'une AG.
+     *
+     * @param AssembleeGenerale $assembly
+     * @return \Illuminate\View\View
+     */
+    public function editAssembly(AssembleeGenerale $assembly)
+    {
+        return view('admin.gouvernance.assembly-edit', compact('assembly'));
+    }
+
+    /**
+     * Supprime une AG.
+     *
+     * @param AssembleeGenerale $assembly
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroyAssembly(AssembleeGenerale $assembly)
+    {
+        if ($assembly->pv_fichier) {
+            Storage::disk('public')->delete($assembly->pv_fichier);
+        }
+        $assembly->delete();
+        return redirect()->route('admin.gouvernance.assemblies')
+            ->with('success', 'L\'Assemblée Générale a été supprimée.');
+    }
+
+    /**
+     * Affiche le détail d'une Assemblée Générale.
+     *
+     * @param AssembleeGenerale $assembly
+     * @return \Illuminate\View\View
+     */
+    public function showAssembly(AssembleeGenerale $assembly)
+    {
+        return view('admin.gouvernance.assembly-show', compact('assembly'));
+    }
 }

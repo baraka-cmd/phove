@@ -2,7 +2,7 @@
 
 @section('title', 'Nos Partenaires')
 
-@section('meta_description', 'Découvrez les organisations et institutions qui soutiennent AHD-RDC dans sa mission humanitaire en République Démocratique du Congo.')
+@section('meta_description', 'Découvrez les organisations internationales qui soutiennent PHOVE : FAO, WFP, OCHA, UNESCO, GPE et la République Démocratique du Congo.')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
@@ -21,13 +21,59 @@
             </div>
             <h1 class="page-header-title">Nos Partenaires</h1>
             <p class="page-header-subtitle">
-                Ils nous font confiance et soutiennent notre mission humanitaire pour le développement des communautés vulnérables en RD Congo.
+                Ils nous font confiance et soutiennent notre mission humanitaire pour les orphelins, veuves et personnes démunies de la RD Congo.
             </p>
             <nav class="page-breadcrumb">
                 <a href="{{ url('/') }}"><i class="fas fa-home"></i> Accueil</a>
                 <i class="fas fa-chevron-right"></i>
                 <span>Nos Partenaires</span>
             </nav>
+        </div>
+    </section>
+
+    {{-- ============================================ --}}
+    {{-- SECTION STATISTIQUES RAPIDES --}}
+    {{-- ============================================ --}}
+    <section class="partenaires-stats-section">
+        <div class="container">
+            <div class="partenaires-stats-grid">
+                <div class="partenaire-stat-card">
+                    <div class="partenaire-stat-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="partenaire-stat-info">
+                        <span class="partenaire-stat-number">{{ $totalPartenaires }}</span>
+                        <span class="partenaire-stat-label">Partenaires actifs</span>
+                    </div>
+                </div>
+                <div class="partenaire-stat-card">
+                    <div class="partenaire-stat-icon">
+                        <i class="fas fa-globe-africa"></i>
+                    </div>
+                    <div class="partenaire-stat-info">
+                        <span class="partenaire-stat-number">{{ $statsTypes['international'] ?? 0 }}</span>
+                        <span class="partenaire-stat-label">Partenaires internationaux</span>
+                    </div>
+                </div>
+                <div class="partenaire-stat-card">
+                    <div class="partenaire-stat-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="partenaire-stat-info">
+                        <span class="partenaire-stat-number">{{ $statsTypes['institutionnel'] ?? 0 }}</span>
+                        <span class="partenaire-stat-label">Partenaires institutionnels</span>
+                    </div>
+                </div>
+                <div class="partenaire-stat-card">
+                    <div class="partenaire-stat-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="partenaire-stat-info">
+                        <span class="partenaire-stat-number">{{ $totalProjetsAssocies }}</span>
+                        <span class="partenaire-stat-label">Projets soutenus</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -40,111 +86,136 @@
                 <span class="section-subtitle">Notre réseau</span>
                 <h2 class="section-title">Ils nous accompagnent</h2>
                 <p class="section-description">
-                    AHD-RDC collabore avec des organisations locales et internationales qui partagent 
-                    notre vision d'une société pacifiée et solidaire. Leur soutien financier, technique 
-                    et logistique nous permet de mener à bien notre mission.
+                    PHOVE collabore avec des organisations internationales et des institutions 
+                    qui partagent notre mission d'assistance aux personnes vulnérables. 
+                    Leur soutien financier, technique et logistique nous permet de mener 
+                    à bien nos actions humanitaires.
                 </p>
+            </div>
+
+            {{-- Filtres par type --}}
+            <div class="partenaires-filter">
+                <a href="{{ route('partenaires') }}" class="partenaire-filter-btn {{ !$type ? 'active' : '' }}">
+                    <i class="fas fa-th-list"></i> Tous
+                </a>
+                @foreach($types as $value => $label)
+                    <a href="{{ route('partenaires', ['type' => $value]) }}" 
+                       class="partenaire-filter-btn {{ $type === $value ? 'active' : '' }}">
+                        {{ $label }}
+                    </a>
+                @endforeach
             </div>
         </div>
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION PARTENAIRES ACTUELS --}}
+    {{-- SECTION LISTE DES PARTENAIRES --}}
     {{-- ============================================ --}}
     <section class="page-section page-section-light">
         <div class="container">
-            
-            {{-- Partenaire 1 : Conseil d'Administration AHD-RDC --}}
-            <div class="partenaire-card">
-                <div class="partenaire-card-grid">
-                    {{-- Logo --}}
-                    <div class="partenaire-logo-wrapper">
-                        <div class="partenaire-logo">
-                            <span>AHD</span>
-                        </div>
-                        <div class="partenaire-type-badge">
-                            <i class="fas fa-building"></i> Partenaire local
-                        </div>
-                    </div>
 
-                    {{-- Infos --}}
-                    <div class="partenaire-info">
-                        <h2 class="partenaire-name">Conseil d'Administration AHD-RDC</h2>
-                        <p class="partenaire-description">
-                            Le Conseil d'Administration d'AHD-RDC assure l'autofinancement de l'organisation 
-                            depuis sa création en 2017. Composé de membres engagés, il garantit la stabilité 
-                            financière et la continuité des projets humanitaires dans les zones de Minova, 
-                            Kirotshe, Kalehe et Goma.
-                        </p>
-                        <div class="partenaire-meta">
-                            <div class="partenaire-meta-item">
-                                <i class="fas fa-calendar-check"></i>
-                                <span>Partenaire depuis <strong>2017</strong></span>
-                            </div>
-                            <div class="partenaire-meta-item">
-                                <i class="fas fa-hand-holding-heart"></i>
-                                <span>Type de soutien : <strong>Financement & Gouvernance</strong></span>
+            @if($partenaires->count() > 0)
+                @foreach($partenaires as $partenaire)
+                <div class="partenaire-card">
+                    <div class="partenaire-card-grid">
+                        {{-- Logo / Initiales --}}
+                        <div class="partenaire-logo-wrapper">
+                            @if($partenaire->logo)
+                                <img src="{{ asset('storage/' . $partenaire->logo) }}" 
+                                     alt="{{ $partenaire->nom }}" 
+                                     class="partenaire-logo-img"
+                                     loading="lazy">
+                            @else
+                                <div class="partenaire-logo">
+                                    <span>{{ $partenaire->sigleOuInitiales() }}</span>
+                                </div>
+                            @endif
+                            <div class="partenaire-type-badge">
+                                <i class="fas fa-{{ $partenaire->type === 'international' ? 'globe-africa' : ($partenaire->type === 'institutionnel' ? 'building' : 'handshake') }}"></i> 
+                                {{ $partenaire->typeLibelle() }}
                             </div>
                         </div>
-                        <div class="partenaire-projets">
-                            <span class="partenaire-projets-label">
-                                <i class="fas fa-project-diagram"></i> Projets soutenus :
-                            </span>
-                            <div class="partenaire-projets-tags">
-                                <span class="partenaire-projet-tag">Sécurité Alimentaire</span>
-                                <span class="partenaire-projet-tag">Santé-Nutrition</span>
-                                <span class="partenaire-projet-tag">WASH</span>
+
+                        {{-- Infos --}}
+                        <div class="partenaire-info">
+                            <h2 class="partenaire-name">
+                                {{ $partenaire->nom }}
+                                @if($partenaire->sigle)
+                                    <small style="color: #64748B; font-weight: 600;">({{ $partenaire->sigle }})</small>
+                                @endif
+                            </h2>
+                            
+                            @if($partenaire->description)
+                            <p class="partenaire-description">{{ $partenaire->description }}</p>
+                            @endif
+
+                            <div class="partenaire-meta">
+                                @if($partenaire->date_debut)
+                                <div class="partenaire-meta-item">
+                                    <i class="fas fa-calendar-check"></i>
+                                    <span>Partenaire depuis <strong>{{ $partenaire->date_debut->format('Y') }}</strong></span>
+                                </div>
+                                @endif
+                                
+                                @if($partenaire->site_web)
+                                <div class="partenaire-meta-item">
+                                    <i class="fas fa-globe"></i>
+                                    <a href="{{ $partenaire->urlSiteWeb() }}" target="_blank" rel="noopener noreferrer" style="color: #1A5B9C;">
+                                        {{ Str::limit($partenaire->site_web, 40) }}
+                                    </a>
+                                </div>
+                                @endif
+
+                                @if($partenaire->email)
+                                <div class="partenaire-meta-item">
+                                    <i class="fas fa-envelope"></i>
+                                    <a href="mailto:{{ $partenaire->email }}" style="color: #1A5B9C;">
+                                        {{ $partenaire->email }}
+                                    </a>
+                                </div>
+                                @endif
                             </div>
+
+                            {{-- Projets soutenus --}}
+                            @if($partenaire->projets->count() > 0)
+                            <div class="partenaire-projets">
+                                <span class="partenaire-projets-label">
+                                    <i class="fas fa-project-diagram"></i> Projets soutenus ({{ $partenaire->projets->count() }}) :
+                                </span>
+                                <div class="partenaire-projets-tags">
+                                    @foreach($partenaire->projets->take(4) as $projet)
+                                        <span class="partenaire-projet-tag">
+                                            <i class="fas fa-tag" style="font-size: 9px;"></i> 
+                                            {{ Str::limit($projet->titre, 40) }}
+                                            @if($projet->code_projet)
+                                                <small style="opacity: 0.7;">({{ $projet->code_projet }})</small>
+                                            @endif
+                                        </span>
+                                    @endforeach
+                                    @if($partenaire->projets->count() > 4)
+                                        <span class="partenaire-projet-tag partenaire-projet-more">
+                                            +{{ $partenaire->projets->count() - 4 }} autre(s)
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
-            </div>
-
-            {{-- Partenaire 2 : DMP-RDC --}}
-            <div class="partenaire-card">
-                <div class="partenaire-card-grid">
-                    {{-- Logo --}}
-                    <div class="partenaire-logo-wrapper">
-                        <div class="partenaire-logo partenaire-logo-dmp">
-                            <span>DMP</span>
-                        </div>
-                        <div class="partenaire-type-badge">
-                            <i class="fas fa-handshake"></i> Partenaire technique
-                        </div>
+                @endforeach
+            @else
+                <div class="partenaires-empty">
+                    <div class="partenaires-empty-icon">
+                        <i class="fas fa-handshake"></i>
                     </div>
-
-                    {{-- Infos --}}
-                    <div class="partenaire-info">
-                        <h2 class="partenaire-name">DMP-RDC</h2>
-                        <p class="partenaire-description">
-                            DMP-RDC est un partenaire technique clé dans la mise en œuvre des projets 
-                            de sensibilisation sanitaire. Leur expertise a été déterminante lors des 
-                            campagnes de sensibilisation contre le choléra, la maladie à virus Ebola 
-                            et la pandémie de COVID-19 dans les zones de Minova et Kirotshe.
-                        </p>
-                        <div class="partenaire-meta">
-                            <div class="partenaire-meta-item">
-                                <i class="fas fa-calendar-check"></i>
-                                <span>Partenaire depuis <strong>2020</strong></span>
-                            </div>
-                            <div class="partenaire-meta-item">
-                                <i class="fas fa-hand-holding-heart"></i>
-                                <span>Type de soutien : <strong>Technique & Mise en œuvre</strong></span>
-                            </div>
-                        </div>
-                        <div class="partenaire-projets">
-                            <span class="partenaire-projets-label">
-                                <i class="fas fa-project-diagram"></i> Projets soutenus :
-                            </span>
-                            <div class="partenaire-projets-tags">
-                                <span class="partenaire-projet-tag">Sensibilisation choléra</span>
-                                <span class="partenaire-projet-tag">Sensibilisation Ebola</span>
-                                <span class="partenaire-projet-tag">COVID-19</span>
-                            </div>
-                        </div>
-                    </div>
+                    <h3>Aucun partenaire trouvé</h3>
+                    <p>
+                        Aucun partenaire ne correspond à ce filtre. 
+                        <a href="{{ route('partenaires') }}" style="color: #1A5B9C;">Voir tous les partenaires</a>.
+                    </p>
                 </div>
-            </div>
+            @endif
 
         </div>
     </section>
@@ -163,7 +234,6 @@
             </div>
 
             <div class="partenariat-types-grid">
-                {{-- Type 1 --}}
                 <div class="partenariat-type-card">
                     <div class="partenariat-type-icon">
                         <i class="fas fa-coins"></i>
@@ -175,7 +245,6 @@
                     </p>
                 </div>
 
-                {{-- Type 2 --}}
                 <div class="partenariat-type-card">
                     <div class="partenariat-type-icon">
                         <i class="fas fa-tools"></i>
@@ -187,7 +256,6 @@
                     </p>
                 </div>
 
-                {{-- Type 3 --}}
                 <div class="partenariat-type-card">
                     <div class="partenariat-type-icon">
                         <i class="fas fa-truck"></i>
@@ -199,7 +267,6 @@
                     </p>
                 </div>
 
-                {{-- Type 4 --}}
                 <div class="partenariat-type-card">
                     <div class="partenariat-type-icon">
                         <i class="fas fa-bullhorn"></i>
@@ -225,7 +292,7 @@
                     <h2 class="section-title text-left">Devenir partenaire</h2>
                     <p class="content-block-text">
                         Vous représentez une organisation, une institution ou une entreprise ? 
-                        Vous partagez nos valeurs de solidarité et de développement ? 
+                        Vous partagez nos valeurs de compassion et de solidarité ? 
                         Rejoignez notre réseau de partenaires et contribuez à changer des vies 
                         en République Démocratique du Congo.
                     </p>
@@ -244,7 +311,7 @@
                         </li>
                         <li>
                             <i class="fas fa-check-circle"></i>
-                            <span>Reçus fiscaux et attestations de partenariat</span>
+                            <span>Attestations de partenariat officielles</span>
                         </li>
                     </ul>
                     <div class="devenir-partenaire-actions">
@@ -261,7 +328,7 @@
                         <i class="fas fa-handshake"></i>
                     </div>
                     <p class="devenir-partenaire-slogan">
-                        « Être ensemble pour le bien de la communauté »
+                        « Compassion avec la population »
                     </p>
                 </div>
             </div>
@@ -281,8 +348,8 @@
                     Construisons <span class="highlight-partenaires">ensemble</span> l'avenir
                 </h2>
                 <p class="cta-text-partenaires">
-                    Chaque partenariat est une pierre apportée à l'édifice du développement 
-                    communautaire en République Démocratique du Congo.
+                    Chaque partenariat est une pierre apportée à l'édifice de la compassion 
+                    et de la solidarité envers les orphelins, veuves et personnes démunies.
                 </p>
                 <div class="cta-buttons-partenaires">
                     <a href="{{ url('/contact') }}" class="btn-partenaires-don">

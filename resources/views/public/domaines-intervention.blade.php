@@ -2,7 +2,7 @@
 
 @section('title', 'Domaines d\'intervention')
 
-@section('meta_description', 'Découvrez les 9 domaines d\'intervention d\'AHD-RDC : Santé-Nutrition, Éducation, Protection, Eau & Assainissement, Sécurité Alimentaire, Communication, Environnement, Paix et Genre.')
+@section('meta_description', 'Découvrez les 9 domaines d\'intervention de PHOVE : Santé, Éducation, Protection Sociale, Agriculture, Infrastructures, Socio-économique, Spirituel, Psychosocial et Assistance Judiciaire.')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
@@ -21,7 +21,8 @@
             </div>
             <h1 class="page-header-title">Nos Domaines d'Intervention</h1>
             <p class="page-header-subtitle">
-                Conformément à l'article 9 de nos statuts, AHD-RDC intervient dans neuf domaines clés pour le développement communautaire.
+                Conformément aux articles 8 et 9 des statuts, PHOVE intervient dans 
+                l'encadrement des personnes vulnérables : orphelins, veuves et personnes démunies.
             </p>
             <nav class="page-breadcrumb">
                 <a href="{{ url('/') }}"><i class="fas fa-home"></i> Accueil</a>
@@ -57,11 +58,11 @@
                 </div>
                 <div class="domaine-stat-card">
                     <div class="domaine-stat-icon">
-                        <i class="fas fa-map-marked-alt"></i>
+                        <i class="fas fa-users"></i>
                     </div>
                     <div class="domaine-stat-info">
-                        <span class="domaine-stat-number">4</span>
-                        <span class="domaine-stat-label">Zones couvertes</span>
+                        <span class="domaine-stat-number">10</span>
+                        <span class="domaine-stat-label">Membres fondateurs</span>
                     </div>
                 </div>
             </div>
@@ -69,7 +70,7 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- DOMAINE 1 : SANTÉ-NUTRITION --}}
+    {{-- DOMAINE 1 : SANTÉ & NUTRITION --}}
     {{-- ============================================ --}}
     <section class="domaine-detail-section" id="sante-nutrition">
         <div class="container">
@@ -81,16 +82,23 @@
                     <span class="domaine-detail-number">01</span>
                 </div>
                 <div class="domaine-detail-content">
-                    <h2 class="domaine-detail-title">Santé-Nutrition</h2>
+                    <h2 class="domaine-detail-title">Santé & Nutrition</h2>
                     <p class="domaine-detail-text">
-                        Nous éduquons la population sur la <strong>santé familiale</strong> et les méthodes 
-                        de lutte contre les maladies sexuellement transmissibles et le <strong>VIH/SIDA</strong>. 
-                        Nous combattons la malnutrition sous toutes ses formes en garantissant à la communauté 
-                        l'accès à l'alimentation et aux soins de santé primaires.
+                        PHOVE assure l'<strong>alimentation</strong>, les <strong>soins médicaux</strong> 
+                        et l'<strong>habillement</strong> des personnes vulnérables. Nous supervisons 
+                        les activités sanitaires du programme, organisons des consultations et 
+                        accompagnons les malades traumatisés pour lutter contre la stigmatisation 
+                        et la discrimination.
+                    </p>
+                    <p class="domaine-detail-text">
+                        Nos <strong>médecins</strong> supervisent les activités sanitaires, élaborent 
+                        les rapports mensuels et veillent au patrimoine sanitaire de l'organisation. 
+                        Nos <strong>psychologues</strong> assurent la stabilité mentale des victimes 
+                        de guerre et de violences sexuelles.
                     </p>
                     <div class="domaine-detail-actions">
                         <a href="{{ route('projets.index', ['domaine' => 'sante_nutrition']) }}" class="btn btn-primary">
-                            <i class="fas fa-search"></i> Voir les projets Santé-Nutrition
+                            <i class="fas fa-search"></i> Voir les projets Santé & Nutrition
                         </a>
                     </div>
                 </div>
@@ -99,18 +107,24 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- DOMAINE 2 : ÉDUCATION --}}
+    {{-- DOMAINE 2 : ÉDUCATION & FORMATION --}}
     {{-- ============================================ --}}
     <section class="domaine-detail-section domaine-alt" id="education">
         <div class="container">
             <div class="domaine-detail-grid">
                 <div class="domaine-detail-content">
-                    <h2 class="domaine-detail-title">Éducation</h2>
+                    <h2 class="domaine-detail-title">Éducation & Formation</h2>
                     <p class="domaine-detail-text">
-                        Nous promouvons la <strong>formation professionnelle</strong>, l'apprentissage des 
-                        métiers et la <strong>réinsertion socioéconomique</strong> des personnes vulnérables. 
-                        Nous croyons que l'éducation et la formation sont les clés de l'autonomisation 
-                        et du développement durable des communautés.
+                        PHOVE assure la <strong>scolarisation des orphelins</strong>, l'<strong>alphabétisation</strong> 
+                        et la <strong>formation professionnelle</strong>. Nos encadreurs et moniteurs forment 
+                        les personnes dans différentes professions : coupe et couture, informatique, 
+                        art culinaire, maçonnerie, menuiserie, art, esthétique, musique, agriculture, 
+                        pêche et élevage.
+                    </p>
+                    <p class="domaine-detail-text">
+                        Ils <strong>livrent les attestations de mérite</strong> dans chaque domaine, 
+                        organisent des séminaires, des jeux, des loisirs, des visites et des promenades. 
+                        L'éducation est la clé de l'autonomisation des personnes vulnérables.
                     </p>
                     <div class="domaine-detail-actions">
                         <a href="{{ route('projets.index', ['domaine' => 'education']) }}" class="btn btn-primary">
@@ -129,7 +143,7 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- DOMAINE 3 : PROTECTION --}}
+    {{-- DOMAINE 3 : PROTECTION SOCIALE --}}
     {{-- ============================================ --}}
     <section class="domaine-detail-section" id="protection">
         <div class="container">
@@ -141,13 +155,18 @@
                     <span class="domaine-detail-number">03</span>
                 </div>
                 <div class="domaine-detail-content">
-                    <h2 class="domaine-detail-title">Protection de l'Enfant et de la Femme</h2>
+                    <h2 class="domaine-detail-title">Protection Sociale</h2>
                     <p class="domaine-detail-text">
-                        Nous sensibilisons, informons et formons les leaders et la population sur la 
-                        <strong>promotion des droits humains et des enfants</strong>. Nous menons un 
-                        plaidoyer en faveur des droits des <strong>réfugiés, rapatriés, demandeurs 
-                        d'asile, retournés et déplacés internes</strong>. La protection des plus 
-                        vulnérables est au cœur de notre mission.
+                        PHOVE <strong>octroie des logements</strong> aux personnes vulnérables, 
+                        assure leur <strong>sécurité alimentaire</strong> et veille à leur 
+                        <strong>protection</strong>. Nous luttons contre le banditisme, le vol, 
+                        le viol, les avortements forcés, les mariages précoces, le vagabondage 
+                        et la pauvreté.
+                    </p>
+                    <p class="domaine-detail-text">
+                        Nous accompagnons les <strong>délaissés juridiquement</strong> et assurons 
+                        l'<strong>assistance judiciaire</strong> aux personnes vulnérables. Notre 
+                        objectif est de protéger les plus faibles et de défendre leurs droits.
                     </p>
                     <div class="domaine-detail-actions">
                         <a href="{{ route('projets.index', ['domaine' => 'protection']) }}" class="btn btn-primary">
@@ -160,28 +179,35 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- DOMAINE 4 : WASH --}}
+    {{-- DOMAINE 4 : AGRICULTURE & ÉLEVAGE --}}
     {{-- ============================================ --}}
-    <section class="domaine-detail-section domaine-alt" id="wash">
+    <section class="domaine-detail-section domaine-alt" id="agriculture">
         <div class="container">
             <div class="domaine-detail-grid">
                 <div class="domaine-detail-content">
-                    <h2 class="domaine-detail-title">Eau, Hygiène et Assainissement (WASH)</h2>
+                    <h2 class="domaine-detail-title">Agriculture, Élevage & Pêche</h2>
                     <p class="domaine-detail-text">
-                        Nous informons et formons les populations sur les techniques et méthodes de 
-                        <strong>traitement et conservation de l'eau potable</strong>, d'assainissement 
-                        et d'hygiène dans le milieu. L'accès à l'eau potable et à l'assainissement 
-                        est un droit fondamental que nous défendons.
+                        PHOVE soutient l'<strong>agriculture</strong>, l'<strong>élevage</strong> 
+                        et la <strong>pêche</strong> pour améliorer la sécurité alimentaire des 
+                        communautés. Nous traçons, réfectionnons et réhabilitons les 
+                        <strong>routes de desserte agricole</strong> pour faciliter l'écoulement 
+                        des productions.
+                    </p>
+                    <p class="domaine-detail-text">
+                        Nous construisons des <strong>dépôts de productions agricoles</strong> en 
+                        milieux ruraux et urbains pour la conservation des récoltes. Nos projets 
+                        avec la <strong>FAO</strong> et le <strong>PAM</strong> renforcent la 
+                        résilience des ménages vulnérables.
                     </p>
                     <div class="domaine-detail-actions">
-                        <a href="{{ route('projets.index', ['domaine' => 'wash']) }}" class="btn btn-primary">
-                            <i class="fas fa-search"></i> Voir les projets WASH
+                        <a href="{{ route('projets.index', ['domaine' => 'securite_alimentaire']) }}" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Voir les projets Agriculture
                         </a>
                     </div>
                 </div>
                 <div class="domaine-detail-visual">
                     <div class="domaine-detail-icon">
-                        <i class="fas fa-tint"></i>
+                        <i class="fas fa-tractor"></i>
                     </div>
                     <span class="domaine-detail-number">04</span>
                 </div>
@@ -190,28 +216,34 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- DOMAINE 5 : SÉCURITÉ ALIMENTAIRE --}}
+    {{-- DOMAINE 5 : INFRASTRUCTURES --}}
     {{-- ============================================ --}}
-    <section class="domaine-detail-section" id="securite-alimentaire">
+    <section class="domaine-detail-section" id="infrastructures">
         <div class="container">
             <div class="domaine-detail-grid">
                 <div class="domaine-detail-visual">
                     <div class="domaine-detail-icon">
-                        <i class="fas fa-seedling"></i>
+                        <i class="fas fa-hospital"></i>
                     </div>
                     <span class="domaine-detail-number">05</span>
                 </div>
                 <div class="domaine-detail-content">
-                    <h2 class="domaine-detail-title">Sécurité Alimentaire</h2>
+                    <h2 class="domaine-detail-title">Infrastructures</h2>
                     <p class="domaine-detail-text">
-                        Nous améliorons la <strong>sécurité des moyens de subsistance</strong> des 
-                        communautés rurales en soutenant la production agricole, l'élevage et les 
-                        activités génératrices de revenus. Notre objectif est de garantir l'accès 
-                        à une alimentation suffisante et nutritive pour tous.
+                        PHOVE <strong>construit, réfectionne et réhabilite</strong> les 
+                        <strong>infrastructures hospitalières et scolaires</strong> pour améliorer 
+                        l'accès aux soins de santé et à l'éducation. Nous construisons également 
+                        des <strong>dépôts de productions agricoles</strong> en milieux ruraux 
+                        et urbains.
+                    </p>
+                    <p class="domaine-detail-text">
+                        Notre objectif est de créer un environnement propice au développement 
+                        des communautés vulnérables en leur offrant des infrastructures de 
+                        qualité pour la santé, l'éducation et l'agriculture.
                     </p>
                     <div class="domaine-detail-actions">
-                        <a href="{{ route('projets.index', ['domaine' => 'securite_alimentaire']) }}" class="btn btn-primary">
-                            <i class="fas fa-search"></i> Voir les projets Sécurité Alimentaire
+                        <a href="{{ route('projets.index') }}" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Voir les projets Infrastructures
                         </a>
                     </div>
                 </div>
@@ -220,28 +252,33 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- DOMAINE 6 : COMMUNICATION --}}
+    {{-- DOMAINE 6 : ACTIVITÉS SOCIO-ÉCONOMIQUES --}}
     {{-- ============================================ --}}
-    <section class="domaine-detail-section domaine-alt" id="communication">
+    <section class="domaine-detail-section domaine-alt" id="socio-economique">
         <div class="container">
             <div class="domaine-detail-grid">
                 <div class="domaine-detail-content">
-                    <h2 class="domaine-detail-title">Communication</h2>
+                    <h2 class="domaine-detail-title">Activités Socio-Économiques</h2>
                     <p class="domaine-detail-text">
-                        La communication est un outil essentiel pour le <strong>changement social</strong>. 
-                        Nous informons, sensibilisons et mobilisons les communautés autour des enjeux 
-                        de développement, de santé publique et de droits humains à travers des 
-                        campagnes de proximité.
+                        PHOVE <strong>accompagne les activités socio-économiques</strong> des 
+                        personnes vulnérables pour leur autonomisation. Nous soutenons leurs 
+                        initiatives génératrices de revenus et luttons contre l'<strong>oisiveté 
+                        juvénile</strong> qui pousse les jeunes vers la délinquance.
+                    </p>
+                    <p class="domaine-detail-text">
+                        Nous encourageons l'entrepreneuriat local, la formation aux métiers et 
+                        l'insertion professionnelle des orphelins, veuves et personnes démunies 
+                        pour leur permettre de subvenir à leurs besoins.
                     </p>
                     <div class="domaine-detail-actions">
-                        <a href="{{ route('projets.index', ['domaine' => 'communication']) }}" class="btn btn-primary">
-                            <i class="fas fa-search"></i> Voir les projets Communication
+                        <a href="{{ route('projets.index') }}" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Voir les projets Socio-économiques
                         </a>
                     </div>
                 </div>
                 <div class="domaine-detail-visual">
                     <div class="domaine-detail-icon">
-                        <i class="fas fa-bullhorn"></i>
+                        <i class="fas fa-hand-holding-usd"></i>
                     </div>
                     <span class="domaine-detail-number">06</span>
                 </div>
@@ -250,28 +287,34 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- DOMAINE 7 : ENVIRONNEMENT --}}
+    {{-- DOMAINE 7 : ACCOMPAGNEMENT SPIRITUEL --}}
     {{-- ============================================ --}}
-    <section class="domaine-detail-section" id="environnement">
+    <section class="domaine-detail-section" id="spirituel">
         <div class="container">
             <div class="domaine-detail-grid">
                 <div class="domaine-detail-visual">
                     <div class="domaine-detail-icon">
-                        <i class="fas fa-tree"></i>
+                        <i class="fas fa-dove"></i>
                     </div>
                     <span class="domaine-detail-number">07</span>
                 </div>
                 <div class="domaine-detail-content">
-                    <h2 class="domaine-detail-title">Protection de l'Environnement</h2>
+                    <h2 class="domaine-detail-title">Accompagnement Spirituel</h2>
                     <p class="domaine-detail-text">
-                        Nous contribuons à la lutte contre la <strong>déforestation</strong> et le 
-                        <strong>réchauffement climatique</strong> par le reboisement et l'éducation 
-                        environnementale. La protection de notre planète est une responsabilité 
-                        collective que nous portons avec détermination.
+                        PHOVE est une organisation à <strong>caractère spirituel</strong>. Nos 
+                        <strong>prédicateurs</strong> — pasteurs, évangélistes, intercesseurs — 
+                        s'occupent de la vie spirituelle de l'organisation. Ils sont 
+                        <strong>bénévoles et charitables</strong>.
+                    </p>
+                    <p class="domaine-detail-text">
+                        Nous <strong>mettons en valeur les Saintes Écritures</strong>, donnons la 
+                        valeur à notre vocation pastorale et préparons les brebis du Seigneur à 
+                        le rencontrer un jour. Nous encadrons spirituellement et socialement 
+                        les orphelins, veuves et personnes démunies.
                     </p>
                     <div class="domaine-detail-actions">
-                        <a href="{{ route('projets.index', ['domaine' => 'environnement']) }}" class="btn btn-primary">
-                            <i class="fas fa-search"></i> Voir les projets Environnement
+                        <a href="{{ url('/mission-vision') }}" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Découvrir notre mission
                         </a>
                     </div>
                 </div>
@@ -280,28 +323,34 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- DOMAINE 8 : PAIX --}}
+    {{-- DOMAINE 8 : ACCOMPAGNEMENT PSYCHOSOCIAL --}}
     {{-- ============================================ --}}
-    <section class="domaine-detail-section domaine-alt" id="paix">
+    <section class="domaine-detail-section domaine-alt" id="psychosocial">
         <div class="container">
             <div class="domaine-detail-grid">
                 <div class="domaine-detail-content">
-                    <h2 class="domaine-detail-title">Promotion de la Paix</h2>
+                    <h2 class="domaine-detail-title">Accompagnement Psychosocial</h2>
                     <p class="domaine-detail-text">
-                        Nous accompagnons les communautés dans la <strong>gestion et la transformation 
-                        positive des conflits</strong> à travers des mécanismes communautaires, la 
-                        promotion de la cohabitation pacifique et la bonne gouvernance. La paix est 
-                        la condition essentielle de tout développement durable.
+                        Nos <strong>psychologues</strong> s'occupent de l'état psychique des personnes 
+                        vulnérables. Ils font des <strong>consultations</strong>, des <strong>enquêtes 
+                        sur terrain</strong> pour se rendre compte de l'état psychique des victimes 
+                        traumatisées par la guerre ou les violences sexuelles.
+                    </p>
+                    <p class="domaine-detail-text">
+                        Ils <strong>étudient et élaborent les fiches d'enquête</strong>, assurent la 
+                        <strong>stabilité mentale</strong> des victimes et prodiguent des conseils 
+                        pouvant rendre la personne traumatisée stable. Nous luttons contre la 
+                        stigmatisation et la discrimination.
                     </p>
                     <div class="domaine-detail-actions">
-                        <a href="{{ route('projets.index', ['domaine' => 'paix']) }}" class="btn btn-primary">
-                            <i class="fas fa-search"></i> Voir les projets Paix
+                        <a href="{{ url('/contact') }}" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Nous contacter
                         </a>
                     </div>
                 </div>
                 <div class="domaine-detail-visual">
                     <div class="domaine-detail-icon">
-                        <i class="fas fa-dove"></i>
+                        <i class="fas fa-brain"></i>
                     </div>
                     <span class="domaine-detail-number">08</span>
                 </div>
@@ -310,28 +359,33 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- DOMAINE 9 : GENRE --}}
+    {{-- DOMAINE 9 : ASSISTANCE JUDICIAIRE --}}
     {{-- ============================================ --}}
-    <section class="domaine-detail-section" id="genre">
+    <section class="domaine-detail-section" id="assistance-judiciaire">
         <div class="container">
             <div class="domaine-detail-grid">
                 <div class="domaine-detail-visual">
                     <div class="domaine-detail-icon">
-                        <i class="fas fa-venus-mars"></i>
+                        <i class="fas fa-gavel"></i>
                     </div>
                     <span class="domaine-detail-number">09</span>
                 </div>
                 <div class="domaine-detail-content">
-                    <h2 class="domaine-detail-title">Sensibilité au Genre</h2>
+                    <h2 class="domaine-detail-title">Assistance Judiciaire</h2>
                     <p class="domaine-detail-text">
-                        La <strong>sensibilité au genre</strong> est une valeur transversale dans 
-                        toutes nos interventions. Nous promouvons l'égalité des chances, la 
-                        participation des femmes à la prise de décision et luttons contre toutes 
-                        les formes de discrimination basées sur le genre.
+                        PHOVE accompagne les <strong>délaissés juridiquement</strong>. Nous 
+                        offrons une <strong>assistance judiciaire</strong> aux personnes vulnérables 
+                        qui ne peuvent pas se défendre. Nos chargés des affaires juridiques 
+                        veillent au respect des droits des orphelins, veuves et personnes démunies.
+                    </p>
+                    <p class="domaine-detail-text">
+                        Nous luttons contre les <strong>violences sexuelles</strong>, les 
+                        <strong>avortements forcés</strong> et les <strong>mariages précoces</strong>. 
+                        Notre objectif est de garantir l'accès à la justice pour tous.
                     </p>
                     <div class="domaine-detail-actions">
-                        <a href="{{ route('projets.index', ['domaine' => 'genre']) }}" class="btn btn-primary">
-                            <i class="fas fa-search"></i> Voir les projets Genre
+                        <a href="{{ url('/contact') }}" class="btn btn-primary">
+                            <i class="fas fa-search"></i> Demander de l'aide
                         </a>
                     </div>
                 </div>
@@ -353,7 +407,7 @@
                 </h2>
                 <p class="cta-text">
                     Votre soutien nous permet d'intervenir dans tous ces domaines pour le bien-être 
-                    des communautés vulnérables de la RD Congo.
+                    des orphelins, veuves et personnes démunies de la RD Congo.
                 </p>
                 <div class="cta-buttons">
                     <a href="{{ url('/faire-un-don') }}" class="btn-cta-don">
