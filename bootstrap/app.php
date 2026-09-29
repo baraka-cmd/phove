@@ -11,8 +11,18 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // ─────────────────────────────────────────
+        // ⭐ Trust proxies (Render, Vercel, etc.)
+        // ─────────────────────────────────────────
+        // Indispensable derrière un reverse proxy
+        // pour détecter HTTPS correctement.
+        $middleware->trustProxies(at: '*');
+
+        // ─────────────────────────────────────────
+        // Alias des middlewares personnalisés
+        // ─────────────────────────────────────────
         $middleware->alias([
-            'check.role' => \App\Http\Middleware\CheckRole::class,
+            'check.role'   => \App\Http\Middleware\CheckRole::class,
             'check.status' => \App\Http\Middleware\CheckStatus::class,
         ]);
     })
