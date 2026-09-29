@@ -140,20 +140,19 @@
                 <div class="projet-main">
 
                     {{-- Image principale --}}
-                    @if($projet->image_principale)
                     <div class="projet-main-image">
-                        <img src="{{ asset('storage/' . $projet->image_principale) }}" 
-                             alt="{{ $projet->titre }}" 
-                             class="projet-featured-image"
-                             loading="lazy">
+                        @if($projet->image_principale)
+                            <img src="{{ route('media.show', ['path' => ltrim($projet->image_principale, '/')]) }}"
+                                alt="{{ $projet->titre }}"
+                                class="projet-featured-image"
+                                loading="lazy"
+                                onerror="this.onerror=null; this.src='{{ asset('assets/images/logo-phove.png') }}';">
+                        @else
+                            <img src="{{ asset('assets/images/logo-phove.png') }}"
+                                alt="{{ $projet->titre }}"
+                                class="projet-featured-image projet-featured-image-placeholder">
+                        @endif
                     </div>
-                    @else
-                    <div class="projet-main-image projet-main-image-placeholder">
-                        <img src="{{ asset('assets/images/logo-phove.png') }}" 
-                             alt="{{ $projet->titre }}" 
-                             class="projet-featured-image">
-                    </div>
-                    @endif
 
                     {{-- Description --}}
                     <div class="projet-block">
@@ -195,20 +194,40 @@
                         <h2 class="projet-block-title">
                             <i class="fas fa-images"></i> Galerie du projet
                         </h2>
+
                         <div class="projet-gallery" id="projetGallery">
                             @foreach($projet->medias as $media)
-                            <div class="gallery-item" data-src="{{ asset('storage/' . $media->fichier) }}" 
-                                 data-title="{{ $media->titre }}">
-                                <img src="{{ asset('storage/' . ($media->miniature ?? $media->fichier)) }}" 
-                                     alt="{{ $media->titre }}" 
-                                     loading="lazy"
-                                     class="gallery-thumb">
-                                @if($media->type === 'video')
-                                <div class="gallery-play-icon">
-                                    <i class="fas fa-play"></i>
+                                @php
+                                    // Fichier principal (pleine résolution)
+                                    $fichierUrl = $media->fichier
+                                        ? route('media.show', ['path' => ltrim($media->fichier, '/')])
+                                        : null;
+
+                                    // Miniature (fallback sur le fichier principal)
+                                    $thumbUrl = $media->miniature
+                                        ? route('media.show', ['path' => ltrim($media->miniature, '/')])
+                                        : $fichierUrl;
+                                @endphp
+
+                                <div class="gallery-item"
+                                    data-src="{{ $fichierUrl }}"
+                                    data-title="{{ $media->titre }}"
+                                    data-type="{{ $media->type }}">
+
+                                    @if($thumbUrl)
+                                        <img src="{{ $thumbUrl }}"
+                                            alt="{{ $media->titre }}"
+                                            loading="lazy"
+                                            class="gallery-thumb"
+                                            onerror="this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #E8F0F8, #F1F5F9)';">
+                                    @endif
+
+                                    @if($media->type === 'video')
+                                        <div class="gallery-play-icon">
+                                            <i class="fas fa-play"></i>
+                                        </div>
+                                    @endif
                                 </div>
-                                @endif
-                            </div>
                             @endforeach
                         </div>
                     </div>
@@ -346,6 +365,7 @@
             </div>
         </div>
     </section>
+    
 
     {{-- ============================================ --}}
     {{-- SECTION TÉMOIGNAGES --}}

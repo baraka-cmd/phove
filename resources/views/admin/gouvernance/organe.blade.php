@@ -70,6 +70,13 @@
                                             <div class="gouvernance-membre-info">
                                                 <div class="gouvernance-membre-nom">
                                                     {{ $organe->membre ? $organe->membre->nomComplet() : '—' }}
+
+                                                    {{-- Badge fondateur --}}
+                                                    @if($organe->est_fondateur)
+                                                        <span class="badge-fondateur" title="Membre fondateur 2012">
+                                                            <i class="fas fa-star"></i> Fondateur
+                                                        </span>
+                                                    @endif
                                                 </div>
                                                 @if($organe->membre && $organe->membre->email)
                                                     <div class="gouvernance-membre-email">
@@ -122,6 +129,7 @@
                                                     data-date-fin="{{ $organe->date_fin ? $organe->date_fin->format('Y-m-d') : '' }}"
                                                     data-actif="{{ $organe->actif }}"
                                                     data-ordre="{{ $organe->ordre }}"
+                                                    data-est-fondateur="{{ $organe->est_fondateur ? '1' : '0' }}"
                                                     title="Modifier le poste">
                                                 <i class="fas fa-edit"></i>
                                             </button>
@@ -301,6 +309,20 @@
                            min="0">
                 </div>
 
+                {{-- EST FONDATEUR --}}
+                <div class="gouvernance-form-group">
+                    <label class="gouvernance-checkbox-row gouvernance-checkbox-fondateur">
+                        <input type="checkbox"
+                               name="est_fondateur"
+                               value="1"
+                               {{ old('est_fondateur') ? 'checked' : '' }}>
+                        <span>
+                            <i class="fas fa-star" style="color: #F59E0B;"></i>
+                            Membre fondateur (2012)
+                        </span>
+                    </label>
+                </div>
+
                 {{-- Submit --}}
                 <button type="submit" class="gouvernance-form-submit">
                     <i class="fas fa-plus-circle"></i> Ajouter à l'organe
@@ -361,6 +383,17 @@
                 <label class="gouvernance-checkbox-row">
                     <input type="checkbox" name="actif" id="edit_actif" value="1">
                     <span>Mandat actif</span>
+                </label>
+            </div>
+
+            {{-- EST FONDATEUR (ÉDITION) --}}
+            <div class="gouvernance-form-group">
+                <label class="gouvernance-checkbox-row gouvernance-checkbox-fondateur">
+                    <input type="checkbox" name="est_fondateur" id="edit_est_fondateur" value="1">
+                    <span>
+                        <i class="fas fa-star" style="color: #F59E0B;"></i>
+                        Membre fondateur (2012)
+                    </span>
                 </label>
             </div>
 

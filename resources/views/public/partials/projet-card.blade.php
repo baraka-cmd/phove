@@ -1,22 +1,18 @@
 {{-- ============================================ --}}
-{{-- COMPOSANT CARTE PROJET RÉUTILISABLE — PHOVE --}}
-{{-- Utilisé dans : liste projets, page d'accueil, projets connexes --}}
+{{-- PARTIAL — CARTE PROJET --}}
 {{-- Variable attendue : $projet --}}
-{{-- Variable optionnelle : $class (classes CSS supplémentaires) --}}
+{{-- Variable optionnelle : $class --}}
 {{-- ============================================ --}}
 
 @php
-    // URL de l'image via la route custom media.show
     $imageUrl = $projet->image_principale
         ? route('media.show', ['path' => ltrim($projet->image_principale, '/')])
-        : asset('assets/images/logo-phove.png');
+        : null;
 
-    // Pourcentage du budget utilisé (0 si budget_total = 0)
     $pourcentage = $projet->budget_total > 0
         ? $projet->pourcentageBudget()
         : 0;
 
-    // Mapping statut → icône
     $statutIcone = match($projet->statut) {
         'en_cours'       => 'spinner fa-pulse',
         'termine'        => 'check-circle',
@@ -24,92 +20,94 @@
         'suspendu'       => 'pause-circle',
         default          => 'circle',
     };
-
-    // Mapping statut → classe CSS (déjà alignée sur le CSS)
-    $statutClasse = match($projet->statut) {
-        'en_cours'       => 'en-cours',
-        'termine'        => 'termine',
-        'en_preparation' => 'preparation',
-        'suspendu'       => 'suspendu',
-        default          => 'en-cours',
-    };
 @endphp
 
-<article class="project-card {{ $class ?? '' }}">
+<article class="projet-card {{ $class ?? '' }}">
 
-    {{-- Image du projet --}}
-    <div class="project-card-image">
-        <img src="{{ $imageUrl }}"
-             alt="{{ $projet->titre }}"
-             loading="lazy"
-             onerror="this.src='{{ asset('assets/images/logo-phove.png') }}'">
+    {{-- Image --}}
+    <div class="projet-card-image">
+        @if($imageUrl)
+            <img src="{{ $imageUrl }}"
+                 alt="{{ $projet->titre }}"
+                 class="projet-card-img"
+                 loading="lazy"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="projet-card-image-placeholder" style="display: none;">
+                <i class="fas fa-project-diagram"></i>
+            </div>
+        @else
+            <div class="projet-card-image-placeholder">
+                <i class="fas fa-project-diagram"></i>
+            </div>
+        @endif
 
         {{-- Badge statut --}}
-        <span class="project-card-badge {{ $statutClasse }}">
+        <span class="projet-card-badge projet-badge-{{ $projet->statut }}">
             <i class="fas fa-{{ $statutIcone }}"></i>
             {{ $projet->statutLibelle() }}
         </span>
-    </div>
 
-    {{-- Corps de la carte --}}
-    <div class="project-card-body">
-
-        {{-- Domaine --}}
-        <span class="project-card-domain">
+        {{-- Badge domaine --}}
+        <span class="projet-card-domain-badge">
+            <i class="fas fa-tag"></i>
             {{ $projet->domaineLibelle() }}
         </span>
+    </div>
 
-        {{-- Titre --}}
-        <h3 class="project-card-title">
-            <a href="{{ route('projets.show', $projet->slug) }}" 
-               title="Voir le projet : {{ $projet->titre }}">
-                {{ Str::limit($projet->titre, 70) }}
+    {{-- Corps --}}
+    <div class="projet-card-body">
+
+        <h3 class="projet-card-title">
+            <a href="{{ route('projets.show', $projet->slug) }}">
+                {{ Str::limit($projet->titre, 80) }}
             </a>
         </h3>
 
-        {{-- Métadonnées --}}
-        <div class="project-card-meta">
-            <span>
-                <i class="fas fa-map-marker-alt"></i>
-                {{ $projet->zone_geographique }}
-            </span>
-            <span>
-                <i class="fas fa-calendar-alt"></i>
-                {{ $projet->date_debut->format('Y') }}
-                @if($projet->date_fin)
-                    - {{ $projet->date_fin->format('Y') }}
-                @endif
-            </span>
+        <div class="projet-card-meta">
+            @if($projet->zone_geographique)
+                <span class="projet-meta-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    {{ Str::limit($projet->zone_geographique, 30) }}
+                </span>
+            @endif
+            @if($projet->date_debut)
+                <span class="projet-meta-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    {{ $projet->date_debut->format('Y') }}
+                </span>
+            @endif
         </div>
 
-        {{-- Description courte --}}
-        <p class="project-card-description">
-            {{ Str::limit(strip_tags($projet->description), 120) }}
-        </p>
-
-        {{-- Barre de progression du budget --}}
-        @if($projet->budget_total > 0)
-        <div class="project-card-progress">
-            <div class="progress-label">
-                <span>Budget utilisé</span>
-                <span>{{ $pourcentage }}%</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill {{ $pourcentage >= 100 ? 'completed' : '' }}"
-                     style="width: {{ $pourcentage }}%"
-                     data-width="{{ $pourcentage }}%">
-                </div>
-            </div>
-        </div>
+        @if($projet->description)
+            <p class="projet-card-description">
+                {{ Str::limit(strip_tags($projet->description), 120) }}
+            </p>
         @endif
 
-        {{-- Footer --}}
-        <div class="project-card-footer">
-            <a href="{{ route('projets.show', $projet->slug) }}" class="project-card-link">
+        @if($projet->budget_total > 0)
+            <div class="projet-card-progress">
+                <div class="projet-progress-header">
+                    <span class="projet-progress-label">
+                        <i class="fas fa-chart-line"></i> Budget
+                    </span>
+                    <span class="projet-progress-percent">{{ $pourcentage }}%</span>
+                </div>
+                <div class="projet-progress-bar">
+                    <div class="projet-progress-fill {{ $pourcentage >= 100 ? 'completed' : '' }}"
+                         style="width: {{ $pourcentage }}%"></div>
+                </div>
+                <div class="projet-progress-amounts">
+                    <span>{{ number_format($projet->budget_utilise, 0, ',', ' ') }} $</span>
+                    <span>{{ number_format($projet->budget_total, 0, ',', ' ') }} $</span>
+                </div>
+            </div>
+        @endif
+
+        <div class="projet-card-footer">
+            <a href="{{ route('projets.show', $projet->slug) }}" class="projet-card-link">
                 Détails du projet <i class="fas fa-arrow-right"></i>
             </a>
 
-            {{-- Partenaires (logos miniatures) --}}
             @php
                 $partenaires = $projet->relationLoaded('partenaires')
                     ? $projet->partenaires
@@ -117,18 +115,18 @@
             @endphp
 
             @if($partenaires->count() > 0)
-            <div class="project-card-partners">
-                @foreach($partenaires->take(3) as $partenaire)
-                    <span class="project-partner-mini" title="{{ $partenaire->nom }}">
-                        {{ Str::upper(Str::substr($partenaire->nom, 0, 2)) }}
-                    </span>
-                @endforeach
-                @if($partenaires->count() > 3)
-                    <span class="project-partner-mini projet-partner-more">
-                        +{{ $partenaires->count() - 3 }}
-                    </span>
-                @endif
-            </div>
+                <div class="projet-card-partners">
+                    @foreach($partenaires->take(3) as $partenaire)
+                        <span class="projet-partner-mini" title="{{ $partenaire->nom }}">
+                            {{ Str::upper(Str::substr($partenaire->nom, 0, 2)) }}
+                        </span>
+                    @endforeach
+                    @if($partenaires->count() > 3)
+                        <span class="projet-partner-mini projet-partner-more">
+                            +{{ $partenaires->count() - 3 }}
+                        </span>
+                    @endif
+                </div>
             @endif
         </div>
     </div>

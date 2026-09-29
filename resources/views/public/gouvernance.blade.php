@@ -190,9 +190,9 @@
                 </div>
                 <div class="content-image-wrapper">
                     <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
-                         alt="Assemblée Générale PHOVE" 
-                         class="content-image"
-                         onerror="this.src='https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600'">
+                        alt="Assemblée Générale PHOVE" 
+                        class="content-image"
+                        onerror="this.src='https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600'">
                 </div>
             </div>
         </div>
@@ -220,7 +220,13 @@
                 <div class="team-card">
                     <div class="team-avatar">
                         @if($organe->membre && $organe->membre->photo)
-                            <img src="{{ asset('storage/' . $organe->membre->photo) }}" alt="{{ $organe->membre->nomComplet() }}" loading="lazy">
+                            <img src="{{ route('media.show', ['path' => ltrim($organe->membre->photo, '/')]) }}"
+                                alt="{{ $organe->membre->nomComplet() }}"
+                                loading="lazy"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span style="display: none;">
+                                {{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}
+                            </span>
                         @else
                             <span>{{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}</span>
                         @endif
@@ -300,7 +306,13 @@
                 <div class="team-card">
                     <div class="team-avatar">
                         @if($organe->membre && $organe->membre->photo)
-                            <img src="{{ asset('storage/' . $organe->membre->photo) }}" alt="{{ $organe->membre->nomComplet() }}" loading="lazy">
+                            <img src="{{ route('media.show', ['path' => ltrim($organe->membre->photo, '/')]) }}"
+                                alt="{{ $organe->membre->nomComplet() }}"
+                                loading="lazy"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span style="display: none;">
+                                {{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}
+                            </span>
                         @else
                             <span>{{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}</span>
                         @endif

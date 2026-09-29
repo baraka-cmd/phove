@@ -1,11 +1,3 @@
-/* ============================================================
-   GOUVERNANCE — PAGE ORGANE
-   ------------------------------------------------------------
-   - Formulaire d'édition de poste (masqué par défaut)
-   - Prévisualisation de la photo avant upload
-   - Suppression de la photo sélectionnée
-   ============================================================ */
-
 document.addEventListener('DOMContentLoaded', function () {
 
     /* ========================================================
@@ -14,11 +6,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const editFormCard = document.getElementById('editFormCard');
     const editForm     = document.getElementById('editForm');
-    const editPoste    = document.getElementById('edit_poste');
-    const editDateDeb  = document.getElementById('edit_date_debut');
-    const editDateFin  = document.getElementById('edit_date_fin');
-    const editActif    = document.getElementById('edit_actif');
-    const editOrdre    = document.getElementById('edit_ordre');
 
     if (editFormCard && editForm) {
 
@@ -26,25 +13,32 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
 
-                const id         = this.dataset.id;
-                const poste      = this.dataset.poste;
-                const dateDebut  = this.dataset.dateDebut;
-                const dateFin    = this.dataset.dateFin;
-                const actif      = this.dataset.actif;
-                const ordre      = this.dataset.ordre;
+                const id            = this.dataset.id;
+                const poste         = this.dataset.poste;
+                const dateDebut     = this.dataset.dateDebut;
+                const dateFin       = this.dataset.dateFin;
+                const actif         = this.dataset.actif;
+                const ordre         = this.dataset.ordre;
+                const estFondateur  = this.dataset.estFondateur;   // ← AJOUT
 
-                // URL dynamique : /admin/gouvernance/organes/{id}/update
+                // URL dynamique
                 const baseUrl = editForm.dataset.actionBase;
                 editForm.action = baseUrl + '/' + id + '/update';
 
                 // Remplissage des champs
-                if (editPoste)    editPoste.value    = poste;
-                if (editDateDeb)  editDateDeb.value  = dateDebut;
-                if (editDateFin)  editDateFin.value  = dateFin || '';
-                if (editActif)    editActif.checked  = actif === '1';
-                if (editOrdre)    editOrdre.value    = ordre;
+                document.getElementById('edit_poste').value       = poste || '';
+                document.getElementById('edit_date_debut').value  = dateDebut || '';
+                document.getElementById('edit_date_fin').value    = dateFin || '';
+                document.getElementById('edit_actif').checked     = actif === '1';
+                document.getElementById('edit_ordre').value       = ordre || 0;
 
-                // Affichage + scroll
+                // Est fondateur
+                const editEstFondateur = document.getElementById('edit_est_fondateur');
+                if (editEstFondateur) {
+                    editEstFondateur.checked = estFondateur === '1';
+                }
+
+                // Affichage
                 editFormCard.style.display = 'block';
                 editFormCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
@@ -64,13 +58,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         photoInput.addEventListener('change', function () {
             const file = this.files[0];
+            if (!file) { resetPhotoPreview(); return; }
 
-            if (!file) {
-                resetPhotoPreview();
-                return;
-            }
-
-            // Validation côté client
             const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
             if (!allowedTypes.includes(file.type)) {
@@ -86,21 +75,15 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             const reader = new FileReader();
-
             reader.onload = function (e) {
                 photoPreviewImg.src = e.target.result;
                 photoPreviewImg.style.display = 'block';
                 photoPlaceholder.style.display = 'none';
-
-                if (photoRemoveBtn) {
-                    photoRemoveBtn.style.display = 'flex';
-                }
+                if (photoRemoveBtn) photoRemoveBtn.style.display = 'flex';
             };
-
             reader.readAsDataURL(file);
         });
 
-        // Suppression de la photo sélectionnée
         if (photoRemoveBtn) {
             photoRemoveBtn.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -113,10 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
             photoPreviewImg.src = '';
             photoPreviewImg.style.display = 'none';
             photoPlaceholder.style.display = 'flex';
-
-            if (photoRemoveBtn) {
-                photoRemoveBtn.style.display = 'none';
-            }
+            if (photoRemoveBtn) photoRemoveBtn.style.display = 'none';
         }
     }
 });

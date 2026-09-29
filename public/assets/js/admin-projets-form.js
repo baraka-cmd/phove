@@ -1,206 +1,275 @@
-/**
- * AHD-RDC — SCRIPTS FORMULAIRE PROJET (CREATE & EDIT)
- * Action Humanitaire pour le Développement en RD Congo
- * « Être ensemble pour le bien de la communauté »
- */
+/* ============================================================
+   FORMULAIRE PROJET — Admin PHOVE
+   ------------------------------------------------------------
+   Fonctionnalités :
+     - Aperçu de l'image principale (1 fichier)
+     - Aperçu de la galerie média (multi-fichiers + drag & drop)
+     - Slug automatique en direct
+     - Validation côté client (formats + tailles)
+   ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ============================================================
-    // 1. PRÉVISUALISATION DE L'IMAGE
-    // ============================================================
-    const imageInput = document.getElementById('image_principale');
-    const imagePreview = document.getElementById('imagePreview');
-    const imagePreviewImg = document.getElementById('imagePreviewImg');
-    const imagePlaceholder = document.getElementById('imagePlaceholder');
-    const imageInfo = document.getElementById('imageInfo');
+    /* ========================================================
+       1. APERÇU DE L'IMAGE PRINCIPALE (1 fichier)
+       ======================================================== */
 
-    if (imageInput && imagePreview) {
+    const imageInput       = document.getElementById('image_principale');
+    const imagePreviewImg  = document.getElementById('imagePreviewImg');
+    const imagePlaceholder = document.getElementById('imagePlaceholder');
+    const imageInfo        = document.getElementById('imageInfo');
+
+    if (imageInput) {
         imageInput.addEventListener('change', function () {
             const file = this.files[0];
 
-            if (file) {
-                // Vérifier le type
-                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-                if (!allowedTypes.includes(file.type)) {
-                    showToast('Format non supporté. Utilisez JPG, PNG ou WebP.', 'error');
-                    this.value = '';
-                    return;
-                }
+            if (!file) {
+                resetImagePreview();
+                return;
+            }
 
-                // Vérifier la taille (max 5 Mo)
-                if (file.size > 5 * 1024 * 1024) {
-                    showToast('L\'image ne doit pas dépasser 5 Mo.', 'error');
-                    this.value = '';
-                    return;
-                }
+            // ─── Validation ───
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
 
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    if (imagePreviewImg) {
-                        imagePreviewImg.src = e.target.result;
-                        imagePreviewImg.style.display = 'block';
-                    }
-                    if (imagePlaceholder) {
-                        imagePlaceholder.style.display = 'none';
-                    }
-                    if (imageInfo) {
-                        imageInfo.innerHTML = '<i class="fas fa-check-circle" style="color: var(--color-success);"></i> ' + file.name + ' (' + formatFileSize(file.size) + ')';
-                    }
-                };
-                reader.readAsDataURL(file);
+            if (!allowedTypes.includes(file.type)) {
+                alert('Format non supporté. Utilisez JPG, PNG ou WebP.');
+                resetImagePreview();
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('L\'image ne doit pas dépasser 5 Mo.');
+                resetImagePreview();
+                return;
+            }
+
+            // ─── Aperçu ───
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                if (imagePreviewImg) {
+                    imagePreviewImg.src = e.target.result;
+                    imagePreviewImg.style.display = 'block';
+                }
+                if (imagePlaceholder) {
+                    imagePlaceholder.style.display = 'none';
+                }
+            };
+            reader.readAsDataURL(file);
+
+            // ─── Info fichier ───
+            if (imageInfo) {
+                imageInfo.textContent = file.name + ' (' + Math.round(file.size / 1024) + ' Ko)';
             }
         });
     }
 
-    function formatFileSize(bytes) {
-        if (bytes < 1024) return bytes + ' o';
-        if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' Ko';
-        return (bytes / 1048576).toFixed(1) + ' Mo';
+    /**
+     * Réinitialise l'aperçu de l'image principale.
+     */
+    function resetImagePreview() {
+        if (imageInput) imageInput.value = '';
+        if (imagePreviewImg) {
+            imagePreviewImg.src = '';
+            imagePreviewImg.style.display = 'none';
+        }
+        if (imagePlaceholder) imagePlaceholder.style.display = 'block';
+        if (imageInfo) imageInfo.textContent = 'Aucun fichier sélectionné';
     }
 
-    // ============================================================
-    // 2. VALIDATION DU FORMULAIRE
-    // ============================================================
-    const projetForm = document.querySelector('form');
+    /* ========================================================
+       2. APERÇU DE LA GALERIE MÉDIA (multi-fichiers)
+       ======================================================== */
 
-    if (projetForm) {
-        projetForm.addEventListener('submit', function (e) {
-            const titre = document.getElementById('titre')?.value?.trim();
-            const domaine = document.getElementById('domaine')?.value;
-            const zone = document.getElementById('zone_geographique')?.value?.trim();
-            const dateDebut = document.getElementById('date_debut')?.value;
-            const statut = document.getElementById('statut')?.value;
-            const description = document.getElementById('description')?.value?.trim();
+    const galerieInput   = document.getElementById('galerie');
+    const galeriePreview = document.getElementById('galeriePreview');
 
-            if (!titre || !domaine || !zone || !dateDebut || !statut || !description) {
+    if (galerieInput && galeriePreview) {
+
+        galerieInput.addEventListener('change', function () {
+            galeriePreview.innerHTML = '';
+
+            const files = Array.from(this.files);
+
+            if (files.length === 0) {
+                return;
+            }
+
+            files.forEach(function (file) {
+                const item = creerApercuFichier(file);
+                if (item) {
+                    galeriePreview.appendChild(item);
+                }
+            });
+        });
+    }
+
+    /**
+     * Crée un élément d'aperçu pour un fichier.
+     *
+     * @param  {File} file
+     * @return {HTMLElement|null}
+     */
+    function creerApercuFichier(file) {
+        const isImage = file.type.startsWith('image/');
+        const isVideo = file.type.startsWith('video/');
+
+        // Accepter uniquement images et vidéos
+        if (!isImage && !isVideo) {
+            return null;
+        }
+
+        const item = document.createElement('div');
+        item.className = 'galerie-preview-item';
+
+        // ─── Aperçu image ───
+        if (isImage) {
+            const img = document.createElement('img');
+            img.alt = file.name;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            item.appendChild(img);
+        }
+        // ─── Placeholder vidéo ───
+        else {
+            const videoPlaceholder = document.createElement('div');
+            videoPlaceholder.className = 'galerie-preview-video';
+            videoPlaceholder.innerHTML = '<i class="fas fa-video"></i>';
+            item.appendChild(videoPlaceholder);
+        }
+
+        // ─── Badge type ───
+        const badge = document.createElement('span');
+        badge.className = 'galerie-preview-badge';
+        badge.innerHTML = isVideo
+            ? '<i class="fas fa-video"></i>'
+            : '<i class="fas fa-image"></i>';
+        item.appendChild(badge);
+
+        // ─── Info taille ───
+        const taille = document.createElement('span');
+        taille.className = 'galerie-preview-size';
+        taille.textContent = Math.round(file.size / 1024) + ' Ko';
+        item.appendChild(taille);
+
+        return item;
+    }
+
+    /* ========================================================
+       3. DRAG & DROP SUR LA ZONE GALERIE
+       ======================================================== */
+
+    const galerieLabel = document.querySelector('.projet-galerie-label');
+
+    if (galerieLabel && galerieInput) {
+
+        // Surbrillance pendant le drag
+        ['dragenter', 'dragover'].forEach(function (event) {
+            galerieLabel.addEventListener(event, function (e) {
                 e.preventDefault();
+                e.stopPropagation();
+                galerieLabel.classList.add('is-dragover');
+            });
+        });
 
-                ['titre', 'domaine', 'zone_geographique', 'date_debut', 'statut', 'description'].forEach(id => {
-                    const field = document.getElementById(id);
-                    if (field && !field.value) {
-                        field.style.borderColor = 'var(--color-accent)';
-                        field.style.background = '#fffbfb';
-                        field.style.transition = 'all 0.25s ease';
-                    }
+        // Retirer la surbrillance
+        ['dragleave', 'drop'].forEach(function (event) {
+            galerieLabel.addEventListener(event, function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                galerieLabel.classList.remove('is-dragover');
+            });
+        });
+
+        // Traitement du drop
+        galerieLabel.addEventListener('drop', function (e) {
+            e.preventDefault();
+
+            const files = e.dataTransfer.files;
+
+            if (files.length > 0) {
+                // Créer un FileList compatible avec l'input
+                const dataTransfer = new DataTransfer();
+
+                Array.from(files).forEach(function (file) {
+                    dataTransfer.items.add(file);
                 });
 
-                showToast('Veuillez remplir tous les champs obligatoires.', 'error');
-                return;
-            }
+                galerieInput.files = dataTransfer.files;
 
-            // Vérifier la date de fin
-            const dateFin = document.getElementById('date_fin')?.value;
-            if (dateFin && dateFin < dateDebut) {
-                e.preventDefault();
-                document.getElementById('date_fin').style.borderColor = 'var(--color-accent)';
-                showToast('La date de fin doit être postérieure à la date de début.', 'error');
-                return;
+                // Déclencher l'événement change pour l'aperçu
+                galerieInput.dispatchEvent(new Event('change', { bubbles: true }));
             }
         });
     }
 
-    // ============================================================
-    // 3. EFFACER LES ERREURS AU FOCUS
-    // ============================================================
-    const formInputs = document.querySelectorAll('.projet-form-input, .projet-form-select, .projet-form-textarea');
+    /* ========================================================
+       4. SLUG AUTOMATIQUE (page create)
+       ======================================================== */
 
-    formInputs.forEach(input => {
-        input.addEventListener('focus', function () {
-            this.style.borderColor = '';
-            this.style.background = '';
-        });
-    });
-
-    // ============================================================
-    // 4. GÉNÉRATION DU SLUG EN TEMPS RÉEL
-    // ============================================================
-    const titreInput = document.getElementById('titre');
+    const titreInput  = document.getElementById('titre');
     const slugPreview = document.getElementById('slugPreview');
 
     if (titreInput && slugPreview) {
         titreInput.addEventListener('input', function () {
-            const slug = this.value
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-|-$/g, '');
+            const slug = genererSlug(this.value);
             slugPreview.textContent = slug || '...';
         });
+    }
 
-        // Initialiser
-        const initialSlug = titreInput.value
+    /**
+     * Génère un slug à partir d'une chaîne.
+     *
+     * @param  {string} texte
+     * @return {string}
+     */
+    function genererSlug(texte) {
+        return texte
             .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-|-$/g, '');
-        slugPreview.textContent = initialSlug || '...';
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')  // Supprimer les accents
+            .replace(/[^a-z0-9\s-]/g, '')     // Garder lettres, chiffres, espaces, tirets
+            .trim()
+            .replace(/\s+/g, '-')             // Remplacer les espaces par des tirets
+            .replace(/-+/g, '-');             // Éviter les tirets multiples
     }
 
-    // ============================================================
-    // 5. TOAST NOTIFICATION
-    // ============================================================
-    function showToast(message, type = 'success', duration = 5000) {
-        let container = document.querySelector('.toast-container');
-        if (!container) {
-            container = document.createElement('div');
-            container.className = 'toast-container';
-            document.body.appendChild(container);
-        }
+    /* ========================================================
+       5. VALIDATION FORMULAIRE AVANT SOUMISSION
+       ======================================================== */
 
-        const toast = document.createElement('div');
-        toast.className = 'toast toast-' + type;
-        toast.innerHTML = `
-            <div class="toast-icon">
-                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
-            </div>
-            <div class="toast-content">
-                <div class="toast-title">${type === 'success' ? 'Succès' : 'Erreur'}</div>
-                <div class="toast-text">${message}</div>
-            </div>
-            <button class="toast-close" title="Fermer"><i class="fas fa-times"></i></button>
-            <div class="toast-progress"></div>
-        `;
+    const projetForm = document.querySelector('form[enctype="multipart/form-data"]');
 
-        container.appendChild(toast);
-        toast.querySelector('.toast-close').addEventListener('click', () => {
-            toast.style.animation = 'toastOut 0.3s ease forwards';
-            setTimeout(() => toast.remove(), 300);
-        });
+    if (projetForm) {
+        projetForm.addEventListener('submit', function (e) {
+            // Vérifier que la galerie ne contient pas plus de 20 fichiers
+            if (galerieInput && galerieInput.files.length > 20) {
+                e.preventDefault();
+                alert('Vous ne pouvez pas uploader plus de 20 fichiers à la fois.');
+                return false;
+            }
 
-        setTimeout(() => {
-            toast.style.animation = 'toastOut 0.3s ease forwards';
-            setTimeout(() => toast.remove(), 300);
-        }, duration);
-    }
+            // Vérifier la taille de chaque fichier de la galerie
+            if (galerieInput) {
+                const fichiers = Array.from(galerieInput.files);
+                const fichiersTropGros = fichiers.filter(function (file) {
+                    return file.size > 50 * 1024 * 1024; // 50 Mo
+                });
 
-    // ============================================================
-    // 6. ANIMATION DU FORMULAIRE
-    // ============================================================
-    const formCard = document.querySelector('.projet-form-card');
-
-    if (formCard && 'IntersectionObserver' in window) {
-        const formObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                    formObserver.unobserve(entry.target);
+                if (fichiersTropGros.length > 0) {
+                    e.preventDefault();
+                    alert(
+                        'Fichier(s) trop volumineux (max 50 Mo) :\n' +
+                        fichiersTropGros.map(f => '• ' + f.name).join('\n')
+                    );
+                    return false;
                 }
-            });
-        }, { threshold: 0.1 });
-
-        formCard.style.opacity = '0';
-        formCard.style.transform = 'translateY(20px)';
-        formCard.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        formObserver.observe(formCard);
+            }
+        });
     }
-
-    // ============================================================
-    // 7. INITIALISATION
-    // ============================================================
-    console.log(
-        '%c📁 AHD-RDC %c— Formulaire Projet chargé',
-        'color: #16558F; font-weight: bold;',
-        'color: #777;'
-    );
 
 });

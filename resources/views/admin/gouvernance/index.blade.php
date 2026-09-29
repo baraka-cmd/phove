@@ -98,9 +98,17 @@
                 <div class="gouvernance-membre-item">
                     <div class="gouvernance-membre-avatar">
                         @if($organe->membre && $organe->membre->photo)
-                            <img src="{{ asset('storage/' . $organe->membre->photo) }}" alt="{{ $organe->membre->nomComplet() }}">
+                            <img src="{{ route('media.show', ['path' => ltrim($organe->membre->photo, '/')]) }}"
+                                alt="{{ $organe->membre->nomComplet() }}"
+                                loading="lazy"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span style="display: none;">
+                                {{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}
+                            </span>
                         @else
-                            <span>{{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}</span>
+                            <span>
+                                {{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}
+                            </span>
                         @endif
                     </div>
                     <div class="gouvernance-membre-info">
@@ -134,9 +142,17 @@
                 <div class="gouvernance-membre-item">
                     <div class="gouvernance-membre-avatar">
                         @if($organe->membre && $organe->membre->photo)
-                            <img src="{{ asset('storage/' . $organe->membre->photo) }}" alt="{{ $organe->membre->nomComplet() }}">
+                            <img src="{{ route('media.show', ['path' => ltrim($organe->membre->photo, '/')]) }}"
+                                alt="{{ $organe->membre->nomComplet() }}"
+                                loading="lazy"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span style="display: none;">
+                                {{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}
+                            </span>
                         @else
-                            <span>{{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}</span>
+                            <span>
+                                {{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}
+                            </span>
                         @endif
                     </div>
                     <div class="gouvernance-membre-info">
@@ -170,9 +186,17 @@
                 <div class="gouvernance-membre-item">
                     <div class="gouvernance-membre-avatar">
                         @if($organe->membre && $organe->membre->photo)
-                            <img src="{{ asset('storage/' . $organe->membre->photo) }}" alt="{{ $organe->membre->nomComplet() }}">
+                            <img src="{{ route('media.show', ['path' => ltrim($organe->membre->photo, '/')]) }}"
+                                alt="{{ $organe->membre->nomComplet() }}"
+                                loading="lazy"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <span style="display: none;">
+                                {{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}
+                            </span>
                         @else
-                            <span>{{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}</span>
+                            <span>
+                                {{ Str::upper(Str::substr($organe->membre->nom ?? '?', 0, 1) . Str::substr($organe->membre->prenom ?? '', 0, 1)) }}
+                            </span>
                         @endif
                     </div>
                     <div class="gouvernance-membre-info">

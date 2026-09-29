@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use App\Models\Media;
 
 class ProjetController extends Controller
 {
@@ -133,155 +134,387 @@ class ProjetController extends Controller
     }
 
     /**
-     * Enregistre un nouveau projet.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'titre' => ['required', 'string', 'max:255'],
-            'code_projet' => ['nullable', 'string', 'max:50', 'unique:projets,code_projet'],
-            'domaine' => ['required', 'in:' . implode(',', array_keys($this->domaines))],
-            'zone_geographique' => ['required', 'string', 'max:255'],
-            'province' => ['nullable', 'string', 'max:100'],
-            'date_debut' => ['required', 'date'],
-            'date_fin' => ['nullable', 'date', 'after_or_equal:date_debut'],
-            'budget_total' => ['nullable', 'numeric', 'min:0'],
-            'budget_utilise' => ['nullable', 'numeric', 'min:0', 'lte:budget_total'],
-            'bailleur' => ['nullable', 'string', 'max:255'],
-            'source_financement' => ['nullable', 'string', 'max:255'],
-            'statut' => ['required', 'in:' . implode(',', array_keys($this->statuts))],
-            'description' => ['required', 'string'],
-            'objectifs' => ['nullable', 'string'],
-            'resultats_attendus' => ['nullable', 'string'],
-            'image_principale' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
-            'publier' => ['nullable', 'boolean'],
-        ], [
-            'titre.required' => 'Le titre est obligatoire.',
-            'code_projet.unique' => 'Ce code projet est déjà utilisé.',
-            'domaine.required' => 'Le domaine est obligatoire.',
-            'zone_geographique.required' => 'La zone géographique est obligatoire.',
-            'date_debut.required' => 'La date de début est obligatoire.',
-            'date_fin.after_or_equal' => 'La date de fin doit être postérieure ou égale à la date de début.',
-            'budget_utilise.lte' => 'Le budget utilisé ne peut pas dépasser le budget total.',
-            'statut.required' => 'Le statut est obligatoire.',
-            'description.required' => 'La description est obligatoire.',
-            'image_principale.image' => 'Le fichier doit être une image.',
-            'image_principale.mimes' => 'L\'image doit être au format JPG, PNG ou WebP.',
-            'image_principale.max' => 'L\'image ne doit pas dépasser 5 Mo.',
-        ]);
+ * Enregistre un nouveau projet.
+ *
+ * @param  Request  $request
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'titre' => ['required', 'string', 'max:255'],
+        'code_projet' => ['nullable', 'string', 'max:50', 'unique:projets,code_projet'],
+        'domaine' => ['required', 'in:' . implode(',', array_keys($this->domaines))],
+        'zone_geographique' => ['required', 'string', 'max:255'],
+        'province' => ['nullable', 'string', 'max:100'],
+        'date_debut' => ['required', 'date'],
+        'date_fin' => ['nullable', 'date', 'after_or_equal:date_debut'],
+        'budget_total' => ['nullable', 'numeric', 'min:0'],
+        'budget_utilise' => ['nullable', 'numeric', 'min:0', 'lte:budget_total'],
+        'bailleur' => ['nullable', 'string', 'max:255'],
+        'source_financement' => ['nullable', 'string', 'max:255'],
+        'statut' => ['required', 'in:' . implode(',', array_keys($this->statuts))],
+        'description' => ['required', 'string'],
+        'objectifs' => ['nullable', 'string'],
+        'resultats_attendus' => ['nullable', 'string'],
+        'image_principale' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
 
-        // Générer le slug
+        // ─────────────────────────────────────────
+        // GALERIE MÉDIA
+        // ─────────────────────────────────────────
+        'galerie' => ['nullable', 'array', 'max:20'],
+        'galerie.*' => [
+            'file',
+            'mimes:jpeg,jpg,png,webp,mp4,webm,ogg',
+            'max:51200', // 50 Mo (gère les vidéos)
+        ],
+
+        'publier' => ['nullable', 'boolean'],
+    ], [
+        'titre.required' => 'Le titre est obligatoire.',
+        'code_projet.unique' => 'Ce code projet est déjà utilisé.',
+        'domaine.required' => 'Le domaine est obligatoire.',
+        'zone_geographique.required' => 'La zone géographique est obligatoire.',
+        'date_debut.required' => 'La date de début est obligatoire.',
+        'date_fin.after_or_equal' => 'La date de fin doit être postérieure ou égale à la date de début.',
+        'budget_utilise.lte' => 'Le budget utilisé ne peut pas dépasser le budget total.',
+        'statut.required' => 'Le statut est obligatoire.',
+        'description.required' => 'La description est obligatoire.',
+        'image_principale.image' => 'Le fichier doit être une image.',
+        'image_principale.mimes' => 'L\'image doit être au format JPG, PNG ou WebP.',
+        'image_principale.max' => 'L\'image ne doit pas dépasser 5 Mo.',
+        'galerie.array' => 'La galerie doit être un ensemble de fichiers.',
+        'galerie.max' => 'Vous ne pouvez pas uploader plus de 20 fichiers à la fois.',
+        'galerie.*.file' => 'Chaque élément doit être un fichier valide.',
+        'galerie.*.mimes' => 'Les fichiers doivent être au format JPG, PNG, WebP, MP4, WebM ou OGG.',
+        'galerie.*.max' => 'Chaque fichier ne doit pas dépasser 50 Mo.',
+    ]);
+
+    // Générer le slug
+    $validated['slug'] = Str::slug($validated['titre']);
+
+    // Gérer l'upload de l'image principale
+    if ($request->hasFile('image_principale')) {
+        $validated['image_principale'] = $request->file('image_principale')
+            ->store('projets/images', 'public');
+    }
+
+    $validated['publier'] = $request->boolean('publier');
+
+    // Créer le projet
+    $projet = Projet::create($validated);
+
+    // ─────────────────────────────────────────
+    // UPLOAD DE LA GALERIE MÉDIA
+    // ─────────────────────────────────────────
+    if ($request->hasFile('galerie')) {
+        $this->uploadGalerie($request, $projet);
+    }
+
+    return redirect()->route('admin.projets.index')
+        ->with('success', 'Le projet « ' . $projet->titre . ' » a été créé avec succès.');
+}
+
+
+/**
+ * Affiche la fiche détaillée d'un projet (prévisualisation admin).
+ *
+ * @param  Projet  $projet
+ * @return \Illuminate\View\View
+ */
+public function show(Projet $projet)
+{
+    $projet->load([
+        'indicateurs',
+        'partenaires',
+        'medias' => function ($q) {
+            $q->orderBy('ordre')->orderBy('created_at', 'desc');
+        },
+    ]);
+
+    return view('admin.projets.show', compact('projet'));
+}
+
+/**
+ * Affiche le formulaire de modification d'un projet.
+ *
+ * @param  Projet  $projet
+ * @return \Illuminate\View\View
+ */
+public function edit(Projet $projet)
+{
+    $projet->load(['medias' => function ($q) {
+        $q->orderBy('ordre')->orderBy('created_at', 'desc');
+    }]);
+
+    return view('admin.projets.edit', [
+        'projet' => $projet,
+        'domaines' => $this->domaines,
+        'statuts' => $this->statuts,
+    ]);
+}
+
+/**
+ * Met à jour un projet.
+ *
+ * @param  Request  $request
+ * @param  Projet   $projet
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function update(Request $request, Projet $projet)
+{
+    $validated = $request->validate([
+        'titre' => ['required', 'string', 'max:255'],
+        'code_projet' => ['nullable', 'string', 'max:50', 'unique:projets,code_projet,' . $projet->id],
+        'domaine' => ['required', 'in:' . implode(',', array_keys($this->domaines))],
+        'zone_geographique' => ['required', 'string', 'max:255'],
+        'province' => ['nullable', 'string', 'max:100'],
+        'date_debut' => ['required', 'date'],
+        'date_fin' => ['nullable', 'date', 'after_or_equal:date_debut'],
+        'budget_total' => ['nullable', 'numeric', 'min:0'],
+        'budget_utilise' => ['nullable', 'numeric', 'min:0', 'lte:budget_total'],
+        'bailleur' => ['nullable', 'string', 'max:255'],
+        'source_financement' => ['nullable', 'string', 'max:255'],
+        'statut' => ['required', 'in:' . implode(',', array_keys($this->statuts))],
+        'description' => ['required', 'string'],
+        'objectifs' => ['nullable', 'string'],
+        'resultats_attendus' => ['nullable', 'string'],
+        'image_principale' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
+
+        // ─────────────────────────────────────────
+        // GALERIE MÉDIA
+        // ─────────────────────────────────────────
+        'galerie' => ['nullable', 'array', 'max:20'],
+        'galerie.*' => [
+            'file',
+            'mimes:jpeg,jpg,png,webp,mp4,webm,ogg',
+            'max:51200',
+        ],
+        'medias_supprimer' => ['nullable', 'array'],
+        'medias_supprimer.*' => ['integer', 'exists:medias,id'],
+
+        'publier' => ['nullable', 'boolean'],
+    ], [
+        'titre.required' => 'Le titre est obligatoire.',
+        'code_projet.unique' => 'Ce code projet est déjà utilisé.',
+        'domaine.required' => 'Le domaine est obligatoire.',
+        'zone_geographique.required' => 'La zone géographique est obligatoire.',
+        'date_debut.required' => 'La date de début est obligatoire.',
+        'date_fin.after_or_equal' => 'La date de fin doit être postérieure ou égale à la date de début.',
+        'budget_utilise.lte' => 'Le budget utilisé ne peut pas dépasser le budget total.',
+        'statut.required' => 'Le statut est obligatoire.',
+        'description.required' => 'La description est obligatoire.',
+        'image_principale.image' => 'Le fichier doit être une image.',
+        'image_principale.mimes' => 'L\'image doit être au format JPG, PNG ou WebP.',
+        'image_principale.max' => 'L\'image ne doit pas dépasser 5 Mo.',
+        'galerie.array' => 'La galerie doit être un ensemble de fichiers.',
+        'galerie.max' => 'Vous ne pouvez pas uploader plus de 20 fichiers à la fois.',
+        'galerie.*.file' => 'Chaque élément doit être un fichier valide.',
+        'galerie.*.mimes' => 'Les fichiers doivent être au format JPG, PNG, WebP, MP4, WebM ou OGG.',
+        'galerie.*.max' => 'Chaque fichier ne doit pas dépasser 50 Mo.',
+    ]);
+
+    // Mettre à jour le slug si le titre a changé
+    if ($projet->titre !== $validated['titre']) {
         $validated['slug'] = Str::slug($validated['titre']);
+    }
 
-        // Gérer l'upload de l'image
-        if ($request->hasFile('image_principale')) {
-            $validated['image_principale'] = $request->file('image_principale')->store('projets/images', 'public');
+    // Gérer l'upload de l'image principale
+    if ($request->hasFile('image_principale')) {
+        // Supprimer l'ancienne image
+        if ($projet->image_principale && Storage::disk('public')->exists($projet->image_principale)) {
+            Storage::disk('public')->delete($projet->image_principale);
         }
-
-        $validated['publier'] = $request->boolean('publier');
-
-        $projet = Projet::create($validated);
-
-        return redirect()->route('admin.projets.index')
-            ->with('success', 'Le projet « ' . $projet->titre . ' » a été créé avec succès.');
+        $validated['image_principale'] = $request->file('image_principale')
+            ->store('projets/images', 'public');
     }
 
-    /**
-     * Affiche la fiche détaillée d'un projet (prévisualisation admin).
-     *
-     * @param Projet $projet
-     * @return \Illuminate\View\View
-     */
-    public function show(Projet $projet)
-    {
-        $projet->load(['indicateurs', 'partenaires', 'medias']);
+    $validated['publier'] = $request->boolean('publier');
 
-        return view('admin.projets.show', compact('projet'));
-    }
+    // Mettre à jour le projet
+    $projet->update($validated);
 
-    /**
-     * Affiche le formulaire de modification d'un projet.
-     *
-     * @param Projet $projet
-     * @return \Illuminate\View\View
-     */
-    public function edit(Projet $projet)
-    {
-        return view('admin.projets.edit', [
-            'projet' => $projet,
-            'domaines' => $this->domaines,
-            'statuts' => $this->statuts,
-        ]);
-    }
+    // ─────────────────────────────────────────
+    // SUPPRESSION DES MÉDIAS COCHÉS
+    // ─────────────────────────────────────────
+    if ($request->filled('medias_supprimer')) {
+        $mediasASupprimer = Media::whereIn('id', $request->input('medias_supprimer'))
+            ->where('projet_id', $projet->id)
+            ->get();
 
-    /**
-     * Met à jour un projet.
-     *
-     * @param Request $request
-     * @param Projet $projet
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(Request $request, Projet $projet)
-    {
-        $validated = $request->validate([
-            'titre' => ['required', 'string', 'max:255'],
-            'code_projet' => ['nullable', 'string', 'max:50', 'unique:projets,code_projet,' . $projet->id],
-            'domaine' => ['required', 'in:' . implode(',', array_keys($this->domaines))],
-            'zone_geographique' => ['required', 'string', 'max:255'],
-            'province' => ['nullable', 'string', 'max:100'],
-            'date_debut' => ['required', 'date'],
-            'date_fin' => ['nullable', 'date', 'after_or_equal:date_debut'],
-            'budget_total' => ['nullable', 'numeric', 'min:0'],
-            'budget_utilise' => ['nullable', 'numeric', 'min:0', 'lte:budget_total'],
-            'bailleur' => ['nullable', 'string', 'max:255'],
-            'source_financement' => ['nullable', 'string', 'max:255'],
-            'statut' => ['required', 'in:' . implode(',', array_keys($this->statuts))],
-            'description' => ['required', 'string'],
-            'objectifs' => ['nullable', 'string'],
-            'resultats_attendus' => ['nullable', 'string'],
-            'image_principale' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:5120'],
-            'publier' => ['nullable', 'boolean'],
-        ], [
-            'titre.required' => 'Le titre est obligatoire.',
-            'code_projet.unique' => 'Ce code projet est déjà utilisé.',
-            'domaine.required' => 'Le domaine est obligatoire.',
-            'zone_geographique.required' => 'La zone géographique est obligatoire.',
-            'date_debut.required' => 'La date de début est obligatoire.',
-            'date_fin.after_or_equal' => 'La date de fin doit être postérieure ou égale à la date de début.',
-            'budget_utilise.lte' => 'Le budget utilisé ne peut pas dépasser le budget total.',
-            'statut.required' => 'Le statut est obligatoire.',
-            'description.required' => 'La description est obligatoire.',
-            'image_principale.image' => 'Le fichier doit être une image.',
-            'image_principale.mimes' => 'L\'image doit être au format JPG, PNG ou WebP.',
-            'image_principale.max' => 'L\'image ne doit pas dépasser 5 Mo.',
-        ]);
-
-        // Mettre à jour le slug si le titre a changé
-        if ($projet->titre !== $validated['titre']) {
-            $validated['slug'] = Str::slug($validated['titre']);
+        foreach ($mediasASupprimer as $media) {
+            // Supprimer les fichiers physiques
+            if ($media->fichier && Storage::disk('public')->exists($media->fichier)) {
+                Storage::disk('public')->delete($media->fichier);
+            }
+            if ($media->miniature && Storage::disk('public')->exists($media->miniature)) {
+                Storage::disk('public')->delete($media->miniature);
+            }
+            $media->delete();
         }
+    }
 
-        // Gérer l'upload de l'image
-        if ($request->hasFile('image_principale')) {
-            // Supprimer l'ancienne image
-            if ($projet->image_principale) {
-                if (Storage::disk('public')->exists($projet->image_principale)) {
-                    Storage::disk('public')->delete($projet->image_principale);
+    // ─────────────────────────────────────────
+    // UPLOAD DES NOUVEAUX MÉDIAS
+    // ─────────────────────────────────────────
+    if ($request->hasFile('galerie')) {
+        $this->uploadGalerie($request, $projet);
+    }
+
+    return redirect()->route('admin.projets.index')
+        ->with('success', 'Le projet « ' . $projet->titre . ' » a été mis à jour avec succès.');
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MÉTHODES PRIVÉES — GALERIE MÉDIA
+|--------------------------------------------------------------------------
+*/
+
+/**
+ * Upload une galerie de fichiers (images et vidéos) liée à un projet.
+ *
+ * @param  Request  $request
+ * @param  Projet   $projet
+ * @return void
+ */
+protected function uploadGalerie(Request $request, Projet $projet): void
+{
+    $formatsImages = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+    $formatsVideos = ['mp4', 'webm', 'ogg'];
+
+    $ordre = Media::where('projet_id', $projet->id)->max('ordre') ?? 0;
+
+    foreach ($request->file('galerie') as $fichier) {
+        try {
+            $extension = strtolower($fichier->getClientOriginalExtension());
+            $type      = in_array($extension, $formatsImages) ? 'image' : 'video';
+
+            // Nom unique
+            $nomFichier = Str::uuid() . '.' . $extension;
+
+            // Dossier selon le type
+            $dossier = $type === 'image' ? 'medias/images' : 'medias/videos';
+
+            // Stocker le fichier
+            $chemin = $fichier->storeAs($dossier, $nomFichier, 'public');
+
+            // Générer une miniature pour les images
+            $cheminMiniature = null;
+            if ($type === 'image' && in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
+                try {
+                    $cheminMiniature = $this->genererMiniature($fichier, $nomFichier);
+                } catch (\Throwable $e) {
+                    // Silencieux : on continue sans miniature
                 }
             }
-            $validated['image_principale'] = $request->file('image_principale')->store('projets/images', 'public');
+
+            $ordre++;
+
+            // Créer l'enregistrement Media
+            Media::create([
+                'titre'       => pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME),
+                'type'        => $type,
+                'fichier'     => $chemin,
+                'miniature'   => $cheminMiniature,
+                'taille'      => $fichier->getSize(),
+                'projet_id'   => $projet->id,
+                'album'       => 'Projet : ' . $projet->titre,
+                'description' => null,
+                'date_prise'  => now(),
+                'lieu'        => $projet->zone_geographique,
+                'auteur'      => auth()->user()->nom ?? 'Admin',
+                'publier'     => true,
+                'ordre'       => $ordre,
+                'user_id'     => auth()->id(),
+            ]);
+        } catch (\Throwable $e) {
+            // Silencieux : si un fichier échoue, on continue avec les suivants
+        }
+    }
+}
+
+/**
+ * Génère une miniature pour une image.
+ *
+ * @param  \Illuminate\Http\UploadedFile  $fichier
+ * @param  string  $nomOriginal
+ * @return string|null
+ */
+protected function genererMiniature($fichier, string $nomOriginal): ?string
+{
+    try {
+        $sourcePath = $fichier->getRealPath();
+        $extension  = strtolower($fichier->getClientOriginalExtension());
+
+        // Créer l'image source
+        $sourceImage = match ($extension) {
+            'jpeg', 'jpg' => @imagecreatefromjpeg($sourcePath),
+            'png'         => @imagecreatefrompng($sourcePath),
+            'webp'        => @imagecreatefromwebp($sourcePath),
+            'gif'         => @imagecreatefromgif($sourcePath),
+            default       => null,
+        };
+
+        if (!$sourceImage) {
+            return null;
         }
 
-        $validated['publier'] = $request->boolean('publier');
+        $originalWidth  = imagesx($sourceImage);
+        $originalHeight = imagesy($sourceImage);
 
-        $projet->update($validated);
+        $maxWidth  = 400;
+        $maxHeight = 300;
 
-        return redirect()->route('admin.projets.index')
-            ->with('success', 'Le projet « ' . $projet->titre . ' » a été mis à jour avec succès.');
+        $ratio     = min($maxWidth / $originalWidth, $maxHeight / $originalHeight);
+        $newWidth  = (int) round($originalWidth * $ratio);
+        $newHeight = (int) round($originalHeight * $ratio);
+
+        $thumbImage = imagecreatetruecolor($newWidth, $newHeight);
+
+        // Préserver la transparence pour PNG et GIF
+        if (in_array($extension, ['png', 'gif'], true)) {
+            imagealphablending($thumbImage, false);
+            imagesavealpha($thumbImage, true);
+            $transparent = imagecolorallocatealpha($thumbImage, 0, 0, 0, 127);
+            imagefilledrectangle($thumbImage, 0, 0, $newWidth, $newHeight, $transparent);
+        }
+
+        imagecopyresampled(
+            $thumbImage, $sourceImage,
+            0, 0, 0, 0,
+            $newWidth, $newHeight,
+            $originalWidth, $originalHeight
+        );
+
+        $nomMiniature    = 'thumb_' . $nomOriginal;
+        $cheminMiniature = 'medias/thumbnails/' . $nomMiniature;
+        $fullPath        = Storage::disk('public')->path($cheminMiniature);
+
+        // Créer le dossier si nécessaire
+        $dir = dirname($fullPath);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        // Sauvegarder selon le format
+        match ($extension) {
+            'jpeg', 'jpg' => imagejpeg($thumbImage, $fullPath, 80),
+            'png'         => imagepng($thumbImage, $fullPath, 7),
+            'webp'        => imagewebp($thumbImage, $fullPath, 80),
+            'gif'         => imagegif($thumbImage, $fullPath),
+            default       => null,
+        };
+
+        imagedestroy($sourceImage);
+        imagedestroy($thumbImage);
+
+        return $cheminMiniature;
+    } catch (\Throwable $e) {
+        return null;
     }
+}
 
     /**
      * Supprime un projet.

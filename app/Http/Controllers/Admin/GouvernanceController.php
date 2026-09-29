@@ -9,6 +9,7 @@ use App\Models\Organe;
 use App\Models\StructureTerritoriale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\RedirectResponse;
 
 class GouvernanceController extends Controller
 {

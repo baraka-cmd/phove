@@ -546,3 +546,56 @@
         height: 100px;
     }
 }
+
+
+/* ============================================================
+   BADGE FONDATEUR — dans le tableau
+   ============================================================ */
+
+.badge-fondateur {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+    color: #92400E;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-left: 8px;
+    vertical-align: middle;
+    border: 1px solid #FCD34D;
+}
+
+.badge-fondateur i {
+    font-size: 9px;
+    color: #D97706;
+}
+
+/* ============================================================
+   CHECKBOX FONDATEUR — mise en avant visuelle
+   ============================================================ */
+
+.gouvernance-checkbox-fondateur {
+    background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
+    border-color: #FCD34D !important;
+}
+
+.gouvernance-checkbox-fondateur:hover {
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+    border-color: #F59E0B !important;
+}
+
+.gouvernance-checkbox-fondateur span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #92400E;
+}
+
+.gouvernance-checkbox-fondateur input[type="checkbox"]:checked {
+    accent-color: #F59E0B;
+}

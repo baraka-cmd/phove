@@ -138,8 +138,17 @@ Route::get('/media/{path}', function ($path) {
 |--------------------------------------------------------------------------
 */
 
+use App\Models\Organe;
+
 Route::get('/qui-sommes-nous', function () {
-    return view('public.qui-sommes-nous');
+    $fondateurs = Organe::where('est_fondateur', true)
+        ->where('actif', true)
+        ->with('membre')
+        ->orderBy('ordre')
+        ->orderBy('date_debut')
+        ->get();
+
+    return view('public.qui-sommes-nous', compact('fondateurs'));
 })->name('qui-sommes-nous');
 
 Route::get('/mission-vision', function () {
