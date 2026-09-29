@@ -1,4 +1,4 @@
-FROM php:8.2-apache
+FROM php:8.4-apache
 
 # ─────────────────────────────────────────────
 # 1. Dépendances système + extensions PHP
@@ -33,7 +33,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # ─────────────────────────────────────────────
-# 5. ⭐ INSTALLER LES DÉPENDANCES COMPOSER
+# 5. Installer les dépendances Composer
 # ─────────────────────────────────────────────
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
