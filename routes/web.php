@@ -81,7 +81,7 @@ use App\Http\Controllers\Admin\InventaireStockController;
 use App\Http\Controllers\Admin\MouvementStockController;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Public\HomeController;
-
+use App\Http\Controllers\SitemapController;
 
 use App\Http\Controllers\Public\GalerieController;
 
@@ -102,6 +102,9 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 
+
+// Sitemap XML (pour les moteurs de recherche)
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 /*
 |--------------------------------------------------------------------------

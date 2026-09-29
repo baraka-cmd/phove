@@ -1,2 +1,9 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Bloquer l'administration
+Disallow: /admin/
+Disallow: /storage/
+
+# Sitemap
+Sitemap: https://phove.onrender.com/sitemap.xml

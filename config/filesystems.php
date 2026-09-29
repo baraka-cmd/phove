@@ -20,11 +20,11 @@ return [
     | Filesystem Disks
     |--------------------------------------------------------------------------
     |
-    | Below you may configure as many filesystem disks as necessary, and you
-    | may even configure multiple disks for the same driver. Examples for
-    | most supported storage drivers are configured here for reference.
-    |
     | Supported drivers: "local", "ftp", "sftp", "s3"
+    |
+    | NOTE : Cloudinary est géré directement via le SDK
+    |        cloudinary/cloudinary_php (voir App\Services\CloudinaryService).
+    |        Il n'apparaît donc pas comme disque ici.
     |
     */
 
@@ -66,11 +66,6 @@ return [
     |--------------------------------------------------------------------------
     | Symbolic Links
     |--------------------------------------------------------------------------
-    |
-    | Here you may configure the symbolic links that will be created when the
-    | `storage:link` Artisan command is executed. The array keys should be
-    | the locations of the links and the values should be their targets.
-    |
     */
 
     'links' => [
