@@ -210,9 +210,17 @@
                             <div class="cotisation-cell-membre">
                                 <div class="cotisation-cell-avatar">
                                     @if($cotisation->membre && $cotisation->membre->photo)
-                                        <img src="{{ asset('storage/' . $cotisation->membre->photo) }}" alt="{{ $cotisation->membre->nomComplet() }}">
+                                        <img src="{{ route('media.show', ['path' => $cotisation->membre->photo]) }}" 
+                                            alt="{{ $cotisation->membre->nomComplet() }}"
+                                            loading="lazy"
+                                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <span style="display: none;">
+                                            {{ Str::upper(Str::substr($cotisation->membre->nom ?? '?', 0, 1) . Str::substr($cotisation->membre->prenom ?? '', 0, 1)) }}
+                                        </span>
                                     @else
-                                        <span>{{ Str::upper(Str::substr($cotisation->membre->nom ?? '?', 0, 1) . Str::substr($cotisation->membre->prenom ?? '', 0, 1)) }}</span>
+                                        <span>
+                                            {{ Str::upper(Str::substr($cotisation->membre->nom ?? '?', 0, 1) . Str::substr($cotisation->membre->prenom ?? '', 0, 1)) }}
+                                        </span>
                                     @endif
                                 </div>
                                 <div>

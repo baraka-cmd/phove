@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-
 class MediaController extends Controller
 {
     /**
@@ -36,14 +35,21 @@ class MediaController extends Controller
     protected array $formatsVideos = ['mp4', 'webm', 'ogg'];
 
     /**
-     * Taille maximale pour les images (10 Mo).
+     * Taille maximale pour les images (10 Mo, en Ko).
      */
     protected int $tailleMaxImage = 10240;
 
     /**
-     * Taille maximale pour les vidéos (50 Mo).
+     * Taille maximale pour les vidéos (50 Mo, en Ko).
      */
     protected int $tailleMaxVideo = 51200;
+
+    /*
+    |--------------------------------------------------------------------------
+    | INDEX
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Affiche la galerie de médias avec KPI, filtres et grille.
      */
@@ -105,15 +111,15 @@ class MediaController extends Controller
         // ============================================
         // STATISTIQUES KPI
         // ============================================
-        $totalMedias = Media::count();
-        $totalImages = Media::where('type', 'image')->count();
-        $totalVideos = Media::where('type', 'video')->count();
-        $totalPublies = Media::where('publier', true)->count();
-        $totalPrives = Media::where('publier', false)->count();
+        $totalMedias   = Media::count();
+        $totalImages   = Media::where('type', 'image')->count();
+        $totalVideos   = Media::where('type', 'video')->count();
+        $totalPublies  = Media::where('publier', true)->count();
+        $totalPrives   = Media::where('publier', false)->count();
 
         // Espace disque utilisé
-        $espaceDisque = Media::sum('taille');
-        $espaceDisqueFormate = $this->formaterTaille($espaceDisque);
+        $espaceDisque         = Media::sum('taille');
+        $espaceDisqueFormate  = $this->formaterTaille((int) $espaceDisque);
 
         // Albums distincts
         $albums = Media::select('album')
@@ -133,8 +139,8 @@ class MediaController extends Controller
         $ordres = [
             'recent' => 'Plus récents',
             'ancien' => 'Plus anciens',
-            'titre' => 'Par titre',
-            'album' => 'Par album',
+            'titre'  => 'Par titre',
+            'album'  => 'Par album',
         ];
 
         return view('admin.medias.index', compact(
@@ -152,13 +158,19 @@ class MediaController extends Controller
         ));
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | CREATE / STORE
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Affiche le formulaire d'upload de médias.
      */
     public function create()
     {
         $projets = Projet::orderBy('titre')->get();
-        $albums = Media::select('album')
+        $albums  = Media::select('album')
             ->whereNotNull('album')
             ->where('album', '!=', '')
             ->distinct()
@@ -171,114 +183,119 @@ class MediaController extends Controller
     /**
      * Enregistre un ou plusieurs médias.
      */
-    /**
- * Enregistre un ou plusieurs médias.
- */
-public function store(Request $request)
-{
-    // Vérifier si on a des fichiers via l'input direct ou via JS
-    $hasDirectFiles = $request->hasFile('fichiers');
-    $hasSingleFile = $request->hasFile('fichier');
+    public function store(Request $request)
+    {
+        // Déterminer si les fichiers arrivent via "fichiers[]" ou "fichier" (single)
+        $hasDirectFiles = $request->hasFile('fichiers');
+        $hasSingleFile  = $request->hasFile('fichier');
 
-    if (!$hasDirectFiles && !$hasSingleFile) {
-        return redirect()->back()
-            ->with('error', 'Veuillez sélectionner au moins un fichier.');
-    }
-
-    // Récupérer les fichiers
-    $fichiers = $hasDirectFiles ? $request->file('fichiers') : [$request->file('fichier')];
-
-    // Validation
-    $request->validate([
-        'fichiers' => ['required', 'array', 'min:1', 'max:20'],
-        'fichiers.*' => [
-            'required',
-            'file',
-            function ($attribute, $value, $fail) {
-                $extension = strtolower($value->getClientOriginalExtension());
-                $formatsAcceptes = array_merge($this->formatsImages, $this->formatsVideos);
-                
-                if (!in_array($extension, $formatsAcceptes)) {
-                    $fail('Le format "' . $extension . '" n\'est pas accepté. Formats acceptés : ' . implode(', ', $formatsAcceptes));
-                }
-                
-                // Taille différenciée
-                $tailleMax = in_array($extension, $this->formatsImages) ? $this->tailleMaxImage : $this->tailleMaxVideo;
-                $tailleMaxMo = $tailleMax / 1024;
-                
-                if ($value->getSize() > $tailleMax * 1024) {
-                    $fail('Le fichier "' . $value->getClientOriginalName() . '" dépasse la taille maximale de ' . $tailleMaxMo . ' Mo.');
-                }
-            },
-        ],
-        'projet_id' => ['nullable', 'exists:projets,id'],
-        'album' => ['nullable', 'string', 'max:255'],
-        'publier' => ['nullable', 'boolean'],
-    ], [
-        'fichiers.required' => 'Veuillez sélectionner au moins un fichier.',
-        'fichiers.max' => 'Vous ne pouvez pas uploader plus de 20 fichiers à la fois.',
-    ]);
-
-    $mediasEnregistres = [];
-    $erreurs = [];
-
-    foreach ($fichiers as $fichier) {
-        try {
-            $extension = strtolower($fichier->getClientOriginalExtension());
-            $type = in_array($extension, $this->formatsImages) ? 'image' : 'video';
-
-            // Générer un nom unique
-            $nomFichier = Str::uuid() . '.' . $extension;
-
-            // Dossier de stockage
-            $dossier = $type === 'image' ? 'medias/images' : 'medias/videos';
-            $chemin = $fichier->storeAs($dossier, $nomFichier, 'public');
-
-            // Miniature pour les images
-            $cheminMiniature = null;
-            if ($type === 'image' && in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
-                try {
-                    $cheminMiniature = $this->genererMiniature($fichier, $nomFichier);
-                } catch (\Exception $e) {
-                    // Si la génération de miniature échoue, on continue sans
-                }
-            }
-
-            // Créer le média
-            $media = Media::create([
-                'titre' => pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME),
-                'type' => $type,
-                'fichier' => $chemin,
-                'miniature' => $cheminMiniature,
-                'taille' => $fichier->getSize(),
-                'projet_id' => $request->projet_id,
-                'album' => $request->album,
-                'description' => null,
-                'date_prise' => now(),
-                'lieu' => null,
-                'auteur' => auth()->user()->nom ?? 'Admin',
-                'publier' => $request->boolean('publier', true),
-                'ordre' => Media::where('album', $request->album)->max('ordre') + 1,
-                'user_id' => auth()->id(),
-            ]);
-
-            $mediasEnregistres[] = $media;
-        } catch (\Exception $e) {
-            $erreurs[] = $fichier->getClientOriginalName() . ' : ' . $e->getMessage();
+        if (!$hasDirectFiles && !$hasSingleFile) {
+            return redirect()->back()
+                ->with('error', 'Veuillez sélectionner au moins un fichier.');
         }
-    }
 
-    $count = count($mediasEnregistres);
-    $message = $count . ' média(s) enregistré(s) avec succès.';
+        // Récupérer les fichiers sous forme de tableau
+        $fichiers = $hasDirectFiles
+            ? $request->file('fichiers')
+            : [$request->file('fichier')];
 
-    if (count($erreurs) > 0) {
+        // S'assurer qu'on a bien un tableau
+        if (!is_array($fichiers)) {
+            $fichiers = [$fichiers];
+        }
+
+        // Construire les règles de validation en fonction de l'input utilisé
+        $rules = [
+            'projet_id' => ['nullable', 'exists:projets,id'],
+            'album'     => ['nullable', 'string', 'max:255'],
+            'publier'   => ['nullable', 'boolean'],
+        ];
+
+        if ($hasDirectFiles) {
+            $rules['fichiers']   = ['required', 'array', 'min:1', 'max:20'];
+            $rules['fichiers.*'] = [$this->regleFichier()];
+        } else {
+            $rules['fichier'] = ['required', 'file', $this->regleFichier()];
+        }
+
+        $request->validate($rules, [
+            'fichiers.required' => 'Veuillez sélectionner au moins un fichier.',
+            'fichiers.max'      => 'Vous ne pouvez pas uploader plus de 20 fichiers à la fois.',
+            'fichier.required'  => 'Veuillez sélectionner un fichier.',
+        ]);
+
+        $mediasEnregistres = [];
+        $erreurs           = [];
+
+        foreach ($fichiers as $fichier) {
+            try {
+                $extension = strtolower($fichier->getClientOriginalExtension());
+                $type      = in_array($extension, $this->formatsImages) ? 'image' : 'video';
+
+                // Nom unique
+                $nomFichier = Str::uuid() . '.' . $extension;
+
+                // Dossier de stockage
+                $dossier = $type === 'image' ? 'medias/images' : 'medias/videos';
+                $chemin  = $fichier->storeAs($dossier, $nomFichier, 'public');
+
+                // Miniature pour les images
+                $cheminMiniature = null;
+                if ($type === 'image' && in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
+                    try {
+                        $cheminMiniature = $this->genererMiniature($fichier, $nomFichier);
+                    } catch (\Exception $e) {
+                        // On continue sans miniature si ça échoue
+                    }
+                }
+
+                // Calcul de l'ordre : par album s'il existe, sinon global
+                $ordre = (int) Media::when(
+                    $request->filled('album'),
+                    fn ($q) => $q->where('album', $request->album),
+                    fn ($q) => $q->whereNull('album')
+                )->max('ordre') + 1;
+
+                Media::create([
+                    'titre'       => pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME),
+                    'type'        => $type,
+                    'fichier'     => $chemin,
+                    'miniature'   => $cheminMiniature,
+                    'taille'      => $fichier->getSize(),
+                    'projet_id'   => $request->projet_id,
+                    'album'       => $request->album,
+                    'description' => null,
+                    'date_prise'  => now(),
+                    'lieu'        => null,
+                    'auteur'      => auth()->user()->nom ?? 'Admin',
+                    'publier'     => $request->boolean('publier', true),
+                    'ordre'       => $ordre,
+                    'user_id'     => auth()->id(),
+                ]);
+
+                $mediasEnregistres[] = true;
+            } catch (\Exception $e) {
+                $erreurs[] = $fichier->getClientOriginalName() . ' : ' . $e->getMessage();
+            }
+        }
+
+        $count   = count($mediasEnregistres);
+        $message = $count . ' média(s) enregistré(s) avec succès.';
+
+        if (count($erreurs) > 0) {
+            return redirect()->route('admin.medias.index')
+                ->with('warning', $message . ' ' . count($erreurs) . ' erreur(s).');
+        }
+
         return redirect()->route('admin.medias.index')
-            ->with('warning', $message . ' ' . count($erreurs) . ' erreur(s).');
+            ->with('success', $message);
     }
 
-    return redirect()->route('admin.medias.index')
-        ->with('success', $message);
-}
+    /*
+    |--------------------------------------------------------------------------
+    | SHOW / EDIT / UPDATE
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Affiche le détail d'un média.
@@ -287,14 +304,13 @@ public function store(Request $request)
     {
         $media->load('projet', 'uploadPar');
 
-        // Médias précédent et suivant dans le même album ou global
         $precedent = Media::where('id', '<', $media->id)
-            ->when($media->album, fn($q) => $q->where('album', $media->album))
+            ->when($media->album, fn ($q) => $q->where('album', $media->album))
             ->orderBy('id', 'desc')
             ->first();
 
         $suivant = Media::where('id', '>', $media->id)
-            ->when($media->album, fn($q) => $q->where('album', $media->album))
+            ->when($media->album, fn ($q) => $q->where('album', $media->album))
             ->orderBy('id', 'asc')
             ->first();
 
@@ -307,7 +323,7 @@ public function store(Request $request)
     public function edit(Media $media)
     {
         $projets = Projet::orderBy('titre')->get();
-        $albums = Media::select('album')
+        $albums  = Media::select('album')
             ->whereNotNull('album')
             ->where('album', '!=', '')
             ->distinct()
@@ -323,15 +339,15 @@ public function store(Request $request)
     public function update(Request $request, Media $media)
     {
         $validated = $request->validate([
-            'titre' => ['required', 'string', 'max:255'],
+            'titre'       => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
-            'album' => ['nullable', 'string', 'max:255'],
-            'projet_id' => ['nullable', 'exists:projets,id'],
-            'lieu' => ['nullable', 'string', 'max:255'],
-            'auteur' => ['nullable', 'string', 'max:255'],
-            'date_prise' => ['nullable', 'date'],
-            'publier' => ['nullable', 'boolean'],
-            'ordre' => ['nullable', 'integer', 'min:0'],
+            'album'       => ['nullable', 'string', 'max:255'],
+            'projet_id'   => ['nullable', 'exists:projets,id'],
+            'lieu'        => ['nullable', 'string', 'max:255'],
+            'auteur'      => ['nullable', 'string', 'max:255'],
+            'date_prise'  => ['nullable', 'date'],
+            'publier'     => ['nullable', 'boolean'],
+            'ordre'       => ['nullable', 'integer', 'min:0'],
         ], [
             'titre.required' => 'Le titre est obligatoire.',
         ]);
@@ -344,21 +360,18 @@ public function store(Request $request)
             ->with('success', 'Le média a été mis à jour avec succès.');
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | DESTROY / BATCH
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Supprime un média.
      */
     public function destroy(Media $media)
     {
-        // Supprimer le fichier physique
-        if ($media->fichier && Storage::disk('public')->exists($media->fichier)) {
-            Storage::disk('public')->delete($media->fichier);
-        }
-
-        // Supprimer la miniature
-        if ($media->miniature && Storage::disk('public')->exists($media->miniature)) {
-            Storage::disk('public')->delete($media->miniature);
-        }
-
+        $this->supprimerFichiersPhysiques($media);
         $media->delete();
 
         return redirect()->route('admin.medias.index')
@@ -371,22 +384,17 @@ public function store(Request $request)
     public function batchDelete(Request $request)
     {
         $request->validate([
-            'ids' => ['required', 'array', 'min:1'],
+            'ids'   => ['required', 'array', 'min:1'],
             'ids.*' => ['required', 'integer', 'exists:medias,id'],
         ], [
             'ids.required' => 'Veuillez sélectionner au moins un média.',
         ]);
 
         $medias = Media::whereIn('id', $request->ids)->get();
-        $count = 0;
+        $count  = 0;
 
         foreach ($medias as $media) {
-            if ($media->fichier && Storage::disk('public')->exists($media->fichier)) {
-                Storage::disk('public')->delete($media->fichier);
-            }
-            if ($media->miniature && Storage::disk('public')->exists($media->miniature)) {
-                Storage::disk('public')->delete($media->miniature);
-            }
+            $this->supprimerFichiersPhysiques($media);
             $media->delete();
             $count++;
         }
@@ -401,15 +409,16 @@ public function store(Request $request)
     public function batchChangeAlbum(Request $request)
     {
         $request->validate([
-            'ids' => ['required', 'array', 'min:1'],
+            'ids'   => ['required', 'array', 'min:1'],
             'ids.*' => ['required', 'integer', 'exists:medias,id'],
             'album' => ['required', 'string', 'max:255'],
         ], [
-            'ids.required' => 'Veuillez sélectionner au moins un média.',
+            'ids.required'   => 'Veuillez sélectionner au moins un média.',
             'album.required' => 'Le nom de l\'album est obligatoire.',
         ]);
 
-        $count = Media::whereIn('id', $request->ids)->update(['album' => $request->album]);
+        $count = Media::whereIn('id', $request->ids)
+            ->update(['album' => $request->album]);
 
         return redirect()->route('admin.medias.index')
             ->with('success', $count . ' média(s) déplacé(s) vers l\'album "' . $request->album . '".');
@@ -421,17 +430,25 @@ public function store(Request $request)
     public function batchTogglePublier(Request $request)
     {
         $request->validate([
-            'ids' => ['required', 'array', 'min:1'],
-            'ids.*' => ['required', 'integer', 'exists:medias,id'],
+            'ids'     => ['required', 'array', 'min:1'],
+            'ids.*'   => ['required', 'integer', 'exists:medias,id'],
             'publier' => ['required', 'boolean'],
         ]);
 
-        $count = Media::whereIn('id', $request->ids)->update(['publier' => $request->publier]);
+        $count = Media::whereIn('id', $request->ids)
+            ->update(['publier' => $request->publier]);
+
         $etat = $request->publier ? 'publié(s)' : 'dépublié(s)';
 
         return redirect()->route('admin.medias.index')
             ->with('success', $count . ' média(s) ' . $etat . ' avec succès.');
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACTIONS UNITAIRES
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Publie ou dépublie un média.
@@ -447,66 +464,58 @@ public function store(Request $request)
 
     /**
      * Remplace le fichier d'un média.
+     *
+     * ⚠️ Corrigé : accepte soit "fichier" (single) soit "fichiers[]" (multi),
+     * et ne prend que le premier fichier reçu.
      */
     public function replaceFile(Request $request, Media $media)
     {
+        // Déterminer quel input est utilisé
+        $fichier = $request->file('fichier')
+            ?? (is_array($request->file('fichiers'))
+                ? $request->file('fichiers')[0]
+                : $request->file('fichiers'));
+
+        if (!$fichier) {
+            return redirect()->back()
+                ->with('error', 'Aucun fichier fourni pour le remplacement.');
+        }
+
+        // Valider le fichier unique
         $request->validate([
-            'fichiers' => ['required', 'array', 'min:1', 'max:20'],
-            'fichiers.*' => [
-                'required',
-                'file',
-                function ($attribute, $value, $fail) {
-                    $extension = strtolower($value->getClientOriginalExtension());
-                    $formatsAcceptes = array_merge($this->formatsImages, $this->formatsVideos);
-                    
-                    if (!in_array($extension, $formatsAcceptes)) {
-                        $fail('Le format "' . $extension . '" n\'est pas accepté. Formats acceptés : ' . implode(', ', $formatsAcceptes));
-                    }
-                    
-                    // Taille différenciée
-                    $tailleMax = in_array($extension, $this->formatsImages) ? $this->tailleMaxImage : $this->tailleMaxVideo;
-                    $tailleMaxMo = $tailleMax / 1024;
-                    
-                    if ($value->getSize() > $tailleMax * 1024) {
-                        $fail('Le fichier "' . $value->getClientOriginalName() . '" dépasse la taille maximale de ' . $tailleMaxMo . ' Mo.');
-                    }
-                },
-            ],
+            'fichier'   => ['nullable', 'file', $this->regleFichier()],
+            'fichiers'  => ['nullable', 'array', 'max:1'],
             'projet_id' => ['nullable', 'exists:projets,id'],
-            'album' => ['nullable', 'string', 'max:255'],
-            'publier' => ['nullable', 'boolean'],
-        ], [
-            'fichiers.required' => 'Veuillez sélectionner au moins un fichier.',
-            'fichiers.max' => 'Vous ne pouvez pas uploader plus de 20 fichiers à la fois.',
+            'album'     => ['nullable', 'string', 'max:255'],
+            'publier'   => ['nullable', 'boolean'],
         ]);
 
-        $fichier = $request->file('fichier');
         $extension = strtolower($fichier->getClientOriginalExtension());
-        $type = in_array($extension, $this->formatsImages) ? 'image' : 'video';
+        $type      = in_array($extension, $this->formatsImages) ? 'image' : 'video';
 
-        // Supprimer l'ancien fichier
-        if ($media->fichier && Storage::disk('public')->exists($media->fichier)) {
-            Storage::disk('public')->delete($media->fichier);
-        }
-        if ($media->miniature && Storage::disk('public')->exists($media->miniature)) {
-            Storage::disk('public')->delete($media->miniature);
-        }
+        // Supprimer les anciens fichiers
+        $this->supprimerFichiersPhysiques($media);
 
         // Stocker le nouveau
         $nomFichier = Str::uuid() . '.' . $extension;
-        $dossier = $type === 'image' ? 'medias/images' : 'medias/videos';
-        $chemin = $fichier->storeAs($dossier, $nomFichier, 'public');
+        $dossier    = $type === 'image' ? 'medias/images' : 'medias/videos';
+        $chemin     = $fichier->storeAs($dossier, $nomFichier, 'public');
 
+        // Générer une miniature si image
         $cheminMiniature = null;
         if ($type === 'image' && in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
-            $cheminMiniature = $this->genererMiniature($fichier, $nomFichier);
+            try {
+                $cheminMiniature = $this->genererMiniature($fichier, $nomFichier);
+            } catch (\Exception $e) {
+                // Silencieux
+            }
         }
 
         $media->update([
-            'type' => $type,
-            'fichier' => $chemin,
+            'type'      => $type,
+            'fichier'   => $chemin,
             'miniature' => $cheminMiniature,
-            'taille' => $fichier->getSize(),
+            'taille'    => $fichier->getSize(),
         ]);
 
         return redirect()->back()
@@ -519,6 +528,7 @@ public function store(Request $request)
     public function incrementerVues(Media $media)
     {
         $media->increment('vues');
+
         return response()->json(['vues' => $media->vues]);
     }
 
@@ -529,108 +539,137 @@ public function store(Request $request)
     */
 
     /**
-     * Génère une miniature pour une image.
+     * Construit la closure de validation commune à un fichier (image ou vidéo).
+     *
+     * @return \Closure
      */
+    private function regleFichier(): \Closure
+    {
+        return function ($attribute, $value, $fail) {
+            $extension      = strtolower($value->getClientOriginalExtension());
+            $formatsAcceptes = array_merge($this->formatsImages, $this->formatsVideos);
+
+            if (!in_array($extension, $formatsAcceptes)) {
+                $fail('Le format "' . $extension . '" n\'est pas accepté. Formats acceptés : ' . implode(', ', $formatsAcceptes));
+                return;
+            }
+
+            $tailleMax   = in_array($extension, $this->formatsImages)
+                ? $this->tailleMaxImage
+                : $this->tailleMaxVideo;
+            $tailleMaxMo = $tailleMax / 1024;
+
+            if ($value->getSize() > $tailleMax * 1024) {
+                $fail('Le fichier "' . $value->getClientOriginalName() . '" dépasse la taille maximale de ' . $tailleMaxMo . ' Mo.');
+            }
+        };
+    }
+
     /**
- * Génère une miniature pour une image (sans package externe).
- */
-private function genererMiniature($fichier, string $nomOriginal): ?string
-{
-    try {
-        $sourcePath = $fichier->getRealPath();
-        $extension = strtolower($fichier->getClientOriginalExtension());
-        
-        // Créer l'image source selon le format
-        switch ($extension) {
-            case 'jpeg':
-            case 'jpg':
-                $sourceImage = @imagecreatefromjpeg($sourcePath);
-                break;
-            case 'png':
-                $sourceImage = @imagecreatefrompng($sourcePath);
-                break;
-            case 'webp':
-                $sourceImage = @imagecreatefromwebp($sourcePath);
-                break;
-            case 'gif':
-                $sourceImage = @imagecreatefromgif($sourcePath);
-                break;
-            default:
-                return null;
+     * Supprime les fichiers physiques associés à un média (fichier + miniature).
+     */
+    private function supprimerFichiersPhysiques(Media $media): void
+    {
+        if ($media->fichier && Storage::disk('public')->exists($media->fichier)) {
+            Storage::disk('public')->delete($media->fichier);
         }
 
-        if (!$sourceImage) {
+        if ($media->miniature && Storage::disk('public')->exists($media->miniature)) {
+            Storage::disk('public')->delete($media->miniature);
+        }
+    }
+
+    /**
+     * Génère une miniature pour une image (sans package externe).
+     */
+    private function genererMiniature($fichier, string $nomOriginal): ?string
+    {
+        try {
+            $sourcePath = $fichier->getRealPath();
+            $extension  = strtolower($fichier->getClientOriginalExtension());
+
+            // Créer l'image source selon le format
+            switch ($extension) {
+                case 'jpeg':
+                case 'jpg':
+                    $sourceImage = @imagecreatefromjpeg($sourcePath);
+                    break;
+                case 'png':
+                    $sourceImage = @imagecreatefrompng($sourcePath);
+                    break;
+                case 'webp':
+                    $sourceImage = @imagecreatefromwebp($sourcePath);
+                    break;
+                case 'gif':
+                    $sourceImage = @imagecreatefromgif($sourcePath);
+                    break;
+                default:
+                    return null;
+            }
+
+            if (!$sourceImage) {
+                return null;
+            }
+
+            $originalWidth  = imagesx($sourceImage);
+            $originalHeight = imagesy($sourceImage);
+
+            $maxWidth  = 400;
+            $maxHeight = 300;
+
+            $ratio     = min($maxWidth / $originalWidth, $maxHeight / $originalHeight);
+            $newWidth  = (int) round($originalWidth * $ratio);
+            $newHeight = (int) round($originalHeight * $ratio);
+
+            $thumbImage = imagecreatetruecolor($newWidth, $newHeight);
+
+            // Préserver la transparence pour PNG et GIF
+            if ($extension === 'png' || $extension === 'gif') {
+                imagealphablending($thumbImage, false);
+                imagesavealpha($thumbImage, true);
+                $transparent = imagecolorallocatealpha($thumbImage, 0, 0, 0, 127);
+                imagefilledrectangle($thumbImage, 0, 0, $newWidth, $newHeight, $transparent);
+            }
+
+            imagecopyresampled(
+                $thumbImage, $sourceImage,
+                0, 0, 0, 0,
+                $newWidth, $newHeight, $originalWidth, $originalHeight
+            );
+
+            $nomMiniature    = 'thumb_' . $nomOriginal;
+            $cheminMiniature = 'medias/thumbnails/' . $nomMiniature;
+            $fullPath        = Storage::disk('public')->path($cheminMiniature);
+
+            $dir = dirname($fullPath);
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+
+            switch ($extension) {
+                case 'jpeg':
+                case 'jpg':
+                    imagejpeg($thumbImage, $fullPath, 80);
+                    break;
+                case 'png':
+                    imagepng($thumbImage, $fullPath, 7);
+                    break;
+                case 'webp':
+                    imagewebp($thumbImage, $fullPath, 80);
+                    break;
+                case 'gif':
+                    imagegif($thumbImage, $fullPath);
+                    break;
+            }
+
+            imagedestroy($sourceImage);
+            imagedestroy($thumbImage);
+
+            return $cheminMiniature;
+        } catch (\Exception $e) {
             return null;
         }
-
-        // Dimensions originales
-        $originalWidth = imagesx($sourceImage);
-        $originalHeight = imagesy($sourceImage);
-
-        // Dimensions de la miniature
-        $maxWidth = 400;
-        $maxHeight = 300;
-
-        // Calcul du ratio
-        $ratio = min($maxWidth / $originalWidth, $maxHeight / $originalHeight);
-        $newWidth = (int) round($originalWidth * $ratio);
-        $newHeight = (int) round($originalHeight * $ratio);
-
-        // Créer la miniature
-        $thumbImage = imagecreatetruecolor($newWidth, $newHeight);
-
-        // Préserver la transparence pour PNG et GIF
-        if ($extension === 'png' || $extension === 'gif') {
-            imagealphablending($thumbImage, false);
-            imagesavealpha($thumbImage, true);
-            $transparent = imagecolorallocatealpha($thumbImage, 0, 0, 0, 127);
-            imagefilledrectangle($thumbImage, 0, 0, $newWidth, $newHeight, $transparent);
-        }
-
-        // Redimensionner
-        imagecopyresampled(
-            $thumbImage, $sourceImage,
-            0, 0, 0, 0,
-            $newWidth, $newHeight, $originalWidth, $originalHeight
-        );
-
-        // Sauvegarder la miniature
-        $nomMiniature = 'thumb_' . $nomOriginal;
-        $cheminMiniature = 'medias/thumbnails/' . $nomMiniature;
-        $fullPath = Storage::disk('public')->path($cheminMiniature);
-
-        // Créer le dossier si nécessaire
-        $dir = dirname($fullPath);
-        if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
-        }
-
-        // Sauvegarder selon le format
-        switch ($extension) {
-            case 'jpeg':
-            case 'jpg':
-                imagejpeg($thumbImage, $fullPath, 80);
-                break;
-            case 'png':
-                imagepng($thumbImage, $fullPath, 7);
-                break;
-            case 'webp':
-                imagewebp($thumbImage, $fullPath, 80);
-                break;
-            case 'gif':
-                imagegif($thumbImage, $fullPath);
-                break;
-        }
-
-        // Libérer la mémoire
-        imagedestroy($sourceImage);
-        imagedestroy($thumbImage);
-
-        return $cheminMiniature;
-    } catch (\Exception $e) {
-        return null;
     }
-}
 
     /**
      * Convertit des coordonnées GPS EXIF en chaîne lisible.
@@ -689,7 +728,7 @@ private function genererMiniature($fichier, string $nomOriginal): ?string
         }
 
         $unites = ['o', 'Ko', 'Mo', 'Go', 'To'];
-        $i = 0;
+        $i      = 0;
         $taille = $octets;
 
         while ($taille >= 1024 && $i < count($unites) - 1) {

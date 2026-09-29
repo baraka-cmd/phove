@@ -3,340 +3,605 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AnnulerSalaireRequest;
+use App\Http\Requests\StoreSalaireRequest;
+use App\Http\Requests\UpdateSalaireRequest;
+use App\Http\Requests\ValiderSalaireRequest;
 use App\Models\Membre;
 use App\Models\Organe;
 use App\Models\Salaire;
+use App\Services\SalaireService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class SalaireController extends Controller
 {
     /**
-     * Nombre de salaires par page.
-     *
-     * @var int
+     * Service métier responsable de la gestion des salaires.
      */
-    protected int $perPage = 15;
-
-    /**
-     * Affiche la liste paginée et filtrée des salaires.
-     *
-     * @param Request $request
-     * @return \Illuminate\View\View
-     */
-    public function index(Request $request)
-    {
-        $query = Salaire::with(['membre', 'organe']);
-
-        // Filtre par mois
-        if ($request->filled('mois')) {
-            $query->where('mois', $request->mois);
-        }
-
-        // Filtre par statut
-        if ($request->filled('statut')) {
-            $query->where('statut', $request->statut);
-        }
-
-        // Recherche par membre
-        if ($request->filled('recherche')) {
-            $recherche = $request->recherche;
-            $query->where(function ($q) use ($recherche) {
-                $q->where('reference', 'like', '%' . $recherche . '%')
-                  ->orWhereHas('membre', function ($mq) use ($recherche) {
-                      $mq->where('nom', 'like', '%' . $recherche . '%')
-                         ->orWhere('post_nom', 'like', '%' . $recherche . '%')
-                         ->orWhere('prenom', 'like', '%' . $recherche . '%');
-                  });
-            });
-        }
-
-        $salaires = $query->orderBy('mois', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage)
-            ->withQueryString();
-
-        // Statistiques
-        $moisCourant = now()->format('Y-m');
-        $totalSalairesMois = Salaire::where('mois', $moisCourant)->count();
-        $totalPayesMois = Salaire::where('mois', $moisCourant)->where('statut', 'paye')->count();
-        $totalValidesMois = Salaire::where('mois', $moisCourant)->where('statut', 'valide')->count();
-        $totalNetMois = Salaire::where('mois', $moisCourant)
-            ->whereIn('statut', ['valide', 'paye'])
-            ->sum('salaire_net');
-
-        // Mois disponibles pour le filtre
-        $moisDisponibles = Salaire::select('mois')
-            ->distinct()
-            ->orderBy('mois', 'desc')
-            ->pluck('mois');
-
-        return view('admin.salaires.index', compact(
-            'salaires',
-            'totalSalairesMois',
-            'totalPayesMois',
-            'totalValidesMois',
-            'totalNetMois',
-            'moisDisponibles',
-            'moisCourant'
-        ));
+    public function __construct(
+        protected SalaireService $salaireService
+    ) {
     }
 
     /**
-     * Affiche le formulaire de création d'un salaire.
+     * Affiche la liste des salaires.
      *
-     * @return \Illuminate\View\View
+     * GET /admin/salaires
      */
-    public function create()
+    public function index(Request $request): View
     {
-        $membres = Membre::where('statut', 'actif')->orderBy('nom')->orderBy('post_nom')->get();
-        $organes = Organe::where('actif', true)->with('membre')->orderBy('ordre')->get();
-        $moisCourant = now()->format('Y-m');
-        $referenceAuto = Salaire::genererReference($moisCourant);
+        $this->authorize('viewAny', Salaire::class);
 
-        return view('admin.salaires.create', compact(
+        /*
+         * Filtres.
+         *
+         * Si aucun mois n'est fourni, on utilise le mois courant.
+         * Cela évite de transmettre null aux méthodes du service
+         * qui exigent un mois au format Y-m.
+         */
+        $mois = $request->input(
+            'mois',
+            now()->format('Y-m')
+        );
+
+        $statut = $request->input('statut');
+
+        $recherche = $request->input('recherche');
+
+        /*
+         * Construction de la requête via le service métier.
+         */
+        $query = $this->salaireService->requete(
+            $mois,
+            $statut,
+            $recherche
+        );
+
+        /*
+         * Liste paginée.
+         *
+         * Les paiements sont agrégés avec withSum()
+         * afin d'éviter de charger inutilement toute
+         * la collection des paiements.
+         */
+        $salaires = $query
+            ->with([
+                'membre',
+                'organe',
+            ])
+            ->withSum('paiements', 'montant')
+            ->orderByDesc('mois')
+            ->orderByDesc('id')
+            ->paginate(15)
+            ->withQueryString();
+
+        /*
+         * Statistiques du mois sélectionné.
+         */
+        $stats = [
+            'total' => $this->salaireService->nombreDuMois(
+                $mois
+            ),
+
+            'montant_total' => $this->salaireService->totalDuMois(
+                $mois
+            ),
+
+            'montant_valide' => $this->salaireService->totalValideDuMois(
+                $mois
+            ),
+
+            'reste_a_payer' => $this->calculerResteGlobal(
+                $mois
+            ),
+        ];
+
+        /*
+         * Statuts disponibles dans le filtre.
+         */
+        $statuts = [
+            Salaire::STATUT_BROUILLON => 'Brouillon',
+            Salaire::STATUT_VALIDE => 'Validé',
+            Salaire::STATUT_PARTIELLEMENT_PAYE => 'Partiellement payé',
+            Salaire::STATUT_PAYE => 'Payé',
+            Salaire::STATUT_ANNULE => 'Annulé',
+        ];
+
+        return view(
+            'admin.salaires.index',
+            compact(
+                'salaires',
+                'stats',
+                'statuts',
+                'mois',
+                'statut',
+                'recherche'
+            )
+        );
+    }
+
+    /**
+     * Affiche la grille salariale.
+     *
+     * GET /admin/salaires/grille
+     */
+    public function grille(Request $request): View
+    {
+        $this->authorize('viewAny', Salaire::class);
+
+        /*
+         * Mois affiché dans la grille.
+         *
+         * Par défaut : mois courant.
+         */
+        $mois = $request->input(
+            'mois',
+            now()->format('Y-m')
+        );
+
+        /*
+         * Organes et membres.
+         *
+         * IMPORTANT :
+         * La table "organes" de ta base ne possède pas
+         * de colonne "nom".
+         *
+         * On utilise donc "id" pour l'ordre afin de
+         * ne pas dépendre d'un nom de colonne inexistant.
+         */
+        $organes = Organe::query()
+            ->orderBy('id')
+            ->get();
+        /*
+         * Salaires du mois.
+         *
+         * Les paiements sont agrégés afin de connaître
+         * rapidement le montant déjà payé pour chaque salaire.
+         */
+        $salaires = Salaire::query()
+            ->with([
+                'membre',
+                'organe',
+            ])
+            ->withSum('paiements', 'montant')
+            ->where('mois', $mois)
+            ->get()
+            ->keyBy('membre_id');
+
+        /*
+         * Total des salaires nets du mois.
+         */
+        $total = $salaires->sum(
+            fn (Salaire $salaire): float =>
+                (float) $salaire->salaire_net
+        );
+
+        /*
+         * Total effectivement payé.
+         */
+        $totalPaye = $salaires->sum(
+            fn (Salaire $salaire): float =>
+                (float) (
+                    $salaire->paiements_sum_montant ?? 0
+                )
+        );
+
+        /*
+         * Reste global à payer.
+         */
+        $reste = max(
+            0,
+            $total - $totalPaye
+        );
+
+        return view(
+            'admin.salaires.grille',
+            compact(
+                'organes',
+                'salaires',
+                'mois',
+                'total',
+                'totalPaye',
+                'reste'
+            )
+        );
+    }
+
+    /**
+     * Affiche le formulaire de création.
+     *
+     * GET /admin/salaires/create
+     */
+    public function create(): View
+{
+    $this->authorize('create', Salaire::class);
+
+    /*
+     * Membres actifs uniquement.
+     */
+    $membres = Membre::query()
+        ->where(function ($query) {
+            $query
+                ->where('statut', 'actif')
+                ->orWhere('statut', 'active');
+        })
+        ->orderBy('nom')
+        ->orderBy('post_nom')
+        ->get();
+
+    /*
+     * Organes disponibles.
+     */
+    $organes = Organe::query()
+        ->orderBy('id')
+        ->get();
+
+    /*
+     * Mois proposé par défaut.
+     */
+    $moisCourant = now()->format('Y-m');
+
+    /*
+     * Référence générée automatiquement.
+     */
+    $referenceAuto = 'SAL-' . now()->format('Ym') . '-' . str_pad(
+        (Salaire::where('mois', $moisCourant)->count() + 1),
+        4,
+        '0',
+        STR_PAD_LEFT
+    );
+
+    return view(
+        'admin.salaires.create',
+        compact(
             'membres',
             'organes',
             'moisCourant',
             'referenceAuto'
-        ));
-    }
+        )
+    );
+}
 
     /**
      * Enregistre un nouveau salaire.
      *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
+     * POST /admin/salaires
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'membre_id' => ['required', 'exists:membres,id'],
-            'organe_id' => ['nullable', 'exists:organes,id'],
-            'mois' => ['required', 'regex:/^\d{4}-\d{2}$/'],
-            'salaire_base' => ['required', 'numeric', 'min:0'],
-            'primes' => ['nullable', 'numeric', 'min:0'],
-            'retenues' => ['nullable', 'numeric', 'min:0'],
-            'mode_paiement' => ['required', 'in:especes,virement,mobile_money,cheque'],
-            'statut' => ['required', 'in:brouillon,valide,paye'],
-            'date_paiement' => ['nullable', 'date', 'required_if:statut,paye'],
-            'reference' => ['required', 'string', 'max:50', 'unique:salaires,reference'],
-            'notes' => ['nullable', 'string', 'max:5000'],
-        ], [
-            'membre_id.required' => 'Veuillez sélectionner un membre.',
-            'mois.required' => 'Le mois est obligatoire.',
-            'mois.regex' => 'Le mois doit être au format YYYY-MM.',
-            'salaire_base.required' => 'Le salaire de base est obligatoire.',
-            'salaire_base.min' => 'Le salaire de base ne peut pas être négatif.',
-            'reference.unique' => 'Cette référence est déjà utilisée.',
-            'date_paiement.required_if' => 'La date de paiement est obligatoire si le statut est "Payé".',
+    public function store(
+        StoreSalaireRequest $request
+    ): RedirectResponse {
+        /*
+         * La validation métier est assurée par le FormRequest.
+         * La création réelle est déléguée au service.
+         */
+        $salaire = $this->salaireService->creer(
+            $request->validatedData(),
+            auth()->id()
+        );
+
+        return redirect()
+            ->route(
+                'admin.salaires.show',
+                $salaire
+            )
+            ->with(
+                'success',
+                'Le salaire a été créé avec succès en brouillon.'
+            );
+    }
+
+    /**
+     * Affiche les détails d'un salaire.
+     *
+     * GET /admin/salaires/{salaire}
+     */
+    public function show(
+        Salaire $salaire
+    ): View {
+        $this->authorize(
+            'view',
+            $salaire
+        );
+
+        /*
+         * Chargement des relations nécessaires.
+         */
+        $salaire->load([
+            'membre',
+            'organe',
+            'createur',
+            'validePar',
+            'annulePar',
+            'paiements' => function ($query) {
+                $query
+                    ->with('payePar')
+                    ->orderByDesc('date_paiement')
+                    ->orderByDesc('id');
+            },
         ]);
 
-        // Vérifier l'unicité membre + mois
-        $existe = Salaire::where('membre_id', $validated['membre_id'])
-            ->where('mois', $validated['mois'])
-            ->exists();
+        /*
+         * Historique des paiements.
+         */
+        $paiements = $salaire->paiements;
 
-        if ($existe) {
-            return redirect()->back()
-                ->with('error', 'Un salaire existe déjà pour ce membre pour le mois ' . $validated['mois'] . '.')
-                ->withInput();
-        }
+        /*
+         * Informations financières calculées par le modèle.
+         */
+        $totalPaye = $salaire->totalPaye;
 
-        // Calculer le salaire net
-        $validated['salaire_net'] = $validated['salaire_base']
-            + ($validated['primes'] ?? 0)
-            - ($validated['retenues'] ?? 0);
+        $resteAPayer = $salaire->resteAPayer();
 
-        // Si payé, définir qui a payé
-        if ($validated['statut'] === 'paye') {
-            $validated['paye_par'] = auth()->id();
-        }
+        $pourcentagePaye = $salaire->pourcentagePaye;
 
-        // Si validé ou payé, définir qui a validé
-        if (in_array($validated['statut'], ['valide', 'paye'])) {
-            $validated['valide_par'] = auth()->id();
-        }
-
-        $salaire = Salaire::create($validated);
-
-        return redirect()->route('admin.salaires.show', $salaire)
-            ->with('success', 'Le salaire de ' . $salaire->nomMembre() . ' pour ' . $salaire->mois . ' a été créé.');
+        return view(
+            'admin.salaires.show',
+            compact(
+                'salaire',
+                'paiements',
+                'totalPaye',
+                'resteAPayer',
+                'pourcentagePaye'
+            )
+        );
     }
 
     /**
-     * Affiche la fiche détaillée d'un salaire.
+     * Affiche le formulaire de modification.
      *
-     * @param Salaire $salaire
-     * @return \Illuminate\View\View
+     * GET /admin/salaires/{salaire}/edit
      */
-    public function show(Salaire $salaire)
-    {
-        $salaire->load(['membre', 'organe', 'validePar', 'payePar']);
+    public function edit(
+        Salaire $salaire
+    ): View {
+        $this->authorize(
+            'update',
+            $salaire
+        );
 
-        return view('admin.salaires.show', compact('salaire'));
-    }
+        /*
+         * Membres actifs uniquement.
+         */
+        $membres = Membre::query()
+            ->where(function ($query) {
+                $query
+                    ->where('statut', 'actif')
+                    ->orWhere('statut', 'active');
+            })
+            ->orderBy('nom')
+            ->orderBy('post_nom')
+            ->get();
 
-    /**
-     * Affiche le formulaire de modification d'un salaire.
-     *
-     * @param Salaire $salaire
-     * @return \Illuminate\View\View
-     */
-    public function edit(Salaire $salaire)
-    {
-        $membres = Membre::where('statut', 'actif')->orderBy('nom')->orderBy('post_nom')->get();
-        $organes = Organe::where('actif', true)->with('membre')->orderBy('ordre')->get();
+        /*
+         * Organes disponibles.
+         */
+        $organes = Organe::query()
+            ->orderBy('id')
+            ->get();
 
-        return view('admin.salaires.edit', compact('salaire', 'membres', 'organes'));
+        return view(
+            'admin.salaires.edit',
+            compact(
+                'salaire',
+                'membres',
+                'organes'
+            )
+        );
     }
 
     /**
      * Met à jour un salaire.
      *
-     * @param Request $request
-     * @param Salaire $salaire
-     * @return \Illuminate\Http\RedirectResponse
+     * PUT/PATCH /admin/salaires/{salaire}
      */
-    public function update(Request $request, Salaire $salaire)
-    {
-        // Si le salaire est déjà payé, ne pas permettre la modification
-        if ($salaire->estPaye()) {
-            return redirect()->back()
-                ->with('error', 'Impossible de modifier un salaire déjà payé.');
-        }
+    public function update(
+        UpdateSalaireRequest $request,
+        Salaire $salaire
+    ): RedirectResponse {
+        /*
+         * Autorisation.
+         *
+         * Le service vérifiera également les règles métier,
+         * notamment l'état du salaire.
+         */
+        $this->authorize(
+            'update',
+            $salaire
+        );
 
-        $validated = $request->validate([
-            'organe_id' => ['nullable', 'exists:organes,id'],
-            'salaire_base' => ['required', 'numeric', 'min:0'],
-            'primes' => ['nullable', 'numeric', 'min:0'],
-            'retenues' => ['nullable', 'numeric', 'min:0'],
-            'mode_paiement' => ['required', 'in:especes,virement,mobile_money,cheque'],
-            'statut' => ['required', 'in:brouillon,valide,paye'],
-            'date_paiement' => ['nullable', 'date', 'required_if:statut,paye'],
-            'notes' => ['nullable', 'string', 'max:5000'],
-        ], [
-            'salaire_base.required' => 'Le salaire de base est obligatoire.',
-            'date_paiement.required_if' => 'La date de paiement est obligatoire si le statut est "Payé".',
-        ]);
+        $this->salaireService->modifier(
+            $salaire,
+            $request->validatedData()
+        );
 
-        // Calculer le salaire net
-        $validated['salaire_net'] = $validated['salaire_base']
-            + ($validated['primes'] ?? 0)
-            - ($validated['retenues'] ?? 0);
-
-        // Si payé, définir qui a payé
-        if ($validated['statut'] === 'paye' && !$salaire->paye_par) {
-            $validated['paye_par'] = auth()->id();
-        }
-
-        // Si validé ou payé, définir qui a validé
-        if (in_array($validated['statut'], ['valide', 'paye']) && !$salaire->valide_par) {
-            $validated['valide_par'] = auth()->id();
-        }
-
-        $salaire->update($validated);
-
-        return redirect()->route('admin.salaires.show', $salaire)
-            ->with('success', 'Le salaire a été mis à jour avec succès.');
+        return redirect()
+            ->route(
+                'admin.salaires.show',
+                $salaire
+            )
+            ->with(
+                'success',
+                'Le salaire a été modifié avec succès.'
+            );
     }
 
     /**
-     * Valide un salaire en brouillon.
+     * Valide un salaire.
      *
-     * @param Salaire $salaire
-     * @return \Illuminate\Http\RedirectResponse
+     * PUT /admin/salaires/{salaire}/valider
      */
-    public function valider(Salaire $salaire)
-    {
-        if (!$salaire->estBrouillon()) {
-            return redirect()->back()
-                ->with('error', 'Ce salaire ne peut pas être validé.');
-        }
+    public function valider(
+        ValiderSalaireRequest $request,
+        Salaire $salaire
+    ): RedirectResponse {
+        /*
+         * Défense en profondeur :
+         *
+         * 1. Policy
+         * 2. FormRequest
+         * 3. Service métier
+         */
+        $this->authorize(
+            'validate',
+            $salaire
+        );
 
-        $salaire->valider(auth()->id());
+        $this->salaireService->valider(
+            $salaire,
+            auth()->id()
+        );
 
-        return redirect()->back()
-            ->with('success', 'Le salaire a été validé avec succès.');
-    }
-
-    /**
-     * Marque un salaire comme payé.
-     *
-     * @param Request $request
-     * @param Salaire $salaire
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function marquerPaye(Request $request, Salaire $salaire)
-    {
-        if ($salaire->estPaye()) {
-            return redirect()->back()
-                ->with('error', 'Ce salaire est déjà payé.');
-        }
-
-        $validated = $request->validate([
-            'date_paiement' => ['required', 'date'],
-        ]);
-
-        $salaire->marquerPaye(auth()->id(), $validated['date_paiement']);
-
-        return redirect()->back()
-            ->with('success', 'Le salaire a été marqué comme payé.');
+        return redirect()
+            ->route(
+                'admin.salaires.show',
+                $salaire
+            )
+            ->with(
+                'success',
+                'Le salaire a été validé. Il est maintenant disponible pour paiement.'
+            );
     }
 
     /**
      * Annule un salaire.
      *
-     * @param Salaire $salaire
-     * @return \Illuminate\Http\RedirectResponse
+     * PUT /admin/salaires/{salaire}/annuler
      */
-    public function annuler(Salaire $salaire)
-    {
-        if ($salaire->estPaye()) {
-            return redirect()->back()
-                ->with('error', 'Impossible d\'annuler un salaire déjà payé.');
-        }
+    public function annuler(
+        AnnulerSalaireRequest $request,
+        Salaire $salaire
+    ): RedirectResponse {
+        $this->authorize(
+            'cancel',
+            $salaire
+        );
 
-        $salaire->annuler();
+        $data = $request->validatedData();
 
-        return redirect()->back()
-            ->with('success', 'Le salaire a été annulé.');
+        $this->salaireService->annuler(
+            $salaire,
+            auth()->id(),
+            $data['motif_annulation']
+        );
+
+        return redirect()
+            ->route(
+                'admin.salaires.show',
+                $salaire
+            )
+            ->with(
+                'success',
+                'Le salaire a été annulé avec succès.'
+            );
     }
 
     /**
-     * Supprime un salaire.
+     * Supprime un salaire en brouillon.
      *
-     * @param Salaire $salaire
-     * @return \Illuminate\Http\RedirectResponse
+     * DELETE /admin/salaires/{salaire}
      */
-    public function destroy(Salaire $salaire)
-    {
-        if ($salaire->estPaye()) {
-            return redirect()->back()
-                ->with('error', 'Impossible de supprimer un salaire déjà payé.');
+    public function destroy(
+        Salaire $salaire
+    ): RedirectResponse {
+        $this->authorize(
+            'delete',
+            $salaire
+        );
+
+        /*
+         * Sécurité supplémentaire :
+         * un salaire ayant un historique financier
+         * ne doit jamais être supprimé.
+         */
+        if ($salaire->paiements()->exists()) {
+            return redirect()
+                ->back()
+                ->with(
+                    'error',
+                    'Ce salaire possède un historique de paiement et ne peut pas être supprimé.'
+                );
+        }
+
+        /*
+         * Seul un brouillon peut être supprimé.
+         */
+        if (!$salaire->estBrouillon()) {
+            return redirect()
+                ->back()
+                ->with(
+                    'error',
+                    'Seul un salaire en brouillon peut être supprimé.'
+                );
         }
 
         $salaire->delete();
 
-        return redirect()->route('admin.salaires.index')
-            ->with('success', 'Le salaire a été supprimé définitivement.');
+        return redirect()
+            ->route(
+                'admin.salaires.index'
+            )
+            ->with(
+                'success',
+                'Le brouillon de salaire a été supprimé.'
+            );
     }
 
     /**
-     * Affiche la grille salariale par poste.
+     * Génère le bulletin de salaire.
      *
-     * @return \Illuminate\View\View
+     * GET /admin/salaires/{salaire}/bulletin
      */
-    public function grille()
-    {
-        // Organes actifs avec leurs salaires
-        $organes = Organe::where('actif', true)
-            ->with(['membre', 'salaires' => function ($query) {
-                $query->orderBy('mois', 'desc')->take(3);
-            }])
-            ->get()
-            ->groupBy('organe');
+    public function bulletin(
+        Salaire $salaire
+    ) {
+        $this->authorize(
+            'view',
+            $salaire
+        );
 
-        return view('admin.salaires.grille', compact('organes'));
+        /*
+         * Relations nécessaires au bulletin.
+         */
+        $salaire->load([
+            'membre',
+            'organe',
+            'createur',
+            'validePar',
+            'annulePar',
+            'paiements.payePar',
+        ]);
+
+        /*
+         * La génération PDF sera branchée ultérieurement.
+         */
+        abort(
+            501,
+            'La génération PDF du bulletin sera activée ultérieurement.'
+        );
+    }
+
+    /**
+     * Calcule le reste global à payer pour un mois.
+     */
+    private function calculerResteGlobal(
+        ?string $mois
+    ): float {
+        /*
+         * Protection supplémentaire.
+         *
+         * Normalement index() transmet toujours un mois.
+         * Mais cette valeur par défaut rend la méthode
+         * robuste si elle est réutilisée ailleurs.
+         */
+        $mois ??= now()->format('Y-m');
+
+        return $this->salaireService
+            ->salairesAvecReste($mois)
+            ->sum(
+                fn (Salaire $salaire): float =>
+                    (float) $salaire->resteAPayer()
+            );
     }
 }

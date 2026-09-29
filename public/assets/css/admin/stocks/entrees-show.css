@@ -1,0 +1,661 @@
+/* ============================================================
+   PHOVE — STYLE : FICHE DÉTAILLÉE D'UNE ENTRÉE DE STOCK
+   Vue : resources/views/admin/stocks/entrees/show.blade.php
+   Route : admin.stocks.entrees.show
+
+   Ce fichier complète stocks-common.css.
+   Il n'ajoute QUE ce qui est spécifique à la fiche entrée.
+   ============================================================ */
+
+
+/* ----------------------------------------------------------
+   1. CONTENEUR DE PAGE
+   ---------------------------------------------------------- */
+
+.stock-entree-show {
+    /* Conteneur principal */
+}
+
+
+/* ----------------------------------------------------------
+   2. EN-TÊTE DE PAGE
+   ----------------------------------------------------------
+   .page-header, .page-header-content, .page-header-text,
+   .page-header-actions, .breadcrumb viennent de stocks-common.css.
+   ---------------------------------------------------------- */
+
+.stock-entree-show .page-header-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+
+/* ----------------------------------------------------------
+   3. MESSAGES
+   ---------------------------------------------------------- */
+
+.stock-entree-show .alert {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-sm);
+}
+
+.stock-entree-show .alert-success {
+    background: var(--color-success-light);
+    color: #065F46;
+    border: 1px solid #6EE7B7;
+}
+
+.stock-entree-show .alert-danger {
+    background: var(--color-error-light);
+    color: #B91C1C;
+    border: 1px solid #FCA5A5;
+}
+
+
+/* ----------------------------------------------------------
+   4. SECTIONS (bloc de contenu)
+   ----------------------------------------------------------
+   .content-section : conteneur d'une section
+   ---------------------------------------------------------- */
+
+.stock-entree-show .content-section {
+    background: var(--color-bg-white);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+}
+
+
+/* ----------------------------------------------------------
+   5. SECTION HEADER
+   ---------------------------------------------------------- */
+
+.stock-entree-show .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color-light);
+    flex-wrap: wrap;
+}
+
+.stock-entree-show .section-title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+}
+
+.stock-entree-show .section-description {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+/* Statut (badge) */
+.stock-entree-show .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+}
+
+.stock-entree-show .status-valide {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+.stock-entree-show .status-annule {
+    background: var(--color-error-light);
+    color: #B91C1C;
+}
+
+
+/* ----------------------------------------------------------
+   6. GRILLE D'INFORMATIONS (2 ou 3 colonnes)
+   ---------------------------------------------------------- */
+
+.stock-entree-show .information-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+
+/* ----------------------------------------------------------
+   7. CARTE D'INFORMATION
+   ---------------------------------------------------------- */
+
+.stock-entree-show .information-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--spacing-md);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+    border-left: 3px solid var(--color-success);
+}
+
+.stock-entree-show .information-label {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.stock-entree-show .information-value {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+    word-break: break-word;
+}
+
+
+/* ----------------------------------------------------------
+   8. RÉSUMÉ DE L'ARTICLE
+   ---------------------------------------------------------- */
+
+.stock-entree-show .stock-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+    border-left: 4px solid var(--color-success);
+    flex-wrap: wrap;
+}
+
+.stock-entree-show .stock-summary-main {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex: 1;
+    min-width: 0;
+}
+
+.stock-entree-show .stock-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-success-light);
+    color: #065F46;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.stock-entree-show .stock-summary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 0;
+}
+
+.stock-entree-show .stock-reference {
+    font-size: var(--font-size-xs);
+    color: var(--color-success);
+    font-weight: var(--font-weight-semibold);
+    font-family: 'Courier New', monospace;
+}
+
+.stock-entree-show .stock-designation {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.stock-entree-show .stock-category {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    text-transform: capitalize;
+}
+
+.stock-entree-show .stock-summary-action {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+
+/* ----------------------------------------------------------
+   9. GRILLE DE QUANTITÉS
+   ---------------------------------------------------------- */
+
+.stock-entree-show .quantity-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.stock-entree-show .quantity-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--spacing-lg);
+    background: linear-gradient(
+        to bottom right,
+        var(--color-success-light) 0%,
+        var(--color-bg-white) 60%
+    );
+    border-radius: var(--border-radius-sm);
+    border-left: 4px solid var(--color-success);
+    text-align: center;
+}
+
+.stock-entree-show .quantity-label {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.stock-entree-show .quantity-value {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-success);
+    line-height: 1.1;
+}
+
+.stock-entree-show .quantity-unit {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+
+/* ----------------------------------------------------------
+   10. CARTE DE LOT
+   ---------------------------------------------------------- */
+
+.stock-entree-show .lot-card {
+    padding: var(--spacing-lg);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+    border-left: 4px solid var(--color-primary);
+}
+
+.stock-entree-show .lot-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 1px dashed var(--border-color);
+    flex-wrap: wrap;
+}
+
+.stock-entree-show .lot-number {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stock-entree-show .lot-number strong {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    font-family: 'Courier New', monospace;
+}
+
+
+/* ----------------------------------------------------------
+   11. GRILLE D'INFORMATIONS DU LOT
+   ---------------------------------------------------------- */
+
+.stock-entree-show .lot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.stock-entree-show .lot-information {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: var(--spacing-md);
+    background: var(--color-bg-white);
+    border-radius: var(--border-radius-sm);
+    border-left: 2px solid var(--color-primary);
+}
+
+.stock-entree-show .lot-information .information-label {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.stock-entree-show .lot-information strong {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.stock-entree-show .lot-document {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: var(--spacing-md);
+    background: var(--color-bg-white);
+    border-radius: var(--border-radius-sm);
+    border-left: 3px solid var(--color-primary);
+    margin-top: var(--spacing-sm);
+}
+
+.stock-entree-show .lot-document strong {
+    font-family: 'Courier New', monospace;
+    color: var(--color-primary);
+    font-size: var(--font-size-sm);
+}
+
+
+/* ----------------------------------------------------------
+   12. CARTE EMPLACEMENT
+   ---------------------------------------------------------- */
+
+.stock-entree-show .location-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+    border-left: 4px solid var(--color-info);
+}
+
+.stock-entree-show .location-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-info-light);
+    color: #1E40AF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.stock-entree-show .location-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.stock-entree-show .location-content strong {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+}
+
+.stock-entree-show .location-code {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-family: 'Courier New', monospace;
+    background: var(--color-bg-white);
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    width: fit-content;
+}
+
+
+/* ----------------------------------------------------------
+   13. CARTE PROJET
+   ---------------------------------------------------------- */
+
+.stock-entree-show .project-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+    border-left: 4px solid var(--color-accent);
+}
+
+.stock-entree-show .project-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-accent-light);
+    color: #92400E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.stock-entree-show .project-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.stock-entree-show .project-content strong {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+}
+
+
+/* ----------------------------------------------------------
+   14. TEXT INFORMATION (motif / notes)
+   ---------------------------------------------------------- */
+
+.stock-entree-show .text-information {
+    padding: var(--spacing-md);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+    border-left: 3px solid var(--color-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.stock-entree-show .text-information:last-child {
+    margin-bottom: 0;
+}
+
+.stock-entree-show .text-information p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-top: var(--spacing-xs);
+}
+
+
+/* ----------------------------------------------------------
+   15. AUDIT / TRAÇABILITÉ
+   ---------------------------------------------------------- */
+
+.stock-entree-show .audit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.stock-entree-show .audit-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: var(--spacing-md);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+    border-left: 3px solid var(--color-primary);
+}
+
+.stock-entree-show .audit-item strong {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+
+/* ----------------------------------------------------------
+   16. CARTE MOUVEMENT
+   ---------------------------------------------------------- */
+
+.stock-entree-show .movement-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: linear-gradient(
+        to right,
+        var(--color-success-light) 0%,
+        var(--color-bg-white) 80%
+    );
+    border-radius: var(--border-radius-sm);
+    border-left: 4px solid var(--color-success);
+}
+
+.stock-entree-show .movement-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--color-success);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.stock-entree-show .movement-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.stock-entree-show .movement-content strong {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    font-family: 'Courier New', monospace;
+}
+
+.stock-entree-show .movement-type {
+    display: inline-block;
+    padding: 3px 10px;
+    background: var(--color-success-light);
+    color: #065F46;
+    border-radius: var(--border-radius-full);
+    font-size: 11px;
+    font-weight: var(--font-weight-semibold);
+    width: fit-content;
+    margin-top: var(--spacing-xs);
+}
+
+
+/* ----------------------------------------------------------
+   17. ÉTAT VIDE COMPACT
+   ---------------------------------------------------------- */
+
+.stock-entree-show .empty-state.compact {
+    padding: var(--spacing-lg);
+    text-align: center;
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+}
+
+.stock-entree-show .empty-state.compact i {
+    font-size: 2rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-sm);
+    display: block;
+}
+
+.stock-entree-show .empty-state.compact h3 {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.stock-entree-show .empty-state.compact p {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+
+/* ----------------------------------------------------------
+   18. ACTIONS DE FIN DE PAGE
+   ---------------------------------------------------------- */
+
+.stock-entree-show .page-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg) 0;
+    margin-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-color-light);
+    flex-wrap: wrap;
+}
+
+
+/* ----------------------------------------------------------
+   19. RESPONSIVE
+   ---------------------------------------------------------- */
+
+@media (max-width: 992px) {
+    .stock-entree-show .stock-summary {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .stock-entree-show .stock-summary-action {
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 768px) {
+    .stock-entree-show .content-section {
+        padding: var(--spacing-md);
+    }
+
+    .stock-entree-show .information-grid,
+    .stock-entree-show .audit-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-entree-show .lot-grid,
+    .stock-entree-show .quantity-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-entree-show .page-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .stock-entree-show .page-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

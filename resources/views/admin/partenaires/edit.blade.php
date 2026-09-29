@@ -4,7 +4,7 @@
 
 @section('page_title', 'Modifier le partenaire')
 @section('page_icon', 'edit')
-@section('page_subtitle', 'Modifiez les informations du partenaire : ' . $partenaire->nom . ($partenaire->sigle ? ' (' . $partenaire->sigle . ')' : ''))
+@section('page_subtitle', 'Modifiez les informations du partenaire : ' . $partenaire->nom)
 
 @php
     $breadcrumb = [
@@ -30,9 +30,6 @@
                 <h2>Modifier le partenaire</h2>
                 <p>
                     {{ $partenaire->typeLibelle() }}
-                    @if($partenaire->sigle)
-                        — <strong>{{ $partenaire->sigle }}</strong>
-                    @endif
                     — Créé le {{ $partenaire->created_at->format('d/m/Y') }} — 
                     {{ $partenaire->projets->count() }} projet(s) associé(s)
                 </p>
@@ -64,22 +61,14 @@
                     </div>
 
                     <div class="partenaire-form-group">
-                        <label for="sigle" class="partenaire-form-label">Sigle <span class="optional">(optionnel)</span></label>
-                        <input type="text" name="sigle" id="sigle" class="partenaire-form-input @error('sigle') error @enderror" 
-                               value="{{ old('sigle', $partenaire->sigle) }}" placeholder="Ex: FAO, WFP, OCHA" maxlength="20">
-                        @error('sigle') <span class="partenaire-form-error"><i class="fas fa-exclamation-circle"></i> {{ $message }}</span> @enderror
-                        <span class="partenaire-form-hint">Sigle officiel du partenaire</span>
-                    </div>
-
-                    <div class="partenaire-form-group">
                         <label for="type" class="partenaire-form-label">Type de partenaire <span class="required">*</span></label>
                         <select name="type" id="type" class="partenaire-form-select @error('type') error @enderror" required>
                             <option value="">Sélectionnez...</option>
-                            <option value="bailleur_fonds" {{ old('type', $partenaire->type) === 'bailleur_fonds' ? 'selected' : '' }}>Bailleur de fonds</option>
-                            <option value="technique" {{ old('type', $partenaire->type) === 'technique' ? 'selected' : '' }}>Partenaire technique</option>
-                            <option value="local" {{ old('type', $partenaire->type) === 'local' ? 'selected' : '' }}>Partenaire local</option>
-                            <option value="international" {{ old('type', $partenaire->type) === 'international' ? 'selected' : '' }}>Partenaire international</option>
-                            <option value="institutionnel" {{ old('type', $partenaire->type) === 'institutionnel' ? 'selected' : '' }}>Partenaire institutionnel</option>
+                            @foreach($types as $value => $label)
+                                <option value="{{ $value }}" {{ old('type', $partenaire->type) === $value ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
+                            @endforeach
                         </select>
                         @error('type') <span class="partenaire-form-error"><i class="fas fa-exclamation-circle"></i> {{ $message }}</span> @enderror
                     </div>
@@ -87,8 +76,11 @@
                     <div class="partenaire-form-group">
                         <label for="statut" class="partenaire-form-label">Statut <span class="required">*</span></label>
                         <select name="statut" id="statut" class="partenaire-form-select @error('statut') error @enderror" required>
-                            <option value="actif" {{ old('statut', $partenaire->statut) === 'actif' ? 'selected' : '' }}>Actif</option>
-                            <option value="inactif" {{ old('statut', $partenaire->statut) === 'inactif' ? 'selected' : '' }}>Inactif</option>
+                            @foreach($statuts as $value => $label)
+                                <option value="{{ $value }}" {{ old('statut', $partenaire->statut) === $value ? 'selected' : '' }}>
+                                    {{ $label }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -154,7 +146,7 @@
                 </h4>
                 @if($partenaire->logo)
                 <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 16px; padding: 14px 18px; background: #FEF3C7; border-radius: 10px; border-left: 4px solid #F59E0B;">
-                    <img src="{{ asset('storage/' . $partenaire->logo) }}" alt="Logo actuel" 
+                    <img src="{{ $partenaire->urlLogo() }}" alt="Logo actuel" 
                          style="width: 60px; height: 60px; object-fit: contain; border-radius: 8px; background: #FFFFFF; padding: 6px;" loading="lazy">
                     <div>
                         <p style="font-size: 13px; font-weight: 600; color: #1E293B; margin-bottom: 2px;">Logo actuel</p>
@@ -171,9 +163,9 @@
                         <p style="font-size: 13px; font-weight: 600; color: #1E293B; margin-bottom: 4px;">
                             @if($partenaire->logo) Remplacer le logo @else Ajouter un logo @endif
                         </p>
-                        <p style="font-size: 11px; color: #64748B; margin-bottom: 8px;">Formats : JPG, PNG, WebP, SVG — Max 2 Mo</p>
+                        <p style="font-size: 11px; color: #64748B; margin-bottom: 8px;">Formats : JPG, PNG, WebP — Max 2 Mo</p>
                         <input type="file" name="logo" id="logo" class="partenaire-form-input" 
-                               accept="image/jpeg,image/jpg,image/png,image/webp,image/svg+xml" style="display: none;">
+                               accept="image/jpeg,image/jpg,image/png,image/webp" style="display: none;">
                         @error('logo') <span class="partenaire-form-error"><i class="fas fa-exclamation-circle"></i> {{ $message }}</span> @enderror
                     </div>
                 </div>
@@ -185,11 +177,16 @@
                     <i class="fas fa-project-diagram"></i> Projets associés
                 </h4>
                 @if($projets->count() > 0)
+                @php
+                    $projetsAssocies = old('projet_ids', $partenaire->projets->pluck('id')->toArray());
+                @endphp
+                {{-- Champ caché pour détecter un "tout décoché" --}}
+                <input type="hidden" name="projet_ids_present" value="1">
                 <div class="partenaires-projets-checkboxes">
                     @foreach($projets as $projet)
                     <label class="partenaire-checkbox-item">
                         <input type="checkbox" name="projet_ids[]" value="{{ $projet->id }}" 
-                               {{ in_array($projet->id, old('projet_ids', $partenaire->projets->pluck('id')->toArray())) ? 'checked' : '' }}>
+                               {{ in_array($projet->id, (array) $projetsAssocies) ? 'checked' : '' }}>
                         <span>{{ Str::limit($projet->titre, 50) }}</span>
                         @if($projet->code_projet)
                             <small style="color: #64748B;">({{ $projet->code_projet }})</small>
@@ -219,8 +216,7 @@
         <form action="{{ route('admin.partenaires.destroy', $partenaire) }}" method="POST" style="margin-top: 16px; text-align: right;">
             @csrf
             @method('DELETE')
-            <button type="submit" class="btn btn-accent btn-sm btn-delete-partenaire" data-nom="{{ $partenaire->nom }}"
-                    onclick="return confirm('Supprimer définitivement ce partenaire ?');">
+            <button type="submit" class="btn btn-accent btn-sm btn-delete-partenaire" data-nom="{{ $partenaire->nom }}">
                 <i class="fas fa-trash-alt"></i> Supprimer ce partenaire
             </button>
         </form>

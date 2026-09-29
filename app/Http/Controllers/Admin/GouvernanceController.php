@@ -124,82 +124,145 @@ class GouvernanceController extends Controller
     }
 
     /**
-     * Ajoute un membre à un organe.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function storeMembre(Request $request)
-    {
-        $validated = $request->validate([
-            'membre_id' => ['required', 'exists:membres,id'],
-            'organe' => ['required', 'in:assemblee_generale,conseil_administration,commission_controle,comite_suivi,comite_gestion,direction_executive'],
-            'poste' => ['required', 'string', 'max:255'],
-            'structure_id' => ['nullable', 'exists:structures_territoriales,id'],
-            'niveau' => ['nullable', 'in:international,national,provincial,local'],
-            'date_debut' => ['required', 'date'],
-            'date_fin' => ['nullable', 'date', 'after:date_debut'],
-            'ordre' => ['nullable', 'integer', 'min:0'],
-        ], [
-            'membre_id.required' => 'Veuillez sélectionner un membre.',
-            'organe.required' => 'L\'organe est obligatoire.',
-            'poste.required' => 'Le poste est obligatoire.',
-            'date_debut.required' => 'La date de début est obligatoire.',
-            'date_fin.after' => 'La date de fin doit être postérieure à la date de début.',
-        ]);
+ * Ajoute un membre à un organe.
+ *
+ * @param  Request  $request
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function storeMembre(Request $request): RedirectResponse
+{
+    $validated = $request->validate([
+        'membre_id'    => ['required', 'exists:membres,id'],
+        'organe'       => ['required', 'in:assemblee_generale,conseil_administration,commission_controle,comite_suivi,comite_gestion,direction_executive'],
+        'poste'        => ['required', 'string', 'max:255'],
+        'structure_id' => ['nullable', 'exists:structures_territoriales,id'],
+        'niveau'       => ['nullable', 'in:international,national,provincial,local'],
+        'date_debut'   => ['required', 'date'],
+        'date_fin'     => ['nullable', 'date', 'after_or_equal:date_debut'],
+        'ordre'        => ['nullable', 'integer', 'min:0'],
+        'photo'        => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
+    ], [
+        'membre_id.required'    => 'Veuillez sélectionner un membre.',
+        'membre_id.exists'      => 'Le membre sélectionné n\'existe pas.',
+        'organe.required'       => 'L\'organe est obligatoire.',
+        'organe.in'             => 'L\'organe sélectionné n\'est pas valide.',
+        'poste.required'        => 'Le poste est obligatoire.',
+        'date_debut.required'   => 'La date de début est obligatoire.',
+        'date_fin.after_or_equal' => 'La date de fin doit être postérieure ou égale à la date de début.',
+        'photo.image'           => 'Le fichier doit être une image.',
+        'photo.mimes'           => 'La photo doit être au format JPG, PNG ou WebP.',
+        'photo.max'             => 'La photo ne doit pas dépasser 2 Mo.',
+    ]);
 
-        Organe::create([
-            'membre_id' => $validated['membre_id'],
-            'organe' => $validated['organe'],
-            'poste' => $validated['poste'],
-            'structure_id' => $validated['structure_id'] ?? null,
-            'niveau' => $validated['niveau'] ?? null,
-            'date_debut' => $validated['date_debut'],
-            'date_fin' => $validated['date_fin'] ?? null,
-            'actif' => true,
-            'ordre' => $validated['ordre'] ?? 0,
-        ]);
+    // ─────────────────────────────────────────────────────────
+    // 1. Vérifier que le membre n'est pas déjà dans cet organe
+    // ─────────────────────────────────────────────────────────
+    $dejaMembre = Organe::where('membre_id', $validated['membre_id'])
+        ->where('organe', $validated['organe'])
+        ->where('actif', true)
+        ->exists();
 
+    if ($dejaMembre) {
         return redirect()->back()
-            ->with('success', 'Le membre a été ajouté à l\'organe avec succès.');
+            ->withInput()
+            ->with('error', 'Ce membre fait déjà partie de cet organe (mandat actif).');
     }
 
-    /**
-     * Met à jour un poste dans un organe.
-     *
-     * @param Request $request
-     * @param Organe $organe
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function updateMembre(Request $request, Organe $organe)
-    {
-        $validated = $request->validate([
-            'poste' => ['required', 'string', 'max:255'],
-            'structure_id' => ['nullable', 'exists:structures_territoriales,id'],
-            'niveau' => ['nullable', 'in:international,national,provincial,local'],
-            'date_debut' => ['required', 'date'],
-            'date_fin' => ['nullable', 'date', 'after:date_debut'],
-            'actif' => ['nullable', 'boolean'],
-            'ordre' => ['nullable', 'integer', 'min:0'],
-        ], [
-            'poste.required' => 'Le poste est obligatoire.',
-            'date_debut.required' => 'La date de début est obligatoire.',
-            'date_fin.after' => 'La date de fin doit être postérieure à la date de début.',
-        ]);
+    // ─────────────────────────────────────────────────────────
+    // 2. Gestion de la photo (uploadée sur le membre)
+    // ─────────────────────────────────────────────────────────
+    $membre = Membre::find($validated['membre_id']);
 
-        $organe->update([
-            'poste' => $validated['poste'],
-            'structure_id' => $validated['structure_id'] ?? $organe->structure_id,
-            'niveau' => $validated['niveau'] ?? $organe->niveau,
-            'date_debut' => $validated['date_debut'],
-            'date_fin' => $validated['date_fin'] ?? null,
-            'actif' => $validated['actif'] ?? $organe->actif,
-            'ordre' => $validated['ordre'] ?? $organe->ordre,
-        ]);
+    if ($request->hasFile('photo') && $membre) {
+        // Supprimer l'ancienne photo si elle existe
+        if ($membre->photo && Storage::disk('public')->exists($membre->photo)) {
+            Storage::disk('public')->delete($membre->photo);
+        }
 
-        return redirect()->back()
-            ->with('success', 'Le poste a été mis à jour avec succès.');
+        // Stocker la nouvelle
+        $photoPath = $request->file('photo')->store('membres/photos', 'public');
+        $membre->update(['photo' => $photoPath]);
     }
+
+    // ─────────────────────────────────────────────────────────
+    // 3. Créer la liaison organe ↔ membre
+    // ─────────────────────────────────────────────────────────
+    Organe::create([
+        'membre_id'    => $validated['membre_id'],
+        'organe'       => $validated['organe'],
+        'poste'        => $validated['poste'],
+        'structure_id' => $validated['structure_id'] ?? null,
+        'niveau'       => $validated['niveau'] ?? null,
+        'date_debut'   => $validated['date_debut'],
+        'date_fin'     => $validated['date_fin'] ?? null,
+        'actif'        => true,
+        'ordre'        => $validated['ordre'] ?? 0,
+    ]);
+
+    return redirect()->back()
+        ->with('success', 'Le membre a été ajouté à l\'organe avec succès.');
+}
+
+
+/**
+ * Met à jour un poste dans un organe.
+ *
+ * @param  Request  $request
+ * @param  Organe   $organe
+ * @return \Illuminate\Http\RedirectResponse
+ */
+public function updateMembre(Request $request, Organe $organe): RedirectResponse
+{
+    $validated = $request->validate([
+        'poste'        => ['required', 'string', 'max:255'],
+        'structure_id' => ['nullable', 'exists:structures_territoriales,id'],
+        'niveau'       => ['nullable', 'in:international,national,provincial,local'],
+        'date_debut'   => ['required', 'date'],
+        'date_fin'     => ['nullable', 'date', 'after_or_equal:date_debut'],
+        'actif'        => ['nullable', 'boolean'],
+        'ordre'        => ['nullable', 'integer', 'min:0'],
+        'photo'        => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
+    ], [
+        'poste.required'          => 'Le poste est obligatoire.',
+        'date_debut.required'     => 'La date de début est obligatoire.',
+        'date_fin.after_or_equal' => 'La date de fin doit être postérieure ou égale à la date de début.',
+        'photo.image'             => 'Le fichier doit être une image.',
+        'photo.mimes'             => 'La photo doit être au format JPG, PNG ou WebP.',
+        'photo.max'               => 'La photo ne doit pas dépasser 2 Mo.',
+    ]);
+
+    // ─────────────────────────────────────────────────────────
+    // 1. Gestion de la photo (si uploadée)
+    // ─────────────────────────────────────────────────────────
+    if ($request->hasFile('photo') && $organe->membre) {
+        $membre = $organe->membre;
+
+        // Supprimer l'ancienne
+        if ($membre->photo && Storage::disk('public')->exists($membre->photo)) {
+            Storage::disk('public')->delete($membre->photo);
+        }
+
+        // Stocker la nouvelle
+        $photoPath = $request->file('photo')->store('membres/photos', 'public');
+        $membre->update(['photo' => $photoPath]);
+    }
+
+    // ─────────────────────────────────────────────────────────
+    // 2. Mise à jour des infos du poste
+    // ─────────────────────────────────────────────────────────
+    $organe->update([
+        'poste'        => $validated['poste'],
+        'structure_id' => $validated['structure_id'] ?? $organe->structure_id,
+        'niveau'       => $validated['niveau'] ?? $organe->niveau,
+        'date_debut'   => $validated['date_debut'],
+        'date_fin'     => $validated['date_fin'] ?? null,
+        'actif'        => $request->boolean('actif', $organe->actif),
+        'ordre'        => $validated['ordre'] ?? $organe->ordre,
+    ]);
+
+    return redirect()->back()
+        ->with('success', 'Le poste a été mis à jour avec succès.');
+}
 
     /**
      * Retire un membre d'un organe (désactive le mandat).

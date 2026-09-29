@@ -196,12 +196,15 @@ class Temoignage extends Model
      * Retourne l'URL de la photo du bénéficiaire ou null.
      */
     public function urlPhoto(): ?string
-    {
-        if ($this->photo) {
-            return asset('storage/' . $this->photo);
-        }
+{
+    if (!$this->photo) {
         return null;
     }
+
+    return route('media.show', [
+        'path' => ltrim($this->photo, '/')
+    ]);
+}
 
     /**
      * Extrait du témoignage (200 premiers caractères).

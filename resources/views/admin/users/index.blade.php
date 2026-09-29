@@ -125,7 +125,9 @@
                             <div class="user-cell">
                                 <div class="user-cell-avatar {{ $avatarColor }}">
                                     @if($utilisateur->photo_profil)
-                                        <img src="{{ asset('storage/' . $utilisateur->photo_profil) }}" alt="{{ $utilisateur->nom }}" loading="lazy">
+                                        <img src="{{ route('media.show', ['path' => ltrim($utilisateur->photo_profil, '/')]) }}"
+                                            alt="{{ $utilisateur->nom }}"
+                                            loading="lazy">
                                     @else
                                         {{ $utilisateur->initiales() }}
                                     @endif

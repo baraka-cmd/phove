@@ -302,13 +302,31 @@ class Projet extends Model
      *
      * @return string
      */
-    public function urlImage(): string
-    {
-        if ($this->image_principale) {
-            return asset('storage/' . $this->image_principale);
-        }
-        return asset('assets/images/logo-phove.png');
+    /**
+ * Retourne l'URL de l'image principale via la route custom "media.show",
+ * ou le logo PHOVE par défaut si aucune image.
+ */
+public function urlImage(): string
+{
+    if ($this->image_principale) {
+        return route('media.show', [
+            'path' => ltrim($this->image_principale, '/')
+        ]);
     }
+    return asset('assets/images/logo-phove.png');
+}
+
+/**
+ * Retourne le pourcentage d'avancement (basé sur le budget).
+ * Utilisé dans les cartes projet pour la barre de progression.
+ */
+public function avancement(): int
+{
+    if ($this->budget_total <= 0) {
+        return 0;
+    }
+    return (int) round(($this->budget_utilise / $this->budget_total) * 100);
+}
 
     /**
      * Retourne le nombre total de bénéficiaires du projet.

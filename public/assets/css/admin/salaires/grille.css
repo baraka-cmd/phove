@@ -1,0 +1,1528 @@
+/* ============================================================
+   PHOVE — ADMINISTRATION
+   MODULE : SALAIRES
+   VUE    : GRILLE DES SALAIRES
+   FICHIER: grille.css
+
+   Blade associé :
+   resources/views/admin/salaires/grille.blade.php
+
+   Architecture :
+   - CSS totalement séparé du Blade
+   - Aucun Bootstrap
+   - Responsive desktop / tablette / mobile
+   - Interface orientée gestion financière
+   ============================================================ */
+
+
+/* ============================================================
+   1. VARIABLES
+   ============================================================ */
+
+.salary-grid {
+    --grid-primary: var(--primary-color, #2563eb);
+    --grid-primary-dark: var(--primary-dark, #1d4ed8);
+
+    --grid-success: var(--success-color, #16a34a);
+    --grid-warning: var(--warning-color, #d97706);
+    --grid-danger: var(--danger-color, #dc2626);
+    --grid-info: var(--info-color, #0891b2);
+
+    --grid-background: var(--bg-color, #f5f7fb);
+    --grid-surface: var(--card-bg, #ffffff);
+
+    --grid-text: var(--text-color, #1f2937);
+    --grid-text-secondary: var(--text-muted, #6b7280);
+
+    --grid-border: var(--border-color, #e5e7eb);
+    --grid-border-light: #eef1f5;
+
+    --grid-radius: var(--border-radius, 10px);
+    --grid-radius-sm: 7px;
+
+    --grid-shadow:
+        0 2px 12px rgba(15, 23, 42, 0.055);
+
+    --grid-shadow-hover:
+        0 8px 24px rgba(15, 23, 42, 0.09);
+
+    --grid-transition: 0.2s ease;
+}
+
+
+/* ============================================================
+   2. CONTENEUR PRINCIPAL
+   ============================================================ */
+
+.salary-grid {
+    width: 100%;
+    min-width: 0;
+    color: var(--grid-text);
+}
+
+.salary-grid *,
+.salary-grid *::before,
+.salary-grid *::after {
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   3. EN-TÊTE DE PAGE
+   ============================================================ */
+
+.salary-grid .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.salary-grid .page-header-content {
+    min-width: 0;
+}
+
+.salary-grid .page-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin: 0 0 7px;
+
+    color: var(--grid-text);
+
+    font-size: 1.65rem;
+    font-weight: 750;
+    line-height: 1.25;
+}
+
+.salary-grid .page-title i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+
+    background: rgba(37, 99, 235, 0.10);
+    color: var(--grid-primary);
+
+    font-size: 1.05rem;
+}
+
+.salary-grid .page-subtitle {
+    margin: 0;
+
+    color: var(--grid-text-secondary);
+
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
+
+/* ============================================================
+   4. ACTIONS DE L'EN-TÊTE
+   ============================================================ */
+
+.salary-grid .page-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+
+/* ============================================================
+   5. SÉLECTEUR DE MOIS
+   ============================================================ */
+
+.salary-grid .month-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 8px 10px;
+
+    border: 1px solid var(--grid-border);
+    border-radius: var(--grid-radius);
+
+    background: var(--grid-surface);
+    box-shadow: var(--grid-shadow);
+}
+
+.salary-grid .month-selector-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    color: var(--grid-text-secondary);
+
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+.salary-grid .month-selector-label i {
+    color: var(--grid-primary);
+}
+
+.salary-grid .month-selector input,
+.salary-grid .month-selector select {
+    min-height: 37px;
+
+    padding: 7px 10px;
+
+    border: 1px solid var(--grid-border);
+    border-radius: 6px;
+
+    outline: none;
+
+    background: var(--grid-surface);
+    color: var(--grid-text);
+
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+
+    transition:
+        border-color var(--grid-transition),
+        box-shadow var(--grid-transition);
+}
+
+.salary-grid .month-selector input:focus,
+.salary-grid .month-selector select:focus {
+    border-color: var(--grid-primary);
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+/* ============================================================
+   6. BOUTONS
+   ============================================================ */
+
+.salary-grid .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    min-height: 40px;
+
+    padding: 9px 14px;
+
+    border: 1px solid transparent;
+    border-radius: var(--grid-radius-sm);
+
+    background: transparent;
+
+    cursor: pointer;
+
+    color: inherit;
+
+    font-family: inherit;
+    font-size: 0.81rem;
+    font-weight: 650;
+
+    line-height: 1.2;
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition:
+        background-color var(--grid-transition),
+        border-color var(--grid-transition),
+        color var(--grid-transition),
+        box-shadow var(--grid-transition),
+        transform var(--grid-transition);
+}
+
+.salary-grid .btn:hover {
+    transform: translateY(-1px);
+}
+
+.salary-grid .btn:active {
+    transform: translateY(0);
+}
+
+.salary-grid .btn-primary {
+    background: var(--grid-primary);
+    border-color: var(--grid-primary);
+    color: #fff;
+}
+
+.salary-grid .btn-primary:hover {
+    background: var(--grid-primary-dark);
+    border-color: var(--grid-primary-dark);
+}
+
+.salary-grid .btn-secondary {
+    background: #64748b;
+    border-color: #64748b;
+    color: #fff;
+}
+
+.salary-grid .btn-secondary:hover {
+    background: #475569;
+    border-color: #475569;
+}
+
+.salary-grid .btn-outline {
+    background: var(--grid-surface);
+    border-color: var(--grid-border);
+    color: var(--grid-text);
+}
+
+.salary-grid .btn-outline:hover {
+    border-color: var(--grid-primary);
+    color: var(--grid-primary);
+    background: rgba(37, 99, 235, 0.035);
+}
+
+.salary-grid .btn-sm {
+    min-height: 34px;
+    padding: 7px 10px;
+    font-size: 0.75rem;
+}
+
+
+/* ============================================================
+   7. BLOC D'INFORMATION DU MOIS
+   ============================================================ */
+
+.salary-grid .period-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+
+    padding: 15px 18px;
+    margin-bottom: 20px;
+
+    border: 1px solid rgba(37, 99, 235, 0.13);
+    border-radius: var(--grid-radius);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37, 99, 235, 0.055),
+            rgba(37, 99, 235, 0.015)
+        );
+}
+
+.salary-grid .period-information {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    min-width: 0;
+}
+
+.salary-grid .period-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 40px;
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 10px;
+
+    background: rgba(37, 99, 235, 0.10);
+    color: var(--grid-primary);
+
+    font-size: 1rem;
+}
+
+.salary-grid .period-content {
+    min-width: 0;
+}
+
+.salary-grid .period-label {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: var(--grid-text-secondary);
+
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.salary-grid .period-value {
+    display: block;
+
+    color: var(--grid-text);
+
+    font-size: 1rem;
+    font-weight: 750;
+}
+
+.salary-grid .period-description {
+    color: var(--grid-text-secondary);
+
+    font-size: 0.75rem;
+}
+
+
+/* ============================================================
+   8. CARTES DE SYNTHÈSE
+   ============================================================ */
+
+.salary-grid .summary-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 16px;
+
+    margin-bottom: 22px;
+}
+
+.salary-grid .summary-card {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    min-width: 0;
+
+    padding: 18px;
+
+    overflow: hidden;
+
+    border: 1px solid var(--grid-border);
+    border-radius: var(--grid-radius);
+
+    background: var(--grid-surface);
+
+    box-shadow: var(--grid-shadow);
+
+    transition:
+        transform var(--grid-transition),
+        box-shadow var(--grid-transition),
+        border-color var(--grid-transition);
+}
+
+.salary-grid .summary-card::after {
+    content: "";
+
+    position: absolute;
+
+    right: 0;
+    bottom: 0;
+
+    width: 70px;
+    height: 70px;
+
+    border-radius: 50% 0 0 0;
+
+    background: rgba(37, 99, 235, 0.025);
+
+    pointer-events: none;
+}
+
+.salary-grid .summary-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow: var(--grid-shadow-hover);
+}
+
+.salary-grid .summary-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 45px;
+
+    width: 45px;
+    height: 45px;
+
+    border-radius: 11px;
+
+    background: rgba(37, 99, 235, 0.10);
+    color: var(--grid-primary);
+
+    font-size: 1rem;
+}
+
+.salary-grid .summary-card:nth-child(2) .summary-icon {
+    background: rgba(22, 163, 74, 0.10);
+    color: var(--grid-success);
+}
+
+.salary-grid .summary-card:nth-child(3) .summary-icon {
+    background: rgba(217, 119, 6, 0.10);
+    color: var(--grid-warning);
+}
+
+.salary-grid .summary-card:nth-child(4) .summary-icon {
+    background: rgba(220, 38, 38, 0.10);
+    color: var(--grid-danger);
+}
+
+.salary-grid .summary-content {
+    position: relative;
+    z-index: 1;
+
+    min-width: 0;
+}
+
+.salary-grid .summary-label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--grid-text-secondary);
+
+    font-size: 0.75rem;
+    font-weight: 550;
+}
+
+.salary-grid .summary-value {
+    display: block;
+
+    overflow: hidden;
+
+    color: var(--grid-text);
+
+    font-size: 1.18rem;
+    font-weight: 750;
+    line-height: 1.25;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.salary-grid .summary-meta {
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--grid-text-secondary);
+
+    font-size: 0.7rem;
+}
+
+
+/* ============================================================
+   9. CARTE PRINCIPALE DE LA GRILLE
+   ============================================================ */
+
+.salary-grid .grid-card {
+    width: 100%;
+
+    overflow: hidden;
+
+    border: 1px solid var(--grid-border);
+    border-radius: var(--grid-radius);
+
+    background: var(--grid-surface);
+
+    box-shadow: var(--grid-shadow);
+}
+
+
+/* ============================================================
+   10. EN-TÊTE DE LA GRILLE
+   ============================================================ */
+
+.salary-grid .grid-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 17px 19px;
+
+    border-bottom: 1px solid var(--grid-border);
+}
+
+.salary-grid .grid-card-title {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    margin: 0;
+
+    color: var(--grid-text);
+
+    font-size: 0.98rem;
+    font-weight: 700;
+}
+
+.salary-grid .grid-card-title i {
+    color: var(--grid-primary);
+}
+
+.salary-grid .grid-card-subtitle {
+    margin: 3px 0 0;
+
+    color: var(--grid-text-secondary);
+
+    font-size: 0.74rem;
+}
+
+.salary-grid .grid-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+
+/* ============================================================
+   11. WRAPPER DU TABLEAU
+   ============================================================ */
+
+.salary-grid .table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+
+/* ============================================================
+   12. TABLEAU
+   ============================================================ */
+
+.salary-grid .salary-grid-table {
+    width: 100%;
+
+    min-width: 1080px;
+
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.salary-grid .salary-grid-table th {
+    padding: 12px 14px;
+
+    border-bottom: 1px solid var(--grid-border);
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+    font-size: 0.7rem;
+    font-weight: 750;
+
+    line-height: 1.3;
+
+    text-align: left;
+    text-transform: uppercase;
+
+    letter-spacing: 0.025em;
+
+    white-space: nowrap;
+}
+
+.salary-grid .salary-grid-table td {
+    padding: 13px 14px;
+
+    border-bottom: 1px solid var(--grid-border-light);
+
+    color: var(--grid-text);
+
+    font-size: 0.81rem;
+
+    vertical-align: middle;
+}
+
+.salary-grid .salary-grid-table tbody tr {
+    transition:
+        background-color var(--grid-transition);
+}
+
+.salary-grid .salary-grid-table tbody tr:hover {
+    background: #fafbfc;
+}
+
+.salary-grid .salary-grid-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+
+/* ============================================================
+   13. COLONNE MEMBRE
+   ============================================================ */
+
+.salary-grid .member-cell {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 210px;
+}
+
+.salary-grid .member-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 37px;
+
+    width: 37px;
+    height: 37px;
+
+    overflow: hidden;
+
+    border-radius: 50%;
+
+    background: rgba(37, 99, 235, 0.10);
+    color: var(--grid-primary);
+
+    font-size: 0.75rem;
+    font-weight: 750;
+
+    text-transform: uppercase;
+}
+
+.salary-grid .member-avatar img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.salary-grid .member-info {
+    min-width: 0;
+}
+
+.salary-grid .member-name {
+    display: block;
+
+    overflow: hidden;
+
+    color: var(--grid-text);
+
+    font-size: 0.82rem;
+    font-weight: 650;
+
+    line-height: 1.35;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.salary-grid .member-role {
+    display: block;
+
+    margin-top: 2px;
+
+    overflow: hidden;
+
+    color: var(--grid-text-secondary);
+
+    font-size: 0.7rem;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   14. ORGANE
+   ============================================================ */
+
+.salary-grid .organe-cell {
+    min-width: 145px;
+}
+
+.salary-grid .organe-name {
+    display: block;
+
+    max-width: 180px;
+
+    overflow: hidden;
+
+    color: var(--grid-text);
+
+    font-size: 0.78rem;
+
+    line-height: 1.4;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.salary-grid .organe-empty {
+    color: #9ca3af;
+
+    font-size: 0.76rem;
+
+    font-style: italic;
+}
+
+
+/* ============================================================
+   15. CELLULE MOIS
+   ============================================================ */
+
+.salary-grid .month-cell {
+    min-width: 100px;
+}
+
+.salary-grid .month-value {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 5px 8px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 5px;
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-family: "Courier New", monospace;
+    font-size: 0.73rem;
+    font-weight: 650;
+}
+
+
+/* ============================================================
+   16. MONTANTS
+   ============================================================ */
+
+.salary-grid .amount {
+    font-variant-numeric: tabular-nums;
+
+    white-space: nowrap;
+}
+
+.salary-grid .amount-base {
+    color: var(--grid-text);
+    font-weight: 600;
+}
+
+.salary-grid .amount-primes {
+    color: var(--grid-success);
+    font-weight: 600;
+}
+
+.salary-grid .amount-retenues {
+    color: var(--grid-danger);
+    font-weight: 600;
+}
+
+.salary-grid .amount-net {
+    color: var(--grid-primary);
+    font-size: 0.84rem;
+    font-weight: 750;
+}
+
+.salary-grid .amount-paid {
+    color: var(--grid-success);
+    font-weight: 700;
+}
+
+.salary-grid .amount-rest {
+    color: var(--grid-danger);
+    font-weight: 700;
+}
+
+.salary-grid .amount-rest.is-zero {
+    color: var(--grid-success);
+}
+
+
+/* ============================================================
+   17. BADGES
+   ============================================================ */
+
+.salary-grid .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 5px 9px;
+
+    border: 1px solid transparent;
+    border-radius: 999px;
+
+    font-size: 0.68rem;
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    white-space: nowrap;
+}
+
+.salary-grid .badge-success {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+    color: #166534;
+}
+
+.salary-grid .badge-warning {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #92400e;
+}
+
+.salary-grid .badge-danger {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+}
+
+.salary-grid .badge-info {
+    background: #ecfeff;
+    border-color: #a5f3fc;
+    color: #155e75;
+}
+
+.salary-grid .badge-neutral {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    color: #475569;
+}
+
+
+/* ============================================================
+   18. PROGRESSION DE PAIEMENT
+   ============================================================ */
+
+.salary-grid .payment-progress {
+    width: 145px;
+    min-width: 145px;
+}
+
+.salary-grid .payment-progress-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+
+    margin-bottom: 6px;
+}
+
+.salary-grid .payment-progress-label {
+    color: var(--grid-text-secondary);
+
+    font-size: 0.68rem;
+    font-weight: 600;
+}
+
+.salary-grid .payment-progress-value {
+    color: var(--grid-text);
+
+    font-size: 0.68rem;
+    font-weight: 750;
+}
+
+.salary-grid .payment-progress-bar {
+    width: 100%;
+    height: 6px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #e5e7eb;
+}
+
+.salary-grid .payment-progress-fill {
+    width: 0;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: var(--grid-primary);
+
+    transition: width 0.35s ease;
+}
+
+.salary-grid .payment-progress-fill.is-partial {
+    background: var(--grid-warning);
+}
+
+.salary-grid .payment-progress-fill.is-complete {
+    background: var(--grid-success);
+}
+
+
+/* ============================================================
+   19. LIGNE DE TOTAL
+   ============================================================ */
+
+.salary-grid .total-row {
+    background: #f8fafc;
+}
+
+.salary-grid .total-row td {
+    border-top: 2px solid var(--grid-border);
+
+    border-bottom: 0;
+
+    color: var(--grid-text);
+
+    font-weight: 700;
+}
+
+.salary-grid .total-label {
+    color: var(--grid-text);
+
+    font-size: 0.78rem;
+    font-weight: 750;
+
+    text-transform: uppercase;
+}
+
+.salary-grid .total-value {
+    color: var(--grid-primary);
+
+    font-size: 0.84rem;
+    font-weight: 750;
+
+    font-variant-numeric: tabular-nums;
+
+    white-space: nowrap;
+}
+
+.salary-grid .total-paid {
+    color: var(--grid-success);
+}
+
+.salary-grid .total-rest {
+    color: var(--grid-danger);
+}
+
+.salary-grid .total-rest.is-zero {
+    color: var(--grid-success);
+}
+
+
+/* ============================================================
+   20. ÉTAT VIDE
+   ============================================================ */
+
+.salary-grid .empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    min-height: 310px;
+
+    padding: 40px 20px;
+
+    text-align: center;
+}
+
+.salary-grid .empty-state-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 64px;
+    height: 64px;
+
+    margin-bottom: 16px;
+
+    border-radius: 50%;
+
+    background: #f1f5f9;
+
+    color: #94a3b8;
+
+    font-size: 1.35rem;
+}
+
+.salary-grid .empty-state-title {
+    margin: 0 0 7px;
+
+    color: var(--grid-text);
+
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.salary-grid .empty-state-text {
+    max-width: 470px;
+
+    margin: 0 0 18px;
+
+    color: var(--grid-text-secondary);
+
+    font-size: 0.82rem;
+
+    line-height: 1.6;
+}
+
+
+/* ============================================================
+   21. FOOTER DU TABLEAU
+   ============================================================ */
+
+.salary-grid .grid-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 14px 18px;
+
+    border-top: 1px solid var(--grid-border);
+
+    background: #fcfcfd;
+}
+
+.salary-grid .grid-footer-info {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    color: var(--grid-text-secondary);
+
+    font-size: 0.74rem;
+}
+
+.salary-grid .grid-footer-info i {
+    color: var(--grid-primary);
+}
+
+
+/* ============================================================
+   22. PAGINATION
+   ============================================================ */
+
+.salary-grid .pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 15px 18px;
+
+    border-top: 1px solid var(--grid-border);
+}
+
+.salary-grid .pagination-info {
+    color: var(--grid-text-secondary);
+
+    font-size: 0.75rem;
+}
+
+.salary-grid .pagination-wrapper nav {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.salary-grid .pagination-wrapper nav > div {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.salary-grid .pagination-wrapper a,
+.salary-grid .pagination-wrapper span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 32px;
+    height: 32px;
+
+    padding: 0 9px;
+
+    border: 1px solid var(--grid-border);
+    border-radius: 6px;
+
+    background: var(--grid-surface);
+
+    color: var(--grid-text);
+
+    font-size: 0.75rem;
+
+    text-decoration: none;
+}
+
+.salary-grid .pagination-wrapper a:hover {
+    border-color: var(--grid-primary);
+    color: var(--grid-primary);
+}
+
+.salary-grid .pagination-wrapper span[aria-current="page"] {
+    border-color: var(--grid-primary);
+    background: var(--grid-primary);
+    color: #fff;
+}
+
+
+/* ============================================================
+   23. ALERTES
+   ============================================================ */
+
+.salary-grid .alert {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    padding: 13px 15px;
+
+    margin-bottom: 18px;
+
+    border: 1px solid transparent;
+    border-radius: var(--grid-radius-sm);
+
+    font-size: 0.84rem;
+
+    line-height: 1.5;
+}
+
+.salary-grid .alert i {
+    flex: 0 0 auto;
+
+    margin-top: 2px;
+}
+
+.salary-grid .alert-info {
+    border-color: #a5f3fc;
+    background: #ecfeff;
+    color: #155e75;
+}
+
+.salary-grid .alert-warning {
+    border-color: #fde68a;
+    background: #fffbeb;
+    color: #92400e;
+}
+
+.salary-grid .alert-success {
+    border-color: #bbf7d0;
+    background: #f0fdf4;
+    color: #166534;
+}
+
+.salary-grid .alert-danger {
+    border-color: #fecaca;
+    background: #fef2f2;
+    color: #991b1b;
+}
+
+
+/* ============================================================
+   24. UTILITAIRES
+   ============================================================ */
+
+.salary-grid .text-muted {
+    color: var(--grid-text-secondary);
+}
+
+.salary-grid .text-center {
+    text-align: center;
+}
+
+.salary-grid .text-right {
+    text-align: right;
+}
+
+.salary-grid .text-left {
+    text-align: left;
+}
+
+.salary-grid .fw-bold {
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   25. RESPONSIVE — GRAND TABLETTE
+   ============================================================ */
+
+@media (max-width: 1200px) {
+
+    .salary-grid .summary-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .salary-grid .page-header {
+        flex-wrap: wrap;
+    }
+
+    .salary-grid .page-actions {
+        width: 100%;
+
+        justify-content: flex-start;
+    }
+}
+
+
+/* ============================================================
+   26. RESPONSIVE — TABLETTE
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .salary-grid .period-banner {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .salary-grid .month-selector {
+        width: 100%;
+    }
+
+    .salary-grid .month-selector input,
+    .salary-grid .month-selector select {
+        flex: 1;
+
+        width: 100%;
+    }
+
+    .salary-grid .grid-card-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .salary-grid .grid-card-actions {
+        width: 100%;
+
+        justify-content: flex-start;
+    }
+}
+
+
+/* ============================================================
+   27. RESPONSIVE — MOBILE
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+    .salary-grid .page-header {
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .salary-grid .page-title {
+        font-size: 1.35rem;
+    }
+
+    .salary-grid .page-title i {
+        width: 34px;
+        height: 34px;
+
+        font-size: 0.95rem;
+    }
+
+    .salary-grid .page-actions {
+        width: 100%;
+
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .salary-grid .page-actions .btn {
+        width: 100%;
+    }
+
+    .salary-grid .summary-grid {
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+    }
+
+    .salary-grid .summary-card {
+        padding: 15px;
+    }
+
+    .salary-grid .period-banner {
+        padding: 14px;
+    }
+
+    .salary-grid .month-selector {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+    .salary-grid .grid-card {
+        border-radius: 8px;
+    }
+
+    .salary-grid .grid-card-header {
+        padding: 15px;
+    }
+
+    .salary-grid .grid-card-actions {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .salary-grid .grid-card-actions .btn {
+        width: 100%;
+    }
+
+    .salary-grid .grid-card-footer {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .salary-grid .pagination-wrapper {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .salary-grid .pagination-wrapper nav {
+        width: 100%;
+
+        justify-content: flex-start;
+
+        overflow-x: auto;
+    }
+}
+
+
+/* ============================================================
+   28. PETITS MOBILES
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+    .salary-grid .page-title {
+        align-items: flex-start;
+    }
+
+    .salary-grid .page-subtitle {
+        font-size: 0.82rem;
+    }
+
+    .salary-grid .summary-value {
+        font-size: 1.05rem;
+    }
+
+    .salary-grid .summary-icon {
+        flex-basis: 40px;
+
+        width: 40px;
+        height: 40px;
+    }
+
+    .salary-grid .period-information {
+        align-items: flex-start;
+    }
+
+    .salary-grid .period-icon {
+        flex-basis: 36px;
+
+        width: 36px;
+        height: 36px;
+    }
+
+    .salary-grid .empty-state {
+        min-height: 260px;
+
+        padding: 30px 15px;
+    }
+}
+
+
+/* ============================================================
+   29. IMPRESSION
+   ============================================================ */
+
+@media print {
+
+    .salary-grid {
+        padding: 0;
+    }
+
+    .salary-grid .page-actions,
+    .salary-grid .month-selector,
+    .salary-grid .grid-card-actions,
+    .salary-grid .pagination-wrapper {
+        display: none !important;
+    }
+
+    .salary-grid .summary-grid {
+        grid-template-columns:
+            repeat(4, 1fr);
+    }
+
+    .salary-grid .summary-card,
+    .salary-grid .grid-card,
+    .salary-grid .period-banner {
+        box-shadow: none;
+
+        border-color: #d1d5db;
+    }
+
+    .salary-grid .table-wrapper {
+        overflow: visible;
+    }
+
+    .salary-grid .salary-grid-table {
+        min-width: 0;
+    }
+
+    .salary-grid .salary-grid-table th,
+    .salary-grid .salary-grid-table td {
+        padding: 7px 8px;
+
+        font-size: 9px;
+    }
+}
+
+
+/* ============================================================
+   30. ACCESSIBILITÉ
+   ============================================================ */
+
+.salary-grid .btn:focus-visible,
+.salary-grid input:focus-visible,
+.salary-grid select:focus-visible,
+.salary-grid a:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.22);
+
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   31. RÉDUCTION DES ANIMATIONS
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .salary-grid *,
+    .salary-grid *::before,
+    .salary-grid *::after {
+        transition: none !important;
+        animation: none !important;
+        scroll-behavior: auto !important;
+    }
+}

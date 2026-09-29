@@ -227,89 +227,83 @@ foreach ($fondateurs as $index => $data) {
 $this->command->info('✅ 10 membres fondateurs créés avec leurs organes de gouvernance');
 
         // =============================================
-        // 3. PARTENAIRES INTERNATIONAUX
-        // Source : Bannières officielles des projets PHOVE
-        // =============================================
+// 3. PARTENAIRES INTERNATIONAUX
+// Source : Bannières officielles des projets PHOVE
+// =============================================
 
-        $fao = Partenaire::updateOrCreate(
-            ['sigle' => 'FAO'],
-            [
-                'nom' => 'Food and Agriculture Organization of the United Nations',
-                'type' => 'international',
-                'email' => 'fao@fao.org',
-                'site_web' => 'https://www.fao.org',
-                'description' => 'Organisation des Nations Unies pour l\'alimentation et l\'agriculture. Partenaire du projet d\'assistance alimentaire et agricole à Muja.',
-                'statut' => 'actif',
-                'date_debut' => '2024-01-01',
-            ]
-        );
+$fao = Partenaire::updateOrCreate(
+    ['nom' => 'Food and Agriculture Organization of the United Nations'],
+    [
+        'type' => 'international',
+        'email' => 'fao@fao.org',
+        'site_web' => 'https://www.fao.org',
+        'description' => 'Organisation des Nations Unies pour l\'alimentation et l\'agriculture. Partenaire du projet d\'assistance alimentaire et agricole à Muja.',
+        'statut' => 'actif',
+        'date_debut' => '2024-01-01',
+    ]
+);
 
-        $wfp = Partenaire::updateOrCreate(
-            ['sigle' => 'WFP'],
-            [
-                'nom' => 'World Food Programme',
-                'type' => 'international',
-                'email' => 'wfp@wfp.org',
-                'site_web' => 'https://www.wfp.org',
-                'description' => 'Programme Alimentaire Mondial (PAM). Partenaire du projet de résilience UNJP/RDC/082/WFP.',
-                'statut' => 'actif',
-                'date_debut' => '2024-01-01',
-            ]
-        );
+$wfp = Partenaire::updateOrCreate(
+    ['nom' => 'World Food Programme'],
+    [
+        'type' => 'international',
+        'email' => 'wfp@wfp.org',
+        'site_web' => 'https://www.wfp.org',
+        'description' => 'Programme Alimentaire Mondial (PAM). Partenaire du projet de résilience UNJP/RDC/082/WFP.',
+        'statut' => 'actif',
+        'date_debut' => '2024-01-01',
+    ]
+);
 
-        $ocha = Partenaire::updateOrCreate(
-            ['sigle' => 'OCHA'],
-            [
-                'nom' => 'Office for the Coordination of Humanitarian Affairs',
-                'type' => 'international',
-                'email' => 'ocha@un.org',
-                'site_web' => 'https://www.unocha.org',
-                'description' => 'Bureau de la coordination des affaires humanitaires des Nations Unies. Partenaire de l\'atelier de formation des agents humanitaires.',
-                'statut' => 'actif',
-                'date_debut' => '2025-01-01',
-            ]
-        );
+$ocha = Partenaire::updateOrCreate(
+    ['nom' => 'Office for the Coordination of Humanitarian Affairs'],
+    [
+        'type' => 'international',
+        'email' => 'ocha@un.org',
+        'site_web' => 'https://www.unocha.org',
+        'description' => 'Bureau de la coordination des affaires humanitaires des Nations Unies. Partenaire de l\'atelier de formation des agents humanitaires.',
+        'statut' => 'actif',
+        'date_debut' => '2025-01-01',
+    ]
+);
 
-        $unesco = Partenaire::updateOrCreate(
-            ['sigle' => 'UNESCO'],
-            [
-                'nom' => 'UNESCO',
-                'type' => 'international',
-                'email' => 'unesco@unesco.org',
-                'site_web' => 'https://www.unesco.org',
-                'description' => 'Organisation des Nations Unies pour l\'éducation, la science et la culture. Partenaire de l\'atelier de formation des agents humanitaires.',
-                'statut' => 'actif',
-                'date_debut' => '2025-01-01',
-            ]
-        );
+$unesco = Partenaire::updateOrCreate(
+    ['nom' => 'UNESCO'],
+    [
+        'type' => 'international',
+        'email' => 'unesco@unesco.org',
+        'site_web' => 'https://www.unesco.org',
+        'description' => 'Organisation des Nations Unies pour l\'éducation, la science et la culture. Partenaire de l\'atelier de formation des agents humanitaires.',
+        'statut' => 'actif',
+        'date_debut' => '2025-01-01',
+    ]
+);
 
-        $gpe = Partenaire::updateOrCreate(
-            ['sigle' => 'GPE'],
-            [
-                'nom' => 'Global Partnership for Education',
-                'type' => 'international',
-                'email' => 'info@globalpartnership.org',
-                'site_web' => 'https://www.globalpartnership.org',
-                'description' => 'Partenariat Mondial pour l\'Éducation. Partenaire de l\'atelier de formation des agents humanitaires.',
-                'statut' => 'actif',
-                'date_debut' => '2025-01-01',
-            ]
-        );
+$gpe = Partenaire::updateOrCreate(
+    ['nom' => 'Global Partnership for Education'],
+    [
+        'type' => 'international',
+        'email' => 'info@globalpartnership.org',
+        'site_web' => 'https://www.globalpartnership.org',
+        'description' => 'Partenariat Mondial pour l\'Éducation. Partenaire de l\'atelier de formation des agents humanitaires.',
+        'statut' => 'actif',
+        'date_debut' => '2025-01-01',
+    ]
+);
 
-        $rdc = Partenaire::updateOrCreate(
-            ['sigle' => 'RDC'],
-            [
-                'nom' => 'République Démocratique du Congo',
-                'type' => 'institutionnel',
-                'email' => null,
-                'site_web' => null,
-                'description' => 'État congolais. Partenaire institutionnel de tous les projets PHOVE.',
-                'statut' => 'actif',
-                'date_debut' => '2012-08-30',
-            ]
-        );
+$rdc = Partenaire::updateOrCreate(
+    ['nom' => 'République Démocratique du Congo'],
+    [
+        'type' => 'institutionnel',
+        'email' => null,
+        'site_web' => null,
+        'description' => 'État congolais. Partenaire institutionnel de tous les projets PHOVE.',
+        'statut' => 'actif',
+        'date_debut' => '2012-08-30',
+    ]
+);
 
-        $this->command->info('✅ 6 partenaires créés : FAO, WFP, OCHA, UNESCO, GPE, RDC');
+$this->command->info('✅ 6 partenaires créés : FAO, WFP, OCHA, UNESCO, GPE, RDC');
 
         // =============================================
         // 4. PROJETS RÉELS PHOVE

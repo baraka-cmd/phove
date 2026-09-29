@@ -1,0 +1,1608 @@
+/* ============================================================
+   PHOVE — ADMINISTRATION
+   MODULE : PAIEMENTS DES SALAIRES
+   VUE : REÇU
+   FICHIER : recu.css
+   ============================================================ */
+
+
+/* ============================================================
+   VARIABLES
+   ============================================================ */
+
+.salary-payment-receipt {
+    --receipt-primary: #13441e;
+    --receipt-primary-dark: #0d3216;
+    --receipt-primary-soft: #edf6ef;
+
+    --receipt-accent: #c89b3c;
+    --receipt-accent-soft: #faf4e5;
+
+    --receipt-success: #198754;
+    --receipt-success-soft: #eaf7ef;
+
+    --receipt-danger: #c0392b;
+    --receipt-danger-soft: #fceeee;
+
+    --receipt-warning: #a86b00;
+    --receipt-warning-soft: #fff6df;
+
+    --receipt-text: #172019;
+    --receipt-text-soft: #5e6961;
+    --receipt-muted: #7c867f;
+
+    --receipt-border: #dfe6e1;
+    --receipt-border-light: #edf1ee;
+
+    --receipt-background: #f3f5f3;
+    --receipt-white: #ffffff;
+
+    --receipt-radius-sm: 8px;
+    --receipt-radius: 14px;
+    --receipt-radius-lg: 20px;
+
+    --receipt-shadow:
+        0 10px 30px rgba(20, 45, 27, 0.08);
+
+    --receipt-shadow-large:
+        0 20px 55px rgba(20, 45, 27, 0.12);
+
+    --receipt-transition:
+        180ms ease;
+}
+
+
+/* ============================================================
+   RACINE
+   ============================================================ */
+
+.salary-payment-receipt {
+    width: 100%;
+    min-height: 100%;
+    padding: 28px 30px 45px;
+    background: var(--receipt-background);
+    color: var(--receipt-text);
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+}
+
+.salary-payment-receipt *,
+.salary-payment-receipt *::before,
+.salary-payment-receipt *::after {
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   TOOLBAR
+   ============================================================ */
+
+.receipt-toolbar {
+    width: min(1120px, 100%);
+    margin: 0 auto 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    padding: 14px 16px;
+
+    background: var(--receipt-white);
+    border: 1px solid var(--receipt-border);
+    border-radius: var(--receipt-radius);
+
+    box-shadow: var(--receipt-shadow);
+}
+
+.toolbar-left,
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.receipt-toolbar .btn {
+    min-height: 42px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    padding: 0 17px;
+
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+
+    text-decoration: none;
+    cursor: pointer;
+
+    transition:
+        transform var(--receipt-transition),
+        box-shadow var(--receipt-transition),
+        background var(--receipt-transition),
+        border-color var(--receipt-transition);
+}
+
+.receipt-toolbar .btn:hover {
+    transform: translateY(-1px);
+}
+
+.receipt-toolbar .btn:active {
+    transform: translateY(0);
+}
+
+.receipt-toolbar .btn-primary {
+    color: #ffffff;
+    background: var(--receipt-primary);
+    border-color: var(--receipt-primary);
+
+    box-shadow:
+        0 5px 14px rgba(19, 68, 30, 0.18);
+}
+
+.receipt-toolbar .btn-primary:hover {
+    background: var(--receipt-primary-dark);
+    border-color: var(--receipt-primary-dark);
+
+    box-shadow:
+        0 7px 18px rgba(19, 68, 30, 0.24);
+}
+
+.receipt-toolbar .btn-secondary {
+    color: var(--receipt-text);
+    background: #ffffff;
+    border-color: var(--receipt-border);
+}
+
+.receipt-toolbar .btn-secondary:hover {
+    background: var(--receipt-primary-soft);
+    border-color: #bfd5c3;
+    color: var(--receipt-primary);
+}
+
+.receipt-toolbar .btn i {
+    font-size: 13px;
+}
+
+
+/* ============================================================
+   CONTENEUR
+   ============================================================ */
+
+.receipt-container {
+    width: min(1120px, 100%);
+    margin: 0 auto;
+}
+
+
+/* ============================================================
+   DOCUMENT
+   ============================================================ */
+
+.receipt-document {
+    position: relative;
+
+    width: 100%;
+    overflow: hidden;
+
+    background: var(--receipt-white);
+
+    border: 1px solid var(--receipt-border);
+    border-radius: var(--receipt-radius-lg);
+
+    box-shadow: var(--receipt-shadow-large);
+}
+
+
+/* ============================================================
+   LIGNE SUPÉRIEURE
+   ============================================================ */
+
+.receipt-top-line {
+    height: 5px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--receipt-primary) 0%,
+            var(--receipt-primary) 72%,
+            var(--receipt-accent) 72%,
+            var(--receipt-accent) 100%
+        );
+}
+
+
+/* ============================================================
+   EN-TÊTE
+   ============================================================ */
+
+.organization-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+
+    padding: 34px 42px 30px;
+
+    border-bottom: 1px solid var(--receipt-border-light);
+}
+
+.organization-identity {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    min-width: 0;
+}
+
+.organization-logo {
+    width: 66px;
+    height: 66px;
+    flex: 0 0 66px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+
+    color: #ffffff;
+    background: var(--receipt-primary);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 7px 18px rgba(19, 68, 30, 0.16);
+}
+
+.organization-logo img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    background: #ffffff;
+}
+
+.organization-logo span {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+}
+
+.organization-info {
+    min-width: 0;
+}
+
+.organization-name {
+    margin-bottom: 4px;
+
+    color: var(--receipt-primary);
+
+    font-size: 19px;
+    line-height: 1.25;
+    font-weight: 800;
+
+    letter-spacing: -0.02em;
+}
+
+.organization-address,
+.organization-contact {
+    color: var(--receipt-text-soft);
+
+    font-size: 11.5px;
+    line-height: 1.65;
+}
+
+.organization-address i,
+.organization-contact i {
+    width: 15px;
+    margin-right: 3px;
+
+    color: var(--receipt-primary);
+}
+
+.organization-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px 8px;
+
+    margin-top: 2px;
+}
+
+.document-identification {
+    flex: 0 0 auto;
+
+    min-width: 250px;
+
+    text-align: right;
+}
+
+.document-label {
+    margin-bottom: 4px;
+
+    color: var(--receipt-accent);
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+
+.document-title {
+    margin: 0;
+
+    color: var(--receipt-primary);
+
+    font-size: 23px;
+    line-height: 1.2;
+    font-weight: 800;
+
+    letter-spacing: -0.035em;
+}
+
+.document-number {
+    margin-top: 9px;
+
+    color: var(--receipt-text);
+
+    font-family: "Courier New", monospace;
+    font-size: 12px;
+    font-weight: 700;
+
+    letter-spacing: 0.03em;
+}
+
+.document-date {
+    margin-top: 3px;
+
+    color: var(--receipt-muted);
+
+    font-size: 10.5px;
+}
+
+
+/* ============================================================
+   TITRE
+   ============================================================ */
+
+.receipt-heading {
+    padding: 28px 42px 4px;
+}
+
+.receipt-heading h1 {
+    margin: 0 0 7px;
+
+    color: var(--receipt-text);
+
+    font-size: 18px;
+    line-height: 1.3;
+    font-weight: 700;
+}
+
+.receipt-heading p {
+    max-width: 760px;
+
+    margin: 0;
+
+    color: var(--receipt-text-soft);
+
+    font-size: 11.5px;
+    line-height: 1.75;
+}
+
+
+/* ============================================================
+   RÉFÉRENCE
+   ============================================================ */
+
+.reference-banner {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    margin: 22px 42px 4px;
+
+    overflow: hidden;
+
+    background: var(--receipt-primary-soft);
+
+    border: 1px solid #d5e6d8;
+    border-radius: 12px;
+}
+
+.reference-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    padding: 14px 17px;
+}
+
+.reference-item + .reference-item {
+    border-left: 1px solid #d5e6d8;
+}
+
+.reference-label {
+    color: var(--receipt-muted);
+
+    font-size: 9.5px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+.reference-value {
+    color: var(--receipt-primary);
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.reference-value.tabular,
+.tabular {
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+
+.section {
+    margin: 30px 42px 0;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    margin-bottom: 15px;
+
+    padding-bottom: 10px;
+
+    border-bottom: 1px solid var(--receipt-border-light);
+}
+
+.section-header-icon {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--receipt-primary);
+
+    background: var(--receipt-primary-soft);
+
+    border-radius: 8px;
+}
+
+.section-header-icon i {
+    font-size: 12px;
+}
+
+.section-title {
+    margin: 0;
+
+    color: var(--receipt-text);
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   BÉNÉFICIAIRE
+   ============================================================ */
+
+.beneficiary-box {
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.5fr)
+        minmax(140px, 0.8fr)
+        minmax(160px, 1fr);
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border: 1px solid var(--receipt-border);
+    border-radius: 12px;
+}
+
+.beneficiary-item {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    padding: 16px 18px;
+}
+
+.beneficiary-item + .beneficiary-item {
+    border-left: 1px solid var(--receipt-border-light);
+}
+
+.beneficiary-label {
+    color: var(--receipt-muted);
+
+    font-size: 9.5px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.beneficiary-value {
+    overflow: hidden;
+
+    color: var(--receipt-text);
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.font-mono,
+.reference {
+    font-family: "Courier New", monospace;
+}
+
+
+/* ============================================================
+   MONTANT PRINCIPAL
+   ============================================================ */
+
+.amount-section {
+    position: relative;
+
+    margin: 30px 42px 0;
+    padding: 27px 30px;
+
+    overflow: hidden;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--receipt-primary-dark) 0%,
+            var(--receipt-primary) 100%
+        );
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 12px 28px rgba(13, 50, 22, 0.16);
+}
+
+.amount-section::after {
+    content: "";
+
+    position: absolute;
+
+    width: 180px;
+    height: 180px;
+
+    right: -70px;
+    top: -90px;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+}
+
+.amount-label {
+    position: relative;
+    z-index: 1;
+
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: rgba(255, 255, 255, 0.72);
+
+    font-size: 10px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.amount-value {
+    position: relative;
+    z-index: 1;
+
+    color: #ffffff;
+
+    font-size: clamp(30px, 4vw, 43px);
+    line-height: 1.15;
+    font-weight: 800;
+
+    letter-spacing: -0.045em;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.amount-currency {
+    margin-left: 5px;
+
+    color: var(--receipt-accent);
+
+    font-size: 17px;
+    font-weight: 700;
+
+    letter-spacing: 0;
+}
+
+.amount-words {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 8px;
+
+    margin-top: 12px;
+
+    color: rgba(255, 255, 255, 0.72);
+
+    font-size: 10.5px;
+    line-height: 1.6;
+}
+
+.amount-words strong {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   DÉTAILS PAIEMENT
+   ============================================================ */
+
+.payment-details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    overflow: hidden;
+
+    border: 1px solid var(--receipt-border);
+    border-radius: 12px;
+}
+
+.payment-detail {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+
+    min-width: 0;
+
+    padding: 14px 17px;
+}
+
+.payment-detail:nth-child(odd) {
+    border-right: 1px solid var(--receipt-border-light);
+}
+
+.payment-detail:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--receipt-border-light);
+}
+
+.payment-detail-label {
+    color: var(--receipt-muted);
+
+    font-size: 10px;
+}
+
+.payment-detail-value {
+    min-width: 0;
+
+    color: var(--receipt-text);
+
+    font-size: 11px;
+    font-weight: 700;
+
+    text-align: right;
+}
+
+.payment-mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 5px 9px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.payment-mode.especes {
+    color: #7a5300;
+    background: #fff4d6;
+}
+
+.payment-mode.virement {
+    color: #245d9c;
+    background: #eaf3fc;
+}
+
+.payment-mode.mobile-money {
+    color: #6d3b96;
+    background: #f4eafd;
+}
+
+.payment-mode.cheque {
+    color: #496348;
+    background: #eaf3e8;
+}
+
+
+/* ============================================================
+   SITUATION SALAIRE
+   ============================================================ */
+
+.salary-info-box {
+    display: grid;
+    grid-template-columns: 1.5fr 0.8fr 1fr;
+
+    overflow: hidden;
+
+    border: 1px solid var(--receipt-border);
+    border-radius: 12px;
+}
+
+.salary-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    padding: 15px 17px;
+}
+
+.salary-info-item + .salary-info-item {
+    border-left: 1px solid var(--receipt-border-light);
+}
+
+.salary-info-label {
+    color: var(--receipt-muted);
+
+    font-size: 9.5px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.salary-info-value {
+    color: var(--receipt-text);
+
+    font-size: 11.5px;
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   ALERTES
+   ============================================================ */
+
+.receipt-cancelled,
+.receipt-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    margin-top: 13px;
+    padding: 12px 14px;
+
+    border-radius: 10px;
+
+    font-size: 10.5px;
+    line-height: 1.6;
+}
+
+.receipt-cancelled {
+    color: var(--receipt-danger);
+    background: var(--receipt-danger-soft);
+    border: 1px solid #f4d4d0;
+}
+
+.receipt-warning {
+    color: var(--receipt-warning);
+    background: var(--receipt-warning-soft);
+    border: 1px solid #f1dfae;
+}
+
+.receipt-cancelled i,
+.receipt-warning i {
+    margin-top: 2px;
+    flex: 0 0 auto;
+}
+
+
+/* ============================================================
+   AVANT / PAIEMENT / APRÈS
+   ============================================================ */
+
+.settlement-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        26px
+        minmax(0, 1fr)
+        26px
+        minmax(0, 1fr);
+
+    align-items: stretch;
+
+    margin-top: 17px;
+}
+
+.settlement-card {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+
+    min-height: 118px;
+
+    padding: 17px;
+
+    background: #ffffff;
+
+    border: 1px solid var(--receipt-border);
+    border-radius: 12px;
+}
+
+.settlement-card.before {
+    background: #fafbfa;
+}
+
+.settlement-card.after {
+    background: var(--receipt-success-soft);
+    border-color: #cde8d5;
+}
+
+.settlement-label {
+    color: var(--receipt-muted);
+
+    font-size: 9px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.settlement-value {
+    margin-bottom: 7px;
+
+    color: var(--receipt-text);
+
+    font-size: 14px;
+    font-weight: 750;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.settlement-value:last-child {
+    margin-bottom: 0;
+}
+
+.text-primary {
+    color: var(--receipt-primary);
+}
+
+.settlement-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: var(--receipt-primary);
+}
+
+.settlement-arrow i {
+    font-size: 11px;
+}
+
+
+/* ============================================================
+   PROGRESSION
+   ============================================================ */
+
+.progress-section {
+    margin-top: 19px;
+    padding: 15px 17px;
+
+    background: #fafcfb;
+
+    border: 1px solid var(--receipt-border-light);
+    border-radius: 12px;
+}
+
+.progress-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+
+    margin-bottom: 9px;
+}
+
+.progress-label {
+    color: var(--receipt-text-soft);
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.progress-percentage {
+    color: var(--receipt-primary);
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.progress-track {
+    width: 100%;
+    height: 8px;
+
+    overflow: hidden;
+
+    background: #e5ebe6;
+
+    border-radius: 999px;
+}
+
+.progress-bar {
+    width: 0;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--receipt-primary),
+            #28763a
+        );
+
+    border-radius: inherit;
+
+    transition: width 500ms ease;
+}
+
+
+/* ============================================================
+   NOTES
+   ============================================================ */
+
+.notes-box {
+    padding: 16px 18px;
+
+    background: #fffdf7;
+
+    border: 1px solid #eee4c8;
+    border-radius: 12px;
+}
+
+.notes-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 8px;
+
+    color: var(--receipt-warning);
+
+    font-size: 10.5px;
+    font-weight: 700;
+}
+
+.notes-content {
+    color: var(--receipt-text-soft);
+
+    font-size: 11px;
+    line-height: 1.75;
+
+    white-space: pre-line;
+}
+
+
+/* ============================================================
+   CERTIFICATION
+   ============================================================ */
+
+.certification {
+    margin: 31px 42px 0;
+    padding: 18px 19px;
+
+    background: var(--receipt-primary-soft);
+
+    border: 1px solid #d5e6d8;
+    border-radius: 12px;
+}
+
+.certification-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    margin-bottom: 8px;
+
+    color: var(--receipt-primary);
+
+    font-size: 11px;
+    font-weight: 750;
+}
+
+.certification-title i {
+    font-size: 13px;
+}
+
+.certification-text {
+    color: var(--receipt-text-soft);
+
+    font-size: 10.5px;
+    line-height: 1.75;
+}
+
+.certification-text strong {
+    color: var(--receipt-text);
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   SIGNATURES
+   ============================================================ */
+
+.signatures {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 25px;
+
+    margin: 35px 42px 0;
+    padding-top: 23px;
+
+    border-top: 1px dashed var(--receipt-border);
+}
+
+.signature-box {
+    min-height: 115px;
+
+    text-align: center;
+}
+
+.signature-title {
+    margin-bottom: 34px;
+
+    color: var(--receipt-text);
+
+    font-size: 10.5px;
+    font-weight: 700;
+}
+
+.signature-line {
+    width: 72%;
+    height: 1px;
+
+    margin: 0 auto 8px;
+
+    background: #aeb7b0;
+}
+
+.signature-name {
+    color: var(--receipt-text);
+
+    font-size: 10.5px;
+    font-weight: 700;
+}
+
+.signature-role {
+    margin-top: 2px;
+
+    color: var(--receipt-muted);
+
+    font-size: 9px;
+}
+
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.receipt-footer {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 7px 20px;
+
+    margin-top: 20px;
+    padding: 17px 42px 25px;
+
+    border-top: 1px solid var(--receipt-border-light);
+}
+
+.footer-text {
+    color: var(--receipt-muted);
+
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+.footer-text:nth-child(2) {
+    text-align: right;
+}
+
+.footer-security {
+    grid-column: 1 / -1;
+
+    margin-top: 4px;
+
+    color: var(--receipt-muted);
+
+    font-size: 8.5px;
+}
+
+.security-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 5px 8px;
+
+    color: var(--receipt-primary);
+
+    background: var(--receipt-primary-soft);
+
+    border-radius: 999px;
+
+    font-size: 8.5px;
+    font-weight: 600;
+}
+
+.security-badge i {
+    font-size: 9px;
+}
+
+
+/* ============================================================
+   ÉTAT VIDE
+   ============================================================ */
+
+.empty-receipt {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+
+    padding: 75px 25px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid var(--receipt-border);
+    border-radius: var(--receipt-radius-lg);
+
+    box-shadow: var(--receipt-shadow);
+}
+
+.empty-receipt-icon {
+    width: 68px;
+    height: 68px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 17px;
+
+    color: var(--receipt-primary);
+
+    background: var(--receipt-primary-soft);
+
+    border-radius: 50%;
+}
+
+.empty-receipt-icon i {
+    font-size: 25px;
+}
+
+.empty-receipt-title {
+    margin: 0 0 7px;
+
+    color: var(--receipt-text);
+
+    font-size: 17px;
+    font-weight: 750;
+}
+
+.empty-receipt-text {
+    max-width: 450px;
+
+    margin: 0;
+
+    color: var(--receipt-muted);
+
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+
+/* ============================================================
+   FOCUS ACCESSIBILITÉ
+   ============================================================ */
+
+.salary-payment-receipt button:focus-visible,
+.salary-payment-receipt a:focus-visible {
+    outline: 3px solid rgba(19, 68, 30, 0.22);
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   RESPONSIVE — TABLETTE
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .salary-payment-receipt {
+        padding: 20px 18px 35px;
+    }
+
+    .organization-header {
+        padding: 27px 28px;
+    }
+
+    .receipt-heading {
+        padding-left: 28px;
+        padding-right: 28px;
+    }
+
+    .reference-banner,
+    .section,
+    .amount-section,
+    .certification,
+    .signatures {
+        margin-left: 28px;
+        margin-right: 28px;
+    }
+
+    .receipt-footer {
+        padding-left: 28px;
+        padding-right: 28px;
+    }
+
+    .beneficiary-box,
+    .salary-info-box {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .beneficiary-item:nth-child(3),
+    .salary-info-item:nth-child(3) {
+        grid-column: 1 / -1;
+    }
+
+    .beneficiary-item:nth-child(3) {
+        border-left: 0;
+        border-top: 1px solid var(--receipt-border-light);
+    }
+
+    .salary-info-item:nth-child(3) {
+        border-left: 0;
+        border-top: 1px solid var(--receipt-border-light);
+    }
+
+    .settlement-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .settlement-arrow {
+        min-height: 20px;
+        transform: rotate(90deg);
+    }
+}
+
+
+/* ============================================================
+   RESPONSIVE — MOBILE
+   ============================================================ */
+
+@media (max-width: 640px) {
+
+    .salary-payment-receipt {
+        padding: 12px 10px 25px;
+    }
+
+    .receipt-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+
+        padding: 10px;
+    }
+
+    .toolbar-left,
+    .toolbar-right {
+        width: 100%;
+    }
+
+    .receipt-toolbar .btn {
+        flex: 1;
+    }
+
+    .organization-header {
+        flex-direction: column;
+        gap: 22px;
+
+        padding: 22px 19px;
+    }
+
+    .organization-identity {
+        width: 100%;
+    }
+
+    .organization-logo {
+        width: 56px;
+        height: 56px;
+        flex-basis: 56px;
+    }
+
+    .organization-name {
+        font-size: 16px;
+    }
+
+    .document-identification {
+        width: 100%;
+        min-width: 0;
+
+        text-align: left;
+    }
+
+    .document-title {
+        font-size: 20px;
+    }
+
+    .receipt-heading {
+        padding: 22px 19px 0;
+    }
+
+    .receipt-heading h1 {
+        font-size: 16px;
+    }
+
+    .reference-banner {
+        grid-template-columns: 1fr;
+
+        margin: 17px 19px 0;
+    }
+
+    .reference-item + .reference-item {
+        border-left: 0;
+        border-top: 1px solid #d5e6d8;
+    }
+
+    .section,
+    .amount-section,
+    .certification,
+    .signatures {
+        margin-left: 19px;
+        margin-right: 19px;
+    }
+
+    .amount-section {
+        padding: 23px 20px;
+    }
+
+    .amount-value {
+        font-size: 31px;
+    }
+
+    .amount-currency {
+        font-size: 14px;
+    }
+
+    .beneficiary-box,
+    .salary-info-box,
+    .payment-details {
+        grid-template-columns: 1fr;
+    }
+
+    .beneficiary-item,
+    .salary-info-item,
+    .payment-detail {
+        border-left: 0 !important;
+        border-right: 0 !important;
+    }
+
+    .beneficiary-item + .beneficiary-item,
+    .salary-info-item + .salary-info-item {
+        border-top: 1px solid var(--receipt-border-light);
+    }
+
+    .payment-detail + .payment-detail {
+        border-top: 1px solid var(--receipt-border-light);
+    }
+
+    .payment-detail:nth-child(-n + 2) {
+        border-bottom: 0;
+    }
+
+    .payment-detail-label {
+        font-size: 9.5px;
+    }
+
+    .payment-detail-value {
+        font-size: 10.5px;
+    }
+
+    .signatures {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .receipt-footer {
+        grid-template-columns: 1fr;
+
+        padding-left: 19px;
+        padding-right: 19px;
+    }
+
+    .footer-text:nth-child(2) {
+        text-align: left;
+    }
+}
+
+
+/* ============================================================
+   IMPRESSION
+   ============================================================ */
+
+@media print {
+
+    @page {
+        size: A4 portrait;
+        margin: 10mm;
+    }
+
+    html,
+    body {
+        background: #ffffff !important;
+    }
+
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .salary-payment-receipt {
+        width: 100%;
+        min-height: 0;
+
+        padding: 0 !important;
+
+        background: #ffffff !important;
+    }
+
+    .receipt-toolbar,
+    [data-no-print] {
+        display: none !important;
+    }
+
+    .receipt-container {
+        width: 100%;
+        max-width: none;
+        margin: 0;
+    }
+
+    .receipt-document {
+        width: 100%;
+
+        overflow: visible;
+
+        border: 0;
+        border-radius: 0;
+
+        box-shadow: none;
+    }
+
+    .receipt-top-line {
+        height: 4px;
+    }
+
+    .organization-header {
+        padding: 22px 25px 19px;
+    }
+
+    .receipt-heading {
+        padding: 18px 25px 0;
+    }
+
+    .reference-banner,
+    .section,
+    .amount-section,
+    .certification,
+    .signatures {
+        margin-left: 25px;
+        margin-right: 25px;
+    }
+
+    .reference-banner {
+        margin-top: 15px;
+    }
+
+    .section {
+        margin-top: 20px;
+    }
+
+    .amount-section {
+        margin-top: 20px;
+        padding: 20px 23px;
+
+        box-shadow: none;
+
+        break-inside: avoid;
+    }
+
+    .beneficiary-box,
+    .payment-details,
+    .salary-info-box,
+    .settlement-grid,
+    .signatures,
+    .certification {
+        break-inside: avoid;
+    }
+
+    .settlement-card {
+        min-height: 100px;
+    }
+
+    .receipt-footer {
+        padding-left: 25px;
+        padding-right: 25px;
+    }
+
+    .footer-security {
+        display: block;
+    }
+
+    .salary-payment-receipt a {
+        color: inherit !important;
+        text-decoration: none !important;
+    }
+}
+
+
+/* ============================================================
+   RÉDUCTION DES ANIMATIONS
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .salary-payment-receipt *,
+    .salary-payment-receipt *::before,
+    .salary-payment-receipt *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}

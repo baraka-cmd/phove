@@ -1,10 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Partenaire;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
 class PartenaireController extends Controller
 {
@@ -15,65 +20,125 @@ class PartenaireController extends Controller
      */
     protected array $types = [
         'bailleur_fonds' => 'Bailleur de fonds',
-        'technique' => 'Partenaire technique',
-        'local' => 'Partenaire local',
-        'international' => 'Partenaire international',
+        'technique'      => 'Partenaire technique',
+        'local'          => 'Partenaire local',
+        'international'  => 'Partenaire international',
         'institutionnel' => 'Partenaire institutionnel',
     ];
 
     /**
      * Affiche la liste des partenaires PHOVE.
      *
-     * @param Request $request
-     * @return \Illuminate\View\View
+     * @param  Request  $request
+     * @return View
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        // 1. Récupérer le filtre de type
-        $type = $request->input('type');
+        // ---------------------------------------------------------------------
+        // 1. Filtre de type (validé)
+        // ---------------------------------------------------------------------
+        $type = (string) $request->input('type', '');
 
-        // 2. Construire la requête de base — uniquement les partenaires actifs
+        if ($type !== '' && !array_key_exists($type, $this->types)) {
+            $type = '';
+        }
+
+        // ---------------------------------------------------------------------
+        // 2. Requête de base — partenaires actifs
+        // ---------------------------------------------------------------------
         $query = Partenaire::query()
             ->where('statut', 'actif')
-            ->withCount('projets');
+            ->with([
+                // On charge uniquement les projets publiés, avec les champs utiles
+                'projets' => function ($q) {
+                    $q->select('projets.id', 'projets.titre', 'projets.code_projet', 'projets.slug')
+                      ->where('projets.publier', true);
+                },
+            ])
+            ->withCount([
+                // Comptage des projets publiés uniquement
+                'projets' => function ($q) {
+                    $q->where('projets.publier', true);
+                },
+            ]);
 
-        // 3. Appliquer le filtre de type avec validation
-        if ($type && in_array($type, array_keys($this->types))) {
+        // ---------------------------------------------------------------------
+        // 3. Appliquer le filtre de type
+        // ---------------------------------------------------------------------
+        if ($type !== '') {
             $query->where('type', $type);
         }
 
-        // 4. Trier par nom alphabétique
-        $query->orderBy('nom');
+        // ---------------------------------------------------------------------
+        // 4. Tri alphabétique + pagination
+        // ---------------------------------------------------------------------
+        $partenaires = $query->orderBy('nom')
+            ->paginate(12)
+            ->withQueryString();
 
-        // 5. Récupérer tous les partenaires actifs
-        $partenaires = $query->get();
+        // ---------------------------------------------------------------------
+        // 5. Statistiques par type (1 seule requête SQL au lieu de 5)
+        // ---------------------------------------------------------------------
+        $statsTypes = $this->recupererStatsTypes();
 
-        // 6. Compter par type pour les filtres
-        $statsTypes = [
-            'international' => Partenaire::where('statut', 'actif')->where('type', 'international')->count(),
-            'institutionnel' => Partenaire::where('statut', 'actif')->where('type', 'institutionnel')->count(),
-            'bailleur_fonds' => Partenaire::where('statut', 'actif')->where('type', 'bailleur_fonds')->count(),
-            'technique' => Partenaire::where('statut', 'actif')->where('type', 'technique')->count(),
-            'local' => Partenaire::where('statut', 'actif')->where('type', 'local')->count(),
-        ];
+        // ---------------------------------------------------------------------
+        // 6. Statistiques globales
+        // ---------------------------------------------------------------------
+        $totalPartenaires = array_sum(array_values($statsTypes));
 
-        // 7. Statistiques globales
-        $totalPartenaires = Partenaire::where('statut', 'actif')->count();
-        $totalProjetsAssocies = Partenaire::where('statut', 'actif')
-            ->withCount('projets')
-            ->get()
-            ->sum('projets_count');
+        $totalProjetsAssocies = (int) DB::table('projet_partenaire')
+            ->join('partenaires', 'partenaires.id', '=', 'projet_partenaire.partenaire_id')
+            ->join('projets', 'projets.id', '=', 'projet_partenaire.projet_id')
+            ->where('partenaires.statut', 'actif')
+            ->where('projets.publier', true)
+            ->distinct()
+            ->count('projet_partenaire.projet_id');
 
-        // 8. Types pour le filtre
+        // ---------------------------------------------------------------------
+        // 7. Types pour le filtre
+        // ---------------------------------------------------------------------
         $types = $this->types;
 
-        return view('public.partenaires', compact(
-            'partenaires',
-            'types',
-            'statsTypes',
-            'totalPartenaires',
-            'totalProjetsAssocies',
-            'type'
-        ));
+        // ---------------------------------------------------------------------
+        // 8. Vue
+        // ---------------------------------------------------------------------
+        return view('public.partenaires', [
+            'partenaires'          => $partenaires,
+            'types'                => $types,
+            'statsTypes'           => $statsTypes,
+            'totalPartenaires'     => $totalPartenaires,
+            'totalProjetsAssocies' => $totalProjetsAssocies,
+            'type'                 => $type,
+        ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | MÉTHODES PRIVÉES
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Récupère le nombre de partenaires actifs par type
+     * en une seule requête SQL.
+     *
+     * @return array<string, int>
+     */
+    protected function recupererStatsTypes(): array
+    {
+        $raw = Partenaire::query()
+            ->where('statut', 'actif')
+            ->select('type', DB::raw('COUNT(*) as total'))
+            ->groupBy('type')
+            ->pluck('total', 'type')
+            ->toArray();
+
+        // On garantit que toutes les clés existent (même à 0)
+        $stats = [];
+        foreach (array_keys($this->types) as $key) {
+            $stats[$key] = (int) ($raw[$key] ?? 0);
+        }
+
+        return $stats;
     }
 }

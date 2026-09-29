@@ -1,71 +1,151 @@
 /* ============================================================
-   PHOVE — STYLES TOPBAR ADMINISTRATEUR
-   Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies
-   Palette : Bleu Principal #1A5B9C | Bleu Nuit #1E293B | Ambre #F59E0B
+   PHOVE — TOPBAR ADMINISTRATEUR
+   ------------------------------------------------------------
+   Barre supérieure fixe de l'administration.
+   Contient : toggle sidebar, breadcrumb, recherche, dark mode,
+   notifications, profil utilisateur.
+
+   À charger APRÈS admin-common.css.
    ============================================================ */
 
-/* ----------------------------------------------------------
-   1. TOPBAR
-   ---------------------------------------------------------- */
+/* ============================================================
+   1. TOPBAR — CONTENEUR PRINCIPAL
+   ============================================================ */
+
 .admin-topbar {
     position: fixed;
     top: 0;
-    right: 0;
     left: var(--sidebar-width);
+    right: 0;
     height: var(--topbar-height);
     background: var(--topbar-bg);
     border-bottom: 1px solid var(--topbar-border);
     box-shadow: var(--topbar-shadow);
-    z-index: var(--z-topbar);
     display: flex;
     align-items: center;
-    padding: 0 var(--spacing-xl);
+    gap: var(--spacing-md);
+    padding: 0 var(--spacing-lg);
+    z-index: var(--z-topbar);
     transition: left var(--transition-base);
 }
 
-.admin-sidebar.collapsed ~ .admin-main .admin-topbar {
+/* Quand la sidebar est réduite */
+.admin-sidebar.collapsed ~ .admin-main .admin-topbar,
+.admin-sidebar.collapsed ~ .admin-topbar {
     left: var(--sidebar-collapsed-width);
 }
 
-/* ----------------------------------------------------------
-   2. BOUTON TOGGLE SIDEBAR
-   ---------------------------------------------------------- */
+/* Sur mobile, la topbar prend toute la largeur */
+@media (max-width: 992px) {
+    .admin-topbar {
+        left: 0;
+    }
+}
+
+/* ============================================================
+   2. BOUTONS DE LA TOPBAR (toggle sidebar, mode sombre)
+   ============================================================ */
+
+.admin-topbar-btn,
 .topbar-toggle-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--color-bg-white);
-    color: var(--color-text-secondary);
-    font-size: 16px;
-    cursor: pointer;
-    display: flex;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin-right: 16px;
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-sm);
+    font-size: 16px;
+    cursor: pointer;
     transition: all var(--transition-fast);
+    flex-shrink: 0;
+    padding: 0;
 }
 
+.admin-topbar-btn:hover,
 .topbar-toggle-btn:hover {
     background: var(--color-bg-light);
+    border-color: var(--border-color-light);
     color: var(--color-primary);
-    border-color: var(--color-primary);
 }
 
-/* ----------------------------------------------------------
-   3. FIL D'ARIANE (BREADCRUMB)
-   ---------------------------------------------------------- */
+.admin-topbar-btn:focus-visible,
+.topbar-toggle-btn:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Le bouton "toggle desktop" est masqué sur mobile */
+#sidebarToggle {
+    display: inline-flex;
+}
+
+@media (max-width: 992px) {
+    #sidebarToggle {
+        display: none;
+    }
+}
+
+/* Le bouton "toggle mobile" est masqué sur desktop */
+#sidebarToggleMobile {
+    display: none;
+}
+
+@media (max-width: 992px) {
+    #sidebarToggleMobile {
+        display: inline-flex;
+    }
+}
+
+/* ============================================================
+   3. FIL D'ARIANE
+   ============================================================ */
+
 .topbar-breadcrumb {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex: 1;
+    min-width: 0;
     font-size: var(--font-size-sm);
     color: var(--color-text-muted);
+    overflow: hidden;
+}
+
+.topbar-breadcrumb .breadcrumb-home {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--border-radius-sm);
+    color: var(--color-primary);
+    background: var(--color-primary-lighter);
+    font-size: 13px;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.topbar-breadcrumb .breadcrumb-home:hover {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    transform: scale(1.05);
+}
+
+.topbar-breadcrumb > i.fa-chevron-right {
+    font-size: 9px;
+    color: var(--color-text-muted);
+    opacity: 0.6;
+    flex-shrink: 0;
 }
 
 .topbar-breadcrumb a {
     color: var(--color-text-secondary);
     text-decoration: none;
+    font-weight: var(--font-weight-medium);
+    white-space: nowrap;
     transition: color var(--transition-fast);
 }
 
@@ -73,89 +153,103 @@
     color: var(--color-primary);
 }
 
-.topbar-breadcrumb i {
-    font-size: 9px;
-    color: var(--color-text-muted);
-}
-
 .topbar-breadcrumb span {
-    color: var(--color-primary);
+    color: var(--color-text-primary);
     font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 220px;
 }
 
-.topbar-breadcrumb .breadcrumb-home {
-    font-size: 14px;
+@media (max-width: 768px) {
+    .topbar-breadcrumb {
+        display: none;
+    }
 }
 
-/* ----------------------------------------------------------
+/* ============================================================
    4. SECTION DROITE
-   ---------------------------------------------------------- */
+   ============================================================ */
+
 .topbar-right {
-    margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--spacing-sm);
+    flex-shrink: 0;
 }
 
-/* ----------------------------------------------------------
+/* ============================================================
    5. RECHERCHE RAPIDE
-   ---------------------------------------------------------- */
+   ============================================================ */
+
 .topbar-search {
     position: relative;
-    margin-right: 8px;
+    display: flex;
+    align-items: center;
 }
 
 .topbar-search-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--color-bg-white);
-    color: var(--color-text-secondary);
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-sm);
+    font-size: 15px;
+    cursor: pointer;
     transition: all var(--transition-fast);
+    padding: 0;
 }
 
 .topbar-search-btn:hover {
     background: var(--color-bg-light);
+    border-color: var(--border-color-light);
     color: var(--color-primary);
-    border-color: var(--color-primary);
 }
 
+/* Wrapper qui glisse à droite */
 .topbar-search-input-wrapper {
     position: absolute;
-    right: 0;
     top: 50%;
+    right: 0;
     transform: translateY(-50%);
-    width: 0;
-    overflow: hidden;
-    transition: width var(--transition-base);
-    background: var(--color-bg-white);
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
     display: flex;
     align-items: center;
+    width: 0;
+    max-width: 380px;
+    height: 42px;
+    background: var(--color-bg-white);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transition: width var(--transition-base), opacity var(--transition-base), visibility var(--transition-base);
+    z-index: 10;
 }
 
 .topbar-search-input-wrapper.active {
-    width: 280px;
+    width: 380px;
+    opacity: 1;
+    visibility: visible;
     border-color: var(--color-primary);
-    box-shadow: 0 4px 15px rgba(26, 91, 156, 0.1);
+    box-shadow: 0 0 0 3px rgba(26, 91, 156, 0.1);
 }
 
 .topbar-search-input {
-    width: 100%;
-    padding: 9px 14px;
-    border: none;
-    outline: none;
+    flex: 1;
+    height: 100%;
+    padding: 0 16px;
     font-family: var(--font-primary);
-    font-size: 13px;
+    font-size: var(--font-size-sm);
     color: var(--color-text-primary);
     background: transparent;
+    border: none;
+    outline: none;
 }
 
 .topbar-search-input::placeholder {
@@ -163,108 +257,135 @@
 }
 
 .topbar-search-close {
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: transparent;
-    color: var(--color-text-muted);
-    cursor: pointer;
-    font-size: 12px;
-    display: flex;
+    width: 36px;
+    height: 100%;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    background: transparent;
+    color: var(--color-text-muted);
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    transition: color var(--transition-fast);
     flex-shrink: 0;
+    padding: 0;
 }
 
 .topbar-search-close:hover {
-    color: #F59E0B;
+    color: var(--color-error);
 }
 
-/* ----------------------------------------------------------
-   6. BOUTON MODE SOMBRE
-   ---------------------------------------------------------- */
+@media (max-width: 768px) {
+    .topbar-search-input-wrapper.active {
+        position: fixed;
+        top: var(--topbar-height);
+        left: var(--spacing-md);
+        right: var(--spacing-md);
+        width: auto;
+        transform: none;
+    }
+}
+
+/* ============================================================
+   6. MODE SOMBRE
+   ============================================================ */
+
 .topbar-darkmode-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--color-bg-white);
-    color: var(--color-text-secondary);
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-sm);
+    font-size: 16px;
+    cursor: pointer;
     transition: all var(--transition-fast);
-    position: relative;
+    padding: 0;
 }
 
 .topbar-darkmode-btn:hover {
     background: var(--color-bg-light);
-    color: #F59E0B;
-    border-color: #F59E0B;
+    border-color: var(--border-color-light);
+    color: var(--color-accent);
 }
 
-/* ----------------------------------------------------------
+.topbar-darkmode-btn.active {
+    background: var(--color-accent-light);
+    color: var(--color-accent-hover);
+    border-color: var(--color-accent);
+}
+
+/* ============================================================
    7. NOTIFICATIONS
-   ---------------------------------------------------------- */
+   ============================================================ */
+
 .topbar-notifications {
     position: relative;
 }
 
 .topbar-notif-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: var(--color-bg-white);
-    color: var(--color-text-secondary);
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    background: transparent;
+    color: var(--color-text-secondary);
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-sm);
+    font-size: 16px;
+    cursor: pointer;
     transition: all var(--transition-fast);
-    position: relative;
+    padding: 0;
 }
 
 .topbar-notif-btn:hover {
     background: var(--color-bg-light);
+    border-color: var(--border-color-light);
     color: var(--color-primary);
-    border-color: var(--color-primary);
 }
 
 .notif-badge {
     position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 18px;
+    top: 4px;
+    right: 4px;
+    min-width: 18px;
     height: 18px;
-    border-radius: 50%;
-    background: #F59E0B;
+    padding: 0 5px;
+    background: var(--color-error);
     color: #FFFFFF;
     font-size: 10px;
-    font-weight: var(--font-weight-bold);
-    display: flex;
+    font-weight: 700;
+    border-radius: var(--border-radius-full);
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
     border: 2px solid var(--color-bg-white);
 }
 
+/* Dropdown notifications */
 .notif-dropdown {
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
-    width: 340px;
+    width: 380px;
+    max-width: calc(100vw - 32px);
     background: var(--color-bg-white);
-    border-radius: 12px;
-    box-shadow: var(--shadow-xl);
     border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
+    transform: translateY(-8px);
     transition: all var(--transition-base);
     z-index: var(--z-dropdown);
+    overflow: hidden;
 }
 
 .notif-dropdown.active {
@@ -279,11 +400,12 @@
     justify-content: space-between;
     padding: 14px 18px;
     border-bottom: 1px solid var(--border-color-light);
+    background: var(--color-bg-light);
 }
 
 .notif-dropdown-title {
     font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-bold);
+    font-weight: 700;
     color: var(--color-text-primary);
 }
 
@@ -291,16 +413,17 @@
     font-size: 11px;
     color: var(--color-primary);
     text-decoration: none;
-    font-weight: var(--font-weight-medium);
-    cursor: pointer;
+    font-weight: 600;
+    transition: color var(--transition-fast);
 }
 
 .notif-dropdown-mark:hover {
+    color: var(--color-primary-dark);
     text-decoration: underline;
 }
 
 .notif-dropdown-list {
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
 }
 
@@ -312,45 +435,51 @@
     border-bottom: 1px solid var(--border-color-light);
     transition: background var(--transition-fast);
     cursor: pointer;
+    position: relative;
 }
 
 .notif-item:hover {
     background: var(--color-bg-light);
 }
 
+.notif-item:last-child {
+    border-bottom: none;
+}
+
 .notif-item.unread {
-    background: var(--color-primary-lighter);
+    background: rgba(26, 91, 156, 0.03);
 }
 
 .notif-item-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: var(--border-radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 13px;
+    font-size: 15px;
     flex-shrink: 0;
 }
 
-.notif-icon-message {
-    background: var(--color-info-light);
-    color: var(--color-info);
-}
-
 .notif-icon-don {
-    background: var(--color-success-light);
-    color: #065F46;
+    background: #FEE2E2;
+    color: #DC2626;
 }
 
 .notif-icon-membre {
-    background: var(--color-primary-lighter);
-    color: var(--color-primary);
+    background: #D1FAE5;
+    color: #059669;
+}
+
+.notif-icon-message {
+    background: #DBEAFE;
+    color: #2563EB;
 }
 
 .notif-icon-alert {
-    background: var(--color-error-light);
-    color: #F59E0B;
+    background: #FEF3C7;
+    color: #D97706;
 }
 
 .notif-item-content {
@@ -359,112 +488,220 @@
 }
 
 .notif-item-text {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--color-text-secondary);
-    line-height: 1.5;
-    margin-bottom: 4px;
+    line-height: 1.4;
+    margin-bottom: 2px;
+    word-wrap: break-word;
+}
+
+.notif-item-text strong {
+    color: var(--color-text-primary);
+    font-weight: 600;
 }
 
 .notif-item-time {
-    font-size: 10px;
+    font-size: 11px;
     color: var(--color-text-muted);
 }
 
 .notif-item-dot {
     width: 8px;
     height: 8px;
+    background: var(--color-primary);
     border-radius: 50%;
-    background: #F59E0B;
     flex-shrink: 0;
     margin-top: 6px;
 }
 
 .notif-dropdown-footer {
+    padding: 12px 18px;
     text-align: center;
-    padding: 12px;
+    border-top: 1px solid var(--border-color-light);
+    background: var(--color-bg-light);
 }
 
 .notif-dropdown-footer a {
     font-size: 12px;
     color: var(--color-primary);
     text-decoration: none;
-    font-weight: var(--font-weight-semibold);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color var(--transition-fast);
 }
 
 .notif-dropdown-footer a:hover {
-    text-decoration: underline;
+    color: var(--color-primary-dark);
 }
 
-/* ----------------------------------------------------------
+@media (max-width: 480px) {
+    .notif-dropdown {
+        width: calc(100vw - 32px);
+        right: -60px;
+    }
+}
+
+/* ============================================================
    8. PROFIL UTILISATEUR
-   ---------------------------------------------------------- */
+   ============================================================ */
+
 .topbar-user {
     position: relative;
 }
 
 .topbar-user-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 6px 14px 6px 6px;
-    border-radius: 50px;
-    border: 1px solid var(--border-color);
-    background: var(--color-bg-white);
+    padding: 6px 12px 6px 6px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: var(--border-radius-full);
     cursor: pointer;
     transition: all var(--transition-fast);
 }
 
 .topbar-user-btn:hover {
     background: var(--color-bg-light);
-    border-color: var(--color-primary-lighter);
+    border-color: var(--border-color-light);
 }
 
-.user-avatar {
-    width: 34px;
-    height: 34px;
+/* ============================================
+   ✅ AVATAR — CORRECTION DU RENDU D'IMAGE
+   ============================================
+   - Forme ronde parfaite
+   - Image qui remplit tout le cercle (object-fit: cover)
+   - Centrage correct
+   ============================================ */
+
+.user-avatar,
+.user-dropdown-avatar {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
     border-radius: 50%;
-    background: var(--color-primary);
-    color: #FFFFFF;
-    font-size: 13px;
-    font-weight: var(--font-weight-bold);
+    overflow: hidden;
+    background: var(--color-primary-lighter);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    border: 2px solid var(--color-primary-lighter);
 }
 
+.user-avatar img,
+.user-dropdown-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;          /* ✅ L'image remplit tout le cercle */
+    object-position: center;    /* ✅ Centrage parfait */
+    border-radius: 50%;
+    display: block;
+}
+
+/* Texte de fallback (initiales) */
+.user-avatar > span,
+.user-dropdown-avatar > span,
+.user-avatar-fallback {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--color-primary);
+    letter-spacing: 0.5px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Fallback caché par défaut quand une image est présente */
+.user-avatar img + .user-avatar-fallback,
+.user-dropdown-avatar img + .user-avatar-fallback {
+    position: absolute;
+    inset: 0;
+    display: none;
+}
+
+/* Quand onerror déclenche le masquage de l'image, le fallback réapparaît */
+.user-avatar img[style*="display: none"] + .user-avatar-fallback,
+.user-dropdown-avatar img[style*="display: none"] + .user-avatar-fallback {
+    display: flex;
+}
+
+/* Le dropdown avatar est légèrement plus grand */
+.user-dropdown-avatar {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+}
+
+.user-dropdown-avatar > span,
+.user-dropdown-avatar .user-avatar-fallback {
+    font-size: 16px;
+}
+
+/* Info utilisateur (nom + rôle) */
 .user-info {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
     line-height: 1.2;
+    min-width: 0;
 }
 
 .user-name {
-    font-size: 12px;
-    font-weight: var(--font-weight-semibold);
+    font-size: 13px;
+    font-weight: 600;
     color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 120px;
 }
 
 .user-role {
     font-size: 10px;
     color: var(--color-text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
+
+@media (max-width: 768px) {
+    .user-info {
+        display: none;
+    }
+
+    .topbar-user-btn {
+        padding: 4px;
+    }
+}
+
+/* ============================================================
+   9. DROPDOWN PROFIL
+   ============================================================ */
 
 .user-dropdown {
     position: absolute;
     top: calc(100% + 10px);
     right: 0;
-    width: 220px;
+    width: 280px;
+    max-width: calc(100vw - 32px);
     background: var(--color-bg-white);
-    border-radius: 12px;
-    box-shadow: var(--shadow-xl);
     border: 1px solid var(--border-color-light);
-    padding: 6px 0;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
+    transform: translateY(-8px);
     transition: all var(--transition-base);
     z-index: var(--z-dropdown);
+    overflow: hidden;
 }
 
 .user-dropdown.active {
@@ -477,50 +714,57 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 14px 18px;
+    padding: 16px 18px;
+    background: var(--color-primary-lighter);
     border-bottom: 1px solid var(--border-color-light);
-}
-
-.user-dropdown-avatar {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    background: var(--color-primary);
-    color: #FFFFFF;
-    font-size: 16px;
-    font-weight: var(--font-weight-bold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
 }
 
 .user-dropdown-info {
     display: flex;
     flex-direction: column;
-    line-height: 1.3;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .user-dropdown-name {
     font-size: 13px;
-    font-weight: var(--font-weight-semibold);
+    font-weight: 700;
     color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .user-dropdown-email {
     font-size: 11px;
     color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .user-dropdown-link {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 18px;
+    padding: 11px 18px;
     font-size: 13px;
     color: var(--color-text-secondary);
     text-decoration: none;
     transition: all var(--transition-fast);
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+}
+
+.user-dropdown-link i {
+    width: 16px;
+    color: var(--color-text-muted);
+    font-size: 14px;
+    transition: color var(--transition-fast);
+    flex-shrink: 0;
 }
 
 .user-dropdown-link:hover {
@@ -528,18 +772,21 @@
     color: var(--color-primary);
 }
 
-.user-dropdown-link i {
-    width: 18px;
-    text-align: center;
-    font-size: 13px;
+.user-dropdown-link:hover i {
+    color: var(--color-primary);
 }
 
 .user-dropdown-link.logout {
-    color: #EF4444;
+    color: var(--color-error);
+}
+
+.user-dropdown-link.logout i {
+    color: var(--color-error);
 }
 
 .user-dropdown-link.logout:hover {
     background: var(--color-error-light);
+    color: #B91C1C;
 }
 
 .user-dropdown-divider {
@@ -548,43 +795,53 @@
     margin: 4px 0;
 }
 
-/* ----------------------------------------------------------
-   9. RESPONSIVE
-   ---------------------------------------------------------- */
+/* ============================================================
+   10. MODE SOMBRE (si activé via JS)
+   ============================================================ */
+
+body.dark-mode .admin-topbar {
+    background: #1E293B;
+    border-bottom-color: #334155;
+}
+
+body.dark-mode .topbar-breadcrumb a,
+body.dark-mode .topbar-breadcrumb span {
+    color: #CBD5E1;
+}
+
+body.dark-mode .notif-dropdown,
+body.dark-mode .user-dropdown {
+    background: #1E293B;
+    border-color: #334155;
+}
+
+body.dark-mode .notif-item:hover,
+body.dark-mode .user-dropdown-link:hover {
+    background: #2C3E50;
+}
+
+/* ============================================================
+   11. RESPONSIVE
+   ============================================================ */
+
 @media (max-width: 992px) {
     .admin-topbar {
-        left: 0;
-    }
-
-    .admin-sidebar.collapsed ~ .admin-main .admin-topbar {
-        left: 0;
-    }
-
-    .topbar-search-input-wrapper.active {
-        width: 200px;
-    }
-
-    .user-name,
-    .user-role {
-        display: none;
-    }
-
-    .topbar-user-btn {
-        padding: 4px;
+        padding: 0 var(--spacing-md);
+        gap: var(--spacing-sm);
     }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 480px) {
     .admin-topbar {
-        padding: 0 var(--spacing-md);
+        padding: 0 var(--spacing-sm);
+        gap: 4px;
     }
 
-    .topbar-search-input-wrapper.active {
-        width: 150px;
+    .topbar-darkmode-btn {
+        display: none;
     }
 
-    .notif-dropdown {
-        width: 280px;
-        right: -80px;
+    .user-dropdown {
+        width: 260px;
     }
 }

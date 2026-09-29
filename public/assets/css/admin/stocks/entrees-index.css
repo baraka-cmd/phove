@@ -1,0 +1,612 @@
+/* ============================================================
+   PHOVE — STYLE : LISTE DES ENTRÉES DE STOCK
+   Vue : resources/views/admin/stocks/entrees/index.blade.php
+   Route : admin.stocks.entrees.index
+
+   Ce fichier complète stocks-common.css.
+   Il n'ajoute QUE ce qui est spécifique à la liste des entrées.
+   ============================================================ */
+
+
+/* ----------------------------------------------------------
+   1. CONTENEUR DE PAGE
+   ---------------------------------------------------------- */
+
+.stock-entrees-page {
+    /* Conteneur principal */
+}
+
+
+/* ----------------------------------------------------------
+   2. EN-TÊTE DE PAGE
+   ----------------------------------------------------------
+   .page-header, .page-header-content, .page-header-text,
+   .page-header-actions, .page-breadcrumb viennent de
+   stocks-common.css.
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .page-header-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+
+/* ----------------------------------------------------------
+   3. STATISTIQUES (4 KPI)
+   ----------------------------------------------------------
+   .stats-grid, .stat-card, .stat-card-icon, .stat-card-content,
+   .stat-card-label, .stat-card-value viennent de stocks-common.css.
+   On ajuste juste la couleur du premier KPI (entrées = vert).
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .stat-card:first-child .stat-card-icon {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+
+/* ----------------------------------------------------------
+   4. CARTE DE FILTRE
+   ----------------------------------------------------------
+   .content-card, .filters-card, .content-card-header,
+   .content-card-title, .content-card-description,
+   .filters-form viennent de stocks-common.css.
+   On ajuste la grille pour 4 champs + actions.
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .filters-form {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    align-items: end;
+}
+
+.stock-entrees-page .filter-search {
+    min-width: 220px;
+}
+
+.stock-entrees-page .filter-actions {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--spacing-sm);
+    grid-column: -2 / -1;
+    justify-content: flex-end;
+}
+
+.stock-entrees-page .form-label {
+    display: block;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.stock-entrees-page .form-control {
+    width: 100%;
+    padding: 9px 12px;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background: var(--color-bg-white);
+    color: var(--color-text-primary);
+    transition: all var(--transition-base);
+}
+
+.stock-entrees-page .form-control:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 91, 156, 0.1);
+}
+
+.stock-entrees-page .input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.stock-entrees-page .input-with-icon i {
+    position: absolute;
+    left: 12px;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    pointer-events: none;
+}
+
+.stock-entrees-page .input-with-icon input {
+    padding-left: 38px;
+}
+
+
+/* ----------------------------------------------------------
+   5. TABLEAU DES ENTRÉES
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .entries-card {
+    /* Rien de spécial : utilise .content-card */
+}
+
+.stock-entrees-page .entries-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color-light);
+    flex-wrap: wrap;
+}
+
+.stock-entrees-page .entries-card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.stock-entrees-page .table-container {
+    padding: 0;
+}
+
+.stock-entrees-page .data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stock-entrees-page .data-table thead {
+    background: var(--color-bg-light);
+}
+
+.stock-entrees-page .data-table thead th {
+    padding: 12px 16px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-color-light);
+    white-space: nowrap;
+}
+
+.stock-entrees-page .data-table tbody td {
+    padding: 14px 16px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--border-color-light);
+    vertical-align: middle;
+}
+
+.stock-entrees-page .data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.stock-entrees-page .data-table tbody tr:hover {
+    background: var(--color-bg-light);
+}
+
+
+/* ----------------------------------------------------------
+   6. CELLULE RÉFÉRENCE
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .reference-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stock-entrees-page .reference-value {
+    font-family: 'Courier New', monospace;
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    background: var(--color-primary-lighter);
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    width: fit-content;
+    font-weight: var(--font-weight-semibold);
+}
+
+
+/* ----------------------------------------------------------
+   7. CELLULE ARTICLE (icône + désignation + référence)
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .product-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.stock-entrees-page .product-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-success-light);
+    color: #065F46;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+}
+
+.stock-entrees-page .product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.stock-entrees-page .product-name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.stock-entrees-page .product-name:hover {
+    color: var(--color-primary);
+}
+
+.stock-entrees-page .product-reference {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-family: 'Courier New', monospace;
+}
+
+
+/* ----------------------------------------------------------
+   8. CELLULE LOT
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .lot-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stock-entrees-page .lot-number {
+    font-family: 'Courier New', monospace;
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    background: var(--color-primary-lighter);
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    width: fit-content;
+    font-weight: var(--font-weight-semibold);
+}
+
+.stock-entrees-page .lot-expiration {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.stock-entrees-page .lot-expiration::before {
+    content: '\f073';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 10px;
+    opacity: 0.7;
+}
+
+
+/* ----------------------------------------------------------
+   9. CELLULE QUANTITÉ
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .quantity-cell {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 3px;
+}
+
+.stock-entrees-page .quantity-value {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-success);
+}
+
+.stock-entrees-page .quantity-unit {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+
+/* ----------------------------------------------------------
+   10. BADGE NATURE
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .badge-nature {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    border-radius: var(--border-radius-full);
+    font-size: 11px;
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+
+
+/* ----------------------------------------------------------
+   11. CELLULE DATE
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .date-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stock-entrees-page .date-main {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+    white-space: nowrap;
+}
+
+.stock-entrees-page .date-time {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+
+/* ----------------------------------------------------------
+   12. CELLULE UTILISATEUR
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .user-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.stock-entrees-page .user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: var(--font-weight-bold);
+    flex-shrink: 0;
+    text-transform: uppercase;
+}
+
+.stock-entrees-page .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.stock-entrees-page .user-name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+
+/* ----------------------------------------------------------
+   13. ACTIONS
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .table-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.stock-entrees-page .action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-color-light);
+    background: var(--color-bg-white);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+}
+
+.stock-entrees-page .action-button:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.stock-entrees-page .action-view:hover {
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.stock-entrees-page .action-stock:hover {
+    background: var(--color-success-light);
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+
+/* ----------------------------------------------------------
+   14. ÉTAT VIDE
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .empty-state {
+    padding: var(--spacing-3xl) var(--spacing-xl);
+    text-align: center;
+}
+
+.stock-entrees-page .empty-state-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-lg);
+    border-radius: 50%;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.stock-entrees-page .empty-state-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.stock-entrees-page .empty-state-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    max-width: 500px;
+    margin: 0 auto var(--spacing-lg);
+    line-height: 1.6;
+}
+
+.stock-entrees-page .empty-value {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    font-style: italic;
+}
+
+
+/* ----------------------------------------------------------
+   15. PAGINATION
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .pagination-container {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-color-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.stock-entrees-page .pagination-summary {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.stock-entrees-page .pagination-links {
+    display: flex;
+    gap: 4px;
+}
+
+
+/* ----------------------------------------------------------
+   16. PANNEAU D'INFORMATION (bas de page)
+   ---------------------------------------------------------- */
+
+.stock-entrees-page .information-panel {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: var(--color-info-light);
+    border-left: 4px solid var(--color-info);
+    border-radius: var(--border-radius-sm);
+    margin-top: var(--spacing-lg);
+}
+
+.stock-entrees-page .information-panel-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--color-info);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.stock-entrees-page .information-panel-content h3 {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: #1E40AF;
+    margin-bottom: var(--spacing-xs);
+}
+
+.stock-entrees-page .information-panel-content p {
+    font-size: var(--font-size-sm);
+    color: #1E3A8A;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-sm);
+}
+
+.stock-entrees-page .information-panel-content p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ----------------------------------------------------------
+   17. RESPONSIVE
+   ---------------------------------------------------------- */
+
+@media (max-width: 1200px) {
+    .stock-entrees-page .filters-form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stock-entrees-page .filter-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 768px) {
+    .stock-entrees-page .filters-form {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-entrees-page .entries-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stock-entrees-page .data-table thead th,
+    .stock-entrees-page .data-table tbody td {
+        padding: 10px 12px;
+    }
+
+    .stock-entrees-page .information-panel {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 576px) {
+    .stock-entrees-page .lot-expiration {
+        display: none;
+    }
+
+    .stock-entrees-page .user-info {
+        display: none;
+    }
+}

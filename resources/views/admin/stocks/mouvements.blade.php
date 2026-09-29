@@ -1,211 +1,898 @@
 @extends('layouts.admin')
 
-@section('title', 'Mouvements de Stock | PHOVE')
-
-@section('page_title', 'Mouvements de Stock')
-@section('page_icon', 'exchange-alt')
-@section('page_subtitle', 'Historique complet des entrées et sorties de stock.')
-
-@php
-    $breadcrumb = [
-        ['label' => 'Stocks', 'url' => route('admin.stocks.index')],
-        'Mouvements'
-    ];
-@endphp
+@section('title', 'Mouvements de stock')
 
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/admin-common.css') }}">
+    <link
+        rel="stylesheet"
+        href="{{ asset('assets/css/admin/stocks/mouvements-index.css') }}"
+    >
 @endsection
 
 @section('content')
 
-    {{-- ============================================ --}}
-    {{-- KPI — 2 CARTES --}}
-    {{-- ============================================ --}}
-    <div class="projets-stats-grid" style="grid-template-columns: repeat(2, 1fr); max-width: 600px;">
-        <div class="projet-stat-card">
-            <div class="projet-stat-icon" style="background: #D1FAE5; color: #065F46;"><i class="fas fa-arrow-down"></i></div>
-            <div class="projet-stat-content">
-                <div class="projet-stat-value" style="color: #065F46;">{{ number_format($totalEntrees, 0, ',', ' ') }}</div>
-                <div class="projet-stat-label">Total entrées</div>
+<div class="stock-mouvements-page">
+
+    {{-- =========================================================
+         EN-TÊTE DE PAGE
+    ========================================================== --}}
+    <div class="stock-mouvements-header">
+
+        <div class="stock-mouvements-header__content">
+
+            <nav
+                class="stock-mouvements-breadcrumb"
+                aria-label="Fil d’Ariane"
+            >
+
+                <a href="{{ route('admin.stocks.index') }}">
+                    Stocks
+                </a>
+
+                <span class="stock-mouvements-breadcrumb__separator">
+                    /
+                </span>
+
+                <span>
+                    Mouvements
+                </span>
+
+            </nav>
+
+
+            <div class="stock-mouvements-title-row">
+
+                <div class="stock-mouvements-title-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+
+                <div>
+
+                    <h1 class="stock-mouvements-title">
+                        Mouvements de stock
+                    </h1>
+
+                    <p class="stock-mouvements-subtitle">
+                        Consultez l’historique des entrées, sorties,
+                        ajustements et autres mouvements enregistrés
+                        dans le stock.
+                    </p>
+
+                </div>
+
             </div>
+
         </div>
-        <div class="projet-stat-card">
-            <div class="projet-stat-icon" style="background: #FEE2E2; color: #B91C1C;"><i class="fas fa-arrow-up"></i></div>
-            <div class="projet-stat-content">
-                <div class="projet-stat-value" style="color: #B91C1C;">{{ number_format($totalSorties, 0, ',', ' ') }}</div>
-                <div class="projet-stat-label">Total sorties</div>
-            </div>
+
+
+        <div class="stock-mouvements-header__actions">
+
+            <a
+                href="{{ route('admin.stocks.index') }}"
+                class="stock-mouvements-button stock-mouvements-button--secondary"
+            >
+                <i class="fas fa-boxes"></i>
+                <span>Stocks</span>
+            </a>
+
         </div>
+
     </div>
 
-    {{-- ============================================ --}}
-    {{-- BARRE D'OUTILS --}}
-    {{-- ============================================ --}}
-    <form action="{{ route('admin.stocks.mouvements') }}" method="GET" class="projets-toolbar">
-        <div class="projets-search">
-            <i class="fas fa-search"></i>
-            <input type="text" name="recherche" id="mouvementSearch" value="{{ request('recherche') }}" 
-                   class="projets-search-input" placeholder="Rechercher un motif, un destinataire, une référence...">
+
+    {{-- =========================================================
+         MESSAGES DE SESSION
+    ========================================================== --}}
+    @if(session('success'))
+
+        <div class="stock-mouvements-alert stock-mouvements-alert--success">
+
+            <div class="stock-mouvements-alert__icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+
+            <div class="stock-mouvements-alert__content">
+
+                <strong>
+                    Opération réussie
+                </strong>
+
+                <p>
+                    {{ session('success') }}
+                </p>
+
+            </div>
+
         </div>
 
-        <div class="projets-filtres">
-            <select name="type" class="projets-filtre-select" onchange="this.form.submit()">
-                <option value="">Tous les types</option>
-                <option value="entree" {{ request('type') === 'entree' ? 'selected' : '' }}>Entrées</option>
-                <option value="sortie" {{ request('type') === 'sortie' ? 'selected' : '' }}>Sorties</option>
-            </select>
+    @endif
 
-            <select name="stock_id" class="projets-filtre-select" onchange="this.form.submit()">
-                <option value="">Tous les articles</option>
-                @foreach($stocks as $stockItem)
-                    <option value="{{ $stockItem->id }}" {{ request('stock_id') == $stockItem->id ? 'selected' : '' }}>
-                        {{ Str::limit($stockItem->designation, 40) }}
-                    </option>
-                @endforeach
-            </select>
 
-            <input type="date" name="date" class="projets-filtre-select" value="{{ request('date') }}" 
-                   onchange="this.form.submit()" title="Filtrer par date">
+    @if(session('error'))
+
+        <div class="stock-mouvements-alert stock-mouvements-alert--danger">
+
+            <div class="stock-mouvements-alert__icon">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+
+            <div class="stock-mouvements-alert__content">
+
+                <strong>
+                    Opération impossible
+                </strong>
+
+                <p>
+                    {{ session('error') }}
+                </p>
+
+            </div>
+
         </div>
 
-        @if(request('recherche') || request('type') || request('stock_id') || request('date'))
-            <a href="{{ route('admin.stocks.mouvements') }}" class="projets-reset-btn" title="Réinitialiser">
-                <i class="fas fa-times"></i>
-            </a>
-        @endif
-    </form>
+    @endif
 
-    {{-- ============================================ --}}
-    {{-- TABLEAU DES MOUVEMENTS --}}
-    {{-- ============================================ --}}
-    <div class="projets-table-card">
+
+    {{-- =========================================================
+         STATISTIQUES
+         ------------------------------------------------
+         Ces variables sont fournies par le controller.
+         Si ce n’est pas le cas, on retombe sur un calcul local.
+    ========================================================== --}}
+    <div class="stock-mouvements-statistics">
+
+        {{-- TOTAL --}}
+        <div class="stock-mouvements-stat-card">
+
+            <div class="stock-mouvements-stat-card__icon">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+
+            <div class="stock-mouvements-stat-card__content">
+
+                <span>
+                    Total des mouvements
+                </span>
+
+                <strong>
+                    {{ number_format($mouvements->total(), 0, ',', ' ') }}
+                </strong>
+
+                <small>
+                    mouvements enregistrés
+                </small>
+
+            </div>
+
+        </div>
+
+
+        {{-- ENTRÉES --}}
+        <div class="stock-mouvements-stat-card stock-mouvements-stat-card--entry">
+
+            <div class="stock-mouvements-stat-card__icon">
+                <i class="fas fa-arrow-down"></i>
+            </div>
+
+            <div class="stock-mouvements-stat-card__content">
+
+                <span>
+                    Entrées
+                </span>
+
+                <strong>
+                    {{ number_format($totalEntrees ?? 0, 0, ',', ' ') }}
+                </strong>
+
+                <small>
+                    mouvements entrants
+                </small>
+
+            </div>
+
+        </div>
+
+
+        {{-- SORTIES --}}
+        <div class="stock-mouvements-stat-card stock-mouvements-stat-card--exit">
+
+            <div class="stock-mouvements-stat-card__icon">
+                <i class="fas fa-arrow-up"></i>
+            </div>
+
+            <div class="stock-mouvements-stat-card__content">
+
+                <span>
+                    Sorties
+                </span>
+
+                <strong>
+                    {{ number_format($totalSorties ?? 0, 0, ',', ' ') }}
+                </strong>
+
+                <small>
+                    mouvements sortants
+                </small>
+
+            </div>
+
+        </div>
+
+
+        {{-- AJUSTEMENTS --}}
+        <div class="stock-mouvements-stat-card stock-mouvements-stat-card--adjustment">
+
+            <div class="stock-mouvements-stat-card__icon">
+                <i class="fas fa-sliders-h"></i>
+            </div>
+
+            <div class="stock-mouvements-stat-card__content">
+
+                <span>
+                    Ajustements
+                </span>
+
+                <strong>
+                    {{ number_format($totalAjustements ?? 0, 0, ',', ' ') }}
+                </strong>
+
+                <small>
+                    corrections de stock
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    {{-- =========================================================
+         FILTRES
+    ========================================================== --}}
+    <div class="stock-mouvements-card">
+
+        <div class="stock-mouvements-card__header">
+
+            <div>
+
+                <h2>
+                    Filtres
+                </h2>
+
+                <p>
+                    Affinez l’historique des mouvements.
+                </p>
+
+            </div>
+
+            <div class="stock-mouvements-card__header-icon">
+                <i class="fas fa-filter"></i>
+            </div>
+
+        </div>
+
+
+        <div class="stock-mouvements-card__body">
+
+            <form
+                method="GET"
+                action="{{ route('admin.stocks.mouvements.index') }}"
+                class="stock-mouvements-filter-form"
+                id="stock-mouvements-filter-form"
+            >
+
+                <div class="stock-mouvements-filter-grid">
+
+                    {{-- RECHERCHE --}}
+                    <div class="stock-mouvements-form-group">
+
+                        <label for="recherche">
+                            Recherche
+                        </label>
+
+                        <div class="stock-mouvements-input-wrapper">
+
+                            <i class="fas fa-search"></i>
+
+                            <input
+                                type="search"
+                                id="recherche"
+                                name="recherche"
+                                value="{{ request('recherche') }}"
+                                placeholder="Article, référence..."
+                                autocomplete="off"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    {{-- TYPE --}}
+                    <div class="stock-mouvements-form-group">
+
+                        <label for="type">
+                            Type de mouvement
+                        </label>
+
+                        <select
+                            id="type"
+                            name="type"
+                        >
+
+                            <option value="">
+                                Tous les types
+                            </option>
+
+                            @foreach(($types ?? []) as $value => $label)
+
+                                <option
+                                    value="{{ $value }}"
+                                    @selected(request('type') === (string) $value)
+                                >
+                                    {{ $label }}
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+
+                    {{-- DATE DÉBUT --}}
+                    <div class="stock-mouvements-form-group">
+
+                        <label for="date_debut">
+                            Date début
+                        </label>
+
+                        <input
+                            type="date"
+                            id="date_debut"
+                            name="date_debut"
+                            value="{{ request('date_debut') }}"
+                        >
+
+                    </div>
+
+
+                    {{-- DATE FIN --}}
+                    <div class="stock-mouvements-form-group">
+
+                        <label for="date_fin">
+                            Date fin
+                        </label>
+
+                        <input
+                            type="date"
+                            id="date_fin"
+                            name="date_fin"
+                            value="{{ request('date_fin') }}"
+                        >
+
+                    </div>
+
+
+                    {{-- ARTICLE --}}
+                    <div class="stock-mouvements-form-group">
+
+                        <label for="stock_id">
+                            Article
+                        </label>
+
+                        <select
+                            id="stock_id"
+                            name="stock_id"
+                        >
+
+                            <option value="">
+                                Tous les articles
+                            </option>
+
+                            @foreach(($stocks ?? []) as $stock)
+
+                                <option
+                                    value="{{ $stock->id }}"
+                                    @selected(
+                                        (string) request('stock_id')
+                                        ===
+                                        (string) $stock->id
+                                    )
+                                >
+                                    {{ $stock->designation }}
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+
+                    {{-- UTILISATEUR --}}
+                    <div class="stock-mouvements-form-group">
+
+                        <label for="utilisateur_id">
+                            Utilisateur
+                        </label>
+
+                        <select
+                            id="utilisateur_id"
+                            name="utilisateur_id"
+                        >
+
+                            <option value="">
+                                Tous les utilisateurs
+                            </option>
+
+                            @foreach(($utilisateurs ?? []) as $utilisateur)
+
+                                <option
+                                    value="{{ $utilisateur->id }}"
+                                    @selected(
+                                        (string) request('utilisateur_id')
+                                        ===
+                                        (string) $utilisateur->id
+                                    )
+                                >
+                                    {{ $utilisateur->name ?? 'Utilisateur' }}
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                {{-- ACTIONS --}}
+                <div class="stock-mouvements-filter-actions">
+
+                    <button
+                        type="submit"
+                        class="stock-mouvements-button stock-mouvements-button--primary"
+                    >
+                        <i class="fas fa-search"></i>
+                        <span>Filtrer</span>
+                    </button>
+
+
+                    <a
+                        href="{{ route('admin.stocks.mouvements.index') }}"
+                        class="stock-mouvements-button stock-mouvements-button--secondary"
+                    >
+                        <i class="fas fa-undo"></i>
+                        <span>Réinitialiser</span>
+                    </a>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    {{-- =========================================================
+         HISTORIQUE
+    ========================================================== --}}
+    <div class="stock-mouvements-card">
+
+        <div class="stock-mouvements-card__header">
+
+            <div>
+
+                <h2>
+                    Historique des mouvements
+                </h2>
+
+                <p>
+                    Liste chronologique des opérations enregistrées.
+                </p>
+
+            </div>
+
+            <div class="stock-mouvements-results-count">
+
+                {{ number_format($mouvements->total(), 0, ',', ' ') }}
+
+                résultat(s)
+
+            </div>
+
+        </div>
+
+
         @if($mouvements->count() > 0)
-        <div class="table-responsive">
-            <table class="table-projets">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Article</th>
-                        <th>Quantité</th>
-                        <th>Motif</th>
-                        <th>Destinataire / Fournisseur</th>
-                        <th>Référence</th>
-                        <th>Projet</th>
-                        <th>Effectué par</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($mouvements as $mouvement)
-                    <tr>
-                        {{-- Date --}}
-                        <td>
-                            <span style="font-size: 13px; white-space: nowrap;">
-                                <i class="fas fa-calendar-alt" style="color: #64748B; font-size: 11px;"></i>
-                                {{ $mouvement->date_mouvement->format('d/m/Y') }}
-                            </span>
-                        </td>
 
-                        {{-- Type --}}
-                        <td>
-                            @if($mouvement->estEntree())
-                                <span class="projet-publication-badge projet-publie">
-                                    <i class="fas fa-arrow-down"></i> Entrée
-                                </span>
-                            @else
-                                <span class="projet-publication-badge" style="background: #FEE2E2; color: #B91C1C;">
-                                    <i class="fas fa-arrow-up"></i> Sortie
-                                </span>
-                            @endif
-                        </td>
+            <div class="stock-mouvements-table-wrapper">
 
-                        {{-- Article --}}
-                        <td>
-                            <span style="font-size: 13px; font-weight: 600; color: #1E293B;">
-                                {{ $mouvement->stock ? $mouvement->stock->designation : '—' }}
-                            </span>
-                            @if($mouvement->stock)
-                            <br><small style="color: #64748B;">{{ $mouvement->stock->reference }}</small>
-                            @endif
-                        </td>
+                <table class="stock-mouvements-table">
 
-                        {{-- Quantité --}}
-                        <td>
-                            <span style="font-size: 14px; font-weight: 700; color: {{ $mouvement->estEntree() ? '#10B981' : '#EF4444' }};">
-                                {{ $mouvement->quantiteFormatee() }}
-                            </span>
-                        </td>
+                    <thead>
 
-                        {{-- Motif --}}
-                        <td>
-                            <span style="font-size: 13px; color: #334155;">{{ $mouvement->motif ?? '—' }}</span>
-                        </td>
+                        <tr>
 
-                        {{-- Destinataire / Fournisseur --}}
-                        <td>
-                            <span style="font-size: 13px; color: #334155;">{{ $mouvement->destinataire ?? '—' }}</span>
-                        </td>
+                            <th>
+                                Date
+                            </th>
 
-                        {{-- Référence --}}
-                        <td>
-                            @if($mouvement->reference_document)
-                                <span style="font-size: 12px; color: #1A5B9C;">
-                                    <i class="fas fa-file-alt"></i> {{ $mouvement->reference_document }}
-                                </span>
-                            @else
-                                <span style="color: #94A3B8; font-size: 12px;">—</span>
-                            @endif
-                        </td>
+                            <th>
+                                Référence
+                            </th>
 
-                        {{-- Projet --}}
-                        <td>
-                            @if($mouvement->projet)
-                                <span style="font-size: 12px; color: #1A5B9C;">
-                                    <i class="fas fa-project-diagram"></i>
-                                    {{ Str::limit($mouvement->projet->titre, 30) }}
-                                </span>
-                            @else
-                                <span style="color: #94A3B8; font-size: 12px;">—</span>
-                            @endif
-                        </td>
+                            <th>
+                                Article
+                            </th>
 
-                        {{-- Effectué par --}}
-                        <td>
-                            <span style="font-size: 12px; color: #64748B;">
-                                <i class="fas fa-user"></i> {{ $mouvement->nomEffectuePar() }}
-                            </span>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                            <th>
+                                Type
+                            </th>
 
-        {{-- Pagination --}}
-        @if($mouvements->hasPages())
-        <div class="projets-pagination">
-            <span class="projets-pagination-info">
-                Affichage de <strong>{{ $mouvements->firstItem() }}-{{ $mouvements->lastItem() }}</strong> sur <strong>{{ $mouvements->total() }}</strong> mouvements
-            </span>
-            {{ $mouvements->links('pagination.custom') }}
-        </div>
-        @endif
+                            <th class="text-right">
+                                Quantité
+                            </th>
+
+                            <th>
+                                Utilisateur
+                            </th>
+
+                            <th class="text-right">
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach($mouvements as $mouvement)
+
+                            @php
+                                $typeMouvement = $mouvement->type instanceof \App\Enums\TypeMouvement
+                                    ? $mouvement->type->value
+                                    : (string) $mouvement->type;
+
+                                $isEntree     = $typeMouvement === 'entree';
+                                $isSortie     = $typeMouvement === 'sortie';
+                                $isAjustement = $typeMouvement === 'ajustement';
+                                $isTransfert  = $typeMouvement === 'transfert';
+                            @endphp
+
+
+                            <tr>
+
+                                {{-- DATE --}}
+                                <td>
+
+                                    <div class="stock-mouvements-date">
+
+                                        <strong>
+                                            {{ $mouvement->date_mouvement
+                                                ? \Carbon\Carbon::parse($mouvement->date_mouvement)->format('d/m/Y')
+                                                : '—'
+                                            }}
+                                        </strong>
+
+                                        @if($mouvement->created_at)
+
+                                            <small>
+                                                {{ $mouvement->created_at->format('H:i') }}
+                                            </small>
+
+                                        @endif
+
+                                    </div>
+
+                                </td>
+
+
+                                {{-- RÉFÉRENCE --}}
+                                <td>
+
+                                    <span class="stock-mouvements-reference">
+
+                                        {{ $mouvement->reference_document ?? '—' }}
+
+                                    </span>
+
+                                </td>
+
+
+                                {{-- ARTICLE --}}
+                                <td>
+
+                                    <div class="stock-mouvements-article">
+
+                                        <div class="stock-mouvements-article__icon">
+                                            <i class="fas fa-box"></i>
+                                        </div>
+
+                                        <div class="stock-mouvements-article__content">
+
+                                            <strong>
+
+                                                {{ $mouvement->stock?->designation ?? 'Article supprimé' }}
+
+                                            </strong>
+
+
+                                            @if($mouvement->stock?->reference)
+
+                                                <small>
+                                                    {{ $mouvement->stock->reference }}
+                                                </small>
+
+                                            @endif
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                {{-- TYPE --}}
+                                <td>
+
+                                    @if($isEntree)
+
+                                        <span class="stock-mouvements-badge stock-mouvements-badge--entry">
+
+                                            <i class="fas fa-arrow-down"></i>
+
+                                            Entrée
+
+                                        </span>
+
+                                    @elseif($isSortie)
+
+                                        <span class="stock-mouvements-badge stock-mouvements-badge--exit">
+
+                                            <i class="fas fa-arrow-up"></i>
+
+                                            Sortie
+
+                                        </span>
+
+                                    @elseif($isAjustement)
+
+                                        <span class="stock-mouvements-badge stock-mouvements-badge--adjustment">
+
+                                            <i class="fas fa-sliders-h"></i>
+
+                                            Ajustement
+
+                                        </span>
+
+                                    @elseif($isTransfert)
+
+                                        <span class="stock-mouvements-badge stock-mouvements-badge--neutral">
+
+                                            <i class="fas fa-exchange-alt"></i>
+
+                                            Transfert
+
+                                        </span>
+
+                                    @else
+
+                                        <span class="stock-mouvements-badge stock-mouvements-badge--neutral">
+
+                                            {{ ucfirst((string) $typeMouvement) }}
+
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+
+                                {{-- QUANTITÉ --}}
+                                <td class="text-right">
+
+                                    @php
+                                        $quantiteSignee = (float) $mouvement->quantite
+                                            * (int) ($mouvement->sens ?? 1);
+                                    @endphp
+
+                                    <span
+                                        class="stock-mouvements-quantity
+                                            {{ $isEntree ? 'stock-mouvements-quantity--positive' : '' }}
+                                            {{ $isSortie ? 'stock-mouvements-quantity--negative' : '' }}"
+                                    >
+
+                                        @if($quantiteSignee > 0)
+                                            +
+                                        @elseif($quantiteSignee < 0)
+                                            -
+                                        @endif
+
+                                        {{ number_format(
+                                            abs($quantiteSignee),
+                                            2,
+                                            ',',
+                                            ' '
+                                        ) }}
+
+                                    </span>
+
+                                </td>
+
+
+                                {{-- UTILISATEUR --}}
+                                <td>
+
+                                    @if($mouvement->utilisateur)
+
+                                        <div class="stock-mouvements-user">
+
+                                            <div class="stock-mouvements-user__avatar">
+
+                                                {{ strtoupper(
+                                                    mb_substr(
+                                                        $mouvement->utilisateur->name ?? 'U',
+                                                        0,
+                                                        1
+                                                    )
+                                                ) }}
+
+                                            </div>
+
+
+                                            <div class="stock-mouvements-user__content">
+
+                                                <strong>
+                                                    {{ $mouvement->utilisateur->name ?? 'Utilisateur' }}
+                                                </strong>
+
+                                                @if($mouvement->utilisateur->email)
+
+                                                    <small>
+                                                        {{ $mouvement->utilisateur->email }}
+                                                    </small>
+
+                                                @endif
+
+                                            </div>
+
+                                        </div>
+
+                                    @else
+
+                                        <span class="stock-mouvements-muted">
+                                            Système
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+
+                                {{-- ACTION --}}
+                                <td class="text-right">
+
+                                    <a
+                                        href="{{ route(
+                                            'admin.stocks.mouvements.show',
+                                            $mouvement
+                                        ) }}"
+                                        class="stock-mouvements-table-action"
+                                        title="Voir le mouvement"
+                                        aria-label="Voir le mouvement"
+                                    >
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+
+                                </td>
+
+                            </tr>
+
+                        @endforeach
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {{-- PAGINATION --}}
+            <div class="stock-mouvements-pagination">
+
+                {{ $mouvements->withQueryString()->links() }}
+
+            </div>
+
 
         @else
-        <div class="projets-empty">
-            <div class="projets-empty-icon"><i class="fas fa-exchange-alt"></i></div>
-            <h4>Aucun mouvement trouvé</h4>
-            <p>Aucun mouvement ne correspond à vos critères de recherche.</p>
-            <a href="{{ route('admin.stocks.mouvements') }}" class="btn btn-outline btn-sm mt-3">
-                <i class="fas fa-sync-alt"></i> Réinitialiser les filtres
-            </a>
-        </div>
+
+            {{-- ÉTAT VIDE --}}
+            <div class="stock-mouvements-empty">
+
+                <div class="stock-mouvements-empty__icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+
+                <h3>
+                    Aucun mouvement trouvé
+                </h3>
+
+                <p>
+                    Aucun mouvement ne correspond aux critères
+                    sélectionnés.
+                </p>
+
+
+                @if(request()->hasAny([
+                    'recherche',
+                    'type',
+                    'date_debut',
+                    'date_fin',
+                    'stock_id',
+                    'utilisateur_id'
+                ]))
+
+                    <a
+                        href="{{ route('admin.stocks.mouvements.index') }}"
+                        class="stock-mouvements-button stock-mouvements-button--secondary"
+                    >
+                        <i class="fas fa-undo"></i>
+                        Réinitialiser les filtres
+                    </a>
+
+                @endif
+
+            </div>
+
         @endif
+
     </div>
+
+
+    {{-- =========================================================
+         INFORMATION MÉTIER
+    ========================================================== --}}
+    <div class="stock-mouvements-information">
+
+        <div class="stock-mouvements-information__icon">
+            <i class="fas fa-info-circle"></i>
+        </div>
+
+        <div class="stock-mouvements-information__content">
+
+            <strong>
+                Historique de traçabilité
+            </strong>
+
+            <p>
+                Les mouvements constituent l’historique des opérations
+                ayant modifié ou documenté le stock. Les corrections
+                doivent être effectuées à travers les procédures
+                prévues par le module afin de préserver la traçabilité.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
 
 @endsection
 
+
 @section('scripts')
-    <script src="{{ asset('assets/js/admin-common.js') }}"></script>
+
+    <script
+        src="{{ asset('assets/js/admin/stocks/mouvements-index.js') }}"
+        defer>
+    </script>
+
 @endsection

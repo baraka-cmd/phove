@@ -12,6 +12,7 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/admin-common.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/admin-structures.css') }}">
 @endsection
 
 @section('content')
@@ -101,7 +102,7 @@
                         <th>Parent</th>
                         <th>Postes</th>
                         <th>Statut</th>
-                        <th style="width: 140px;">Actions</th>
+                        <th class="th-actions">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -109,14 +110,14 @@
                     <tr>
                         {{-- Nom --}}
                         <td>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <div style="width: 38px; height: 38px; border-radius: 8px; background: #E8F0F8; display: flex; align-items: center; justify-content: center; color: #1A5B9C; flex-shrink: 0;">
+                            <div class="cell-with-icon">
+                                <div class="cell-icon">
                                     <i class="fas fa-{{ $structure->type === 'station' ? 'flag' : ($structure->type === 'base' ? 'building' : 'map-marker-alt') }}"></i>
                                 </div>
-                                <div>
-                                    <div style="font-size: 13px; font-weight: 600; color: #1E293B;">{{ $structure->nom }}</div>
+                                <div class="cell-info">
+                                    <div class="cell-title">{{ $structure->nom }}</div>
                                     @if($structure->adresse)
-                                    <div style="font-size: 11px; color: #64748B;">{{ Str::limit($structure->adresse, 40) }}</div>
+                                        <div class="cell-subtitle">{{ Str::limit($structure->adresse, 40) }}</div>
                                     @endif
                                 </div>
                             </div>
@@ -124,7 +125,7 @@
 
                         {{-- Type --}}
                         <td>
-                            <span class="projet-badge" style="background: {{ $structure->type === 'station' ? '#DBEAFE' : ($structure->type === 'base' ? '#D1FAE5' : '#FEF3C7') }}; color: {{ $structure->type === 'station' ? '#1E40AF' : ($structure->type === 'base' ? '#065F46' : '#92400E') }};">
+                            <span class="projet-badge badge-type-{{ $structure->type }}">
                                 <i class="fas fa-{{ $structure->type === 'station' ? 'flag' : ($structure->type === 'base' ? 'building' : 'map-marker-alt') }}"></i>
                                 {{ $structure->typeLibelle() }}
                             </span>
@@ -132,33 +133,31 @@
 
                         {{-- Localisation --}}
                         <td>
-                            <span style="font-size: 13px;">{{ $structure->localisationComplete() }}</span>
+                            <span class="cell-text">{{ $structure->localisationComplete() }}</span>
                         </td>
 
                         {{-- Parent --}}
                         <td>
                             @if($structure->parent)
-                                <span style="font-size: 13px; color: #334155;">
-                                    <i class="fas fa-level-up-alt" style="font-size: 10px; color: #1A5B9C;"></i>
+                                <span class="cell-text">
+                                    <i class="fas fa-level-up-alt cell-parent-icon"></i>
                                     {{ $structure->parent->nom }}
                                 </span>
                             @else
-                                <span style="color: #94A3B8; font-size: 12px;">—</span>
+                                <span class="cell-empty">—</span>
                             @endif
                         </td>
 
                         {{-- Postes --}}
                         <td>
-                            <span style="font-size: 13px; font-weight: 600; color: #1A5B9C;">
-                                {{ $structure->organes_count }}
-                            </span>
-                            <small style="color: #64748B;">poste(s)</small>
+                            <span class="cell-count">{{ $structure->organes_count }}</span>
+                            <span class="cell-count-label">poste(s)</span>
                         </td>
 
                         {{-- Statut --}}
                         <td>
                             <span class="projet-publication-badge {{ $structure->statut === 'actif' ? 'projet-publie' : 'projet-non-publie' }}">
-                                <i class="fas fa-circle" style="font-size: 8px;"></i>
+                                <i class="fas fa-circle badge-dot"></i>
                                 {{ $structure->statut === 'actif' ? 'Actif' : 'Inactif' }}
                             </span>
                         </td>
@@ -172,7 +171,7 @@
                                 <a href="{{ route('admin.structures.edit', $structure) }}" class="projet-action-btn edit" title="Modifier">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.structures.destroy', $structure) }}" method="POST" style="display: inline;">
+                                <form action="{{ route('admin.structures.destroy', $structure) }}" method="POST" class="form-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="projet-action-btn delete" 

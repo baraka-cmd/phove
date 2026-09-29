@@ -6,7 +6,7 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/actualites.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/actualite-show.css') }}">
 @endsection
 
 @section('content')
@@ -85,9 +85,11 @@
                     {{-- Image --}}
                     @if($article->image)
                     <div class="article-featured-image">
-                        <img src="{{ asset('storage/' . $article->image) }}" 
+                        <img src="{{ route('media.show', ['path' => $article->image]) }}" 
                              alt="{{ $article->titre }}" 
-                             class="article-featured-img">
+                             class="article-featured-img"
+                             loading="lazy"
+                             onerror="this.style.display='none';">
                     </div>
                     @endif
 
@@ -148,7 +150,7 @@
                             </div>
                             <div class="article-author-info">
                                 <span class="article-author-name">{{ $article->auteur->nom }}</span>
-                                <span class="article-author-role">{{ $article->auteur->role === 'super_admin' ? 'Super Administrateur' : ($article->auteur->role === 'admin' ? 'Administrateur' : 'Éditeur') }}</span>
+                                <span class="article-author-role">{{ $article->auteur->roleLibelle() ?? 'Administrateur' }}</span>
                             </div>
                         </div>
                     </div>
@@ -180,7 +182,7 @@
                     </div>
 
                     {{-- Articles connexes --}}
-                    @if($articlesConnexes->count() > 0)
+                    @if(isset($articlesConnexes) && $articlesConnexes->count() > 0)
                     <div class="article-sidebar-card">
                         <h3 class="article-sidebar-title">
                             <i class="fas fa-link"></i> Articles connexes
@@ -213,7 +215,7 @@
                     Restez <span class="highlight-page">informés</span>
                 </h2>
                 <p class="cta-text-page">
-                    Ne manquez aucune actualité d'AHD-RDC. Suivez nos actions, nos projets 
+                    Ne manquez aucune actualité de PHOVE. Suivez nos actions, nos projets 
                     et nos événements en vous abonnant à notre newsletter.
                 </p>
                 <div class="cta-buttons-page">
@@ -232,5 +234,5 @@
 
 @section('scripts')
     <script src="{{ asset('assets/js/public-pages-common.js') }}"></script>
-    <script src="{{ asset('assets/js/actualites.js') }}"></script>
+    <script src="{{ asset('assets/js/actualite-show.js') }}"></script>
 @endsection

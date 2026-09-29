@@ -7,114 +7,312 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Exécuter la migration (créer la table salaires).
+     * Crée la table des salaires.
+     *
+     * Architecture :
+     * - Un salaire représente le montant dû à un membre pour un mois.
+     * - Les paiements réels seront enregistrés séparément dans
+     *   la table paiements_salaires.
+     * - Un salaire peut donc être payé en plusieurs fois.
      */
     public function up(): void
     {
         Schema::create('salaires', function (Blueprint $table) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | IDENTIFIANT
+            |--------------------------------------------------------------------------
+            */
+
             $table->id();
 
-            // Lien vers le membre (personnel rémunéré)
+
+            /*
+            |--------------------------------------------------------------------------
+            | PERSONNEL CONCERNÉ
+            |--------------------------------------------------------------------------
+            */
+
             $table->foreignId('membre_id')
-                  ->constrained('membres')
-                  ->onDelete('cascade')
-                  ->comment('Membre (personnel) concerné par ce salaire');
+                ->constrained('membres')
+                ->restrictOnDelete()
+                ->comment(
+                    'Membre concerné par le salaire. ' .
+                    'La suppression du membre est bloquée si un historique salarial existe.'
+                );
 
-            // Lien vers le poste occupé (organe)
+
+            /*
+            |--------------------------------------------------------------------------
+            | POSTE / ORGANE
+            |--------------------------------------------------------------------------
+            */
+
             $table->foreignId('organe_id')
-                  ->nullable()
-                  ->constrained('organes')
-                  ->onDelete('set null')
-                  ->comment('Poste occupé dans l\'organigramme');
+                ->nullable()
+                ->constrained('organes')
+                ->nullOnDelete()
+                ->comment(
+                    'Organe ou poste occupé par le membre au moment de la paie.'
+                );
 
-            // Période de paie (format YYYY-MM)
+
+            /*
+            |--------------------------------------------------------------------------
+            | PÉRIODE DE PAIE
+            |--------------------------------------------------------------------------
+            |
+            | Format attendu : YYYY-MM
+            | Exemple : 2026-09
+            |
+            | On conserve une chaîne de 7 caractères plutôt qu'une date complète,
+            | car un salaire correspond à un mois comptable et non à un jour précis.
+            |
+            */
+
             $table->string('mois', 7)
-                  ->comment('Période de paie (format YYYY-MM)');
+                ->comment(
+                    'Période salariale au format YYYY-MM.'
+                );
 
-            // Salaire de base
+
+            /*
+            |--------------------------------------------------------------------------
+            | COMPOSANTES DU SALAIRE
+            |--------------------------------------------------------------------------
+            */
+
             $table->decimal('salaire_base', 12, 2)
-                  ->default(0)
-                  ->comment('Salaire de base');
+                ->default(0)
+                ->comment(
+                    'Salaire de base du membre pour la période.'
+                );
 
-            // Primes et indemnités
             $table->decimal('primes', 12, 2)
-                  ->default(0)
-                  ->comment('Primes, indemnités et avantages');
+                ->default(0)
+                ->comment(
+                    'Total des primes et avantages ajoutés au salaire.'
+                );
 
-            // Retenues (impôts, avances, cotisations)
             $table->decimal('retenues', 12, 2)
-                  ->default(0)
-                  ->comment('Retenues : impôts, avances, cotisations');
+                ->default(0)
+                ->comment(
+                    'Total des retenues appliquées au salaire.'
+                );
 
-            // Salaire net à payer
             $table->decimal('salaire_net', 12, 2)
-                  ->default(0)
-                  ->comment('Salaire net = base + primes - retenues');
+                ->default(0)
+                ->comment(
+                    'Montant net dû au membre : salaire_base + primes - retenues.'
+                );
 
-            // Mode de paiement
-            $table->enum('mode_paiement', [
-                'especes',
-                'virement',
-                'mobile_money',
-                'cheque',
-            ])->default('especes')
-              ->comment('Mode de paiement');
 
-            // Date effective du paiement
-            $table->date('date_paiement')
-                  ->nullable()
-                  ->comment('Date effective du paiement');
+            /*
+            |--------------------------------------------------------------------------
+            | ÉTAT DU SALAIRE
+            |--------------------------------------------------------------------------
+            |
+            | brouillon
+            |     Le salaire est en préparation.
+            |
+            | valide
+            |     Le salaire a été approuvé et peut être payé.
+            |
+            | partiellement_paye
+            |     Une partie du salaire a déjà été versée.
+            |
+            | paye
+            |     Le salaire a été intégralement payé.
+            |
+            | annule
+            |     Le salaire a été annulé et ne doit plus être payé.
+            |
+            */
 
-            // Statut du salaire
             $table->enum('statut', [
                 'brouillon',
                 'valide',
+                'partiellement_paye',
                 'paye',
                 'annule',
-            ])->default('brouillon')
-              ->comment('Statut : brouillon, valide, payé, annulé');
+            ])
+                ->default('brouillon')
+                ->comment(
+                    'État du salaire dans le cycle de traitement.'
+                );
 
-            // Référence unique du bulletin de salaire
+
+            /*
+            |--------------------------------------------------------------------------
+            | RÉFÉRENCE DU BULLETIN
+            |--------------------------------------------------------------------------
+            |
+            | Exemple :
+            | BUL-202609-0001
+            |
+            | Cette référence identifie le salaire lui-même.
+            | Elle est différente des références de paiement.
+            |
+            */
+
             $table->string('reference', 50)
-                  ->unique()
-                  ->comment('Référence unique du bulletin (BUL-YYYYMM-XXXX)');
+                ->unique()
+                ->comment(
+                    'Référence unique du bulletin salarial.'
+                );
 
-            // Admin qui a validé
+
+            /*
+            |--------------------------------------------------------------------------
+            | VALIDATION
+            |--------------------------------------------------------------------------
+            */
+
             $table->foreignId('valide_par')
-                  ->nullable()
-                  ->constrained('users')
-                  ->onDelete('set null')
-                  ->comment('Admin qui a validé le salaire');
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete()
+                ->comment(
+                    'Utilisateur ayant validé le salaire.'
+                );
 
-            // Admin qui a effectué le paiement
-            $table->foreignId('paye_par')
-                  ->nullable()
-                  ->constrained('users')
-                  ->onDelete('set null')
-                  ->comment('Admin qui a effectué le paiement');
+            $table->timestamp('valide_at')
+                ->nullable()
+                ->comment(
+                    'Date et heure exactes de validation du salaire.'
+                );
 
-            // Notes
+
+            /*
+            |--------------------------------------------------------------------------
+            | ANNULATION
+            |--------------------------------------------------------------------------
+            */
+
+            $table->foreignId('annule_par')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete()
+                ->comment(
+                    'Utilisateur ayant annulé le salaire.'
+                );
+
+            $table->timestamp('annule_at')
+                ->nullable()
+                ->comment(
+                    'Date et heure exactes de l’annulation.'
+                );
+
+            $table->text('motif_annulation')
+                ->nullable()
+                ->comment(
+                    'Justification obligatoire lors de l’annulation.'
+                );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | CRÉATION / RESPONSABILITÉ
+            |--------------------------------------------------------------------------
+            */
+
+            $table->foreignId('created_by')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete()
+                ->comment(
+                    'Utilisateur ayant créé le salaire.'
+                );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | NOTES
+            |--------------------------------------------------------------------------
+            */
+
             $table->text('notes')
-                  ->nullable()
-                  ->comment('Notes sur ce salaire');
+                ->nullable()
+                ->comment(
+                    'Observations ou informations complémentaires concernant le salaire.'
+                );
 
-            // Timestamps
+
+            /*
+            |--------------------------------------------------------------------------
+            | TIMESTAMPS
+            |--------------------------------------------------------------------------
+            */
+
             $table->timestamps();
 
-            // Index pour la recherche rapide
-            $table->index('membre_id');
-            $table->index('organe_id');
-            $table->index('mois');
-            $table->index('statut');
-            $table->index('date_paiement');
 
-            // Contrainte d'unicité : un seul salaire par membre par mois
-            $table->unique(['membre_id', 'mois']);
+            /*
+            |--------------------------------------------------------------------------
+            | INDEX
+            |--------------------------------------------------------------------------
+            |
+            | Ces index améliorent les recherches utilisées par :
+            | - la liste des salaires ;
+            | - les filtres par mois ;
+            | - les filtres par statut ;
+            | - les recherches par membre ;
+            | - les tableaux financiers.
+            |
+            */
+
+            $table->index(
+                ['mois', 'statut'],
+                'salaires_mois_statut_index'
+            );
+
+            $table->index(
+                ['membre_id', 'mois'],
+                'salaires_membre_mois_index'
+            );
+
+            $table->index(
+                ['organe_id', 'mois'],
+                'salaires_organe_mois_index'
+            );
+
+            $table->index(
+                'valide_par',
+                'salaires_valide_par_index'
+            );
+
+            $table->index(
+                'created_by',
+                'salaires_created_by_index'
+            );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | CONTRAINTE MÉTIER
+            |--------------------------------------------------------------------------
+            |
+            | Un membre ne peut avoir qu'un seul salaire pour un même mois.
+            |
+            | Exemple :
+            |
+            | Membre 15 + 2026-09 = UN SEUL salaire
+            |
+            | Cela évite les doublons accidentels.
+            |
+            */
+
+            $table->unique(
+                ['membre_id', 'mois'],
+                'salaires_membre_mois_unique'
+            );
         });
     }
 
+
     /**
-     * Annuler la migration (supprimer la table).
+     * Supprime la table des salaires.
      */
     public function down(): void
     {

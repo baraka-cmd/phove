@@ -1,0 +1,934 @@
+/* ============================================================
+   PHOVE — STYLE : FICHE DÉTAILLÉE D'UN BON DE SORTIE
+   Vue : resources/views/admin/stocks/sorties/show.blade.php
+   Route : admin.stocks.sorties.show
+
+   Ce fichier complète stocks-common.css.
+   Il n'ajoute QUE ce qui est spécifique à la fiche du bon.
+   ============================================================ */
+
+
+/* ----------------------------------------------------------
+   1. CONTENEUR DE PAGE
+   ---------------------------------------------------------- */
+
+.stock-sortie-show {
+    /* Conteneur principal */
+}
+
+
+/* ----------------------------------------------------------
+   2. EN-TÊTE DE PAGE
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .page-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.stock-sortie-show .page-header-main {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex: 1;
+    min-width: 0;
+}
+
+.stock-sortie-show .page-header-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--border-radius);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.stock-sortie-show .page-header-eyebrow {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 2px;
+}
+
+.stock-sortie-show .page-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.3;
+}
+
+.stock-sortie-show .page-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+.stock-sortie-show .page-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+
+/* ----------------------------------------------------------
+   3. MESSAGES
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .alert {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-sm);
+}
+
+.stock-sortie-show .alert-success {
+    background: var(--color-success-light);
+    color: #065F46;
+    border: 1px solid #6EE7B7;
+}
+
+.stock-sortie-show .alert-danger {
+    background: var(--color-error-light);
+    color: #B91C1C;
+    border: 1px solid #FCA5A5;
+}
+
+.stock-sortie-show .alert-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.stock-sortie-show .alert-content {
+    flex: 1;
+    min-width: 0;
+}
+
+
+/* ----------------------------------------------------------
+   4. GRILLE RÉSUMÉ (4 cartes)
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.stock-sortie-show .summary-card {
+    background: var(--color-bg-white);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+}
+
+.stock-sortie-show .summary-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.stock-sortie-show .summary-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.stock-sortie-show .summary-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.stock-sortie-show .summary-label {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.stock-sortie-show .summary-value {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+
+/* ----------------------------------------------------------
+   5. CARTE STATUT COURANT
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .status-card {
+    background: var(--color-bg-white);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-xl);
+    overflow: hidden;
+    border-left: 4px solid var(--color-primary);
+}
+
+.stock-sortie-show .status-card--brouillon {
+    border-left-color: #64748B;
+}
+
+.stock-sortie-show .status-card--soumis {
+    border-left-color: var(--color-info);
+}
+
+.stock-sortie-show .status-card--valide {
+    border-left-color: var(--color-success);
+}
+
+.stock-sortie-show .status-card--en_preparation {
+    border-left-color: var(--color-warning);
+}
+
+.stock-sortie-show .status-card--sorti {
+    border-left-color: var(--color-success);
+}
+
+.stock-sortie-show .status-card--annule {
+    border-left-color: var(--color-error);
+}
+
+.stock-sortie-show .status-card-main {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+}
+
+.stock-sortie-show .status-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.stock-sortie-show .status-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stock-sortie-show .status-eyebrow {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.stock-sortie-show .status-value {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+}
+
+
+/* ----------------------------------------------------------
+   6. BARRE DE PROGRESSION (dans la carte statut)
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .status-progress {
+    padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
+    background: var(--color-bg-light);
+    border-top: 1px solid var(--border-color-light);
+}
+
+.stock-sortie-show .progress-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+}
+
+.stock-sortie-show .progress-header strong {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-bold);
+}
+
+.stock-sortie-show .progress-bar {
+    height: 10px;
+    background: var(--border-color-light);
+    border-radius: var(--border-radius-full);
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm);
+}
+
+.stock-sortie-show .progress-fill {
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        var(--color-primary),
+        var(--color-primary-light)
+    );
+    border-radius: var(--border-radius-full);
+    transition: width var(--transition-slow);
+    min-width: 3px;
+}
+
+.stock-sortie-show .progress-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+
+/* ----------------------------------------------------------
+   7. CARTES D'INFORMATION
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .card {
+    background: var(--color-bg-white);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    margin-bottom: var(--spacing-lg);
+    padding: 0;
+}
+
+.stock-sortie-show .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color-light);
+    background: var(--color-bg-light);
+    margin-bottom: 0;
+    padding-bottom: var(--spacing-lg);
+}
+
+.stock-sortie-show .card-eyebrow {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: var(--font-weight-semibold);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.stock-sortie-show .card-title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+}
+
+.stock-sortie-show .card-header-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+
+/* ----------------------------------------------------------
+   8. LISTE D'INFORMATIONS (demandeur, validateur, dates…)
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .information-list {
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.stock-sortie-show .information-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) 0;
+    border-bottom: 1px dashed var(--border-color-light);
+}
+
+.stock-sortie-show .information-row:last-child {
+    border-bottom: none;
+}
+
+.stock-sortie-show .information-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.stock-sortie-show .information-label i {
+    color: var(--color-primary);
+    font-size: var(--font-size-sm);
+    width: 16px;
+    text-align: center;
+}
+
+.stock-sortie-show .information-value {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    text-align: right;
+    word-break: break-word;
+}
+
+
+/* ----------------------------------------------------------
+   9. GRILLE DE CONTEXTE (destinataire, projet, motif)
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .context-grid {
+    padding: var(--spacing-lg);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.stock-sortie-show .context-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-md);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+    border-left: 3px solid var(--color-primary);
+}
+
+.stock-sortie-show .context-item-wide {
+    grid-column: 1 / -1;
+}
+
+.stock-sortie-show .context-label {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.stock-sortie-show .context-value {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+}
+
+.stock-sortie-show .context-text {
+    font-weight: var(--font-weight-regular);
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+}
+
+
+/* ----------------------------------------------------------
+   10. CARTE DES LIGNES
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .lines-card .line-count {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+}
+
+.stock-sortie-show .table-wrapper {
+    overflow-x: auto;
+}
+
+.stock-sortie-show .data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stock-sortie-show .data-table thead {
+    background: var(--color-bg-light);
+}
+
+.stock-sortie-show .data-table thead th {
+    padding: 12px 16px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-color-light);
+    white-space: nowrap;
+}
+
+.stock-sortie-show .data-table tbody td {
+    padding: 14px 16px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--border-color-light);
+    vertical-align: middle;
+}
+
+.stock-sortie-show .data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.stock-sortie-show .data-table tbody tr:hover {
+    background: var(--color-bg-light);
+}
+
+.stock-sortie-show .data-table tfoot td {
+    padding: 12px 16px;
+    background: var(--color-bg-light);
+    border-top: 2px solid var(--border-color-light);
+    font-size: var(--font-size-sm);
+}
+
+.stock-sortie-show .row-number {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-semibold);
+    text-align: center;
+    width: 40px;
+}
+
+
+/* ----------------------------------------------------------
+   11. CELLULE ARTICLE
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .article-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.stock-sortie-show .article-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+}
+
+.stock-sortie-show .article-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.stock-sortie-show .article-details strong {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.stock-sortie-show .article-details small {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.stock-sortie-show .reference-code {
+    font-family: 'Courier New', monospace;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    background: var(--color-bg-light);
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+
+/* ----------------------------------------------------------
+   12. QUANTITÉS
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .quantity-cell {
+    font-family: 'Courier New', monospace;
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+}
+
+.stock-sortie-show .quantity-highlight {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-md);
+}
+
+
+/* ----------------------------------------------------------
+   13. STATUT DE LIGNE
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .line-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: var(--border-radius-full);
+    font-size: 11px;
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+}
+
+.stock-sortie-show .line-status i {
+    font-size: 10px;
+}
+
+.stock-sortie-show .line-status-sortie {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+.stock-sortie-show .line-status-validee {
+    background: var(--color-info-light);
+    color: #1E40AF;
+}
+
+.stock-sortie-show .line-status-partielle {
+    background: var(--color-warning-light);
+    color: #92400E;
+}
+
+.stock-sortie-show .line-status-attente {
+    background: #F1F5F9;
+    color: #475569;
+}
+
+
+/* ----------------------------------------------------------
+   14. ACTIONS DE WORKFLOW
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .actions-card .actions-grid {
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+    align-items: center;
+}
+
+.stock-sortie-show .action-form {
+    display: inline-block;
+    margin: 0;
+}
+
+.stock-sortie-show .action-button {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-width: 160px;
+    padding: var(--spacing-lg) var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    border: 2px solid var(--border-color-light);
+    background: var(--color-bg-white);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-family: var(--font-primary);
+}
+
+.stock-sortie-show .action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+}
+
+.stock-sortie-show .action-button i {
+    font-size: 1.4rem;
+    margin-bottom: 2px;
+}
+
+.stock-sortie-show .action-button span {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+}
+
+.stock-sortie-show .action-button small {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-regular);
+}
+
+.stock-sortie-show .action-submit {
+    border-color: var(--color-info);
+    color: var(--color-info);
+}
+
+.stock-sortie-show .action-submit:hover {
+    background: var(--color-info-light);
+    border-color: var(--color-info);
+    color: #1E40AF;
+}
+
+.stock-sortie-show .action-validate {
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+.stock-sortie-show .action-validate:hover {
+    background: var(--color-success-light);
+    border-color: var(--color-success);
+    color: #065F46;
+}
+
+.stock-sortie-show .action-prepare {
+    border-color: var(--color-warning);
+    color: #92400E;
+}
+
+.stock-sortie-show .action-prepare:hover {
+    background: var(--color-warning-light);
+    border-color: var(--color-warning);
+}
+
+.stock-sortie-show .action-output {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.stock-sortie-show .action-output:hover {
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary);
+}
+
+.stock-sortie-show .action-cancel {
+    border-color: var(--color-error);
+    color: var(--color-error);
+}
+
+.stock-sortie-show .action-cancel:hover {
+    background: var(--color-error-light);
+    border-color: var(--color-error);
+    color: #B91C1C;
+}
+
+
+/* ----------------------------------------------------------
+   15. WORKFLOW TERMINÉ (bon sorti / annulé)
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .workflow-complete {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg) var(--spacing-xl);
+    background: var(--color-success-light);
+    border-left: 4px solid var(--color-success);
+    border-radius: var(--border-radius-sm);
+    width: 100%;
+}
+
+.stock-sortie-show .workflow-complete .complete-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    color: var(--color-success);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.stock-sortie-show .workflow-complete strong {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: #065F46;
+    margin-bottom: 2px;
+}
+
+.stock-sortie-show .workflow-complete span {
+    font-size: var(--font-size-xs);
+    color: #065F46;
+}
+
+.stock-sortie-show .workflow-cancelled {
+    background: var(--color-error-light);
+    border-left-color: var(--color-error);
+}
+
+.stock-sortie-show .workflow-cancelled .complete-icon {
+    color: var(--color-error);
+}
+
+.stock-sortie-show .workflow-cancelled strong {
+    color: #B91C1C;
+}
+
+.stock-sortie-show .workflow-cancelled span {
+    color: #B91C1C;
+}
+
+
+/* ----------------------------------------------------------
+   16. TRAÇABILITÉ
+   ---------------------------------------------------------- */
+
+.stock-sortie-show .audit-card .audit-grid {
+    padding: var(--spacing-lg);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+.stock-sortie-show .audit-item {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: var(--spacing-md);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+    border-left: 3px solid var(--color-primary);
+}
+
+.stock-sortie-show .audit-item span {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.stock-sortie-show .audit-item strong {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    font-family: 'Courier New', monospace;
+}
+
+
+/* ----------------------------------------------------------
+   17. RESPONSIVE
+   ---------------------------------------------------------- */
+
+@media (max-width: 992px) {
+    .stock-sortie-show .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stock-sortie-show .context-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-sortie-show .audit-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .stock-sortie-show .card {
+        margin-bottom: var(--spacing-md);
+    }
+
+    .stock-sortie-show .information-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-xs);
+    }
+
+    .stock-sortie-show .information-value {
+        text-align: left;
+    }
+
+    .stock-sortie-show .actions-grid {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .stock-sortie-show .action-button {
+        min-width: auto;
+        width: 100%;
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: var(--spacing-md);
+    }
+
+    .stock-sortie-show .action-button i {
+        font-size: 1.2rem;
+        margin-bottom: 0;
+        margin-right: var(--spacing-sm);
+    }
+
+    .stock-sortie-show .action-button span {
+        flex: 1;
+        text-align: left;
+    }
+}
+
+@media (max-width: 576px) {
+    .stock-sortie-show .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-sortie-show .page-header-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .stock-sortie-show .page-header-actions {
+        justify-content: flex-end;
+    }
+}

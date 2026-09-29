@@ -1,241 +1,1111 @@
 @extends('layouts.admin')
 
-@section('title', 'Gestion des Stocks | PHOVE')
-
-@section('page_title', 'Gestion des Stocks')
-@section('page_icon', 'boxes')
-@section('page_subtitle', 'Gérez les vivres, médicaments, matériels et autres articles en stock.')
-
-@php
-    $breadcrumb = [ 'Stocks' ];
-@endphp
+@section('title', 'Gestion des stocks')
 
 @section('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/admin-common.css') }}">
+    <link
+        rel="stylesheet"
+        href="{{ asset('assets/css/admin/stocks/index.css') }}"
+    >
 @endsection
 
 @section('content')
 
-    {{-- ============================================ --}}
-    {{-- KPI — 4 CARTES --}}
-    {{-- ============================================ --}}
-    <div class="projets-stats-grid">
-        <div class="projet-stat-card">
-            <div class="projet-stat-icon"><i class="fas fa-boxes"></i></div>
-            <div class="projet-stat-content">
-                <div class="projet-stat-value">{{ $totalArticles }}</div>
-                <div class="projet-stat-label">Total articles</div>
+<div class="admin-content stocks-page">
+
+    {{-- =========================================================
+         EN-TÊTE DE PAGE
+    ========================================================== --}}
+    <div class="page-header">
+
+        <div class="page-header-content">
+
+            <div class="page-header-text">
+
+                <div class="page-header-icon">
+                    <i class="fas fa-boxes-stacked"></i>
+                </div>
+
+                <div>
+                    <h1 class="page-title">
+                        Gestion des stocks
+                    </h1>
+
+                    <p class="page-subtitle">
+                        Consultez et gérez les articles, leurs disponibilités
+                        et leur état dans les différents stocks de PHOVE.
+                    </p>
+                </div>
+
             </div>
-        </div>
-        <div class="projet-stat-card">
-            <div class="projet-stat-icon" style="background: #D1FAE5; color: #065F46;"><i class="fas fa-check-circle"></i></div>
-            <div class="projet-stat-content">
-                <div class="projet-stat-value" style="color: #065F46;">{{ $articlesDisponibles }}</div>
-                <div class="projet-stat-label">Disponibles</div>
+
+            <div class="page-header-actions">
+
+                @can('create', App\Models\Stock::class)
+
+                    <a
+                        href="{{ route('admin.stocks.create') }}"
+                        class="btn btn-primary"
+                    >
+                        <i class="fas fa-plus"></i>
+
+                        <span>
+                            Nouvel article
+                        </span>
+                    </a>
+
+                @endcan
+
             </div>
+
         </div>
-        <div class="projet-stat-card">
-            <div class="projet-stat-icon" style="background: #FEF3C7; color: #92400E;"><i class="fas fa-exclamation-triangle"></i></div>
-            <div class="projet-stat-content">
-                <div class="projet-stat-value" style="color: #92400E;">{{ $articlesFaibles }}</div>
-                <div class="projet-stat-label">Stock faible</div>
-            </div>
-        </div>
-        <div class="projet-stat-card">
-            <div class="projet-stat-icon" style="background: #FEE2E2; color: #B91C1C;"><i class="fas fa-times-circle"></i></div>
-            <div class="projet-stat-content">
-                <div class="projet-stat-value" style="color: #B91C1C;">{{ $articlesRupture }}</div>
-                <div class="projet-stat-label">Rupture de stock</div>
-            </div>
-        </div>
+
     </div>
 
-    {{-- ============================================ --}}
-    {{-- BARRE D'OUTILS --}}
-    {{-- ============================================ --}}
-    <form action="{{ route('admin.stocks.index') }}" method="GET" class="projets-toolbar">
-        <div class="projets-search">
-            <i class="fas fa-search"></i>
-            <input type="text" name="recherche" id="stockSearch" value="{{ request('recherche') }}" 
-                   class="projets-search-input" placeholder="Rechercher un article, une référence...">
+
+    {{-- =========================================================
+         MESSAGES DE SESSION
+    ========================================================== --}}
+    @if(session('success'))
+
+        <div class="alert alert-success" role="alert">
+
+            <div class="alert-icon">
+                <i class="fas fa-circle-check"></i>
+            </div>
+
+            <div class="alert-content">
+                {{ session('success') }}
+            </div>
+
+            <button
+                type="button"
+                class="alert-close"
+                data-dismiss-alert
+                aria-label="Fermer"
+            >
+                <i class="fas fa-xmark"></i>
+            </button>
+
         </div>
 
-        <div class="projets-filtres">
-            <select name="categorie" class="projets-filtre-select" onchange="this.form.submit()">
-                <option value="">Toutes les catégories</option>
-                <option value="vivres" {{ request('categorie') === 'vivres' ? 'selected' : '' }}>Vivres</option>
-                <option value="medicaments" {{ request('categorie') === 'medicaments' ? 'selected' : '' }}>Médicaments</option>
-                <option value="habillement" {{ request('categorie') === 'habillement' ? 'selected' : '' }}>Habillement</option>
-                <option value="abris" {{ request('categorie') === 'abris' ? 'selected' : '' }}>Abris</option>
-                <option value="materiel" {{ request('categorie') === 'materiel' ? 'selected' : '' }}>Matériel</option>
-                <option value="semences" {{ request('categorie') === 'semences' ? 'selected' : '' }}>Semences</option>
-                <option value="outils" {{ request('categorie') === 'outils' ? 'selected' : '' }}>Outils aratoires</option>
-                <option value="autre" {{ request('categorie') === 'autre' ? 'selected' : '' }}>Autre</option>
-            </select>
+    @endif
 
-            <select name="statut" class="projets-filtre-select" onchange="this.form.submit()">
-                <option value="">Tous les statuts</option>
-                <option value="disponible" {{ request('statut') === 'disponible' ? 'selected' : '' }}>Disponible</option>
-                <option value="faible" {{ request('statut') === 'faible' ? 'selected' : '' }}>Stock faible</option>
-                <option value="rupture" {{ request('statut') === 'rupture' ? 'selected' : '' }}>Rupture</option>
-            </select>
+
+    @if(session('error'))
+
+        <div class="alert alert-danger" role="alert">
+
+            <div class="alert-icon">
+                <i class="fas fa-circle-exclamation"></i>
+            </div>
+
+            <div class="alert-content">
+                {{ session('error') }}
+            </div>
+
+            <button
+                type="button"
+                class="alert-close"
+                data-dismiss-alert
+                aria-label="Fermer"
+            >
+                <i class="fas fa-xmark"></i>
+            </button>
+
         </div>
 
-        @if(request('recherche') || request('categorie') || request('statut'))
-            <a href="{{ route('admin.stocks.index') }}" class="projets-reset-btn" title="Réinitialiser">
-                <i class="fas fa-times"></i>
-            </a>
-        @endif
+    @endif
 
-        <a href="{{ route('admin.stocks.mouvements') }}" class="btn btn-outline btn-sm" style="margin-left: 8px;">
-            <i class="fas fa-exchange-alt"></i> Mouvements
-        </a>
 
-        <a href="{{ route('admin.stocks.create') }}" class="projets-add-btn">
-            <i class="fas fa-plus-circle"></i> Nouvel article
-        </a>
-    </form>
+    {{-- =========================================================
+         STATISTIQUES
+         ------------------------------------------------
+         $stats est fourni par StockController::index()
+         via StockService::statistiques().
 
-    {{-- ============================================ --}}
-    {{-- TABLEAU DES STOCKS --}}
-    {{-- ============================================ --}}
-    <div class="projets-table-card">
-        @if($stocks->count() > 0)
-        <div class="table-responsive">
-            <table class="table-projets">
-                <thead>
-                    <tr>
-                        <th>Article</th>
-                        <th>Catégorie</th>
-                        <th>Quantité actuelle</th>
-                        <th>Seuil d'alerte</th>
-                        <th>Statut</th>
-                        <th>Emplacement</th>
-                        <th style="width: 180px;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($stocks as $stock)
-                    <tr>
-                        {{-- Article --}}
-                        <td>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <div style="width: 38px; height: 38px; border-radius: 8px; background: #E8F0F8; display: flex; align-items: center; justify-content: center; color: #1A5B9C; flex-shrink: 0;">
-                                    <i class="fas fa-{{ $stock->categorie === 'vivres' ? 'utensils' : ($stock->categorie === 'medicaments' ? 'pills' : ($stock->categorie === 'habillement' ? 'tshirt' : ($stock->categorie === 'abris' ? 'home' : ($stock->categorie === 'materiel' ? 'tools' : ($stock->categorie === 'semences' ? 'seedling' : 'box'))))) }}"></i>
-                                </div>
-                                <div>
-                                    <div style="font-size: 13px; font-weight: 600; color: #1E293B;">{{ $stock->designation }}</div>
-                                    <div style="font-size: 11px; color: #64748B;">Réf : {{ $stock->reference }}</div>
-                                </div>
-                            </div>
-                        </td>
+         Clés attendues :
+           - articles_actifs
+           - articles_inactifs
+           - articles_archives
+           - ruptures
+           - stocks_faibles
+           - quantite_physique
+           - quantite_reservee
+           - quantite_disponible
+    ========================================================== --}}
+    <section
+        class="stock-kpi-grid"
+        aria-label="Statistiques des stocks"
+    >
 
-                        {{-- Catégorie --}}
-                        <td>
-                            <span class="projet-badge" style="background: #E8F0F8; color: #1A5B9C;">
-                                <i class="fas fa-tag"></i> {{ $stock->categorieLibelle() }}
-                            </span>
-                        </td>
+        {{-- ARTICLES ACTIFS --}}
+        <article class="stock-kpi-card">
 
-                        {{-- Quantité actuelle --}}
-                        <td>
-                            <span style="font-size: 14px; font-weight: 700; color: #1E293B;">
-                                {{ number_format($stock->quantite_actuelle, 2, ',', ' ') }}
-                            </span>
-                            <small style="color: #64748B;">{{ $stock->unite }}</small>
-                        </td>
+            <div class="stock-kpi-icon">
+                <i class="fas fa-box"></i>
+            </div>
 
-                        {{-- Seuil d'alerte --}}
-                        <td>
-                            @if($stock->seuil_alerte !== null)
-                                <span style="font-size: 13px; color: #F59E0B;">
-                                    <i class="fas fa-bell"></i> {{ number_format($stock->seuil_alerte, 2, ',', ' ') }} {{ $stock->unite }}
-                                </span>
-                            @else
-                                <span style="color: #94A3B8; font-size: 12px;">—</span>
-                            @endif
-                        </td>
+            <div class="stock-kpi-content">
 
-                        {{-- Statut --}}
-                        <td>
-                            @if($stock->statut === 'disponible')
-                                <span class="projet-publication-badge projet-publie">
-                                    <i class="fas fa-check-circle"></i> Disponible
-                                </span>
-                            @elseif($stock->statut === 'faible')
-                                <span class="projet-publication-badge" style="background: #FEF3C7; color: #92400E;">
-                                    <i class="fas fa-exclamation-triangle"></i> Stock faible
-                                </span>
-                            @else
-                                <span class="projet-publication-badge" style="background: #FEE2E2; color: #B91C1C;">
-                                    <i class="fas fa-times-circle"></i> Rupture
-                                </span>
-                            @endif
-                        </td>
+                <span class="stock-kpi-label">
+                    Articles actifs
+                </span>
 
-                        {{-- Emplacement --}}
-                        <td>
-                            <span style="font-size: 13px; color: #334155;">
-                                <i class="fas fa-map-marker-alt" style="font-size: 11px; color: #64748B;"></i>
-                                {{ $stock->emplacement ?? '—' }}
-                            </span>
-                        </td>
+                <strong class="stock-kpi-value">
+                    {{ number_format($stats['articles_actifs'] ?? 0, 0, ',', ' ') }}
+                </strong>
 
-                        {{-- Actions --}}
-                        <td>
-                            <div class="projet-actions">
-                                <a href="{{ route('admin.stocks.show', $stock) }}" class="projet-action-btn view" title="Voir le détail">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="{{ route('admin.stocks.formEntree', $stock) }}" class="projet-action-btn edit" title="Entrée de stock" style="background: #D1FAE5; color: #065F46;">
-                                    <i class="fas fa-arrow-down"></i>
-                                </a>
-                                <a href="{{ route('admin.stocks.formSortie', $stock) }}" class="projet-action-btn edit" title="Sortie de stock" style="background: #FEF3C7; color: #92400E;">
-                                    <i class="fas fa-arrow-up"></i>
-                                </a>
-                                <a href="{{ route('admin.stocks.edit', $stock) }}" class="projet-action-btn edit" title="Modifier">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('admin.stocks.destroy', $stock) }}" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="projet-action-btn delete" 
-                                            onclick="return confirm('Supprimer cet article et tous ses mouvements ?');" title="Supprimer">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
+            </div>
+
+        </article>
+
+
+        {{-- STOCK FAIBLE --}}
+        <article class="stock-kpi-card stock-kpi-warning">
+
+            <div class="stock-kpi-icon">
+                <i class="fas fa-triangle-exclamation"></i>
+            </div>
+
+            <div class="stock-kpi-content">
+
+                <span class="stock-kpi-label">
+                    Stock faible
+                </span>
+
+                <strong class="stock-kpi-value">
+                    {{ number_format($stats['stocks_faibles'] ?? 0, 0, ',', ' ') }}
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        {{-- RUPTURES --}}
+        <article class="stock-kpi-card stock-kpi-danger">
+
+            <div class="stock-kpi-icon">
+                <i class="fas fa-circle-xmark"></i>
+            </div>
+
+            <div class="stock-kpi-content">
+
+                <span class="stock-kpi-label">
+                    Ruptures
+                </span>
+
+                <strong class="stock-kpi-value">
+                    {{ number_format($stats['ruptures'] ?? 0, 0, ',', ' ') }}
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        {{-- QUANTITÉ PHYSIQUE --}}
+        <article class="stock-kpi-card">
+
+            <div class="stock-kpi-icon">
+                <i class="fas fa-boxes-stacked"></i>
+            </div>
+
+            <div class="stock-kpi-content">
+
+                <span class="stock-kpi-label">
+                    Quantité physique
+                </span>
+
+                <strong class="stock-kpi-value">
+                    {{ number_format(
+                        (float) ($stats['quantite_physique'] ?? 0),
+                        2,
+                        ',',
+                        ' '
+                    ) }}
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        {{-- QUANTITÉ RÉSERVÉE --}}
+        <article class="stock-kpi-card stock-kpi-info">
+
+            <div class="stock-kpi-icon">
+                <i class="fas fa-bookmark"></i>
+            </div>
+
+            <div class="stock-kpi-content">
+
+                <span class="stock-kpi-label">
+                    Quantité réservée
+                </span>
+
+                <strong class="stock-kpi-value">
+                    {{ number_format(
+                        (float) ($stats['quantite_reservee'] ?? 0),
+                        2,
+                        ',',
+                        ' '
+                    ) }}
+                </strong>
+
+            </div>
+
+        </article>
+
+
+        {{-- QUANTITÉ DISPONIBLE --}}
+        <article class="stock-kpi-card stock-kpi-success">
+
+            <div class="stock-kpi-icon">
+                <i class="fas fa-box-open"></i>
+            </div>
+
+            <div class="stock-kpi-content">
+
+                <span class="stock-kpi-label">
+                    Quantité disponible
+                </span>
+
+                <strong class="stock-kpi-value">
+                    {{ number_format(
+                        (float) ($stats['quantite_disponible'] ?? 0),
+                        2,
+                        ',',
+                        ' '
+                    ) }}
+                </strong>
+
+            </div>
+
+        </article>
+
+    </section>
+
+
+    {{-- =========================================================
+         FILTRES
+    ========================================================== --}}
+    <section class="stock-filter-card">
+
+        <div class="stock-filter-header">
+
+            <div class="stock-filter-title">
+
+                <i class="fas fa-filter"></i>
+
+                <div>
+
+                    <h2>
+                        Rechercher dans les stocks
+                    </h2>
+
+                    <p>
+                        Filtrez les articles selon vos besoins.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            @if(
+                request()->filled('recherche')
+                || request()->filled('categorie')
+                || request()->filled('statut')
+            )
+
+                <a
+                    href="{{ route('admin.stocks.index') }}"
+                    class="btn btn-light btn-reset-filters"
+                >
+                    <i class="fas fa-rotate-left"></i>
+
+                    Réinitialiser
+                </a>
+
+            @endif
+
+        </div>
+
+
+        <form
+            action="{{ route('admin.stocks.index') }}"
+            method="GET"
+            class="stock-filter-form"
+            id="stock-filter-form"
+        >
+
+            {{-- RECHERCHE --}}
+            <div class="form-group form-group-search">
+
+                <label for="recherche">
+                    Recherche
+                </label>
+
+                <div class="input-icon-wrapper">
+
+                    <i class="fas fa-magnifying-glass"></i>
+
+                    <input
+                        type="search"
+                        name="recherche"
+                        id="recherche"
+                        class="form-control"
+                        value="{{ request('recherche') }}"
+                        placeholder="Référence ou désignation..."
+                        autocomplete="off"
+                    >
+
+                </div>
+
+            </div>
+
+
+            {{-- CATÉGORIE --}}
+            <div class="form-group">
+
+                <label for="categorie">
+                    Catégorie
+                </label>
+
+                <select
+                    name="categorie"
+                    id="categorie"
+                    class="form-control"
+                >
+
+                    <option value="">
+                        Toutes les catégories
+                    </option>
+
+                    @foreach($categories as $value => $label)
+
+                        <option
+                            value="{{ $value }}"
+                            @selected(request('categorie') === $value)
+                        >
+                            {{ $label }}
+                        </option>
+
                     @endforeach
-                </tbody>
-            </table>
+
+                </select>
+
+            </div>
+
+
+            {{-- STATUT --}}
+            <div class="form-group">
+
+                <label for="statut">
+                    Statut
+                </label>
+
+                <select
+                    name="statut"
+                    id="statut"
+                    class="form-control"
+                >
+
+                    <option value="">
+                        Tous les statuts
+                    </option>
+
+                    @foreach($statuts as $value => $label)
+
+                        <option
+                            value="{{ $value }}"
+                            @selected(request('statut') === $value)
+                        >
+                            {{ $label }}
+                        </option>
+
+                    @endforeach
+
+                </select>
+
+            </div>
+
+
+            {{-- BOUTONS --}}
+            <div class="stock-filter-actions">
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    <i class="fas fa-magnifying-glass"></i>
+
+                    Rechercher
+                </button>
+
+            </div>
+
+        </form>
+
+    </section>
+
+
+    {{-- =========================================================
+         LISTE DES ARTICLES
+    ========================================================== --}}
+    <section class="stock-table-card">
+
+        <div class="stock-table-header">
+
+            <div>
+
+                <h2 class="stock-table-title">
+                    Articles en stock
+                </h2>
+
+                <p class="stock-table-subtitle">
+
+                    @if($stocks->total() > 0)
+
+                        {{ number_format($stocks->total(), 0, ',', ' ') }}
+                        article(s) trouvé(s).
+
+                    @else
+
+                        Aucun article trouvé.
+
+                    @endif
+
+                </p>
+
+            </div>
+
+
+            <div class="stock-table-tools">
+
+                <span class="stock-result-count">
+
+                    Page {{ $stocks->currentPage() }}
+                    sur {{ $stocks->lastPage() }}
+
+                </span>
+
+            </div>
+
         </div>
 
-        {{-- Pagination --}}
-        @if($stocks->hasPages())
-        <div class="projets-pagination">
-            <span class="projets-pagination-info">
-                Affichage de <strong>{{ $stocks->firstItem() }}-{{ $stocks->lastItem() }}</strong> sur <strong>{{ $stocks->total() }}</strong> articles
-            </span>
-            {{ $stocks->links('pagination.custom') }}
-        </div>
-        @endif
+
+        @if($stocks->count() > 0)
+
+            <div class="table-responsive">
+
+                <table class="data-table stocks-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th scope="col">
+                                Référence
+                            </th>
+
+                            <th scope="col">
+                                Article
+                            </th>
+
+                            <th scope="col">
+                                Catégorie
+                            </th>
+
+                            <th scope="col">
+                                Stock physique
+                            </th>
+
+                            <th scope="col">
+                                Seuil d'alerte
+                            </th>
+
+                            <th scope="col">
+                                État
+                            </th>
+
+                            <th scope="col">
+                                Statut
+                            </th>
+
+                            <th
+                                scope="col"
+                                class="text-right"
+                            >
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @foreach($stocks as $stock)
+
+                            @php
+                                /*
+                                 * Quantité physique : fournie par
+                                 * withSum('lots', 'quantite_actuelle')
+                                 * dans StockController::index().
+                                 *
+                                 * StockService::paginer() applique cet agrégat.
+                                 *
+                                 * L'attribut retourné par Eloquent est :
+                                 *   lots_sum_quantite_actuelle
+                                 */
+                                $quantitePhysique = (float) (
+                                    $stock->lots_sum_quantite_actuelle ?? 0
+                                );
+
+                                /*
+                                 * Statut de l'article : casté en
+                                 * App\Enums\StatutStock par le modèle.
+                                 */
+                                $statut = $stock->statut;
+
+                                /*
+                                 * État calculé du stock : rupture,
+                                 * faible ou disponible.
+                                 *
+                                 * ATTENTION : ici on ne connaît PAS la
+                                 * quantité réservée (pas de withSum).
+                                 * On utilise donc une approximation :
+                                 * si quantité physique <= seuil → faible,
+                                 * si quantité physique = 0 → rupture.
+                                 *
+                                 * Pour un état exact, il faut afficher la
+                                 * quantité réservée via une sous-requête
+                                 * ou un calcul dans le controller.
+                                 */
+                                $seuil = $stock->seuil_alerte !== null
+                                    ? (float) $stock->seuil_alerte
+                                    : null;
+
+                                if ($quantitePhysique <= 0) {
+                                    $etatStock = 'rupture';
+                                } elseif ($seuil !== null && $quantitePhysique <= $seuil) {
+                                    $etatStock = 'faible';
+                                } else {
+                                    $etatStock = 'disponible';
+                                }
+                            @endphp
+
+
+                            <tr>
+
+                                {{-- RÉFÉRENCE --}}
+                                <td>
+
+                                    <a
+                                        href="{{ route('admin.stocks.show', $stock) }}"
+                                        class="stock-reference"
+                                    >
+                                        {{ $stock->reference }}
+                                    </a>
+
+                                </td>
+
+
+                                {{-- ARTICLE --}}
+                                <td>
+
+                                    <div class="stock-article-cell">
+
+                                        <div class="stock-article-icon">
+                                            <i class="fas fa-box"></i>
+                                        </div>
+
+                                        <div class="stock-article-info">
+
+                                            <a
+                                                href="{{ route('admin.stocks.show', $stock) }}"
+                                                class="stock-article-name"
+                                            >
+                                                {{ $stock->designation }}
+                                            </a>
+
+
+                                            @if($stock->emplacementPrincipal)
+
+                                                <span class="stock-location">
+
+                                                    <i class="fas fa-location-dot"></i>
+
+                                                    {{ $stock->emplacementPrincipal->nom }}
+
+                                                </span>
+
+                                            @endif
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+
+                                {{-- CATÉGORIE --}}
+                                <td>
+
+                                    <span class="category-badge">
+
+                                        {{ ucfirst(
+                                            str_replace(
+                                                '_',
+                                                ' ',
+                                                (string) $stock->categorie
+                                            )
+                                        ) }}
+
+                                    </span>
+
+                                </td>
+
+
+                                {{-- STOCK PHYSIQUE --}}
+                                <td>
+
+                                    <span class="quantity-value">
+
+                                        {{ number_format(
+                                            $quantitePhysique,
+                                            2,
+                                            ',',
+                                            ' '
+                                        ) }}
+
+                                    </span>
+
+                                    <span class="quantity-unit">
+                                        {{ $stock->unite }}
+                                    </span>
+
+                                </td>
+
+
+                                {{-- SEUIL D'ALERTE --}}
+                                <td>
+
+                                    @if($seuil !== null)
+
+                                        <span class="quantity-value quantity-threshold">
+
+                                            {{ number_format(
+                                                $seuil,
+                                                2,
+                                                ',',
+                                                ' '
+                                            ) }}
+
+                                        </span>
+
+                                        <span class="quantity-unit">
+                                            {{ $stock->unite }}
+                                        </span>
+
+                                    @else
+
+                                        <span class="empty-value">
+                                            —
+                                        </span>
+
+                                    @endif
+
+                                </td>
+
+
+                                {{-- ÉTAT DU STOCK --}}
+                                <td>
+
+                                    @switch($etatStock)
+
+                                        @case('disponible')
+
+                                            <span class="status-badge status-success">
+
+                                                <i class="fas fa-circle-check"></i>
+
+                                                Disponible
+
+                                            </span>
+
+                                            @break
+
+
+                                        @case('faible')
+
+                                            <span class="status-badge status-warning">
+
+                                                <i class="fas fa-triangle-exclamation"></i>
+
+                                                Stock faible
+
+                                            </span>
+
+                                            @break
+
+
+                                        @case('rupture')
+
+                                            <span class="status-badge status-danger">
+
+                                                <i class="fas fa-circle-xmark"></i>
+
+                                                Rupture
+
+                                            </span>
+
+                                            @break
+
+                                    @endswitch
+
+                                </td>
+
+
+                                {{-- STATUT ARTICLE --}}
+                                <td>
+
+                                    @php
+                                        $statutValue = $statut instanceof \App\Enums\StatutStock
+                                            ? $statut->value
+                                            : (string) $statut;
+                                    @endphp
+
+                                    @switch($statutValue)
+
+                                        @case('actif')
+
+                                            <span class="status-badge status-success">
+
+                                                <i class="fas fa-circle-check"></i>
+
+                                                {{ $statut->libelle() }}
+
+                                            </span>
+
+                                            @break
+
+
+                                        @case('inactif')
+
+                                            <span class="status-badge status-warning">
+
+                                                <i class="fas fa-circle-pause"></i>
+
+                                                {{ $statut->libelle() }}
+
+                                            </span>
+
+                                            @break
+
+
+                                        @case('archive')
+
+                                            <span class="status-badge status-neutral">
+
+                                                <i class="fas fa-box-archive"></i>
+
+                                                {{ $statut->libelle() }}
+
+                                            </span>
+
+                                            @break
+
+                                    @endswitch
+
+                                </td>
+
+
+                                {{-- ACTIONS --}}
+                                <td class="text-right">
+
+                                    <div class="stock-actions">
+
+                                        {{-- VOIR --}}
+                                        <a
+                                            href="{{ route('admin.stocks.show', $stock) }}"
+                                            class="action-btn action-btn-view"
+                                            title="Consulter"
+                                            aria-label="Consulter {{ $stock->designation }}"
+                                        >
+
+                                            <i class="fas fa-eye"></i>
+
+                                        </a>
+
+
+                                        {{-- MODIFIER --}}
+                                        @can('update', $stock)
+
+                                            <a
+                                                href="{{ route('admin.stocks.edit', $stock) }}"
+                                                class="action-btn action-btn-edit"
+                                                title="Modifier"
+                                                aria-label="Modifier {{ $stock->designation }}"
+                                            >
+
+                                                <i class="fas fa-pen"></i>
+
+                                            </a>
+
+                                        @endcan
+
+
+                                        {{-- ARCHIVER --}}
+                                        @can('archive', $stock)
+
+                                            @if($statutValue !== 'archive')
+
+                                                <button
+                                                    type="button"
+                                                    class="action-btn action-btn-archive"
+                                                    title="Archiver"
+                                                    aria-label="Archiver {{ $stock->designation }}"
+                                                    data-open-archive-modal
+                                                    data-stock-id="{{ $stock->id }}"
+                                                    data-stock-name="{{ $stock->designation }}"
+                                                >
+
+                                                    <i class="fas fa-box-archive"></i>
+
+                                                </button>
+
+                                            @endif
+
+                                        @endcan
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+                        @endforeach
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {{-- PAGINATION --}}
+            <div class="stock-pagination">
+
+                {{ $stocks->withQueryString()->links() }}
+
+            </div>
+
 
         @else
-        <div class="projets-empty">
-            <div class="projets-empty-icon"><i class="fas fa-boxes"></i></div>
-            <h4>Aucun article trouvé</h4>
-            <p>Aucun article ne correspond à vos critères de recherche.</p>
-            <a href="{{ route('admin.stocks.index') }}" class="btn btn-outline btn-sm mt-3">
-                <i class="fas fa-sync-alt"></i> Réinitialiser les filtres
-            </a>
-        </div>
+
+            {{-- ÉTAT VIDE --}}
+            <div class="stock-empty-state">
+
+                <div class="stock-empty-icon">
+                    <i class="fas fa-box-open"></i>
+                </div>
+
+                <h3>
+                    Aucun article trouvé
+                </h3>
+
+                <p>
+                    Aucun article ne correspond aux critères
+                    de recherche actuels.
+                </p>
+
+
+                @if(
+                    request()->filled('recherche')
+                    || request()->filled('categorie')
+                    || request()->filled('statut')
+                )
+
+                    <a
+                        href="{{ route('admin.stocks.index') }}"
+                        class="btn btn-light"
+                    >
+
+                        <i class="fas fa-rotate-left"></i>
+
+                        Réinitialiser les filtres
+
+                    </a>
+
+                @else
+
+                    @can('create', App\Models\Stock::class)
+
+                        <a
+                            href="{{ route('admin.stocks.create') }}"
+                            class="btn btn-primary"
+                        >
+
+                            <i class="fas fa-plus"></i>
+
+                            Créer le premier article
+
+                        </a>
+
+                    @endcan
+
+                @endif
+
+            </div>
+
         @endif
+
+    </section>
+
+</div>
+
+
+{{-- =============================================================
+     MODALE D'ARCHIVAGE
+============================================================== --}}
+<div
+    class="modal-overlay"
+    id="archive-stock-modal"
+    data-modal
+    hidden
+>
+
+    <div
+        class="modal-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="archive-stock-title"
+    >
+
+        {{-- EN-TÊTE MODALE --}}
+        <div class="modal-header">
+
+            <div class="modal-title-wrapper">
+
+                <div class="modal-icon modal-icon-warning">
+
+                    <i class="fas fa-box-archive"></i>
+
+                </div>
+
+                <div>
+
+                    <h2 id="archive-stock-title">
+                        Archiver l'article
+                    </h2>
+
+                    <p>
+                        Cette action désactive l'article
+                        sans supprimer son historique.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close-modal
+                aria-label="Fermer"
+            >
+
+                <i class="fas fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+
+        {{-- CORPS MODALE --}}
+        <div class="modal-body">
+
+            <p>
+
+                Voulez-vous vraiment archiver
+
+                <strong data-archive-stock-name>
+                    cet article
+                </strong>
+
+                ?
+
+            </p>
+
+
+            <p class="modal-warning-text">
+
+                L'article ne sera pas supprimé physiquement.
+                Son historique de stock restera conservé.
+
+            </p>
+
+        </div>
+
+
+        {{-- PIED MODALE --}}
+        <div class="modal-footer">
+
+            <button
+                type="button"
+                class="btn btn-light"
+                data-close-modal
+            >
+
+                Annuler
+
+            </button>
+
+
+            <form
+                method="POST"
+                id="archive-stock-form"
+                action=""
+            >
+
+                @csrf
+
+                @method('PATCH')
+
+
+                <button
+                    type="submit"
+                    class="btn btn-warning"
+                >
+
+                    <i class="fas fa-box-archive"></i>
+
+                    Archiver
+
+                </button>
+
+            </form>
+
+        </div>
+
     </div>
+
+</div>
 
 @endsection
 
+
 @section('scripts')
-    <script src="{{ asset('assets/js/admin-common.js') }}"></script>
+
+    <script
+        src="{{ asset('assets/js/admin/stocks/index.js') }}"
+        defer>
+    </script>
+
 @endsection

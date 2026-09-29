@@ -113,7 +113,13 @@
                             <div class="membre-cell-identite">
                                 <div class="membre-cell-avatar">
                                     @if($demande->photo)
-                                        <img src="{{ asset('storage/' . $demande->photo) }}" alt="{{ $demande->nomComplet() }}">
+                                        <img src="{{ route('media.show', ['path' => ltrim($demande->photo, '/')]) }}"
+                                            alt="{{ $demande->nomComplet() }}"
+                                            loading="lazy"
+                                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <span style="display: none;">
+                                            {{ Str::upper(Str::substr($demande->nom, 0, 1) . Str::substr($demande->prenom ?? '', 0, 1)) }}
+                                        </span>
                                     @else
                                         <span>{{ Str::upper(Str::substr($demande->nom, 0, 1) . Str::substr($demande->prenom ?? '', 0, 1)) }}</span>
                                     @endif

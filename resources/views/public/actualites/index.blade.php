@@ -2,7 +2,7 @@
 
 @section('title', 'Actualités')
 
-@section('meta_description', 'Restez informés des dernières actualités, projets, événements et communiqués d\'AHD-RDC en République Démocratique du Congo.')
+@section('meta_description', 'Restez informés des dernières actualités, projets, événements et communiqués de PHOVE en République Démocratique du Congo.')
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">

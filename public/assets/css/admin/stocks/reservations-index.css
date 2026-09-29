@@ -1,0 +1,797 @@
+/* ============================================================
+   PHOVE — STYLE : LISTE DES RÉSERVATIONS DE STOCK
+   Vue : resources/views/admin/stocks/reservations/index.blade.php
+   Route : admin.stocks.reservations.index
+
+   Ce fichier complète stocks-common.css.
+   Il n'ajoute QUE ce qui est spécifique à la liste des réservations.
+   ============================================================ */
+
+
+/* ----------------------------------------------------------
+   1. CONTENEUR DE PAGE
+   ---------------------------------------------------------- */
+
+.stock-reservations-index {
+    /* Conteneur principal */
+}
+
+
+/* ----------------------------------------------------------
+   2. EN-TÊTE
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    flex-wrap: wrap;
+}
+
+.stock-reservations-index__header-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.stock-reservations-index__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.stock-reservations-index__breadcrumb a {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.stock-reservations-index__breadcrumb a:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+}
+
+.stock-reservations-index__breadcrumb span[aria-hidden] {
+    color: var(--color-text-muted);
+    opacity: 0.6;
+}
+
+.stock-reservations-index__title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.2;
+}
+
+.stock-reservations-index__subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+.stock-reservations-index__header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+
+/* ----------------------------------------------------------
+   3. BOUTONS CUSTOM
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: 10px 18px;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    border: 2px solid transparent;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+}
+
+.stock-reservations-index__btn--primary {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    border-color: var(--color-primary);
+}
+
+.stock-reservations-index__btn--primary:hover {
+    background: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.stock-reservations-index__btn--secondary {
+    background: transparent;
+    color: var(--color-text-secondary);
+    border-color: var(--border-color);
+}
+
+.stock-reservations-index__btn--secondary:hover {
+    background: var(--color-bg-light);
+    border-color: var(--color-text-muted);
+    color: var(--color-text-primary);
+}
+
+
+/* ----------------------------------------------------------
+   4. MESSAGES
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-lg);
+    border-left: 4px solid transparent;
+}
+
+.stock-reservations-index__alert--success {
+    background: var(--color-success-light);
+    border-left-color: var(--color-success);
+}
+
+.stock-reservations-index__alert--danger {
+    background: var(--color-error-light);
+    border-left-color: var(--color-error);
+}
+
+.stock-reservations-index__alert-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.stock-reservations-index__alert--success .stock-reservations-index__alert-icon {
+    color: var(--color-success);
+}
+
+.stock-reservations-index__alert--danger .stock-reservations-index__alert-icon {
+    color: var(--color-error);
+}
+
+.stock-reservations-index__alert-content strong {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: 4px;
+}
+
+.stock-reservations-index__alert--success .stock-reservations-index__alert-content strong {
+    color: #065F46;
+}
+
+.stock-reservations-index__alert--danger .stock-reservations-index__alert-content strong {
+    color: #B91C1C;
+}
+
+.stock-reservations-index__alert-content p {
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+}
+
+.stock-reservations-index__alert--success .stock-reservations-index__alert-content p {
+    color: #065F46;
+}
+
+.stock-reservations-index__alert--danger .stock-reservations-index__alert-content p {
+    color: #B91C1C;
+}
+
+
+/* ----------------------------------------------------------
+   5. STATISTIQUES (4 KPI)
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.stock-reservations-index__stat-card {
+    background: var(--color-bg-white);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+}
+
+.stock-reservations-index__stat-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.stock-reservations-index__stat-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.stock-reservations-index__stat-icon--draft {
+    background: #F1F5F9;
+    color: #475569;
+}
+
+.stock-reservations-index__stat-icon--confirmed {
+    background: var(--color-info-light);
+    color: #1E40AF;
+}
+
+.stock-reservations-index__stat-icon--active {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+.stock-reservations-index__stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.stock-reservations-index__stat-label {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.stock-reservations-index__stat-value {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    line-height: 1.1;
+}
+
+
+/* ----------------------------------------------------------
+   6. CARTES GÉNÉRIQUES (filtre + liste)
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__card {
+    background: var(--color-bg-white);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-xl);
+    overflow: hidden;
+}
+
+.stock-reservations-index__card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color-light);
+    background: var(--color-bg-light);
+    flex-wrap: wrap;
+}
+
+.stock-reservations-index__card-title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+}
+
+.stock-reservations-index__card-description {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.stock-reservations-index__card-body {
+    padding: var(--spacing-lg);
+}
+
+
+/* ----------------------------------------------------------
+   7. FILTRES
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__filters {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
+    gap: var(--spacing-md);
+    align-items: end;
+}
+
+.stock-reservations-index__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.stock-reservations-index__field label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.stock-reservations-index__field input,
+.stock-reservations-index__field select {
+    width: 100%;
+    padding: 9px 12px;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background: var(--color-bg-white);
+    color: var(--color-text-primary);
+    transition: all var(--transition-base);
+}
+
+.stock-reservations-index__field input:focus,
+.stock-reservations-index__field select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 91, 156, 0.1);
+}
+
+.stock-reservations-index__input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.stock-reservations-index__input-wrapper i {
+    position: absolute;
+    left: 12px;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    pointer-events: none;
+}
+
+.stock-reservations-index__input-wrapper input {
+    padding-left: 38px;
+}
+
+.stock-reservations-index__filter-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    justify-content: flex-end;
+    grid-column: -2 / -1;
+}
+
+
+/* ----------------------------------------------------------
+   8. TABLEAU
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__table-wrapper {
+    overflow-x: auto;
+}
+
+.stock-reservations-index__table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stock-reservations-index__table thead {
+    background: var(--color-bg-light);
+}
+
+.stock-reservations-index__table thead th {
+    padding: 12px 16px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-color-light);
+    white-space: nowrap;
+}
+
+.stock-reservations-index__table tbody td {
+    padding: 14px 16px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--border-color-light);
+    vertical-align: middle;
+}
+
+.stock-reservations-index__table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.stock-reservations-index__table tbody tr:hover {
+    background: var(--color-bg-light);
+}
+
+
+/* ----------------------------------------------------------
+   9. CELLULE RÉSERVATION
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__reservation {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.stock-reservations-index__reservation-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+}
+
+.stock-reservations-index__reservation-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.stock-reservations-index__reservation-number {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    text-decoration: none;
+    font-family: 'Courier New', monospace;
+    transition: color var(--transition-fast);
+}
+
+.stock-reservations-index__reservation-number:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+}
+
+.stock-reservations-index__reservation-recipient {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 220px;
+}
+
+
+/* ----------------------------------------------------------
+   10. CELLULE DEMANDEUR
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__person-name {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+}
+
+
+/* ----------------------------------------------------------
+   11. BADGE PROJET
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__project {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background: var(--color-accent-light);
+    color: #92400E;
+    border-radius: var(--border-radius-full);
+    font-size: 11px;
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stock-reservations-index__muted {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+
+/* ----------------------------------------------------------
+   12. CELLULE DATE
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__date strong {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+}
+
+
+/* ----------------------------------------------------------
+   13. CELLULE EXPIRATION
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__expiration {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stock-reservations-index__expiration strong {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+}
+
+.stock-reservations-index__expiration span {
+    font-size: var(--font-size-xs);
+    color: var(--color-warning);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.stock-reservations-index__expiration--danger strong {
+    color: var(--color-error);
+}
+
+.stock-reservations-index__expiration--danger span {
+    color: var(--color-error);
+}
+
+
+/* ----------------------------------------------------------
+   14. BADGE STATUT (workflow)
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: var(--border-radius-full);
+    font-size: 11px;
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+}
+
+.stock-reservations-index__status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+.stock-reservations-index__status--brouillon {
+    background: #F1F5F9;
+    color: #475569;
+}
+
+.stock-reservations-index__status--confirmee {
+    background: var(--color-info-light);
+    color: #1E40AF;
+}
+
+.stock-reservations-index__status--partielle {
+    background: var(--color-warning-light);
+    color: #92400E;
+}
+
+.stock-reservations-index__status--consommee {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+.stock-reservations-index__status--expiree {
+    background: var(--color-error-light);
+    color: #B91C1C;
+}
+
+.stock-reservations-index__status--annulee {
+    background: var(--color-error-light);
+    color: #B91C1C;
+}
+
+
+/* ----------------------------------------------------------
+   15. ACTIONS
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.stock-reservations-index__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-color-light);
+    background: var(--color-bg-white);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+}
+
+.stock-reservations-index__action:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.stock-reservations-index__action--view:hover {
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.stock-reservations-index__action--confirm:hover {
+    background: var(--color-success-light);
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+.stock-reservations-index__action--cancel:hover {
+    background: var(--color-error-light);
+    border-color: var(--color-error);
+    color: var(--color-error);
+}
+
+.stock-reservations-index__action-form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.stock-reservations-index__action-form button {
+    padding: 0;
+    border: 1px solid var(--border-color-light);
+    background: var(--color-bg-white);
+}
+
+
+/* ----------------------------------------------------------
+   16. ÉTAT VIDE
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__empty {
+    padding: var(--spacing-3xl) var(--spacing-xl);
+    text-align: center;
+}
+
+.stock-reservations-index__empty-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-lg);
+    border-radius: 50%;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.stock-reservations-index__empty h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.stock-reservations-index__empty p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    max-width: 500px;
+    margin: 0 auto var(--spacing-lg);
+    line-height: 1.6;
+}
+
+
+/* ----------------------------------------------------------
+   17. PAGINATION
+   ---------------------------------------------------------- */
+
+.stock-reservations-index__pagination {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-color-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* ----------------------------------------------------------
+   18. RESPONSIVE
+   ---------------------------------------------------------- */
+
+@media (max-width: 1200px) {
+    .stock-reservations-index__filters {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stock-reservations-index__filter-actions {
+        grid-column: 1 / -1;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 768px) {
+    .stock-reservations-index__header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .stock-reservations-index__header-actions {
+        justify-content: flex-end;
+    }
+
+    .stock-reservations-index__filters {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-reservations-index__stats {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-reservations-index__table thead th,
+    .stock-reservations-index__table tbody td {
+        padding: 10px 12px;
+    }
+
+    .stock-reservations-index__project {
+        max-width: 100px;
+    }
+}
+
+@media (max-width: 576px) {
+    .stock-reservations-index__reservation-recipient {
+        max-width: 120px;
+    }
+}

@@ -1,0 +1,335 @@
+/* ============================================================
+   PHOVE — STYLE : CRÉATION D'UN ARTICLE DE STOCK
+   Vue : resources/views/admin/stocks/create.blade.php
+   Route : admin.stocks.create
+
+   Ce fichier complète stocks-common.css.
+   Il n'ajoute QUE ce qui est spécifique à la création d'un article.
+   ============================================================ */
+
+
+/* ----------------------------------------------------------
+   1. CONTENEUR DE PAGE
+   ---------------------------------------------------------- */
+
+.stock-create-page {
+    /* Conteneur principal, aucune personnalisation nécessaire */
+}
+
+
+/* ----------------------------------------------------------
+   2. FORMULAIRE PRINCIPAL
+   ----------------------------------------------------------
+   .stock-form englobe toutes les sections.
+   Structure globale : pas de style particulier.
+   ---------------------------------------------------------- */
+
+.stock-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+
+/* ----------------------------------------------------------
+   3. INFO BANNER (rappel architectural)
+   ----------------------------------------------------------
+   .info-banner, .info-banner-icon, .info-banner-content
+   viennent de stocks-common.css.
+   On surcharge légèrement la couleur pour le contexte "création".
+   ---------------------------------------------------------- */
+
+.stock-create-page .info-banner {
+    background: var(--color-primary-lighter);
+    border-left-color: var(--color-primary);
+}
+
+.stock-create-page .info-banner-icon {
+    color: var(--color-primary);
+}
+
+
+/* ----------------------------------------------------------
+   4. FORM CARD (une section = une carte)
+   ----------------------------------------------------------
+   .form-card, .form-card-header, .form-card-body viennent
+   de stocks-common.css. On ajuste juste le style du titre
+   avec icône + description.
+   ---------------------------------------------------------- */
+
+.stock-create-page .form-card {
+    margin-bottom: var(--spacing-xl);
+}
+
+.stock-create-page .form-card-title-wrapper {
+    align-items: center;
+}
+
+.stock-create-page .form-card-title {
+    margin-bottom: 2px;
+}
+
+
+/* ----------------------------------------------------------
+   5. FORM GRID (2 colonnes)
+   ----------------------------------------------------------
+   .form-grid définit repeat(auto-fit, minmax(280px, 1fr))
+   dans stocks-common.css.
+   Ici on veut un contrôle plus précis : 2 colonnes max sur desktop.
+   ---------------------------------------------------------- */
+
+.stock-create-page .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.stock-create-page .form-group-full {
+    grid-column: 1 / -1;
+}
+
+
+/* ----------------------------------------------------------
+   6. INPUT AVEC ICÔNE
+   ----------------------------------------------------------
+   .input-wrapper et .input-icon viennent de stocks-common.css.
+   Ici on ajuste le padding-left du form-control pour laisser
+   la place à l'icône.
+   ---------------------------------------------------------- */
+
+.stock-create-page .input-wrapper .form-control {
+    padding-left: 42px;
+}
+
+.stock-create-page .input-wrapper .input-icon {
+    left: 14px;
+    font-size: var(--font-size-base);
+}
+
+
+/* ----------------------------------------------------------
+   7. SELECT
+   ---------------------------------------------------------- */
+
+.stock-create-page .select-wrapper {
+    position: relative;
+}
+
+.stock-create-page .form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748B' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 38px;
+}
+
+
+/* ----------------------------------------------------------
+   8. FORM HELP
+   ----------------------------------------------------------
+   .form-help vient de stocks-common.css.
+   Ajustement mineur pour la taille et la couleur.
+   ---------------------------------------------------------- */
+
+.stock-create-page .form-help {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin-top: 2px;
+}
+
+
+/* ----------------------------------------------------------
+   9. FIELD ERROR
+   ----------------------------------------------------------
+   .field-error vient de stocks-common.css.
+   ---------------------------------------------------------- */
+
+.stock-create-page .field-error {
+    margin-top: 4px;
+}
+
+
+/* ----------------------------------------------------------
+   10. TEXTAREA + COMPTEUR DE CARACTÈRES
+   ---------------------------------------------------------- */
+
+.stock-create-page .form-textarea {
+    min-height: 140px;
+    resize: vertical;
+    font-family: var(--font-primary);
+    line-height: 1.6;
+}
+
+.stock-create-page .form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xs);
+}
+
+.stock-create-page .character-counter {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-medium);
+    padding: 3px 8px;
+    background: var(--color-bg-light);
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+
+/* ----------------------------------------------------------
+   11. SUMMARY / RÉCAPITULATIF LIVE
+   ----------------------------------------------------------
+   .creation-summary, .summary-item, .summary-label, .summary-value
+   viennent de stocks-common.css.
+   On ajuste juste le style spécifique de la carte de résumé.
+   ---------------------------------------------------------- */
+
+.stock-create-page .form-summary-card {
+    border-top: 3px solid var(--color-primary);
+    background: linear-gradient(
+        to bottom,
+        var(--color-primary-lighter) 0%,
+        var(--color-bg-white) 40%
+    );
+}
+
+.stock-create-page .form-summary-card .form-card-header {
+    background: transparent;
+    border-bottom: none;
+}
+
+.stock-create-page .creation-summary {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-md);
+}
+
+.stock-create-page .summary-item {
+    background: var(--color-bg-white);
+    border-left: 3px solid var(--color-primary);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-base);
+}
+
+.stock-create-page .summary-item:hover {
+    box-shadow: var(--shadow-sm);
+}
+
+.stock-create-page .summary-label {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 4px;
+}
+
+.stock-create-page .summary-value {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    word-break: break-word;
+    min-height: 20px;
+}
+
+.stock-create-page .summary-value:empty::before {
+    content: '—';
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-regular);
+}
+
+
+/* ----------------------------------------------------------
+   12. FORM ACTIONS (Boutons du bas)
+   ---------------------------------------------------------- */
+
+.stock-create-page .form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg) 0;
+    border-top: 1px solid var(--border-color-light);
+    margin-top: var(--spacing-xl);
+}
+
+
+/* ----------------------------------------------------------
+   13. BOUTON SUBMIT AVEC LOADER
+   ----------------------------------------------------------
+   Le bouton principal a :
+     - une icône (data-submit-icon)
+     - un texte (data-submit-text)
+     - un loader caché (data-submit-loader)
+   
+   Le JS bascule entre l'icône+texte et le loader.
+   ---------------------------------------------------------- */
+
+.stock-create-page [data-stock-submit] {
+    position: relative;
+    min-width: 200px;
+    transition: all var(--transition-base);
+}
+
+.stock-create-page [data-stock-submit] .submit-loader {
+    display: inline-flex;
+    align-items: center;
+    margin-left: var(--spacing-xs);
+}
+
+.stock-create-page [data-stock-submit] .submit-loader[hidden] {
+    display: none;
+}
+
+.stock-create-page [data-stock-submit]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+
+/* ----------------------------------------------------------
+   14. RESPONSIVE
+   ---------------------------------------------------------- */
+
+@media (max-width: 992px) {
+    .stock-create-page .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-create-page .creation-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .stock-create-page .form-card-body {
+        padding: var(--spacing-md);
+    }
+
+    .stock-create-page .form-card-header {
+        padding: var(--spacing-md);
+    }
+
+    .stock-create-page .creation-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-create-page .form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .stock-create-page .form-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .stock-create-page [data-stock-submit] {
+        min-width: auto;
+    }
+}

@@ -1,0 +1,400 @@
+/* ============================================================
+   PHOVE — STYLE : CRÉATION D'UNE ENTRÉE DE STOCK
+   Vue : resources/views/admin/stocks/entrees/create.blade.php
+   Route : admin.stocks.entrees.create
+
+   Ce fichier complète stocks-common.css.
+   Il n'ajoute QUE ce qui est spécifique à la création d'une entrée.
+   ============================================================ */
+
+
+/* ----------------------------------------------------------
+   1. CONTENEUR DE PAGE
+   ---------------------------------------------------------- */
+
+.stock-entry-page {
+    /* Conteneur principal */
+}
+
+
+/* ----------------------------------------------------------
+   2. EN-TÊTE DE PAGE
+   ----------------------------------------------------------
+   .page-header, .page-header-content, .breadcrumb,
+   .page-title, .page-description viennent de stocks-common.css.
+   On ajuste juste la structure texte + actions.
+   ---------------------------------------------------------- */
+
+.stock-entry-page .page-header-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.stock-entry-page .page-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.stock-entry-page .page-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.stock-entry-page .page-title i {
+    color: var(--color-success);
+}
+
+
+/* ----------------------------------------------------------
+   3. BOUTONS SPÉCIFIQUES
+   ----------------------------------------------------------
+   .btn, .btn-primary, .btn-secondary viennent de
+   admin-common.css. On ajoute juste un variant "success"
+   pour le bouton "Enregistrer l'entrée".
+   ---------------------------------------------------------- */
+
+.btn-success {
+    background: var(--color-success);
+    color: #FFFFFF;
+    border-color: var(--color-success);
+}
+
+.btn-success:hover {
+    background: #059669;
+    border-color: #059669;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+    color: #FFFFFF;
+}
+
+/* Alerte globale (résumé d'erreurs) */
+.validation-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: var(--color-error-light);
+    border-left: 4px solid var(--color-error);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-xl);
+}
+
+.validation-alert .alert-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--color-error);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.validation-alert .alert-content strong {
+    display: block;
+    color: #B91C1C;
+    font-weight: var(--font-weight-bold);
+    margin-bottom: var(--spacing-sm);
+}
+
+.validation-alert .error-list {
+    list-style: disc;
+    padding-left: var(--spacing-lg);
+    font-size: var(--font-size-xs);
+    color: #B91C1C;
+    line-height: 1.6;
+}
+
+.validation-alert .error-list li {
+    margin-bottom: 4px;
+}
+
+
+/* ----------------------------------------------------------
+   4. FORMULAIRE
+   ---------------------------------------------------------- */
+
+.stock-entry-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+
+/* ----------------------------------------------------------
+   5. FORM CARD (une section = une carte)
+   ----------------------------------------------------------
+   .form-card, .form-card-header, .form-card-body, .form-card-icon,
+   .form-card-title, .form-card-description viennent de
+   stocks-common.css. On ajuste juste la grille et les champs.
+   ---------------------------------------------------------- */
+
+.stock-entry-form .form-card {
+    margin-bottom: var(--spacing-xl);
+}
+
+
+/* ----------------------------------------------------------
+   6. FORM GRID (2 colonnes)
+   ---------------------------------------------------------- */
+
+.stock-entry-form .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.stock-entry-form .form-group-full {
+    grid-column: 1 / -1;
+}
+
+
+/* ----------------------------------------------------------
+   7. INPUT WITH UNIT (quantité + unité)
+   ----------------------------------------------------------
+   Pour la quantité : input + badge unité à droite.
+   ---------------------------------------------------------- */
+
+.input-with-unit {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+}
+
+.input-with-unit .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.input-with-unit .input-unit {
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-md);
+    background: var(--color-bg-light);
+    border: 2px solid var(--border-color);
+    border-left: none;
+    border-top-right-radius: var(--border-radius-sm);
+    border-bottom-right-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+    text-transform: lowercase;
+}
+
+.input-with-unit .form-control:focus + .input-unit {
+    border-color: var(--color-primary);
+}
+
+
+/* ----------------------------------------------------------
+   8. INPUT WITH SUFFIX (coût unitaire + USD)
+   ---------------------------------------------------------- */
+
+.input-with-suffix {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+}
+
+.input-with-suffix .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.input-with-suffix .input-suffix {
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-md);
+    background: var(--color-bg-light);
+    border: 2px solid var(--border-color);
+    border-left: none;
+    border-top-right-radius: var(--border-radius-sm);
+    border-bottom-right-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+}
+
+.input-with-suffix .form-control:focus + .input-suffix {
+    border-color: var(--color-primary);
+}
+
+
+/* ----------------------------------------------------------
+   9. CHAMPS SPÉCIFIQUES
+   ---------------------------------------------------------- */
+
+.stock-entry-form .form-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.stock-entry-form .form-label .required {
+    color: var(--color-error);
+    margin-left: 2px;
+}
+
+.stock-entry-form .form-control,
+.stock-entry-form .form-select,
+.stock-entry-form .textarea-control {
+    width: 100%;
+    padding: 10px 14px;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background: var(--color-bg-white);
+    color: var(--color-text-primary);
+    transition: all var(--transition-base);
+    outline: none;
+}
+
+.stock-entry-form .form-control:focus,
+.stock-entry-form .form-select:focus,
+.stock-entry-form .textarea-control:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(26, 91, 156, 0.1);
+}
+
+.stock-entry-form .form-control.is-invalid,
+.stock-entry-form .form-select.is-invalid,
+.stock-entry-form .textarea-control.is-invalid {
+    border-color: var(--color-error);
+    background: #FEF2F2;
+}
+
+.stock-entry-form .form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748B' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 38px;
+    cursor: pointer;
+}
+
+.stock-entry-form .textarea-control {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.6;
+}
+
+.stock-entry-form .field-help {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin-top: 2px;
+}
+
+.stock-entry-form .field-error {
+    font-size: var(--font-size-xs);
+    color: var(--color-error);
+    font-weight: var(--font-weight-medium);
+    margin-top: 4px;
+}
+
+
+/* ----------------------------------------------------------
+   10. RAPPEL DE TRAÇABILITÉ
+   ----------------------------------------------------------
+   .traceability-notice, .traceability-icon, .traceability-content
+   viennent de stocks-common.css. On ajuste juste la couleur
+   pour le contexte d'entrée (vert/succès).
+   ---------------------------------------------------------- */
+
+.stock-entry-page .traceability-notice {
+    background: var(--color-success-light);
+    border-left-color: var(--color-success);
+}
+
+.stock-entry-page .traceability-icon {
+    color: var(--color-success);
+}
+
+
+/* ----------------------------------------------------------
+   11. FORM ACTIONS (boutons du bas)
+   ---------------------------------------------------------- */
+
+.stock-entry-page .form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg) 0;
+    border-top: 1px solid var(--border-color-light);
+    margin-top: var(--spacing-xl);
+}
+
+
+/* ----------------------------------------------------------
+   12. RESPONSIVE
+   ---------------------------------------------------------- */
+
+@media (max-width: 992px) {
+    .stock-entry-form .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .stock-entry-form .form-card-body {
+        padding: var(--spacing-md);
+    }
+
+    .stock-entry-form .form-card-header {
+        padding: var(--spacing-md);
+    }
+
+    .stock-entry-page .form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .stock-entry-page .form-actions .btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .input-with-unit,
+    .input-with-suffix {
+        flex-direction: column;
+    }
+
+    .input-with-unit .form-control,
+    .input-with-suffix .form-control {
+        border-top-right-radius: var(--border-radius-sm);
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .input-with-unit .input-unit,
+    .input-with-suffix .input-suffix {
+        justify-content: center;
+        padding: var(--spacing-sm);
+        border-left: 2px solid var(--border-color);
+        border-top: none;
+        border-bottom-left-radius: var(--border-radius-sm);
+        border-bottom-right-radius: var(--border-radius-sm);
+    }
+}

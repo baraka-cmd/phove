@@ -700,98 +700,263 @@
     line-height: 1.6;
 }
 
-/* ----------------------------------------------------------
-   5. SECTION PROJETS RÉCENTS
-   ---------------------------------------------------------- */
-.projects-section {
-    padding: var(--spacing-6xl) 0;
-    background: var(--color-bg-light);
-}
+/* ============================================================
+   SECTION TÉMOIGNAGES — ACCUEIL
+   ------------------------------------------------------------
+   Couvre :
+     - .testimonials-section (conteneur global)
+     - .testimonials-grid (grille)
+     - .testimonial-card (carte)
+     - .testimonial-quote, .testimonial-text
+     - .testimonial-author, .testimonial-avatar, .testimonial-info
+   ============================================================ */
 
-.projects-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-xl);
-}
+/* ============================================================
+   1. SECTION GLOBALE
+   ============================================================ */
 
-.project-card {
-    background: var(--color-bg-white);
-    border-radius: var(--border-radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border-color-light);
-    transition: all var(--transition-base);
-}
-
-.project-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-xl);
-}
-
-.project-card-image {
+.testimonials-section {
+    padding: 80px 0;
+    background: linear-gradient(180deg, #F8FAFC 0%, #F1F5F9 100%);
     position: relative;
-    height: 230px;
     overflow: hidden;
 }
 
-.project-card-image img {
+/* Décoration de fond */
+.testimonials-section::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(26, 91, 156, 0.06), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.testimonials-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.testimonials-section .section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.testimonials-section .section-subtitle {
+    display: inline-block;
+    padding: 6px 16px;
+    background: #E8F0F8;
+    color: #1A5B9C;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 50px;
+    margin-bottom: 16px;
+}
+
+.testimonials-section .section-title {
+    font-size: 36px;
+    font-weight: 800;
+    color: #1E293B;
+    line-height: 1.2;
+    margin-bottom: 16px;
+}
+
+.testimonials-section .section-description {
+    font-size: 16px;
+    color: #64748B;
+    line-height: 1.7;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+/* ============================================================
+   2. GRILLE
+   ============================================================ */
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+}
+
+/* ============================================================
+   3. CARTE TÉMOIGNAGE
+   ============================================================ */
+
+.testimonial-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 32px 28px 26px;
+    background: #FFFFFF;
+    border-radius: 16px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    margin: 0;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    overflow: hidden;
+    min-height: 320px;
+}
+
+/* Barre décorative en haut */
+.testimonial-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #1A5B9C, #3A7BC8, #F59E0B);
+    border-radius: 16px 16px 0 0;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 42px rgba(26, 91, 156, 0.12);
+}
+
+/* ============================================================
+   4. ICÔNE GUILLEMETS
+   ============================================================ */
+
+.testimonial-quote {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #E8F0F8, #DBEAFE);
+    color: #1A5B9C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    transition: transform 0.35s ease;
+}
+
+.testimonial-card:hover .testimonial-quote {
+    transform: scale(1.08) rotate(-4deg);
+    background: linear-gradient(135deg, #1A5B9C, #3A7BC8);
+    color: #FFFFFF;
+}
+
+/* ============================================================
+   5. TEXTE DU TÉMOIGNAGE
+   ============================================================ */
+
+.testimonial-text {
+    flex: 1;
+    font-size: 15px;
+    font-style: italic;
+    color: #334155;
+    line-height: 1.7;
+    margin: 0;
+    position: relative;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    quotes: """ """ "'" "'";
+}
+
+.testimonial-text::before {
+    content: open-quote;
+    font-size: 32px;
+    color: #1A5B9C;
+    opacity: 0.15;
+    position: absolute;
+    top: -12px;
+    left: -8px;
+    font-family: Georgia, serif;
+    line-height: 1;
+}
+
+/* ============================================================
+   6. AUTEUR (AVATAR + INFOS)
+   ============================================================ */
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 18px;
+    border-top: 1px solid #F1F5F9;
+    margin-top: auto;
+}
+
+/* --- Avatar --- */
+.testimonial-avatar {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1A5B9C, #3A7BC8);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 3px solid #FFFFFF;
+    box-shadow: 0 3px 10px rgba(26, 91, 156, 0.25);
+}
+
+.testimonial-avatar img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform var(--transition-slow);
-}
-
-.project-card:hover .project-card-image img {
-    transform: scale(1.06);
-}
-
-.project-card-badge {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    padding: 6px 14px;
-    border-radius: var(--border-radius-full);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    backdrop-filter: blur(5px);
-}
-
-.project-card-badge.en-cours {
-    background: rgba(26, 91, 156, 0.9);
-    color: var(--color-text-white);
-}
-
-.project-card-badge.en-cours .fa-pulse {
-    color: var(--color-text-white);
-}
-
-.project-card-badge.termine {
-    background: rgba(16, 185, 129, 0.9);
-    color: var(--color-text-white);
-}
-
-.project-card-body {
-    padding: var(--spacing-xl);
-}
-
-.project-card-domain {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: var(--spacing-sm);
+    object-position: center;
+    border-radius: 50%;
     display: block;
 }
 
-.project-card-title {
-    font-size: var(--font-size-md);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text-primary);
-    margin-bottom: var(--spacing-sm);
+.testimonial-avatar > span,
+.testimonial-avatar-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+/* --- Infos --- */
+.testimonial-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.testimonial-name {
+    font-size: 14px;
+    font-weight: 800;
+    color: #1E293B;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.testimonial-role {
+    font-size: 12px;
+    color: #64748B;
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -799,277 +964,116 @@
     overflow: hidden;
 }
 
-.project-card-title a {
-    color: inherit;
-    text-decoration: none;
-    transition: color var(--transition-fast);
+/* ============================================================
+   7. RESPONSIVE — TABLETTE (≤ 992px)
+   ============================================================ */
+
+@media (max-width: 992px) {
+    .testimonials-section {
+        padding: 60px 0;
+    }
+
+    .testimonials-section .section-title {
+        font-size: 28px;
+    }
+
+    .testimonials-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .testimonial-card {
+        padding: 26px 22px 22px;
+        min-height: 300px;
+    }
+
+    .testimonial-text {
+        font-size: 14px;
+    }
 }
 
-.project-card-title a:hover {
-    color: var(--color-primary);
+/* ============================================================
+   8. RESPONSIVE — MOBILE (≤ 768px)
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .testimonials-section {
+        padding: 50px 0;
+    }
+
+    .testimonials-section .section-header {
+        margin-bottom: 32px;
+    }
+
+    .testimonials-section .section-title {
+        font-size: 24px;
+    }
+
+    .testimonials-section .section-description {
+        font-size: 14px;
+    }
+
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .testimonial-card {
+        padding: 24px 20px 20px;
+        min-height: auto;
+        gap: 16px;
+    }
+
+    .testimonial-quote {
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+    }
+
+    .testimonial-text {
+        font-size: 14px;
+        -webkit-line-clamp: 5;
+    }
+
+    .testimonial-avatar {
+        width: 46px;
+        height: 46px;
+        font-size: 14px;
+    }
+
+    .testimonial-avatar > span,
+    .testimonial-avatar-fallback {
+        font-size: 14px;
+    }
+
+    .testimonial-name {
+        font-size: 13px;
+    }
+
+    .testimonial-role {
+        font-size: 11px;
+    }
 }
 
-.project-card-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-md);
-    font-size: var(--font-size-xs);
-    color: var(--color-text-muted);
-    margin-bottom: var(--spacing-lg);
+/* ============================================================
+   9. ACCESSIBILITÉ — Reduced Motion
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    .testimonial-card,
+    .testimonial-quote {
+        transition: none !important;
+    }
+
+    .testimonial-card:hover {
+        transform: none;
+    }
+
+    .testimonial-card:hover .testimonial-quote {
+        transform: none;
+    }
 }
 
-.project-card-meta span {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.project-card-meta i {
-    color: #F59E0B;
-    font-size: 11px;
-}
-
-.project-card-progress {
-    margin-bottom: var(--spacing-lg);
-}
-
-.progress-label {
-    display: flex;
-    justify-content: space-between;
-    font-size: var(--font-size-xs);
-    color: var(--color-text-muted);
-    margin-bottom: 8px;
-    font-weight: var(--font-weight-medium);
-}
-
-.progress-bar {
-    width: 100%;
-    height: 8px;
-    background: var(--border-color-light);
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
-    border-radius: 4px;
-    transition: width 1.5s ease;
-}
-
-.progress-fill.completed {
-    background: linear-gradient(90deg, var(--color-success) 0%, #34D399 100%);
-}
-
-.project-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: var(--spacing-md);
-    border-top: 1px solid var(--border-color-light);
-}
-
-.project-card-link {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-primary);
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all var(--transition-fast);
-}
-
-.project-card-link:hover {
-    gap: 10px;
-    color: #F59E0B;
-}
-
-.project-card-link i {
-    font-size: 10px;
-    transition: transform var(--transition-fast);
-}
-
-.project-card-link:hover i {
-    transform: translateX(3px);
-}
-
-.section-footer {
-    text-align: center;
-    margin-top: var(--spacing-3xl);
-}
-
-
-
-
-/* ----------------------------------------------------------
-   6. SECTION TÉMOIGNAGES
-   ---------------------------------------------------------- */
-.testimonials-section {
-    padding: var(--spacing-6xl) 0;
-    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 50%, var(--color-primary-light) 100%);
-    position: relative;
-    overflow: hidden;
-}
-
-.testimonials-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.04) 0%, transparent 60%),
-        radial-gradient(circle at 80% 20%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
-    pointer-events: none;
-}
-
-.testimonials-section .section-subtitle {
-    color: rgba(255, 255, 255, 0.75);
-}
-
-.testimonials-section .section-title {
-    color: var(--color-text-white);
-}
-
-.testimonials-section .section-description {
-    color: rgba(255, 255, 255, 0.65);
-}
-
-.testimonials-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-xl);
-    position: relative;
-    z-index: 1;
-}
-
-.testimonial-card {
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: var(--border-radius-lg);
-    padding: var(--spacing-2xl);
-    transition: all var(--transition-base);
-}
-
-.testimonial-card:hover {
-    background: rgba(255, 255, 255, 0.12);
-    transform: translateY(-6px);
-    border-color: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.testimonial-quote {
-    font-size: 3rem;
-    color: #F59E0B;
-    margin-bottom: var(--spacing-md);
-    line-height: 0.4;
-    opacity: 0.8;
-}
-
-.testimonial-text {
-    font-size: var(--font-size-sm);
-    color: rgba(255, 255, 255, 0.85);
-    line-height: 1.9;
-    font-style: italic;
-    margin-bottom: var(--spacing-xl);
-}
-
-.testimonial-author {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    padding-top: var(--spacing-md);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.testimonial-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: var(--border-radius-circle);
-    background: #F59E0B;
-    color: var(--color-text-white);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: var(--font-weight-bold);
-    font-size: var(--font-size-md);
-    flex-shrink: 0;
-}
-
-.testimonial-info .testimonial-name {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-white);
-    display: block;
-}
-
-.testimonial-info .testimonial-role {
-    font-size: var(--font-size-xs);
-    color: rgba(255, 255, 255, 0.55);
-}
-
-/* ----------------------------------------------------------
-   7. SECTION PARTENAIRES
-   ---------------------------------------------------------- */
-.partners-section {
-    padding: var(--spacing-4xl) 0;
-    background: var(--color-bg-white);
-}
-
-.partners-grid {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-3xl);
-    flex-wrap: wrap;
-}
-
-.partner-item {
-    text-align: center;
-}
-
-.partner-placeholder {
-    width: 180px;
-    height: 90px;
-    background: var(--color-bg-light);
-    border: 2px dashed var(--border-color);
-    border-radius: var(--border-radius);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    color: var(--color-text-muted);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    transition: all var(--transition-base);
-    cursor: default;
-}
-
-.partner-placeholder i {
-    font-size: var(--font-size-xl);
-    color: var(--color-primary);
-    opacity: 0.5;
-}
-
-.partner-placeholder:hover {
-    border-color: var(--color-primary);
-    background: var(--color-primary-lighter);
-}
-
-.partner-become {
-    border-style: solid;
-    border-color: #F59E0B;
-    cursor: pointer;
-}
-
-.partner-become:hover {
-    background: #FEF3C7;
-    border-color: #D97706;
-}
 
 /* ----------------------------------------------------------
    8. SECTION CTA — APPEL À L'ACTION
@@ -1331,5 +1335,1475 @@
 
     .cta-section {
         padding: var(--spacing-4xl) 0;
+    }
+}
+
+
+/* ============================================================
+   SECTION ACTUALITÉS & ÉVÉNEMENTS RÉCENTS
+   ============================================================ */
+
+.news-section {
+    padding: var(--spacing-6xl) 0;
+    background: var(--color-bg-light);
+    position: relative;
+    overflow: hidden;
+}
+
+.news-section::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: -100px;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26, 91, 156, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+
+/* ----------------------------------------------------------
+   1. GRILLE DES ACTUALITÉS
+   ---------------------------------------------------------- */
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-2xl);
+}
+
+
+/* ----------------------------------------------------------
+   2. CARTE ACTUALITÉ
+   ---------------------------------------------------------- */
+
+.news-card {
+    background: var(--color-bg-white);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color-light);
+    transition: all var(--transition-base);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.news-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--color-primary-lighter);
+}
+
+
+/* ----------------------------------------------------------
+   3. IMAGE DE LA CARTE
+   ---------------------------------------------------------- */
+
+.news-card-image {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #E8F0F8 0%, #F1F5F9 100%);
+}
+
+.news-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.news-card:hover .news-card-image img {
+    transform: scale(1.08);
+}
+
+.news-card-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    font-size: 3rem;
+    opacity: 0.4;
+    background: linear-gradient(135deg, #E8F0F8 0%, #DBEAFE 100%);
+}
+
+
+/* ----------------------------------------------------------
+   4. BADGE CATÉGORIE
+   ---------------------------------------------------------- */
+
+.news-card-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    padding: 6px 14px;
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #FFFFFF;
+    letter-spacing: 0.3px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.news-card-badge i {
+    font-size: 10px;
+}
+
+/* Couleurs par catégorie */
+.news-badge-actualite {
+    background: rgba(26, 91, 156, 0.92);
+}
+
+.news-badge-projet {
+    background: rgba(16, 185, 129, 0.92);
+}
+
+.news-badge-evenement {
+    background: rgba(245, 158, 11, 0.92);
+}
+
+.news-badge-rapport {
+    background: rgba(139, 92, 246, 0.92);
+}
+
+.news-badge-temoignage {
+    background: rgba(236, 72, 153, 0.92);
+}
+
+.news-badge-communique {
+    background: rgba(239, 68, 68, 0.92);
+}
+
+
+/* ----------------------------------------------------------
+   5. BADGE ÉPINGLÉ
+   ---------------------------------------------------------- */
+
+.news-card-pin {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(245, 158, 11, 0.95);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.40);
+    animation: pulse 2.5s ease-in-out infinite;
+}
+
+.news-card-pin i {
+    transform: rotate(-45deg);
+}
+
+
+/* ----------------------------------------------------------
+   6. CORPS DE LA CARTE
+   ---------------------------------------------------------- */
+
+.news-card-body {
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+
+/* ----------------------------------------------------------
+   7. MÉTADONNÉES
+   ---------------------------------------------------------- */
+
+.news-card-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.news-card-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.news-card-meta i {
+    color: var(--color-primary);
+    font-size: 11px;
+    opacity: 0.75;
+}
+
+
+/* ----------------------------------------------------------
+   8. TITRE
+   ---------------------------------------------------------- */
+
+.news-card-title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.9em;
+}
+
+.news-card-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.news-card-title a:hover {
+    color: var(--color-primary);
+}
+
+
+/* ----------------------------------------------------------
+   9. EXTRAIT
+   ---------------------------------------------------------- */
+
+.news-card-excerpt {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: var(--spacing-lg);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+}
+
+
+/* ----------------------------------------------------------
+   10. FOOTER
+   ---------------------------------------------------------- */
+
+.news-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--border-color-light);
+    margin-top: auto;
+}
+
+.news-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.news-card-link:hover {
+    gap: 10px;
+    color: var(--color-accent);
+}
+
+.news-card-link i {
+    font-size: 10px;
+    transition: transform var(--transition-fast);
+}
+
+.news-card-link:hover i {
+    transform: translateX(3px);
+}
+
+.news-card-author {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-light);
+    font-style: italic;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.news-card-author i {
+    font-size: 10px;
+    color: var(--color-text-muted);
+}
+
+
+/* ----------------------------------------------------------
+   11. FOOTER DE SECTION
+   ---------------------------------------------------------- */
+
+.news-section .section-footer {
+    text-align: center;
+    margin-top: var(--spacing-2xl);
+}
+
+
+/* ----------------------------------------------------------
+   12. ANIMATION PULSE
+   ---------------------------------------------------------- */
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.40);
+    }
+    50% {
+        transform: scale(1.08);
+        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.55);
+    }
+}
+
+
+/* ----------------------------------------------------------
+   13. RESPONSIVE — 1200px
+   ---------------------------------------------------------- */
+
+@media (max-width: 1200px) {
+
+    .news-grid {
+        gap: var(--spacing-lg);
+    }
+
+    .news-card-body {
+        padding: var(--spacing-lg);
+    }
+
+    .news-card-image {
+        height: 200px;
+    }
+}
+
+
+/* ----------------------------------------------------------
+   14. RESPONSIVE — 992px
+   ---------------------------------------------------------- */
+
+@media (max-width: 992px) {
+
+    .news-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .news-card-image {
+        height: 200px;
+    }
+}
+
+
+/* ----------------------------------------------------------
+   15. RESPONSIVE — 768px
+   ---------------------------------------------------------- */
+
+@media (max-width: 768px) {
+
+    .news-section {
+        padding: var(--spacing-4xl) 0;
+    }
+
+    .news-grid {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        margin: 0 auto var(--spacing-xl);
+    }
+
+    .news-card-image {
+        height: 240px;
+    }
+
+    .news-card-title {
+        font-size: var(--font-size-base);
+        min-height: auto;
+    }
+
+    .news-card-excerpt {
+        -webkit-line-clamp: 2;
+    }
+}
+
+
+/* ----------------------------------------------------------
+   16. RESPONSIVE — 576px
+   ---------------------------------------------------------- */
+
+@media (max-width: 576px) {
+
+    .news-section {
+        padding: var(--spacing-3xl) 0;
+    }
+
+    .news-card-image {
+        height: 200px;
+    }
+
+    .news-card-body {
+        padding: var(--spacing-md);
+    }
+
+    .news-card-meta {
+        font-size: 0.7rem;
+        gap: var(--spacing-sm);
+    }
+
+    .news-card-title {
+        font-size: var(--font-size-sm);
+    }
+
+    .news-card-excerpt {
+        font-size: var(--font-size-xs);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .news-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .news-card-author {
+        max-width: 100%;
+    }
+}
+
+
+
+/* ============================================================
+   SECTION PROJETS RÉCENTS — ACCUEIL
+   ------------------------------------------------------------
+   Couvre la section #projects de public/home.blade.php
+   Inclut le partial public/partials/projet-card.blade.php
+   ============================================================ */
+
+/* ============================================================
+   1. SECTION GLOBALE
+   ============================================================ */
+
+.projects-section {
+    padding: 80px 0;
+    background: #F8FAFC;
+}
+
+.projects-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.projects-section .section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.projects-section .section-subtitle {
+    display: inline-block;
+    padding: 6px 16px;
+    background: #E8F0F8;
+    color: #1A5B9C;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 50px;
+    margin-bottom: 16px;
+}
+
+.projects-section .section-title {
+    font-size: 36px;
+    font-weight: 800;
+    color: #1E293B;
+    line-height: 1.2;
+    margin-bottom: 16px;
+}
+
+.projects-section .section-description {
+    font-size: 16px;
+    color: #64748B;
+    line-height: 1.7;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.projects-section .section-footer {
+    text-align: center;
+    margin-top: 50px;
+}
+
+/* ============================================================
+   2. GRILLE DES PROJETS
+   ============================================================ */
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 28px;
+}
+
+/* ============================================================
+   3. CARTE PROJET — CONTENEUR
+   ============================================================ */
+
+.project-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #FFFFFF;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.10);
+}
+
+/* ============================================================
+   4. IMAGE DU PROJET
+   ============================================================ */
+
+.project-card-image {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #E8F0F8, #F1F5F9);
+    flex-shrink: 0;
+}
+
+.project-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.6s ease;
+}
+
+.project-card:hover .project-card-image img {
+    transform: scale(1.06);
+}
+
+.project-card-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1A5B9C;
+    font-size: 48px;
+    opacity: 0.4;
+}
+
+/* ============================================================
+   5. BADGES (statut, domaine)
+   ============================================================ */
+
+.project-card-badge {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    z-index: 2;
+    white-space: nowrap;
+}
+
+.project-card-badge.en-cours {
+    background: rgba(26, 91, 156, 0.95);
+}
+
+.project-card-badge.termine {
+    background: rgba(16, 185, 129, 0.95);
+}
+
+.project-card-badge.suspendu {
+    background: rgba(239, 68, 68, 0.95);
+}
+
+.project-card-badge.preparation {
+    background: rgba(100, 116, 139, 0.95);
+}
+
+.project-card-badge i {
+    font-size: 10px;
+}
+
+/* ============================================================
+   6. CORPS DE LA CARTE
+   ============================================================ */
+
+.project-card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 22px;
+    gap: 12px;
+}
+
+/* ============================================================
+   7. DOMAINE
+   ============================================================ */
+
+.project-card-domain {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 4px 10px;
+    background: #E8F0F8;
+    color: #1A5B9C;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 50px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    line-height: 1.4;
+}
+
+/* ============================================================
+   8. TITRE
+   ============================================================ */
+
+.project-card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1E293B;
+    line-height: 1.4;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 44px;
+}
+
+.project-card-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.project-card-title a:hover {
+    color: #1A5B9C;
+}
+
+/* ============================================================
+   9. MÉTADONNÉES
+   ============================================================ */
+
+.project-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 12px;
+    color: #64748B;
+    line-height: 1.4;
+}
+
+.project-card-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.project-card-meta i {
+    color: #1A5B9C;
+    font-size: 11px;
+}
+
+/* ============================================================
+   10. BARRE DE PROGRESSION
+   ============================================================ */
+
+.project-card-progress {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.progress-label span:first-child {
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #64748B;
+}
+
+.progress-label span:last-child {
+    color: #1A5B9C;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #E2E8F0;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1A5B9C 0%, #3A7BC8 100%);
+    border-radius: 3px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.progress-fill.completed,
+.progress-fill[data-width="100%"] {
+    background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+}
+
+/* ============================================================
+   11. FOOTER DE LA CARTE
+   ============================================================ */
+
+.project-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 14px;
+    border-top: 1px solid #F1F5F9;
+    margin-top: auto;
+}
+
+.project-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #1A5B9C;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: gap 0.25s ease, color 0.2s ease;
+}
+
+.project-card-link:hover {
+    gap: 12px;
+    color: #124270;
+}
+
+.project-card-link i {
+    font-size: 11px;
+    transition: transform 0.25s ease;
+}
+
+.project-card-link:hover i {
+    transform: translateX(3px);
+}
+
+/* ============================================================
+   12. ÉTAT VIDE
+   ============================================================ */
+
+.projects-empty {
+    grid-column: 1 / -1;
+    padding: 70px 24px;
+    text-align: center;
+    background: #FFFFFF;
+    border-radius: 16px;
+    border: 2px dashed #CBD5E1;
+}
+
+.projects-empty i {
+    display: block;
+    font-size: 64px;
+    color: #CBD5E1;
+    margin-bottom: 20px;
+}
+
+.projects-empty h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 8px;
+}
+
+.projects-empty p {
+    font-size: 14px;
+    color: #64748B;
+    max-width: 420px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* ============================================================
+   13. BOUTON SECTION-FOOTER
+   ============================================================ */
+
+.projects-section .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: transparent;
+    color: #1A5B9C;
+    font-size: 14px;
+    font-weight: 700;
+    border: 2px solid #1A5B9C;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.projects-section .btn-outline:hover {
+    background: #1A5B9C;
+    color: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(26, 91, 156, 0.25);
+}
+
+/* ============================================================
+   14. RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 992px) {
+    .projects-section {
+        padding: 60px 0;
+    }
+
+    .projects-section .section-title {
+        font-size: 28px;
+    }
+
+    .projects-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .projects-section {
+        padding: 50px 0;
+    }
+
+    .projects-section .section-header {
+        margin-bottom: 32px;
+    }
+
+    .projects-section .section-title {
+        font-size: 24px;
+    }
+
+    .projects-section .section-description {
+        font-size: 14px;
+    }
+
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .project-card-image {
+        height: 190px;
+    }
+
+    .project-card-body {
+        padding: 18px;
+    }
+
+    .project-card-title {
+        font-size: 15px;
+        -webkit-line-clamp: 3;
+    }
+
+    .project-card-badge {
+        font-size: 10px;
+        padding: 4px 10px;
+    }
+
+    .projects-empty {
+        padding: 50px 20px;
+    }
+
+    .projects-empty i {
+        font-size: 48px;
+    }
+
+    .projects-empty h3 {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .projects-section {
+        padding: 40px 0;
+    }
+
+    .project-card-image {
+        height: 170px;
+    }
+
+    .project-card-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+
+
+
+
+
+/* ============================================================
+   SECTION PARTENAIRES — ACCUEIL
+   ------------------------------------------------------------
+   Couvre :
+     - .partners-section (conteneur global)
+     - .partners-grid (grille)
+     - .partner-item + .partner-link (carte partenaire)
+     - .partner-logo-wrapper / .partner-logo / .partner-fallback
+     - .partner-info / .partner-name / .partner-meta / badges
+     - .partner-become-link (CTA "Devenir partenaire")
+     - .partners-empty (état vide)
+   ============================================================ */
+
+/* ============================================================
+   1. SECTION GLOBALE
+   ============================================================ */
+
+.partners-section {
+    padding: 80px 0;
+    background: #FFFFFF;
+}
+
+.partners-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.partners-section .section-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.partners-section .section-subtitle {
+    display: inline-block;
+    padding: 6px 16px;
+    background: #E8F0F8;
+    color: #1A5B9C;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 50px;
+    margin-bottom: 16px;
+}
+
+.partners-section .section-title {
+    font-size: 36px;
+    font-weight: 800;
+    color: #1E293B;
+    line-height: 1.2;
+    margin-bottom: 16px;
+}
+
+.partners-section .section-description {
+    font-size: 16px;
+    color: #64748B;
+    line-height: 1.7;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+/* ============================================================
+   2. GRILLE
+   ============================================================ */
+
+.partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+/* ============================================================
+   3. CARTE PARTENAIRE — CONTENEUR
+   ============================================================ */
+
+.partner-item {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.partner-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 20px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease,
+                box-shadow 0.3s ease,
+                border-color 0.3s ease;
+    min-height: 240px;
+    height: 100%;
+}
+
+.partner-link:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(26, 91, 156, 0.12);
+    border-color: #1A5B9C;
+}
+
+/* ============================================================
+   4. LOGO / FALLBACK
+   ============================================================ */
+
+.partner-logo-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 90px;
+    flex-shrink: 0;
+    position: relative;
+}
+
+/* Logo réel */
+.partner-logo {
+    max-width: 100%;
+    max-height: 80px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.partner-link:hover .partner-logo {
+    transform: scale(1.06);
+}
+
+/* Fallback (icône + sigle dans un cercle) */
+.partner-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #E8F0F8, #F1F5F9);
+    color: #1A5B9C;
+    border: 2px solid #DBEAFE;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+.partner-fallback i {
+    font-size: 24px;
+    opacity: 0.85;
+}
+
+.partner-fallback span {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: #1A5B9C;
+    line-height: 1;
+}
+
+.partner-link:hover .partner-fallback {
+    background: #1A5B9C;
+    color: #FFFFFF;
+    border-color: #1A5B9C;
+    transform: scale(1.08);
+}
+
+.partner-link:hover .partner-fallback i,
+.partner-link:hover .partner-fallback span {
+    color: #FFFFFF;
+    opacity: 1;
+}
+
+/* Fallback caché (utilisé par le onerror de l'img) */
+.partner-fallback-hidden {
+    display: none !important;
+}
+
+/* ============================================================
+   5. INFORMATIONS (nom, sigle, type, site)
+   ============================================================ */
+
+.partner-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    width: 100%;
+    min-width: 0;
+}
+
+.partner-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1E293B;
+    line-height: 1.4;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+    min-height: 40px;
+}
+
+.partner-link:hover .partner-name {
+    color: #1A5B9C;
+}
+
+.partner-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* Badge sigle */
+.partner-sigle-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #1A5B9C;
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    line-height: 1.5;
+}
+
+/* Badge type (couleur par défaut) */
+.partner-type-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    background: #E8F0F8;
+    color: #1A5B9C;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    line-height: 1.5;
+}
+
+/* Variantes de couleur par type de partenaire */
+.partner-type-bailleur_fonds {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.partner-type-technique {
+    background: #DBEAFE;
+    color: #1E40AF;
+}
+
+.partner-type-local {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.partner-type-international {
+    background: #E0E7FF;
+    color: #4338CA;
+}
+
+.partner-type-institutionnel {
+    background: #FCE7F3;
+    color: #9D174D;
+}
+
+/* Site web */
+.partner-website {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #64748B;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-top: 2px;
+}
+
+.partner-website i {
+    font-size: 9px;
+    color: #1A5B9C;
+}
+
+/* ============================================================
+   6. CTA "DEVENIR PARTENAIRE"
+   ============================================================ */
+
+.partner-become-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 28px 20px;
+    background: linear-gradient(135deg, #F0F7FF, #E8F0F8);
+    border: 2px dashed #1A5B9C;
+    border-radius: 14px;
+    text-decoration: none;
+    color: #1A5B9C;
+    text-align: center;
+    min-height: 240px;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.partner-become-link:hover {
+    background: #1A5B9C;
+    color: #FFFFFF;
+    border-style: solid;
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(26, 91, 156, 0.25);
+}
+
+.partner-become-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    color: #1A5B9C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    transition: transform 0.4s ease;
+    flex-shrink: 0;
+}
+
+.partner-become-link:hover .partner-become-icon {
+    transform: rotate(-10deg) scale(1.1);
+}
+
+.partner-become-title {
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    line-height: 1.3;
+}
+
+.partner-become-desc {
+    font-size: 12px;
+    opacity: 0.85;
+    line-height: 1.5;
+    max-width: 200px;
+}
+
+/* ============================================================
+   7. ÉTAT VIDE
+   ============================================================ */
+
+.partners-empty {
+    grid-column: 1 / -1;
+    padding: 60px 24px;
+    text-align: center;
+    background: #FFFFFF;
+    border-radius: 14px;
+    border: 2px dashed #CBD5E1;
+}
+
+.partners-empty i {
+    font-size: 52px;
+    color: #CBD5E1;
+    display: block;
+    margin-bottom: 14px;
+}
+
+.partners-empty p {
+    font-size: 14px;
+    color: #64748B;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* ============================================================
+   8. RESPONSIVE — TABLETTE (≤ 992px)
+   ============================================================ */
+
+@media (max-width: 992px) {
+    .partners-section {
+        padding: 60px 0;
+    }
+
+    .partners-section .section-title {
+        font-size: 28px;
+    }
+
+    .partners-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 18px;
+    }
+
+    .partner-link,
+    .partner-become-link {
+        padding: 22px 16px;
+        min-height: 220px;
+    }
+
+    .partner-logo-wrapper {
+        height: 80px;
+    }
+
+    .partner-logo {
+        max-height: 70px;
+    }
+}
+
+/* ============================================================
+   9. RESPONSIVE — MOBILE (≤ 768px)
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .partners-section {
+        padding: 50px 0;
+    }
+
+    .partners-section .section-header {
+        margin-bottom: 32px;
+    }
+
+    .partners-section .section-title {
+        font-size: 24px;
+    }
+
+    .partners-section .section-description {
+        font-size: 14px;
+    }
+
+    .partners-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    .partner-link,
+    .partner-become-link {
+        padding: 18px 14px;
+        min-height: 200px;
+    }
+
+    .partner-logo-wrapper {
+        height: 70px;
+    }
+
+    .partner-logo {
+        max-height: 60px;
+    }
+
+    .partner-fallback {
+        width: 70px;
+        height: 70px;
+    }
+
+    .partner-fallback i {
+        font-size: 20px;
+    }
+
+    .partner-fallback span {
+        font-size: 13px;
+    }
+
+    .partner-name {
+        font-size: 13px;
+        min-height: 36px;
+    }
+
+    .partner-become-icon {
+        width: 52px;
+        height: 52px;
+        font-size: 22px;
+    }
+
+    .partner-become-title {
+        font-size: 12px;
+    }
+
+    .partner-become-desc {
+        font-size: 11px;
+    }
+
+    .partners-empty {
+        padding: 40px 20px;
+    }
+
+    .partners-empty i {
+        font-size: 42px;
+    }
+}
+
+/* ============================================================
+   10. RESPONSIVE — PETIT MOBILE (≤ 480px)
+   ============================================================ */
+
+@media (max-width: 480px) {
+    .partners-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .partner-link,
+    .partner-become-link {
+        min-height: 180px;
     }
 }

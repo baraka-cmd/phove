@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Roles;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -17,22 +19,43 @@ class UserController extends Controller
     protected int $perPage = 15;
 
     /**
-     * Rôles disponibles.
-     */
-    protected array $roles = [
-        'super_admin' => 'Super Admin',
-        'admin' => 'Administrateur',
-        'editeur' => 'Éditeur',
-    ];
-
-    /**
      * Statuts disponibles.
      */
     protected array $statuts = [
-        'actif' => 'Actif',
-        'inactif' => 'Inactif',
+        'actif'    => 'Actif',
+        'inactif'  => 'Inactif',
         'suspendu' => 'Suspendu',
     ];
+
+    /**
+     * Retourne la liste des rôles autorisés (source unique : l'Enum Roles).
+     *
+     * @return array<string, string>
+     */
+    protected function rolesDisponibles(): array
+    {
+        return Roles::adminRoles();
+    }
+
+    /**
+     * Retourne la liste des clés de rôles autorisés (pour Rule::in).
+     *
+     * @return array<int, string>
+     */
+    protected function rolesValides(): array
+    {
+        return array_keys($this->rolesDisponibles());
+    }
+
+    /**
+     * Retourne la liste des clés de statuts autorisés.
+     *
+     * @return array<int, string>
+     */
+    protected function statutsValides(): array
+    {
+        return array_keys($this->statuts);
+    }
 
     /**
      * Affiche la liste paginée et filtrée des utilisateurs.
@@ -68,9 +91,9 @@ class UserController extends Controller
         // ============================================
         // STATISTIQUES KPI
         // ============================================
-        $totalUsers = User::count();
-        $usersActifs = User::where('statut', 'actif')->count();
-        $usersInactifs = User::where('statut', 'inactif')->count();
+        $totalUsers     = User::count();
+        $usersActifs    = User::where('statut', 'actif')->count();
+        $usersInactifs  = User::where('statut', 'inactif')->count();
         $usersSuspendus = User::where('statut', 'suspendu')->count();
 
         return view('admin.users.index', compact(
@@ -87,7 +110,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $roles   = $this->rolesDisponibles();
+        $statuts = $this->statuts;
+
+        return view('admin.users.create', compact('roles', 'statuts'));
     }
 
     /**
@@ -96,31 +122,34 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nom' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:191', 'unique:users,email'],
-            'telephone' => ['nullable', 'string', 'max:20'],
+            'nom'          => ['required', 'string', 'max:255'],
+            'email'        => ['required', 'email', 'max:191', 'unique:users,email'],
+            'telephone'    => ['nullable', 'string', 'max:20'],
             'mot_de_passe' => ['required', 'string', 'min:8', 'confirmed'],
-            'role' => ['required', 'in:super_admin,admin,editeur'],
-            'statut' => ['required', 'in:actif,inactif,suspendu'],
+            'role'         => ['required', Rule::in($this->rolesValides())],
+            'statut'       => ['required', Rule::in($this->statutsValides())],
             'photo_profil' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
         ], [
-            'nom.required' => 'Le nom est obligatoire.',
-            'email.required' => 'L\'adresse email est obligatoire.',
-            'email.email' => 'Veuillez saisir une adresse email valide.',
-            'email.unique' => 'Cette adresse email est déjà utilisée.',
-            'mot_de_passe.required' => 'Le mot de passe est obligatoire.',
-            'mot_de_passe.min' => 'Le mot de passe doit contenir au moins 8 caractères.',
-            'mot_de_passe.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
-            'role.required' => 'Le rôle est obligatoire.',
-            'statut.required' => 'Le statut est obligatoire.',
-            'photo_profil.image' => 'Le fichier doit être une image.',
-            'photo_profil.mimes' => 'La photo doit être au format JPG, PNG ou WebP.',
-            'photo_profil.max' => 'La photo ne doit pas dépasser 2 Mo.',
+            'nom.required'                 => 'Le nom est obligatoire.',
+            'email.required'               => 'L\'adresse email est obligatoire.',
+            'email.email'                  => 'Veuillez saisir une adresse email valide.',
+            'email.unique'                 => 'Cette adresse email est déjà utilisée.',
+            'mot_de_passe.required'        => 'Le mot de passe est obligatoire.',
+            'mot_de_passe.min'             => 'Le mot de passe doit contenir au moins 8 caractères.',
+            'mot_de_passe.confirmed'       => 'La confirmation du mot de passe ne correspond pas.',
+            'role.required'                => 'Le rôle est obligatoire.',
+            'role.in'                      => 'Le rôle sélectionné n\'est pas valide.',
+            'statut.required'              => 'Le statut est obligatoire.',
+            'statut.in'                    => 'Le statut sélectionné n\'est pas valide.',
+            'photo_profil.image'           => 'Le fichier doit être une image.',
+            'photo_profil.mimes'           => 'La photo doit être au format JPG, PNG ou WebP.',
+            'photo_profil.max'             => 'La photo ne doit pas dépasser 2 Mo.',
         ]);
 
         // Upload photo
         if ($request->hasFile('photo_profil')) {
-            $validated['photo_profil'] = $request->file('photo_profil')->store('users/photos', 'public');
+            $validated['photo_profil'] = $request->file('photo_profil')
+                ->store('users/photos', 'public');
         }
 
         // Hasher le mot de passe
@@ -137,7 +166,14 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user->loadCount(['articles', 'donsEnregistres', 'cotisationsEnregistrees', 'medias', 'rapportsFinanciers', 'contactsTraites']);
+        $user->loadCount([
+            'articles',
+            'donsEnregistres',
+            'cotisationsEnregistrees',
+            'medias',
+            'rapportsFinanciers',
+            'contactsTraites',
+        ]);
 
         return view('admin.users.show', compact('user'));
     }
@@ -147,7 +183,10 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $roles   = $this->rolesDisponibles();
+        $statuts = $this->statuts;
+
+        return view('admin.users.edit', compact('user', 'roles', 'statuts'));
     }
 
     /**
@@ -155,29 +194,40 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        // Protection : on ne modifie pas son propre rôle / statut
+        if ($user->id === Auth::id()) {
+            $request->merge([
+                'role'   => $user->role,
+                'statut' => $user->statut,
+            ]);
+        }
+
         $validated = $request->validate([
-            'nom' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:191', Rule::unique('users')->ignore($user->id)],
-            'telephone' => ['nullable', 'string', 'max:20'],
-            'role' => ['required', 'in:super_admin,admin,editeur'],
-            'statut' => ['required', 'in:actif,inactif,suspendu'],
+            'nom'          => ['required', 'string', 'max:255'],
+            'email'        => ['required', 'email', 'max:191', Rule::unique('users')->ignore($user->id)],
+            'telephone'    => ['nullable', 'string', 'max:20'],
+            'role'         => ['required', Rule::in($this->rolesValides())],
+            'statut'       => ['required', Rule::in($this->statutsValides())],
             'photo_profil' => ['nullable', 'image', 'mimes:jpeg,jpg,png,webp', 'max:2048'],
         ], [
-            'nom.required' => 'Le nom est obligatoire.',
-            'email.required' => 'L\'adresse email est obligatoire.',
-            'email.email' => 'Veuillez saisir une adresse email valide.',
-            'email.unique' => 'Cette adresse email est déjà utilisée.',
-            'role.required' => 'Le rôle est obligatoire.',
+            'nom.required'    => 'Le nom est obligatoire.',
+            'email.required'  => 'L\'adresse email est obligatoire.',
+            'email.email'     => 'Veuillez saisir une adresse email valide.',
+            'email.unique'    => 'Cette adresse email est déjà utilisée.',
+            'role.required'   => 'Le rôle est obligatoire.',
+            'role.in'         => 'Le rôle sélectionné n\'est pas valide.',
             'statut.required' => 'Le statut est obligatoire.',
+            'statut.in'       => 'Le statut sélectionné n\'est pas valide.',
         ]);
 
         // Upload photo
         if ($request->hasFile('photo_profil')) {
             // Supprimer l'ancienne photo
             if ($user->photo_profil) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->photo_profil);
+                Storage::disk('public')->delete($user->photo_profil);
             }
-            $validated['photo_profil'] = $request->file('photo_profil')->store('users/photos', 'public');
+            $validated['photo_profil'] = $request->file('photo_profil')
+                ->store('users/photos', 'public');
         }
 
         $user->update($validated);
@@ -197,9 +247,16 @@ class UserController extends Controller
                 ->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
         }
 
+        // Protection : ne pas supprimer le dernier Super Admin
+        if ($user->role === Roles::SUPER_ADMIN
+            && User::where('role', Roles::SUPER_ADMIN)->count() <= 1) {
+            return redirect()->route('admin.users.index')
+                ->with('error', 'Impossible de supprimer le dernier Super Admin.');
+        }
+
         // Supprimer la photo
         if ($user->photo_profil) {
-            \Illuminate\Support\Facades\Storage::disk('public')->delete($user->photo_profil);
+            Storage::disk('public')->delete($user->photo_profil);
         }
 
         $user->delete();
@@ -247,6 +304,13 @@ class UserController extends Controller
                 ->with('error', 'Vous ne pouvez pas suspendre votre propre compte.');
         }
 
+        // Protection : ne pas suspendre le dernier Super Admin
+        if ($user->role === Roles::SUPER_ADMIN
+            && User::where('role', Roles::SUPER_ADMIN)->count() <= 1) {
+            return redirect()->back()
+                ->with('error', 'Impossible de suspendre le dernier Super Admin.');
+        }
+
         $user->update(['statut' => 'suspendu']);
 
         return redirect()->back()
@@ -269,8 +333,8 @@ class UserController extends Controller
         $validated = $request->validate([
             'mot_de_passe' => ['required', 'string', 'min:8', 'confirmed'],
         ], [
-            'mot_de_passe.required' => 'Le nouveau mot de passe est obligatoire.',
-            'mot_de_passe.min' => 'Le mot de passe doit contenir au moins 8 caractères.',
+            'mot_de_passe.required'  => 'Le nouveau mot de passe est obligatoire.',
+            'mot_de_passe.min'       => 'Le mot de passe doit contenir au moins 8 caractères.',
             'mot_de_passe.confirmed' => 'La confirmation du mot de passe ne correspond pas.',
         ]);
 

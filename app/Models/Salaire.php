@@ -2,22 +2,36 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Salaire extends Model
 {
-    /**
-     * La table associée au modèle.
-     *
-     * @var string
-     */
+    use HasFactory;
+
+    /*
+    |--------------------------------------------------------------------------
+    | TABLE
+    |--------------------------------------------------------------------------
+    */
+
     protected $table = 'salaires';
 
-    /**
-     * Les attributs modifiables en masse.
-     *
-     * @var array<int, string>
-     */
+
+    /*
+    |--------------------------------------------------------------------------
+    | ATTRIBUTS MASS-ASSIGNABLES
+    |--------------------------------------------------------------------------
+    |
+    | Les champs liés aux paiements ne figurent volontairement PAS ici.
+    |
+    | Un paiement est enregistré dans PaiementSalaire.
+    |
+    */
+
     protected $fillable = [
         'membre_id',
         'organe_id',
@@ -26,347 +40,973 @@ class Salaire extends Model
         'primes',
         'retenues',
         'salaire_net',
-        'mode_paiement',
-        'date_paiement',
         'statut',
         'reference',
         'valide_par',
-        'paye_par',
+        'valide_at',
+        'annule_par',
+        'annule_at',
+        'motif_annulation',
+        'created_by',
         'notes',
     ];
 
-    /**
-     * Cast des attributs.
-     *
-     * @return array<string, string>
-     */
+
+    /*
+    |--------------------------------------------------------------------------
+    | CASTS
+    |--------------------------------------------------------------------------
+    */
+
     protected function casts(): array
     {
         return [
             'salaire_base' => 'decimal:2',
-            'primes' => 'decimal:2',
-            'retenues' => 'decimal:2',
-            'salaire_net' => 'decimal:2',
-            'date_paiement' => 'date',
+            'primes'       => 'decimal:2',
+            'retenues'     => 'decimal:2',
+            'salaire_net'  => 'decimal:2',
+
+            'valide_at'    => 'datetime',
+            'annule_at'    => 'datetime',
         ];
     }
 
+
     /*
     |--------------------------------------------------------------------------
-    | RELATIONS
+    | CONSTANTES MÉTIER
+    |--------------------------------------------------------------------------
+    |
+    | Éviter de disperser les chaînes "brouillon", "valide", etc.
+    | dans toute l'application.
+    |
+    */
+
+    public const STATUT_BROUILLON = 'brouillon';
+
+    public const STATUT_VALIDE = 'valide';
+
+    public const STATUT_PARTIELLEMENT_PAYE = 'partiellement_paye';
+
+    public const STATUT_PAYE = 'paye';
+
+    public const STATUT_ANNULE = 'annule';
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | MODES DE PAIEMENT
+    |--------------------------------------------------------------------------
+    |
+    | Ces valeurs seront principalement utilisées par
+    | PaiementSalaire.
+    |
+    | Elles sont centralisées ici pour éviter les incohérences.
+    |
+    */
+
+    public const MODE_ESPECES = 'especes';
+
+    public const MODE_VIREMENT = 'virement';
+
+    public const MODE_MOBILE_MONEY = 'mobile_money';
+
+    public const MODE_CHEQUE = 'cheque';
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATION : MEMBRE
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * Le membre (personnel) concerné par ce salaire.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function membre()
+    public function membre(): BelongsTo
     {
-        return $this->belongsTo(Membre::class, 'membre_id');
+        return $this->belongsTo(Membre::class);
     }
 
-    /**
-     * Le poste occupé dans l'organigramme.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function organe()
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATION : ORGANE
+    |--------------------------------------------------------------------------
+    */
+
+    public function organe(): BelongsTo
     {
-        return $this->belongsTo(Organe::class, 'organe_id');
+        return $this->belongsTo(Organe::class);
     }
 
-    /**
-     * L'admin qui a validé le salaire.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function validePar()
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATION : UTILISATEUR AYANT CRÉÉ LE SALAIRE
+    |--------------------------------------------------------------------------
+    */
+
+    public function createur(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATION : UTILISATEUR AYANT VALIDÉ
+    |--------------------------------------------------------------------------
+    */
+
+    public function validePar(): BelongsTo
     {
         return $this->belongsTo(User::class, 'valide_par');
     }
 
-    /**
-     * L'admin qui a effectué le paiement.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function payePar()
-    {
-        return $this->belongsTo(User::class, 'paye_par');
-    }
 
     /*
     |--------------------------------------------------------------------------
-    | SCOPES
+    | RELATION : UTILISATEUR AYANT ANNULÉ
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * Scope : salaires brouillons.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeBrouillon($query)
+    public function annulePar(): BelongsTo
     {
-        return $query->where('statut', 'brouillon');
+        return $this->belongsTo(User::class, 'annule_par');
     }
 
-    /**
-     * Scope : salaires validés.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeValides($query)
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELATION : PAIEMENTS
+    |--------------------------------------------------------------------------
+    |
+    | Un salaire peut avoir :
+    |
+    | 0 paiement
+    | 1 paiement
+    | plusieurs paiements
+    |
+    */
+
+    public function paiements(): HasMany
     {
-        return $query->where('statut', 'valide');
+        return $this->hasMany(PaiementSalaire::class, 'salaire_id');
     }
 
-    /**
-     * Scope : salaires payés.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopePayes($query)
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPE : BROUILLONS
+    |--------------------------------------------------------------------------
+    */
+
+    public function scopeBrouillons(Builder $query): Builder
     {
-        return $query->where('statut', 'paye');
+        return $query->where(
+            'statut',
+            self::STATUT_BROUILLON
+        );
     }
 
-    /**
-     * Scope : salaires annulés.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeAnnules($query)
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPE : VALIDÉS
+    |--------------------------------------------------------------------------
+    */
+
+    public function scopeValides(Builder $query): Builder
     {
-        return $query->where('statut', 'annule');
+        return $query->where(
+            'statut',
+            self::STATUT_VALIDE
+        );
     }
 
-    /**
-     * Scope : filtrer par mois.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $mois Format YYYY-MM
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeDuMois($query, string $mois)
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPE : PARTIELLEMENT PAYÉS
+    |--------------------------------------------------------------------------
+    */
+
+    public function scopePartiellementPayes(Builder $query): Builder
     {
+        return $query->where(
+            'statut',
+            self::STATUT_PARTIELLEMENT_PAYE
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPE : PAYÉS
+    |--------------------------------------------------------------------------
+    */
+
+    public function scopePayes(Builder $query): Builder
+    {
+        return $query->where(
+            'statut',
+            self::STATUT_PAYE
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPE : ANNULÉS
+    |--------------------------------------------------------------------------
+    */
+
+    public function scopeAnnules(Builder $query): Builder
+    {
+        return $query->where(
+            'statut',
+            self::STATUT_ANNULE
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPE : MOIS
+    |--------------------------------------------------------------------------
+    */
+
+    public function scopeDuMois(
+        Builder $query,
+        string $mois
+    ): Builder {
         return $query->where('mois', $mois);
     }
 
-    /**
-     * Scope : filtrer par membre.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $membreId
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeDuMembre($query, int $membreId)
-    {
-        return $query->where('membre_id', $membreId);
-    }
 
     /*
     |--------------------------------------------------------------------------
-    | MÉTHODES UTILITAIRES
+    | SCOPE : MEMBRE
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * Libellé du mode de paiement en français.
-     *
-     * @return string
-     */
-    public function modePaiementLibelle(): string
-    {
-        return match($this->mode_paiement) {
-            'especes' => 'Espèces',
-            'virement' => 'Virement bancaire',
-            'mobile_money' => 'Mobile Money',
-            'cheque' => 'Chèque',
-            default => $this->mode_paiement,
-        };
+    public function scopeDuMembre(
+        Builder $query,
+        int $membreId
+    ): Builder {
+        return $query->where('membre_id', $membreId);
     }
 
-    /**
-     * Libellé du statut en français.
-     *
-     * @return string
-     */
-    public function statutLibelle(): string
-    {
-        return match($this->statut) {
-            'brouillon' => 'Brouillon',
-            'valide' => 'Validé',
-            'paye' => 'Payé',
-            'annule' => 'Annulé',
-            default => $this->statut,
-        };
-    }
 
-    /**
-     * Calcule le salaire net automatiquement.
-     *
-     * @return float
-     */
-    public function calculerSalaireNet(): float
-    {
-        $this->salaire_net = $this->salaire_base + $this->primes - $this->retenues;
-        $this->save();
-        return $this->salaire_net;
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | SCOPE : RECHERCHE
+    |--------------------------------------------------------------------------
+    */
 
-    /**
-     * Vérifie si le salaire est en brouillon.
-     *
-     * @return bool
-     */
-    public function estBrouillon(): bool
-    {
-        return $this->statut === 'brouillon';
-    }
-
-    /**
-     * Vérifie si le salaire est validé.
-     *
-     * @return bool
-     */
-    public function estValide(): bool
-    {
-        return $this->statut === 'valide';
-    }
-
-    /**
-     * Vérifie si le salaire est payé.
-     *
-     * @return bool
-     */
-    public function estPaye(): bool
-    {
-        return $this->statut === 'paye';
-    }
-
-    /**
-     * Valide le salaire.
-     *
-     * @param int $adminId
-     * @return void
-     */
-    public function valider(int $adminId): void
-    {
-        $this->update([
-            'statut' => 'valide',
-            'valide_par' => $adminId,
-        ]);
-    }
-
-    /**
-     * Marque le salaire comme payé.
-     *
-     * @param int $adminId
-     * @param string|null $datePaiement
-     * @return void
-     */
-    public function marquerPaye(int $adminId, ?string $datePaiement = null): void
-    {
-        $this->update([
-            'statut' => 'paye',
-            'paye_par' => $adminId,
-            'date_paiement' => $datePaiement ?? now()->format('Y-m-d'),
-        ]);
-    }
-
-    /**
-     * Annule le salaire.
-     *
-     * @return void
-     */
-    public function annuler(): void
-    {
-        $this->update(['statut' => 'annule']);
-    }
-
-    /**
-     * Retourne le nom complet du membre concerné.
-     *
-     * @return string
-     */
-    public function nomMembre(): string
-    {
-        return $this->membre ? $this->membre->nomComplet() : '—';
-    }
-
-    /**
-     * Retourne le nom du poste occupé.
-     *
-     * @return string
-     */
-    public function nomPoste(): string
-    {
-        return $this->organe ? $this->organe->poste : '—';
-    }
-
-    /**
-     * Formate un montant pour l'affichage.
-     *
-     * @param float $montant
-     * @return string
-     */
-    public static function formaterMontant(float $montant): string
-    {
-        return number_format($montant, 2, ',', ' ') . ' $';
-    }
-
-    /**
-     * Génère une référence unique de bulletin.
-     *
-     * @param string $mois Format YYYY-MM
-     * @return string
-     */
-    public static function genererReference(string $mois): string
-    {
-        $prefix = 'BUL-' . str_replace('-', '', $mois) . '-';
-        $dernier = self::where('reference', 'like', $prefix . '%')
-            ->orderBy('reference', 'desc')
-            ->first();
-
-        if ($dernier) {
-            $numero = (int) substr($dernier->reference, -4) + 1;
-        } else {
-            $numero = 1;
+    public function scopeRecherche(
+        Builder $query,
+        ?string $recherche
+    ): Builder {
+        if (!$recherche) {
+            return $query;
         }
 
-        return $prefix . str_pad($numero, 4, '0', STR_PAD_LEFT);
+        $recherche = trim($recherche);
+
+        if ($recherche === '') {
+            return $query;
+        }
+
+        return $query->where(function (Builder $q) use ($recherche) {
+
+            $q->where('reference', 'like', "%{$recherche}%")
+
+                ->orWhereHas('membre', function (Builder $membre) use ($recherche) {
+
+                    $membre->where('nom', 'like', "%{$recherche}%")
+                        ->orWhere('post_nom', 'like', "%{$recherche}%")
+                        ->orWhere('prenom', 'like', "%{$recherche}%")
+                        ->orWhere('matricule', 'like', "%{$recherche}%");
+                });
+        });
     }
 
-    /**
-     * Retourne le total des salaires payés pour un mois donné.
-     *
-     * @param string $mois Format YYYY-MM
-     * @return float
-     */
-    public static function totalPayeDuMois(string $mois): float
+
+    /*
+    |--------------------------------------------------------------------------
+    | CALCUL DU SALAIRE NET
+    |--------------------------------------------------------------------------
+    |
+    | salaire_net = salaire_base + primes - retenues
+    |
+    */
+
+    public function calculerNet(): float
     {
-        return self::where('mois', $mois)
-            ->where('statut', 'paye')
-            ->sum('salaire_net');
+        return round(
+            (float) $this->salaire_base
+            + (float) $this->primes
+            - (float) $this->retenues,
+            2
+        );
     }
 
-    /**
-     * Retourne le total des salaires validés mais non payés pour un mois.
-     *
-     * @param string $mois Format YYYY-MM
-     * @return float
-     */
-    public static function totalValideDuMois(string $mois): float
+
+    /*
+    |--------------------------------------------------------------------------
+    | METTRE À JOUR LE SALAIRE NET
+    |--------------------------------------------------------------------------
+    */
+
+    public function recalculerNet(): float
     {
-        return self::where('mois', $mois)
-            ->where('statut', 'valide')
-            ->sum('salaire_net');
+        $net = $this->calculerNet();
+
+        $this->salaire_net = $net;
+
+        return $net;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | TOTAL PAYÉ
+    |--------------------------------------------------------------------------
+    |
+    | Le montant réellement payé provient exclusivement
+    | de la table paiements_salaires.
+    |
+    */
+
+    public function getTotalPayeAttribute(): float
+    {
+        if ($this->relationLoaded('paiements')) {
+            return round(
+                (float) $this->paiements->sum('montant'),
+                2
+            );
+        }
+
+        return round(
+            (float) $this->paiements()->sum('montant'),
+            2
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RESTE À PAYER
+    |--------------------------------------------------------------------------
+    */
+
+    public function getResteAPayerAttribute(): float
+    {
+        return max(
+            0,
+            round(
+                (float) $this->salaire_net
+                - $this->total_paye,
+                2
+            )
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | POURCENTAGE PAYÉ
+    |--------------------------------------------------------------------------
+    */
+
+    public function getPourcentagePayeAttribute(): float
+    {
+        $net = (float) $this->salaire_net;
+
+        if ($net <= 0) {
+            return 0;
+        }
+
+        $pourcentage = (
+            $this->total_paye / $net
+        ) * 100;
+
+        return round(
+            min(100, max(0, $pourcentage)),
+            2
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RESTE-T-IL QUELQUE CHOSE À PAYER ?
+    |--------------------------------------------------------------------------
+    */
+
+    public function resteAPayer(): bool
+    {
+        return $this->reste_a_payer > 0;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SALAIRE ENTIÈREMENT PAYÉ ?
+    |--------------------------------------------------------------------------
+    */
+
+    public function estPaye(): bool
+    {
+        return $this->statut === self::STATUT_PAYE;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SALAIRE PARTIELLEMENT PAYÉ ?
+    |--------------------------------------------------------------------------
+    */
+
+    public function estPartiellementPaye(): bool
+    {
+        return $this->statut === self::STATUT_PARTIELLEMENT_PAYE;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SALAIRE VALIDÉ ?
+    |--------------------------------------------------------------------------
+    */
+
+    public function estValide(): bool
+    {
+        return $this->statut === self::STATUT_VALIDE
+            || $this->statut === self::STATUT_PARTIELLEMENT_PAYE
+            || $this->statut === self::STATUT_PAYE;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | BROUILLON ?
+    |--------------------------------------------------------------------------
+    */
+
+    public function estBrouillon(): bool
+    {
+        return $this->statut === self::STATUT_BROUILLON;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ANNULÉ ?
+    |--------------------------------------------------------------------------
+    */
+
+    public function estAnnule(): bool
+    {
+        return $this->statut === self::STATUT_ANNULE;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PEUT ÊTRE MODIFIÉ ?
+    |--------------------------------------------------------------------------
+    |
+    | Une fois le salaire validé, ses montants financiers ne doivent
+    | plus être librement modifiés.
+    |
+    */
+
+    public function peutEtreModifie(): bool
+    {
+        return $this->statut === self::STATUT_BROUILLON;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PEUT ÊTRE VALIDÉ ?
+    |--------------------------------------------------------------------------
+    */
+
+    public function peutEtreValide(): bool
+    {
+        return $this->statut === self::STATUT_BROUILLON;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PEUT RECEVOIR UN PAIEMENT ?
+    |--------------------------------------------------------------------------
+    */
+
+    public function peutRecevoirPaiement(): bool
+    {
+        return in_array(
+            $this->statut,
+            [
+                self::STATUT_VALIDE,
+                self::STATUT_PARTIELLEMENT_PAYE,
+            ],
+            true
+        ) && $this->resteAPayer();
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | PEUT ÊTRE ANNULÉ ?
+    |--------------------------------------------------------------------------
+    */
+
+    public function peutEtreAnnule(): bool
+    {
+        return in_array(
+            $this->statut,
+            [
+                self::STATUT_BROUILLON,
+                self::STATUT_VALIDE,
+            ],
+            true
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATION
+    |--------------------------------------------------------------------------
+    |
+    | Cette méthode ne doit être appelée que par le service métier
+    | après vérification des autorisations.
+    |
+    */
+
+    public function valider(int $userId): bool
+    {
+        if (!$this->peutEtreValide()) {
+            return false;
+        }
+
+        $this->statut = self::STATUT_VALIDE;
+        $this->valide_par = $userId;
+        $this->valide_at = now();
+
+        return $this->save();
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ANNULATION
+    |--------------------------------------------------------------------------
+    */
+
+    public function annuler(
+        int $userId,
+        string $motif
+    ): bool {
+        if (!$this->peutEtreAnnule()) {
+            return false;
+        }
+
+        $motif = trim($motif);
+
+        if ($motif === '') {
+            return false;
+        }
+
+        $this->statut = self::STATUT_ANNULE;
+        $this->annule_par = $userId;
+        $this->annule_at = now();
+        $this->motif_annulation = $motif;
+
+        return $this->save();
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | SYNCHRONISATION DU STATUT DE PAIEMENT
+    |--------------------------------------------------------------------------
+    |
+    | Cette méthode permet de déterminer le statut financier
+    | à partir des paiements réellement enregistrés.
+    |
+    */
+
+    public function synchroniserStatutPaiement(): bool
+    {
+        /*
+         * Un salaire annulé ne doit jamais redevenir payable.
+         */
+        if ($this->estAnnule()) {
+            return false;
+        }
+
+        /*
+         * Un salaire en brouillon ne doit pas recevoir de paiement.
+         */
+        if ($this->estBrouillon()) {
+            return false;
+        }
+
+        $totalPaye = $this->total_paye;
+        $net = (float) $this->salaire_net;
+
+        /*
+         * Aucun paiement.
+         */
+        if ($totalPaye <= 0) {
+            $this->statut = self::STATUT_VALIDE;
+        }
+
+        /*
+         * Paiement partiel.
+         */
+        elseif ($totalPaye < $net) {
+            $this->statut = self::STATUT_PARTIELLEMENT_PAYE;
+        }
+
+        /*
+         * Paiement complet.
+         */
+        else {
+            $this->statut = self::STATUT_PAYE;
+        }
+
+        return $this->save();
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | LIBELLÉ DU STATUT
+    |--------------------------------------------------------------------------
+    */
+
+    public function getStatutLabelAttribute(): string
+    {
+        return match ($this->statut) {
+
+            self::STATUT_BROUILLON =>
+                'Brouillon',
+
+            self::STATUT_VALIDE =>
+                'Validé',
+
+            self::STATUT_PARTIELLEMENT_PAYE =>
+                'Partiellement payé',
+
+            self::STATUT_PAYE =>
+                'Payé',
+
+            self::STATUT_ANNULE =>
+                'Annulé',
+
+            default =>
+                ucfirst((string) $this->statut),
+        };
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | CLASSE CSS DU STATUT
+    |--------------------------------------------------------------------------
+    */
+
+    public function getStatutBadgeAttribute(): string
+    {
+        return match ($this->statut) {
+
+            self::STATUT_BROUILLON =>
+                'warning',
+
+            self::STATUT_VALIDE =>
+                'info',
+
+            self::STATUT_PARTIELLEMENT_PAYE =>
+                'primary',
+
+            self::STATUT_PAYE =>
+                'success',
+
+            self::STATUT_ANNULE =>
+                'danger',
+
+            default =>
+                'secondary',
+        };
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | LIBELLÉ DU MODE DE PAIEMENT
+    |--------------------------------------------------------------------------
+    |
+    | Utile lorsque le mode provient d'un PaiementSalaire.
+    |
+    */
+
+    public static function modePaiementLabel(
+        ?string $mode
+    ): string {
+        return match ($mode) {
+
+            self::MODE_ESPECES =>
+                'Espèces',
+
+            self::MODE_VIREMENT =>
+                'Virement bancaire',
+
+            self::MODE_MOBILE_MONEY =>
+                'Mobile Money',
+
+            self::MODE_CHEQUE =>
+                'Chèque',
+
+            default =>
+                $mode
+                    ? ucfirst(str_replace('_', ' ', $mode))
+                    : 'Non défini',
+        };
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | NOM COMPLET DU MEMBRE
+    |--------------------------------------------------------------------------
+    */
+
+    public function getNomMembreAttribute(): string
+    {
+        if (!$this->membre) {
+            return 'Membre inconnu';
+        }
+
+        /*
+         * On utilise les attributs disponibles sans imposer
+         * une structure supplémentaire au modèle Membre.
+         */
+
+        $nom = trim(
+            collect([
+                $this->membre->prenom ?? null,
+                $this->membre->nom ?? null,
+                $this->membre->post_nom ?? null,
+            ])
+                ->filter()
+                ->implode(' ')
+        );
+
+        return $nom !== ''
+            ? $nom
+            : 'Membre #' . $this->membre_id;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | NOM DU POSTE / ORGANE
+    |--------------------------------------------------------------------------
+    */
+
+    public function getNomPosteAttribute(): string
+    {
+        if (!$this->organe) {
+            return 'Non défini';
+        }
+
+        return $this->organe->nom
+            ?? $this->organe->libelle
+            ?? 'Organe #' . $this->organe_id;
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | FORMATAGE DU MONTANT
+    |--------------------------------------------------------------------------
+    */
+
+    public function formaterMontant(
+        float|int|string $montant
+    ): string {
+        return number_format(
+            (float) $montant,
+            2,
+            ',',
+            ' '
+        ) . ' $';
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | MONTANT NET FORMATÉ
+    |--------------------------------------------------------------------------
+    */
+
+    public function getSalaireNetFormateAttribute(): string
+    {
+        return $this->formaterMontant(
+            $this->salaire_net
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | TOTAL PAYÉ FORMATÉ
+    |--------------------------------------------------------------------------
+    */
+
+    public function getTotalPayeFormateAttribute(): string
+    {
+        return $this->formaterMontant(
+            $this->total_paye
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | RESTE À PAYER FORMATÉ
+    |--------------------------------------------------------------------------
+    */
+
+    public function getResteAPayerFormateAttribute(): string
+    {
+        return $this->formaterMontant(
+            $this->reste_a_payer
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | GÉNÉRATION D'UNE RÉFÉRENCE
+    |--------------------------------------------------------------------------
+    |
+    | Exemple :
+    |
+    | BUL-202609-0001
+    |
+    | Cette méthode sert à proposer une référence.
+    |
+    | La contrainte UNIQUE de la base reste la véritable protection
+    | contre les doublons.
+    |
+    */
+
+    public static function genererReference(
+        string $mois
+    ): string {
+        $prefixe = 'BUL-' . str_replace('-', '', $mois) . '-';
+
+        $dernier = static::query()
+            ->where('reference', 'like', $prefixe . '%')
+            ->orderByDesc('id')
+            ->value('reference');
+
+        if (!$dernier) {
+            return $prefixe . '0001';
+        }
+
+        $numero = (int) substr(
+            $dernier,
+            -4
+        );
+
+        return $prefixe . str_pad(
+            $numero + 1,
+            4,
+            '0',
+            STR_PAD_LEFT
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | TOTAL DES SALAIRES PAYÉS POUR UN MOIS
+    |--------------------------------------------------------------------------
+    */
+
+    public static function totalPayeDuMois(
+        string $mois
+    ): float {
+        return round(
+            (float) static::query()
+                ->where('mois', $mois)
+                ->where('statut', self::STATUT_PAYE)
+                ->withSum('paiements', 'montant')
+                ->get()
+                ->sum('paiements_sum_montant'),
+            2
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | TOTAL DES SALAIRES DUS POUR UN MOIS
+    |--------------------------------------------------------------------------
+    */
+
+    public static function totalDuMois(
+        string $mois
+    ): float {
+        return round(
+            (float) static::query()
+                ->where('mois', $mois)
+                ->whereNot(
+                    'statut',
+                    self::STATUT_ANNULE
+                )
+                ->sum('salaire_net'),
+            2
+        );
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | TOTAL RESTANT À PAYER POUR UN MOIS
+    |--------------------------------------------------------------------------
+    */
+
+    public static function totalResteDuMois(
+        string $mois
+    ): float {
+        $salaires = static::query()
+            ->where('mois', $mois)
+            ->whereNot(
+                'statut',
+                self::STATUT_ANNULE
+            )
+            ->withSum('paiements', 'montant')
+            ->get();
+
+        return round(
+            (float) $salaires->sum(
+                function (Salaire $salaire) {
+                    return max(
+                        0,
+                        (float) $salaire->salaire_net
+                        - (float) ($salaire->paiements_sum_montant ?? 0)
+                    );
+                }
+            ),
+            2
+        );
     }
 }

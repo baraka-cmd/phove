@@ -1,0 +1,1668 @@
+/* ============================================================
+   PHOVE — ADMINISTRATION
+   MODULE : SALAIRES
+   VUE    : CRÉATION D'UN SALAIRE
+   FICHIER: create.css
+
+   Blade associé :
+   resources/views/admin/salaires/create.blade.php
+
+   PRINCIPES :
+   - CSS autonome
+   - Aucun Bootstrap
+   - Aucun style inline
+   - Interface administrative professionnelle
+   - Responsive desktop / tablette / mobile
+   ============================================================ */
+
+
+/* ============================================================
+   1. VARIABLES LOCALES
+   ============================================================ */
+
+.salary-create {
+    --salary-primary: var(--primary-color, #2563eb);
+    --salary-primary-dark: var(--primary-dark, #1d4ed8);
+
+    --salary-success: var(--success-color, #16a34a);
+    --salary-warning: var(--warning-color, #d97706);
+    --salary-danger: var(--danger-color, #dc2626);
+    --salary-info: var(--info-color, #0891b2);
+
+    --salary-bg: var(--bg-color, #f5f7fb);
+    --salary-surface: var(--card-bg, #ffffff);
+
+    --salary-text: var(--text-color, #1f2937);
+    --salary-muted: var(--text-muted, #6b7280);
+
+    --salary-border: var(--border-color, #e5e7eb);
+    --salary-border-light: #eef1f5;
+
+    --salary-radius: var(--border-radius, 10px);
+    --salary-radius-sm: 7px;
+
+    --salary-shadow:
+        0 2px 12px rgba(15, 23, 42, 0.055);
+
+    --salary-shadow-hover:
+        0 8px 24px rgba(15, 23, 42, 0.09);
+
+    --salary-transition: 0.2s ease;
+}
+
+
+/* ============================================================
+   2. CONTENEUR PRINCIPAL
+   ============================================================ */
+
+.salary-create {
+    width: 100%;
+    min-width: 0;
+
+    color: var(--salary-text);
+}
+
+.salary-create *,
+.salary-create *::before,
+.salary-create *::after {
+    box-sizing: border-box;
+}
+
+
+/* ============================================================
+   3. EN-TÊTE
+   ============================================================ */
+
+.salary-create .page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 24px;
+
+    margin-bottom: 24px;
+}
+
+.salary-create .page-header-content {
+    min-width: 0;
+}
+
+.salary-create .page-title {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 0 0 7px;
+
+    color: var(--salary-text);
+
+    font-size: 1.65rem;
+    font-weight: 750;
+
+    line-height: 1.25;
+}
+
+.salary-create .page-title i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+
+    background: rgba(37, 99, 235, 0.10);
+
+    color: var(--salary-primary);
+
+    font-size: 1rem;
+}
+
+.salary-create .page-subtitle {
+    margin: 0;
+
+    color: var(--salary-muted);
+
+    font-size: 0.9rem;
+
+    line-height: 1.55;
+}
+
+.salary-create .page-actions {
+    display: flex;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 9px;
+}
+
+
+/* ============================================================
+   4. ALERTES
+   ============================================================ */
+
+.salary-create .alert {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    width: 100%;
+
+    padding: 13px 15px;
+
+    margin-bottom: 18px;
+
+    border: 1px solid transparent;
+
+    border-radius: var(--salary-radius-sm);
+
+    font-size: 0.84rem;
+
+    line-height: 1.55;
+}
+
+.salary-create .alert i {
+    flex: 0 0 auto;
+
+    margin-top: 2px;
+}
+
+.salary-create .alert-success {
+    border-color: #bbf7d0;
+
+    background: #f0fdf4;
+
+    color: #166534;
+}
+
+.salary-create .alert-danger {
+    border-color: #fecaca;
+
+    background: #fef2f2;
+
+    color: #991b1b;
+}
+
+.salary-create .alert-warning {
+    border-color: #fde68a;
+
+    background: #fffbeb;
+
+    color: #92400e;
+}
+
+.salary-create .alert-info {
+    border-color: #a5f3fc;
+
+    background: #ecfeff;
+
+    color: #155e75;
+}
+
+
+/* ============================================================
+   5. ERREURS DE VALIDATION
+   ============================================================ */
+
+.salary-create .validation-errors {
+    width: 100%;
+
+    padding: 15px 18px;
+
+    margin-bottom: 20px;
+
+    border: 1px solid #fecaca;
+
+    border-radius: var(--salary-radius);
+
+    background: #fef2f2;
+}
+
+.salary-create .validation-errors-title {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0 0 9px;
+
+    color: #991b1b;
+
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.salary-create .validation-errors ul {
+    margin: 0;
+
+    padding-left: 21px;
+
+    color: #b91c1c;
+}
+
+.salary-create .validation-errors li {
+    margin-bottom: 4px;
+
+    font-size: 0.82rem;
+}
+
+.salary-create .validation-errors li:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ============================================================
+   6. LAYOUT FORMULAIRE
+   ============================================================ */
+
+.salary-create .form-layout {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        340px;
+
+    align-items: start;
+
+    gap: 20px;
+
+    width: 100%;
+}
+
+
+/* ============================================================
+   7. COLONNE PRINCIPALE
+   ============================================================ */
+
+.salary-create .form-main {
+    min-width: 0;
+}
+
+
+/* ============================================================
+   8. COLONNE LATÉRALE
+   ============================================================ */
+
+.salary-create .form-sidebar {
+    position: sticky;
+
+    top: 20px;
+
+    min-width: 0;
+}
+
+
+/* ============================================================
+   9. CARTES DE FORMULAIRE
+   ============================================================ */
+
+.salary-create .form-card {
+    width: 100%;
+
+    margin-bottom: 18px;
+
+    overflow: hidden;
+
+    border: 1px solid var(--salary-border);
+
+    border-radius: var(--salary-radius);
+
+    background: var(--salary-surface);
+
+    box-shadow: var(--salary-shadow);
+}
+
+.salary-create .form-card:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ============================================================
+   10. EN-TÊTE DES CARTES
+   ============================================================ */
+
+.salary-create .form-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 16px 18px;
+
+    border-bottom: 1px solid var(--salary-border);
+
+    background: #fcfcfd;
+}
+
+.salary-create .form-card-heading {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    min-width: 0;
+}
+
+.salary-create .form-card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 34px;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 8px;
+
+    background: rgba(37, 99, 235, 0.09);
+
+    color: var(--salary-primary);
+
+    font-size: 0.9rem;
+}
+
+.salary-create .form-card-title {
+    margin: 0;
+
+    color: var(--salary-text);
+
+    font-size: 0.92rem;
+
+    font-weight: 700;
+
+    line-height: 1.3;
+}
+
+.salary-create .form-card-description {
+    margin: 2px 0 0;
+
+    color: var(--salary-muted);
+
+    font-size: 0.72rem;
+
+    line-height: 1.4;
+}
+
+.salary-create .form-card-body {
+    padding: 19px;
+}
+
+
+/* ============================================================
+   11. GRILLE DES CHAMPS
+   ============================================================ */
+
+.salary-create .form-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 17px;
+}
+
+.salary-create .form-grid-3 {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 17px;
+}
+
+.salary-create .form-group {
+    min-width: 0;
+}
+
+.salary-create .form-group-full {
+    grid-column: 1 / -1;
+}
+
+
+/* ============================================================
+   12. LABELS
+   ============================================================ */
+
+.salary-create .form-label {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+
+    margin-bottom: 7px;
+
+    color: var(--salary-text);
+
+    font-size: 0.78rem;
+
+    font-weight: 650;
+
+    line-height: 1.3;
+}
+
+.salary-create .form-label .required {
+    color: var(--salary-danger);
+
+    font-weight: 700;
+}
+
+.salary-create .form-label i {
+    color: var(--salary-muted);
+
+    font-size: 0.72rem;
+}
+
+
+/* ============================================================
+   13. AIDE DES CHAMPS
+   ============================================================ */
+
+.salary-create .form-help {
+    display: block;
+
+    margin-top: 5px;
+
+    color: var(--salary-muted);
+
+    font-size: 0.69rem;
+
+    line-height: 1.45;
+}
+
+.salary-create .form-help i {
+    margin-right: 3px;
+}
+
+
+/* ============================================================
+   14. INPUTS / SELECT / TEXTAREA
+   ============================================================ */
+
+.salary-create .form-control,
+.salary-create .form-select {
+    display: block;
+
+    width: 100%;
+
+    min-height: 42px;
+
+    padding: 9px 11px;
+
+    border: 1px solid var(--salary-border);
+
+    border-radius: var(--salary-radius-sm);
+
+    outline: none;
+
+    background: var(--salary-surface);
+
+    color: var(--salary-text);
+
+    font-family: inherit;
+
+    font-size: 0.83rem;
+
+    line-height: 1.4;
+
+    transition:
+        border-color var(--salary-transition),
+        box-shadow var(--salary-transition),
+        background-color var(--salary-transition);
+}
+
+.salary-create textarea.form-control {
+    min-height: 105px;
+
+    resize: vertical;
+}
+
+.salary-create .form-control::placeholder {
+    color: #9ca3af;
+}
+
+.salary-create .form-control:hover,
+.salary-create .form-select:hover {
+    border-color: #cbd5e1;
+}
+
+.salary-create .form-control:focus,
+.salary-create .form-select:focus {
+    border-color: var(--salary-primary);
+
+    background: #fff;
+
+    box-shadow:
+        0 0 0 3px rgba(37, 99, 235, 0.10);
+}
+
+
+/* ============================================================
+   15. CHAMPS EN ERREUR
+   ============================================================ */
+
+.salary-create .form-control.is-invalid,
+.salary-create .form-select.is-invalid {
+    border-color: var(--salary-danger);
+
+    background: #fffafa;
+}
+
+.salary-create .form-control.is-invalid:focus,
+.salary-create .form-select.is-invalid:focus {
+    box-shadow:
+        0 0 0 3px rgba(220, 38, 38, 0.10);
+}
+
+.salary-create .field-error {
+    display: block;
+
+    margin-top: 5px;
+
+    color: var(--salary-danger);
+
+    font-size: 0.7rem;
+
+    line-height: 1.4;
+}
+
+
+/* ============================================================
+   16. CHAMPS DÉSACTIVÉS
+   ============================================================ */
+
+.salary-create .form-control:disabled,
+.salary-create .form-select:disabled {
+    cursor: not-allowed;
+
+    background: #f8fafc;
+
+    color: #94a3b8;
+
+    opacity: 0.9;
+}
+
+
+/* ============================================================
+   17. INPUT AVEC ICÔNE
+   ============================================================ */
+
+.salary-create .input-wrapper {
+    position: relative;
+}
+
+.salary-create .input-wrapper .input-icon {
+    position: absolute;
+
+    top: 50%;
+    left: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 18px;
+
+    transform: translateY(-50%);
+
+    color: var(--salary-muted);
+
+    pointer-events: none;
+
+    font-size: 0.78rem;
+}
+
+.salary-create .input-wrapper .form-control {
+    padding-left: 36px;
+}
+
+
+/* ============================================================
+   18. INPUT MONÉTAIRE
+   ============================================================ */
+
+.salary-create .money-input {
+    position: relative;
+}
+
+.salary-create .money-input .currency {
+    position: absolute;
+
+    top: 50%;
+    right: 11px;
+
+    transform: translateY(-50%);
+
+    color: var(--salary-muted);
+
+    font-size: 0.72rem;
+
+    font-weight: 650;
+
+    pointer-events: none;
+}
+
+.salary-create .money-input .form-control {
+    padding-right: 52px;
+
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* ============================================================
+   19. SECTION COMPOSITION DU SALAIRE
+   ============================================================ */
+
+.salary-create .salary-components {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 15px;
+}
+
+.salary-create .salary-component {
+    padding: 15px;
+
+    border: 1px solid var(--salary-border);
+
+    border-radius: var(--salary-radius-sm);
+
+    background: #fcfcfd;
+}
+
+.salary-create .salary-component-label {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    margin-bottom: 8px;
+
+    color: var(--salary-text);
+
+    font-size: 0.76rem;
+
+    font-weight: 650;
+}
+
+.salary-create .salary-component-label i {
+    color: var(--salary-muted);
+}
+
+.salary-create .salary-component-description {
+    margin: 6px 0 0;
+
+    color: var(--salary-muted);
+
+    font-size: 0.67rem;
+
+    line-height: 1.4;
+}
+
+.salary-create .salary-component--base {
+    border-color: rgba(37, 99, 235, 0.14);
+}
+
+.salary-create .salary-component--prime {
+    border-color: rgba(22, 163, 74, 0.14);
+}
+
+.salary-create .salary-component--retenue {
+    border-color: rgba(220, 38, 38, 0.14);
+}
+
+
+/* ============================================================
+   20. CALCUL DU SALAIRE NET
+   ============================================================ */
+
+.salary-create .net-preview {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 19px;
+
+    margin-top: 18px;
+
+    overflow: hidden;
+
+    border: 1px solid rgba(37, 99, 235, 0.15);
+
+    border-radius: var(--salary-radius);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37, 99, 235, 0.07),
+            rgba(37, 99, 235, 0.025)
+        );
+}
+
+.salary-create .net-preview::after {
+    content: "";
+
+    position: absolute;
+
+    right: -35px;
+    bottom: -55px;
+
+    width: 125px;
+    height: 125px;
+
+    border-radius: 50%;
+
+    background: rgba(37, 99, 235, 0.045);
+
+    pointer-events: none;
+}
+
+.salary-create .net-preview-info {
+    position: relative;
+    z-index: 1;
+
+    min-width: 0;
+}
+
+.salary-create .net-preview-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--salary-muted);
+
+    font-size: 0.73rem;
+
+    font-weight: 600;
+}
+
+.salary-create .net-preview-title {
+    margin: 0;
+
+    color: var(--salary-text);
+
+    font-size: 0.82rem;
+
+    font-weight: 650;
+}
+
+.salary-create .net-preview-value {
+    position: relative;
+    z-index: 1;
+
+    color: var(--salary-primary);
+
+    font-size: 1.4rem;
+
+    font-weight: 800;
+
+    font-variant-numeric: tabular-nums;
+
+    white-space: nowrap;
+}
+
+.salary-create .net-preview-value small {
+    margin-left: 3px;
+
+    color: var(--salary-muted);
+
+    font-size: 0.7rem;
+
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   21. RÉSUMÉ LATÉRAL
+   ============================================================ */
+
+.salary-create .summary-card {
+    width: 100%;
+
+    overflow: hidden;
+
+    margin-bottom: 17px;
+
+    border: 1px solid var(--salary-border);
+
+    border-radius: var(--salary-radius);
+
+    background: var(--salary-surface);
+
+    box-shadow: var(--salary-shadow);
+}
+
+.salary-create .summary-card:last-child {
+    margin-bottom: 0;
+}
+
+.salary-create .summary-header {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 15px 17px;
+
+    border-bottom: 1px solid var(--salary-border);
+
+    background: #fcfcfd;
+}
+
+.salary-create .summary-header i {
+    color: var(--salary-primary);
+}
+
+.salary-create .summary-title {
+    margin: 0;
+
+    color: var(--salary-text);
+
+    font-size: 0.87rem;
+
+    font-weight: 700;
+}
+
+.salary-create .summary-body {
+    padding: 16px 17px;
+}
+
+
+/* ============================================================
+   22. RÉSUMÉ DU MEMBRE
+   ============================================================ */
+
+.salary-create .member-summary {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    margin-bottom: 16px;
+}
+
+.salary-create .member-summary-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 42px;
+
+    width: 42px;
+    height: 42px;
+
+    overflow: hidden;
+
+    border-radius: 50%;
+
+    background: rgba(37, 99, 235, 0.10);
+
+    color: var(--salary-primary);
+
+    font-size: 0.8rem;
+
+    font-weight: 750;
+}
+
+.salary-create .member-summary-avatar img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.salary-create .member-summary-info {
+    min-width: 0;
+}
+
+.salary-create .member-summary-name {
+    display: block;
+
+    overflow: hidden;
+
+    color: var(--salary-text);
+
+    font-size: 0.82rem;
+
+    font-weight: 700;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.salary-create .member-summary-meta {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--salary-muted);
+
+    font-size: 0.69rem;
+
+    line-height: 1.4;
+}
+
+
+/* ============================================================
+   23. LIGNES DU RÉSUMÉ FINANCIER
+   ============================================================ */
+
+.salary-create .summary-list {
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.salary-create .summary-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 9px 0;
+
+    border-bottom: 1px solid var(--salary-border-light);
+}
+
+.salary-create .summary-list-item:first-child {
+    padding-top: 0;
+}
+
+.salary-create .summary-list-item:last-child {
+    padding-bottom: 0;
+
+    border-bottom: 0;
+}
+
+.salary-create .summary-list-label {
+    color: var(--salary-muted);
+
+    font-size: 0.73rem;
+}
+
+.salary-create .summary-list-value {
+    color: var(--salary-text);
+
+    font-size: 0.76rem;
+
+    font-weight: 650;
+
+    text-align: right;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.salary-create .summary-list-value.primary {
+    color: var(--salary-primary);
+}
+
+.salary-create .summary-list-value.success {
+    color: var(--salary-success);
+}
+
+.salary-create .summary-list-value.danger {
+    color: var(--salary-danger);
+}
+
+
+/* ============================================================
+   24. INDICATEUR BROUILLON
+   ============================================================ */
+
+.salary-create .draft-indicator {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    padding: 13px 14px;
+
+    border: 1px solid #fde68a;
+
+    border-radius: var(--salary-radius-sm);
+
+    background: #fffbeb;
+}
+
+.salary-create .draft-indicator-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 28px;
+
+    width: 28px;
+    height: 28px;
+
+    border-radius: 7px;
+
+    background: rgba(217, 119, 6, 0.10);
+
+    color: var(--salary-warning);
+
+    font-size: 0.75rem;
+}
+
+.salary-create .draft-indicator-content {
+    min-width: 0;
+}
+
+.salary-create .draft-indicator-title {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #92400e;
+
+    font-size: 0.76rem;
+
+    font-weight: 700;
+}
+
+.salary-create .draft-indicator-text {
+    margin: 0;
+
+    color: #a16207;
+
+    font-size: 0.69rem;
+
+    line-height: 1.45;
+}
+
+
+/* ============================================================
+   25. ACTIONS DU FORMULAIRE
+   ============================================================ */
+
+.salary-create .form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 9px;
+
+    padding-top: 4px;
+}
+
+.salary-create .form-actions-left {
+    margin-right: auto;
+}
+
+.salary-create .form-actions-right {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+}
+
+
+/* ============================================================
+   26. BOUTONS
+   ============================================================ */
+
+.salary-create .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 40px;
+
+    padding: 9px 14px;
+
+    border: 1px solid transparent;
+
+    border-radius: var(--salary-radius-sm);
+
+    cursor: pointer;
+
+    font-family: inherit;
+
+    font-size: 0.81rem;
+
+    font-weight: 650;
+
+    line-height: 1.2;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    transition:
+        background-color var(--salary-transition),
+        border-color var(--salary-transition),
+        color var(--salary-transition),
+        box-shadow var(--salary-transition),
+        transform var(--salary-transition);
+}
+
+.salary-create .btn:hover {
+    transform: translateY(-1px);
+}
+
+.salary-create .btn:active {
+    transform: translateY(0);
+}
+
+.salary-create .btn-primary {
+    background: var(--salary-primary);
+
+    border-color: var(--salary-primary);
+
+    color: #fff;
+}
+
+.salary-create .btn-primary:hover {
+    background: var(--salary-primary-dark);
+
+    border-color: var(--salary-primary-dark);
+}
+
+.salary-create .btn-secondary {
+    background: #64748b;
+
+    border-color: #64748b;
+
+    color: #fff;
+}
+
+.salary-create .btn-secondary:hover {
+    background: #475569;
+
+    border-color: #475569;
+}
+
+.salary-create .btn-outline {
+    background: var(--salary-surface);
+
+    border-color: var(--salary-border);
+
+    color: var(--salary-text);
+}
+
+.salary-create .btn-outline:hover {
+    border-color: var(--salary-primary);
+
+    color: var(--salary-primary);
+
+    background: rgba(37, 99, 235, 0.035);
+}
+
+.salary-create .btn-success {
+    background: var(--salary-success);
+
+    border-color: var(--salary-success);
+
+    color: #fff;
+}
+
+.salary-create .btn-danger {
+    background: var(--salary-danger);
+
+    border-color: var(--salary-danger);
+
+    color: #fff;
+}
+
+.salary-create .btn-sm {
+    min-height: 34px;
+
+    padding: 7px 10px;
+
+    font-size: 0.75rem;
+}
+
+
+/* ============================================================
+   27. COMPTEUR DE CARACTÈRES
+   ============================================================ */
+
+.salary-create .character-counter {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-top: 5px;
+
+    color: var(--salary-muted);
+
+    font-size: 0.68rem;
+}
+
+.salary-create .character-counter.is-warning {
+    color: var(--salary-warning);
+}
+
+.salary-create .character-counter.is-danger {
+    color: var(--salary-danger);
+}
+
+
+/* ============================================================
+   28. SÉPARATEUR
+   ============================================================ */
+
+.salary-create .form-divider {
+    width: 100%;
+    height: 1px;
+
+    margin: 20px 0;
+
+    background: var(--salary-border-light);
+}
+
+
+/* ============================================================
+   29. BADGE INFORMATION
+   ============================================================ */
+
+.salary-create .info-badge {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 8px;
+
+    border: 1px solid #bfdbfe;
+
+    border-radius: 999px;
+
+    background: #eff6ff;
+
+    color: #1d4ed8;
+
+    font-size: 0.67rem;
+
+    font-weight: 700;
+}
+
+.salary-create .info-badge i {
+    font-size: 0.62rem;
+}
+
+
+/* ============================================================
+   30. APERÇU DU CALCUL
+   ============================================================ */
+
+.salary-create .calculation-box {
+    padding: 15px;
+
+    margin-top: 17px;
+
+    border: 1px solid var(--salary-border);
+
+    border-radius: var(--salary-radius-sm);
+
+    background: #f8fafc;
+}
+
+.salary-create .calculation-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 7px 0;
+
+    color: var(--salary-text);
+
+    font-size: 0.76rem;
+}
+
+.salary-create .calculation-row + .calculation-row {
+    border-top: 1px dashed #e2e8f0;
+}
+
+.salary-create .calculation-label {
+    color: var(--salary-muted);
+}
+
+.salary-create .calculation-value {
+    font-weight: 650;
+
+    font-variant-numeric: tabular-nums;
+
+    white-space: nowrap;
+}
+
+.salary-create .calculation-row--net {
+    padding-top: 12px;
+    margin-top: 5px;
+
+    border-top: 2px solid var(--salary-border) !important;
+}
+
+.salary-create .calculation-row--net .calculation-label {
+    color: var(--salary-text);
+
+    font-weight: 700;
+}
+
+.salary-create .calculation-row--net .calculation-value {
+    color: var(--salary-primary);
+
+    font-size: 0.92rem;
+
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   31. ÉTAT DE CHARGEMENT
+   ============================================================ */
+
+.salary-create .form-loading {
+    position: relative;
+
+    pointer-events: none;
+}
+
+.salary-create .form-loading::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 20;
+
+    border-radius: inherit;
+
+    background: rgba(255, 255, 255, 0.68);
+}
+
+.salary-create .btn.is-loading {
+    cursor: wait;
+
+    opacity: 0.75;
+}
+
+.salary-create .btn.is-loading .btn-text {
+    opacity: 0.65;
+}
+
+
+/* ============================================================
+   32. RESPONSIVE — 1200 PX
+   ============================================================ */
+
+@media (max-width: 1200px) {
+
+    .salary-create .form-layout {
+        grid-template-columns:
+            minmax(0, 1fr)
+            300px;
+    }
+
+    .salary-create .salary-components {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* ============================================================
+   33. RESPONSIVE — 1000 PX
+   ============================================================ */
+
+@media (max-width: 1000px) {
+
+    .salary-create .form-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .salary-create .form-sidebar {
+        position: static;
+    }
+
+    .salary-create .form-sidebar {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        align-items: start;
+
+        gap: 17px;
+    }
+
+    .salary-create .summary-card {
+        margin-bottom: 0;
+    }
+}
+
+
+/* ============================================================
+   34. RESPONSIVE — 800 PX
+   ============================================================ */
+
+@media (max-width: 800px) {
+
+    .salary-create .page-header {
+        flex-direction: column;
+
+        gap: 15px;
+    }
+
+    .salary-create .page-actions {
+        width: 100%;
+
+        justify-content: flex-start;
+    }
+
+    .salary-create .form-grid-3 {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* ============================================================
+   35. RESPONSIVE — MOBILE
+   ============================================================ */
+
+@media (max-width: 680px) {
+
+    .salary-create .page-title {
+        font-size: 1.35rem;
+    }
+
+    .salary-create .page-title i {
+        width: 34px;
+        height: 34px;
+    }
+
+    .salary-create .page-actions {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .salary-create .page-actions .btn {
+        width: 100%;
+    }
+
+    .salary-create .form-card-body {
+        padding: 15px;
+    }
+
+    .salary-create .form-card-header {
+        padding: 14px 15px;
+    }
+
+    .salary-create .form-grid,
+    .salary-create .form-grid-3,
+    .salary-create .salary-components,
+    .salary-create .form-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+    .salary-create .salary-component {
+        padding: 13px;
+    }
+
+    .salary-create .net-preview {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 9px;
+    }
+
+    .salary-create .net-preview-value {
+        font-size: 1.25rem;
+    }
+
+    .salary-create .form-actions {
+        align-items: stretch;
+
+        flex-direction: column-reverse;
+    }
+
+    .salary-create .form-actions-left {
+        width: 100%;
+
+        margin-right: 0;
+    }
+
+    .salary-create .form-actions-right {
+        width: 100%;
+
+        flex-direction: column;
+    }
+
+    .salary-create .form-actions .btn {
+        width: 100%;
+    }
+}
+
+
+/* ============================================================
+   36. TRÈS PETITS ÉCRANS
+   ============================================================ */
+
+@media (max-width: 430px) {
+
+    .salary-create .page-title {
+        align-items: flex-start;
+
+        font-size: 1.2rem;
+    }
+
+    .salary-create .page-subtitle {
+        font-size: 0.8rem;
+    }
+
+    .salary-create .form-control,
+    .salary-create .form-select {
+        min-height: 40px;
+
+        font-size: 0.8rem;
+    }
+
+    .salary-create .net-preview {
+        padding: 15px;
+    }
+
+    .salary-create .net-preview-value {
+        font-size: 1.12rem;
+    }
+
+    .salary-create .summary-body {
+        padding: 14px;
+    }
+}
+
+
+/* ============================================================
+   37. IMPRESSION
+   ============================================================ */
+
+@media print {
+
+    .salary-create {
+        padding: 0;
+    }
+
+    .salary-create .page-actions,
+    .salary-create .form-actions {
+        display: none !important;
+    }
+
+    .salary-create .form-layout {
+        display: block;
+    }
+
+    .salary-create .form-sidebar {
+        position: static;
+
+        display: block;
+    }
+
+    .salary-create .form-card,
+    .salary-create .summary-card {
+        box-shadow: none;
+
+        border-color: #d1d5db;
+    }
+
+    .salary-create .form-card,
+    .salary-create .summary-card {
+        margin-bottom: 15px;
+    }
+
+    .salary-create .form-control,
+    .salary-create .form-select {
+        border-color: #d1d5db;
+
+        background: #fff;
+    }
+}
+
+
+/* ============================================================
+   38. ACCESSIBILITÉ
+   ============================================================ */
+
+.salary-create .btn:focus-visible,
+.salary-create .form-control:focus-visible,
+.salary-create .form-select:focus-visible,
+.salary-create a:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.22);
+
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   39. RÉDUCTION DES ANIMATIONS
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .salary-create *,
+    .salary-create *::before,
+    .salary-create *::after {
+        transition: none !important;
+
+        animation: none !important;
+
+        scroll-behavior: auto !important;
+    }
+}

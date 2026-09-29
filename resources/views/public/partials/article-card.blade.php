@@ -8,10 +8,14 @@
     {{-- Image de l'article --}}
     <div class="article-card-image">
         @if($article->image)
-            <img src="{{ asset('storage/' . $article->image) }}" 
+            <img src="{{ route('media.show', ['path' => $article->image]) }}" 
                  alt="{{ $article->titre }}" 
                  loading="lazy"
-                 class="article-card-img">
+                 class="article-card-img"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="article-card-placeholder" style="display: none;">
+                <i class="fas fa-newspaper"></i>
+            </div>
         @else
             <div class="article-card-placeholder">
                 <i class="fas fa-newspaper"></i>

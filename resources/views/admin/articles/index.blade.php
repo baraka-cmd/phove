@@ -116,7 +116,9 @@
                             <div class="article-cell-titre">
                                 <div class="article-cell-image">
                                     @if($article->image)
-                                        <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->titre }}">
+                                        <img src="{{ route('media.show', ['path' => ltrim($article->image, '/')]) }}"
+                                            alt="{{ $article->titre }}"
+                                            loading="lazy">
                                     @else
                                         <div class="article-cell-image-placeholder">
                                             <i class="fas fa-newspaper"></i>

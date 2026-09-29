@@ -175,9 +175,15 @@
                         Photo <small style="font-weight: 400; color: #64748B;">(laissez vide pour conserver la photo actuelle)</small>
                     </label>
                     <div class="user-photo-upload">
+                        @php
+                            $photoUrl = $user->photo_profil
+                                ? route('media.show', ['path' => ltrim($user->photo_profil, '/')])
+                                : null;
+                        @endphp
+
                         <label for="photo_profil" class="user-photo-preview" id="photoPreview">
-                            @if($user->photo_profil)
-                                <img id="photoPreviewImg" src="{{ asset('storage/' . $user->photo_profil) }}" alt="Photo actuelle" style="display: block;" loading="lazy">
+                            @if($photoUrl)
+                                <img id="photoPreviewImg" src="{{ $photoUrl }}" alt="Photo actuelle" style="display: block;" loading="lazy">
                                 <div class="user-photo-placeholder" id="photoPlaceholder" style="display: none;">
                                     <i class="fas fa-user"></i>
                                 </div>
@@ -190,12 +196,12 @@
                         </label>
                         <div class="user-photo-info">
                             <p>
-                                @if($user->photo_profil)
+                                @if($photoUrl)
                                     <span style="color: #10B981;">
                                         <i class="fas fa-check-circle"></i> Photo actuelle
                                     </span>
                                     <br>
-                                    <a href="{{ asset('storage/' . $user->photo_profil) }}" target="_blank" style="font-size: 12px; color: #1A5B9C; text-decoration: underline;">
+                                    <a href="{{ $photoUrl }}" target="_blank" style="font-size: 12px; color: #1A5B9C; text-decoration: underline;">
                                         <i class="fas fa-external-link-alt"></i> Voir la photo
                                     </a>
                                     <br>
@@ -212,8 +218,8 @@
                                 <li><i class="fas fa-check-circle"></i> Format carré recommandé</li>
                             </ul>
                             <input type="file" name="photo_profil" id="photo_profil" 
-                                   accept="image/jpeg,image/jpg,image/png,image/webp" 
-                                   style="display: none;">
+                                accept="image/jpeg,image/jpg,image/png,image/webp" 
+                                style="display: none;">
                             <input type="hidden" name="remove_photo" id="removePhotoFlag" value="0">
                         </div>
                     </div>

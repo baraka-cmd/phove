@@ -147,9 +147,15 @@
                             Image de couverture <small style="font-weight: 400; color: var(--color-text-muted);">(optionnel — laissez vide pour conserver l'image actuelle)</small>
                         </label>
                         <div class="article-image-upload">
+                            @php
+                                $imageUrl = $article->image
+                                    ? route('media.show', ['path' => ltrim($article->image, '/')])
+                                    : null;
+                            @endphp
+
                             <label for="image" class="article-image-preview" id="imagePreview">
-                                @if($article->image)
-                                    <img id="imagePreviewImg" src="{{ asset('storage/' . $article->image) }}" alt="Image actuelle" style="display: block;">
+                                @if($imageUrl)
+                                    <img id="imagePreviewImg" src="{{ $imageUrl }}" alt="Image actuelle" style="display: block;" loading="lazy">
                                     <div class="article-image-placeholder" id="imagePlaceholder" style="display: none;">
                                         <i class="fas fa-cloud-upload-alt"></i>
                                     </div>
@@ -162,12 +168,12 @@
                             </label>
                             <div class="article-image-info">
                                 <p>
-                                    @if($article->image)
+                                    @if($imageUrl)
                                         <span style="color: var(--color-success);">
                                             <i class="fas fa-check-circle"></i> Image actuelle
                                         </span>
                                         <br>
-                                        <a href="{{ asset('storage/' . $article->image) }}" target="_blank" style="font-size: 12px; color: var(--color-primary); text-decoration: underline;">
+                                        <a href="{{ $imageUrl }}" target="_blank" style="font-size: 12px; color: var(--color-primary); text-decoration: underline;">
                                             <i class="fas fa-external-link-alt"></i> Voir l'image
                                         </a>
                                     @else
@@ -178,7 +184,7 @@
                                     <li><i class="fas fa-check-circle"></i> JPG, PNG ou WebP</li>
                                     <li><i class="fas fa-check-circle"></i> Taille max : 5 Mo</li>
                                     <li><i class="fas fa-check-circle"></i> Recommandé : 1200×630 px</li>
-                                    @if($article->image)
+                                    @if($imageUrl)
                                         <li>
                                             <button type="button" id="removeImageBtn" style="background: none; border: none; color: var(--color-accent); font-size: 12px; cursor: pointer; padding: 0; text-decoration: underline;">
                                                 <i class="fas fa-trash-alt"></i> Supprimer l'image actuelle
@@ -187,8 +193,8 @@
                                     @endif
                                 </ul>
                                 <input type="file" name="image" id="image" 
-                                       accept="image/jpeg,image/jpg,image/png,image/webp" 
-                                       style="display: none;">
+                                    accept="image/jpeg,image/jpg,image/png,image/webp" 
+                                    style="display: none;">
                                 <input type="hidden" name="remove_image" id="removeImageFlag" value="0">
                             </div>
                         </div>

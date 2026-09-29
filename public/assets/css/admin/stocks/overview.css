@@ -1,0 +1,585 @@
+/* ============================================================
+   PHOVE — STYLE : VUE D'ENSEMBLE DES STOCKS
+   Vue : resources/views/admin/stocks/overview.blade.php
+   Route : admin.stocks.overview
+
+   Ce fichier est autonome. Il s'appuie sur admin-common.css
+   pour les variables CSS (couleurs, espacements, ombres, etc.).
+   ============================================================ */
+
+
+/* ----------------------------------------------------------
+   1. CONTENEUR DE PAGE
+   ---------------------------------------------------------- */
+
+.stock-overview-page {
+    /* Conteneur principal */
+}
+
+
+/* ----------------------------------------------------------
+   2. EN-TÊTE
+   ---------------------------------------------------------- */
+
+.page-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.page-header-content {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.page-header-text {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    flex: 1;
+    min-width: 0;
+}
+
+.page-header-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--border-radius);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.page-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.3;
+}
+
+.page-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+.page-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+
+/* ----------------------------------------------------------
+   3. BOUTONS
+   ---------------------------------------------------------- */
+
+.btn-primary,
+.btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 10px 18px;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    border: 2px solid transparent;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+    background: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+    color: #FFFFFF;
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--color-text-secondary);
+    border-color: var(--border-color);
+}
+
+.btn-secondary:hover {
+    background: var(--color-bg-light);
+    border-color: var(--color-text-muted);
+    color: var(--color-text-primary);
+}
+
+
+/* ----------------------------------------------------------
+   4. KPI PRINCIPAUX (4 cartes en haut)
+   ---------------------------------------------------------- */
+
+.overview-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.overview-kpi-card {
+    background: var(--color-bg-white);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    display: flex;
+    gap: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
+}
+
+.overview-kpi-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--color-primary);
+    opacity: 0.6;
+}
+
+.overview-kpi-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.overview-kpi-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.overview-kpi-content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    min-width: 0;
+}
+
+.overview-kpi-label {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.overview-kpi-value {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    line-height: 1.1;
+}
+
+.overview-kpi-unit {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.overview-kpi-alert {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    padding: 2px 0;
+}
+
+.overview-kpi-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    margin-top: var(--spacing-xs);
+    transition: gap var(--transition-fast);
+}
+
+.overview-kpi-link:hover {
+    gap: 8px;
+    text-decoration: underline;
+}
+
+/* Variantes KPI */
+.overview-kpi-danger::after {
+    background: var(--color-error);
+}
+
+.overview-kpi-danger .overview-kpi-icon {
+    background: var(--color-error-light);
+    color: #B91C1C;
+}
+
+.overview-kpi-danger .overview-kpi-alert {
+    color: var(--color-error);
+}
+
+.overview-kpi-warning::after {
+    background: var(--color-warning);
+}
+
+.overview-kpi-warning .overview-kpi-icon {
+    background: var(--color-warning-light);
+    color: #92400E;
+}
+
+.overview-kpi-warning .overview-kpi-alert {
+    color: #92400E;
+}
+
+.overview-kpi-success::after {
+    background: var(--color-success);
+}
+
+.overview-kpi-success .overview-kpi-icon {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+
+/* ----------------------------------------------------------
+   5. GRILLE 2 COLONNES
+   ---------------------------------------------------------- */
+
+.overview-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+
+/* ----------------------------------------------------------
+   6. CARTES
+   ---------------------------------------------------------- */
+
+.overview-card {
+    background: var(--color-bg-white);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.overview-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color-light);
+    background: var(--color-bg-light);
+    flex-wrap: wrap;
+}
+
+.overview-card-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.overview-card-title > i {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.overview-card-title h2 {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+}
+
+.overview-card-title p {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.overview-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    transition: gap var(--transition-fast);
+}
+
+.overview-card-link:hover {
+    gap: 8px;
+    text-decoration: underline;
+}
+
+.overview-card-body {
+    padding: var(--spacing-md);
+    flex: 1;
+}
+
+
+/* ----------------------------------------------------------
+   7. LISTE DES ÉLÉMENTS (mouvements, lots, réservations…)
+   ---------------------------------------------------------- */
+
+.overview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.overview-list-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    transition: background var(--transition-fast);
+}
+
+.overview-list-item:hover {
+    background: var(--color-bg-light);
+}
+
+.overview-list-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+}
+
+.overview-list-icon.is-entree {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+.overview-list-icon.is-sortie {
+    background: var(--color-error-light);
+    color: #B91C1C;
+}
+
+.overview-list-icon.is-ajustement,
+.overview-list-icon.is-warning {
+    background: var(--color-warning-light);
+    color: #92400E;
+}
+
+.overview-list-icon.is-info {
+    background: var(--color-info-light);
+    color: #1E40AF;
+}
+
+.overview-list-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.overview-list-content strong {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.overview-list-content span {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.overview-list-value {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    font-family: 'Courier New', monospace;
+    white-space: nowrap;
+}
+
+.overview-list-value.is-positive {
+    color: var(--color-success);
+}
+
+.overview-list-value.is-negative {
+    color: var(--color-error);
+}
+
+.overview-list-value.is-warning {
+    color: #92400E;
+}
+
+.overview-list-value.is-danger {
+    color: var(--color-error);
+}
+
+.overview-list-value.is-info {
+    color: #1E40AF;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-xs);
+}
+
+
+/* ----------------------------------------------------------
+   8. ÉTAT VIDE
+   ---------------------------------------------------------- */
+
+.overview-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xl) var(--spacing-md);
+    text-align: center;
+    color: var(--color-text-muted);
+}
+
+.overview-empty i {
+    font-size: 2rem;
+    opacity: 0.5;
+}
+
+.overview-empty p {
+    font-size: var(--font-size-sm);
+    font-style: italic;
+}
+
+
+/* ----------------------------------------------------------
+   9. ACCÈS RAPIDES
+   ---------------------------------------------------------- */
+
+.overview-shortcuts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.overview-shortcut {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg);
+    background: var(--color-bg-light);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius-sm);
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    transition: all var(--transition-base);
+}
+
+.overview-shortcut:hover {
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+}
+
+.overview-shortcut i {
+    font-size: 1.5rem;
+}
+
+
+/* ----------------------------------------------------------
+   10. RESPONSIVE
+   ---------------------------------------------------------- */
+
+@media (max-width: 992px) {
+    .overview-grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .page-header-actions {
+        justify-content: flex-end;
+    }
+
+    .overview-kpi-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .overview-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .overview-shortcuts {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .page-header-icon {
+        display: none;
+    }
+
+    .overview-kpi-card {
+        padding: var(--spacing-md);
+    }
+
+    .overview-kpi-value {
+        font-size: var(--font-size-xl);
+    }
+}

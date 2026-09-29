@@ -100,6 +100,28 @@ class Membre extends Model
 
     /*
     |--------------------------------------------------------------------------
+    | ACCESSORS
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Retourne le nom complet comme attribut Eloquent.
+     *
+     * Utilisation :
+     * $membre->nom_complet
+     *
+     * Format congolais :
+     * Nom Post-nom Prénom.
+     *
+     * @return string
+     */
+    public function getNomCompletAttribute(): string
+    {
+        return $this->nomComplet();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
     | SCOPES
     |--------------------------------------------------------------------------
     */
@@ -166,13 +188,24 @@ class Membre extends Model
     */
 
     /**
-     * Récupère le nom complet du membre (format congolais : Nom Post-nom Prénom).
+     * Récupère le nom complet du membre.
+     *
+     * Cette méthode est conservée afin de ne pas casser
+     * le code existant qui utilise $membre->nomComplet().
+     *
+     * Format congolais :
+     * Nom Post-nom Prénom.
      *
      * @return string
      */
     public function nomComplet(): string
     {
-        $parties = array_filter([$this->nom, $this->post_nom, $this->prenom]);
+        $parties = array_filter([
+            $this->nom,
+            $this->post_nom,
+            $this->prenom,
+        ]);
+
         return implode(' ', $parties);
     }
 
@@ -184,7 +217,9 @@ class Membre extends Model
      */
     public function cotisationPayeePour(string $mois): bool
     {
-        return $this->cotisations()->where('mois', $mois)->exists();
+        return $this->cotisations()
+            ->where('mois', $mois)
+            ->exists();
     }
 
     /**
@@ -207,7 +242,7 @@ class Membre extends Model
      */
     public function categorieLibelle(): string
     {
-        return match($this->categorie) {
+        return match ($this->categorie) {
             'fondateur' => 'Membre fondateur',
             'adherent' => 'Membre adhérent',
             'honneur' => 'Membre d\'honneur',
@@ -223,7 +258,7 @@ class Membre extends Model
      */
     public function statutLibelle(): string
     {
-        return match($this->statut) {
+        return match ($this->statut) {
             'actif' => 'Actif',
             'inactif' => 'Inactif',
             'suspendu' => 'Suspendu',
@@ -252,6 +287,7 @@ class Membre extends Model
     public function cotisationAJour(): bool
     {
         $moisCourant = now()->format('Y-m');
+
         return $this->cotisationPayeePour($moisCourant);
     }
 
@@ -263,8 +299,19 @@ class Membre extends Model
     public function initiales(): string
     {
         $initiales = '';
-        if ($this->prenom) $initiales .= strtoupper(mb_substr($this->prenom, 0, 1));
-        if ($this->nom) $initiales .= strtoupper(mb_substr($this->nom, 0, 1));
+
+        if ($this->prenom) {
+            $initiales .= strtoupper(
+                mb_substr($this->prenom, 0, 1)
+            );
+        }
+
+        if ($this->nom) {
+            $initiales .= strtoupper(
+                mb_substr($this->nom, 0, 1)
+            );
+        }
+
         return $initiales ?: '?';
     }
 
@@ -278,6 +325,7 @@ class Membre extends Model
         if ($this->photo) {
             return asset('storage/' . $this->photo);
         }
+
         return null;
     }
 }

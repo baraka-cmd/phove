@@ -1,273 +1,1193 @@
 @extends('layouts.admin')
 
-@section('title', 'Grille Salariale | PHOVE')
+@section('title', 'Grille mensuelle des salaires')
 
-@section('page_title', 'Grille Salariale')
-@section('page_icon', 'table')
-@section('page_subtitle', 'Vue d\'ensemble des salaires par organe et par poste.')
-
-@php
-    $breadcrumb = [
-        ['label' => 'Salaires', 'url' => route('admin.salaires.index')],
-        'Grille salariale'
-    ];
-@endphp
-
-@section('styles')
-    <link rel="stylesheet" href="{{ asset('assets/css/admin-common.css') }}">
-    <style>
-        .grille-organe-card {
-            background: #FFFFFF;
-            border-radius: 16px;
-            padding: 20px 24px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-            margin-bottom: 24px;
-            border-left: 4px solid #1A5B9C;
-        }
-        .grille-organe-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #E2E8F0;
-        }
-        .grille-organe-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: #1E293B;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .grille-organe-title i {
-            color: #1A5B9C;
-        }
-        .grille-organe-count {
-            font-size: 12px;
-            color: #64748B;
-            font-weight: 600;
-        }
-        .grille-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .grille-table thead th {
-            padding: 10px 14px;
-            font-size: 11px;
-            font-weight: 700;
-            color: #64748B;
-            text-align: left;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 2px solid #E2E8F0;
-            white-space: nowrap;
-        }
-        .grille-table tbody td {
-            padding: 10px 14px;
-            font-size: 13px;
-            color: #334155;
-            border-bottom: 1px solid #E2E8F0;
-        }
-        .grille-table tbody tr:hover {
-            background: #F8FAFC;
-        }
-        .grille-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-        .grille-membre-cell {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .grille-membre-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #E8F0F8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #1A5B9C;
-            font-size: 11px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-        .grille-montant {
-            font-weight: 700;
-            color: #1E293B;
-        }
-        .grille-badge-paye {
-            background: #D1FAE5;
-            color: #065F46;
-            padding: 4px 10px;
-            border-radius: 50px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        .grille-badge-valide {
-            background: #DBEAFE;
-            color: #1E40AF;
-            padding: 4px 10px;
-            border-radius: 50px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        .grille-badge-vacant {
-            background: #FEE2E2;
-            color: #B91C1C;
-            padding: 4px 10px;
-            border-radius: 50px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-    </style>
-@endsection
+{{-- ============================================================
+CSS SPÉCIFIQUE À LA PAGE
+============================================================ --}}
+@push('styles') <link
+     rel="stylesheet"
+     href="{{ asset('assets/css/admin/salaires/grille.css') }}"
+ >
+@endpush
 
 @section('content')
 
-    {{-- ============================================ --}}
-    {{-- EN-TÊTE --}}
-    {{-- ============================================ --}}
-    <div style="background: #FFFFFF; border-radius: 16px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
-        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
-            <div>
-                <h2 style="font-size: 1.1rem; font-weight: 700; color: #1E293B; margin-bottom: 4px;">
-                    <i class="fas fa-table" style="color: #1A5B9C;"></i> Grille salariale par organe
-                </h2>
-                <p style="font-size: 13px; color: #64748B;">
-                    Conformément à l'Article 63 des Statuts : seuls l'AG, la Commission de Contrôle et le CA sont bénévoles.
-                </p>
-            </div>
-            <a href="{{ route('admin.salaires.create') }}" class="btn btn-primary btn-sm">
-                <i class="fas fa-plus"></i> Nouveau salaire
-            </a>
+<div
+    class="salary-grid"
+    data-current-month="{{ $mois ?? request('mois') ?? now()->format('Y-m') }}"
+    data-month="{{ $mois ?? request('mois') ?? now()->format('Y-m') }}"
+>
+
+```
+{{-- ========================================================
+     EN-TÊTE DE PAGE
+========================================================= --}}
+<header class="page-header">
+
+    <div class="page-header-content">
+
+        <div>
+            <h1 class="page-title">
+                <i class="fas fa-table" aria-hidden="true"></i>
+                Grille mensuelle des salaires
+            </h1>
+
+            <p class="page-subtitle">
+                Vue synthétique des salaires et de leur situation
+                de paiement pour le mois sélectionné.
+            </p>
         </div>
+
+        <div class="page-actions">
+
+            <a
+                href="{{ route('admin.salaires.index') }}"
+                class="btn btn-outline"
+            >
+                <i class="fas fa-list" aria-hidden="true"></i>
+                Liste des salaires
+            </a>
+
+            <a
+                href="{{ route('admin.salaires.grille', [
+                    'mois' => $mois ?? request('mois') ?? now()->format('Y-m')
+                ]) }}"
+                class="btn btn-secondary"
+                data-refresh
+            >
+                <i class="fas fa-sync-alt" aria-hidden="true"></i>
+                Actualiser
+            </a>
+
+            <button
+                type="button"
+                class="btn btn-outline"
+                data-print
+            >
+                <i class="fas fa-print" aria-hidden="true"></i>
+                Imprimer
+            </button>
+
+            @can('create', App\Models\Salaire::class)
+
+                <a
+                    href="{{ route('admin.salaires.create') }}"
+                    class="btn btn-primary"
+                >
+                    <i class="fas fa-plus" aria-hidden="true"></i>
+                    Nouveau salaire
+                </a>
+
+            @endcan
+
+        </div>
+
     </div>
 
-    {{-- ============================================ --}}
-    {{-- GRILLE PAR ORGANE --}}
-    {{-- ============================================ --}}
-    @if($organes->count() > 0)
-        @foreach($organes as $organeNom => $organesGroupe)
-        @php
-            $totalOrgane = $organesGroupe->sum(function($o) {
-                return $o->salaires->where('statut', 'paye')->sum('salaire_net');
-            });
-        @endphp
-        <div class="grille-organe-card">
-            <div class="grille-organe-header">
-                <h3 class="grille-organe-title">
-                    <i class="fas fa-{{ $organeNom === 'assemblee_generale' ? 'users-cog' : ($organeNom === 'conseil_administration' ? 'user-tie' : ($organeNom === 'direction_executive' ? 'tasks' : ($organeNom === 'commission_controle' ? 'search-dollar' : ($organeNom === 'comite_suivi' ? 'clipboard-check' : ($organeNom === 'comite_gestion' ? 'cogs' : 'sitemap'))))) }}"></i>
-                    {{ $organesGroupe->first()->organeLibelle() }}
-                </h3>
-                <span class="grille-organe-count">
-                    {{ $organesGroupe->count() }} poste(s) — Total payé : <strong>{{ number_format($totalOrgane, 2, ',', ' ') }} $</strong>
-                </span>
-            </div>
+</header>
 
-            <div class="table-responsive">
-                <table class="grille-table">
-                    <thead>
-                        <tr>
-                            <th>Membre</th>
-                            <th>Poste</th>
-                            <th>Structure</th>
-                            <th>Niveau</th>
-                            <th>Dernier salaire</th>
-                            <th>Dernier mois</th>
-                            <th>Statut</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($organesGroupe as $organe)
-                        <tr>
+
+{{-- ========================================================
+     MESSAGES
+========================================================= --}}
+
+@if(session('success'))
+
+    <div
+        class="alert alert-success"
+        role="alert"
+    >
+        <i class="fas fa-check-circle" aria-hidden="true"></i>
+
+        <span>
+            {{ session('success') }}
+        </span>
+    </div>
+
+@endif
+
+
+@if(session('error'))
+
+    <div
+        class="alert alert-danger"
+        role="alert"
+    >
+        <i class="fas fa-exclamation-circle" aria-hidden="true"></i>
+
+        <span>
+            {{ session('error') }}
+        </span>
+    </div>
+
+@endif
+
+
+{{-- ========================================================
+     SÉLECTION DU MOIS
+========================================================= --}}
+<section class="month-selector">
+
+    <form
+        method="GET"
+        action="{{ route('admin.salaires.grille') }}"
+        data-month-form
+    >
+
+        <div class="month-selector-label">
+
+            <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+
+            <label for="mois">
+                Mois de la grille
+            </label>
+
+        </div>
+
+        <input
+            type="month"
+            id="mois"
+            name="mois"
+            value="{{ $mois ?? request('mois') ?? now()->format('Y-m') }}"
+            data-month-input
+            required
+            aria-label="Sélectionner le mois de la grille"
+        >
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+            data-month-submit
+            data-loading-text="Chargement..."
+        >
+            <i class="fas fa-search" aria-hidden="true"></i>
+            Afficher la grille
+        </button>
+
+    </form>
+
+</section>
+
+
+{{-- ========================================================
+     BANNIÈRE DE PÉRIODE
+========================================================= --}}
+@php
+    $moisGrille = $mois
+        ?? request('mois')
+        ?? now()->format('Y-m');
+
+    try {
+        $dateGrille = \Carbon\Carbon::createFromFormat(
+            'Y-m',
+            $moisGrille
+        );
+    } catch (\Throwable $e) {
+        $moisGrille = now()->format('Y-m');
+
+        $dateGrille = \Carbon\Carbon::createFromFormat(
+            'Y-m',
+            $moisGrille
+        );
+    }
+
+    $isCurrentMonth = $moisGrille === now()->format('Y-m');
+
+    $nombreSalaires = $totalSalaires ?? $salaires->count();
+
+    $masseSalariale = (float) ($totalNet ?? 0);
+
+    $montantPaye = (float) ($totalPaye ?? 0);
+
+    $montantRestant = max(
+        (float) ($resteAPayer ?? ($masseSalariale - $montantPaye)),
+        0
+    );
+
+    $tauxPaiement = $masseSalariale > 0
+        ? min(
+            ($montantPaye / $masseSalariale) * 100,
+            100
+        )
+        : 0;
+@endphp
+
+
+<section class="period-banner">
+
+    <div class="period-information">
+
+        <div class="period-icon">
+            <i class="fas fa-calendar-check" aria-hidden="true"></i>
+        </div>
+
+        <div class="period-content">
+
+            <span class="period-label">
+                Période sélectionnée
+            </span>
+
+            <strong class="period-value">
+                {{ $dateGrille->translatedFormat('F Y') }}
+            </strong>
+
+            <span class="period-description">
+                @if($isCurrentMonth)
+                    Mois courant — situation salariale actuelle.
+                @else
+                    Consultation de la grille salariale pour la période sélectionnée.
+                @endif
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{{-- ========================================================
+     RÉSUMÉ DU MOIS
+========================================================= --}}
+<section class="summary-grid">
+
+    {{-- Nombre de salaires --}}
+    <article class="summary-card">
+
+        <div class="summary-icon">
+            <i class="fas fa-users" aria-hidden="true"></i>
+        </div>
+
+        <div class="summary-content">
+
+            <span class="summary-label">
+                Nombre de salaires
+            </span>
+
+            <strong class="summary-value">
+                {{ number_format($nombreSalaires, 0, ',', ' ') }}
+            </strong>
+
+            <span class="summary-meta">
+                salaire(s) enregistré(s)
+            </span>
+
+        </div>
+
+    </article>
+
+
+    {{-- Masse salariale --}}
+    <article class="summary-card">
+
+        <div class="summary-icon">
+            <i class="fas fa-coins" aria-hidden="true"></i>
+        </div>
+
+        <div class="summary-content">
+
+            <span class="summary-label">
+                Masse salariale
+            </span>
+
+            <strong class="summary-value">
+                {{ number_format($masseSalariale, 2, ',', ' ') }}
+            </strong>
+
+            <span class="summary-meta">
+                montant net total
+            </span>
+
+        </div>
+
+    </article>
+
+
+    {{-- Total payé --}}
+    <article class="summary-card">
+
+        <div class="summary-icon">
+            <i class="fas fa-money-bill-wave" aria-hidden="true"></i>
+        </div>
+
+        <div class="summary-content">
+
+            <span class="summary-label">
+                Total payé
+            </span>
+
+            <strong class="summary-value">
+                {{ number_format($montantPaye, 2, ',', ' ') }}
+            </strong>
+
+            <span class="summary-meta">
+                {{ number_format($tauxPaiement, 0, ',', ' ') }} %
+                de la masse salariale
+            </span>
+
+        </div>
+
+    </article>
+
+
+    {{-- Reste à payer --}}
+    <article class="summary-card">
+
+        <div class="summary-icon">
+            <i class="fas fa-hourglass-half" aria-hidden="true"></i>
+        </div>
+
+        <div class="summary-content">
+
+            <span class="summary-label">
+                Reste à payer
+            </span>
+
+            <strong class="summary-value">
+                {{ number_format($montantRestant, 2, ',', ' ') }}
+            </strong>
+
+            <span class="summary-meta">
+                montant encore dû
+            </span>
+
+        </div>
+
+    </article>
+
+</section>
+
+
+{{-- ========================================================
+     GRILLE SALARIALE
+========================================================= --}}
+<section class="grid-card">
+
+    {{-- En-tête de la grille --}}
+    <div class="grid-card-header">
+
+        <div>
+
+            <h2 class="grid-card-title">
+
+                <i
+                    class="fas fa-money-check-alt"
+                    aria-hidden="true"
+                ></i>
+
+                Salaires du
+                {{ $dateGrille->translatedFormat('F Y') }}
+
+            </h2>
+
+            <p class="grid-card-subtitle">
+
+                {{ $salaires->count() }}
+                salaire(s) affiché(s) pour cette période.
+
+            </p>
+
+        </div>
+
+
+        <div class="grid-card-actions">
+
+            <a
+                href="{{ route('admin.salaires.index', [
+                    'mois' => $moisGrille
+                ]) }}"
+                class="btn btn-sm btn-outline"
+            >
+                <i class="fas fa-list" aria-hidden="true"></i>
+                Voir la liste
+            </a>
+
+        </div>
+
+    </div>
+
+
+    {{-- ====================================================
+         CONTENU
+    ===================================================== --}}
+
+    @if($salaires->count())
+
+        <div class="table-wrapper">
+
+            <table class="salary-grid-table">
+
+                <caption class="text-muted">
+                    Grille des salaires pour
+                    {{ $dateGrille->translatedFormat('F Y') }}
+                </caption>
+
+                <thead>
+
+                    <tr>
+
+                        <th scope="col">
+                            N°
+                        </th>
+
+                        <th scope="col">
+                            Membre
+                        </th>
+
+                        <th scope="col">
+                            Organe
+                        </th>
+
+                        <th scope="col">
+                            Mois
+                        </th>
+
+                        <th scope="col">
+                            Référence
+                        </th>
+
+                        <th
+                            scope="col"
+                            class="text-right"
+                        >
+                            Salaire de base
+                        </th>
+
+                        <th
+                            scope="col"
+                            class="text-right"
+                        >
+                            Primes
+                        </th>
+
+                        <th
+                            scope="col"
+                            class="text-right"
+                        >
+                            Retenues
+                        </th>
+
+                        <th
+                            scope="col"
+                            class="text-right"
+                        >
+                            Net
+                        </th>
+
+                        <th
+                            scope="col"
+                            class="text-right"
+                        >
+                            Payé
+                        </th>
+
+                        <th
+                            scope="col"
+                            class="text-right"
+                        >
+                            Reste
+                        </th>
+
+                        <th scope="col">
+                            Paiement
+                        </th>
+
+                        <th scope="col">
+                            Statut
+                        </th>
+
+                        <th
+                            scope="col"
+                            class="text-right"
+                        >
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @foreach($salaires as $index => $salaire)
+
+                        @php
+
+                            $salaireBase = (float) (
+                                $salaire->salaire_base ?? 0
+                            );
+
+                            $primes = (float) (
+                                $salaire->primes ?? 0
+                            );
+
+                            $retenues = (float) (
+                                $salaire->retenues ?? 0
+                            );
+
+                            $net = (float) (
+                                $salaire->salaire_net ?? 0
+                            );
+
+                            $totalPayeLigne = (float) (
+                                $salaire->paiements_sum_montant ?? 0
+                            );
+
+                            $reste = max(
+                                $net - $totalPayeLigne,
+                                0
+                            );
+
+                            $pourcentage = $net > 0
+                                ? min(
+                                    ($totalPayeLigne / $net) * 100,
+                                    100
+                                )
+                                : 0;
+
+                            $membreNom = $salaire->membre
+                                ? (
+                                    $salaire->membre->nom_complet
+                                    ?? trim(
+                                        ($salaire->membre->nom ?? '') .
+                                        ' ' .
+                                        ($salaire->membre->post_nom ?? '') .
+                                        ' ' .
+                                        ($salaire->membre->prenom ?? '')
+                                    )
+                                )
+                                : 'Membre supprimé';
+
+                            $initiales = '';
+
+                            if ($salaire->membre) {
+                                $parts = preg_split(
+                                    '/\s+/',
+                                    trim($membreNom)
+                                );
+
+                                foreach (array_slice($parts, 0, 2) as $part) {
+                                    if ($part !== '') {
+                                        $initiales .= mb_strtoupper(
+                                            mb_substr($part, 0, 1)
+                                        );
+                                    }
+                                }
+                            }
+
+                            $progressClass = $pourcentage >= 100
+                                ? 'is-complete'
+                                : ($pourcentage > 0
+                                    ? 'is-partial'
+                                    : '');
+
+                        @endphp
+
+
+                        <tr
+                            data-salary-row
+                            data-selectable-row
+                            data-salary-id="{{ $salaire->id }}"
+                            data-month="{{ $moisGrille }}"
+                            tabindex="0"
+                            aria-label="Salaire de {{ $membreNom }}"
+                        >
+
+                            {{-- N° --}}
+                            <td>
+                                {{ $index + 1 }}
+                            </td>
+
+
                             {{-- Membre --}}
                             <td>
-                                @if($organe->membre)
-                                <div class="grille-membre-cell">
-                                    <div class="grille-membre-avatar">
-                                        {{ $organe->membre->initiales() }}
+
+                                <div class="member-cell">
+
+                                    <div
+                                        class="member-avatar"
+                                        aria-hidden="true"
+                                    >
+                                        @if($salaire->membre && !empty($salaire->membre->photo))
+                                            <img
+                                                src="{{ asset('storage/' . $salaire->membre->photo) }}"
+                                                alt=""
+                                            >
+                                        @else
+                                            {{ $initiales ?: '?' }}
+                                        @endif
                                     </div>
-                                    <span style="font-weight: 600; color: #1E293B;">{{ $organe->membre->nomComplet() }}</span>
+
+                                    <div class="member-info">
+
+                                        @if($salaire->membre)
+
+                                            <a
+                                                href="{{ route(
+                                                    'admin.salaires.show',
+                                                    $salaire
+                                                ) }}"
+                                                class="member-name"
+                                            >
+                                                {{ $membreNom }}
+                                            </a>
+
+                                            @if(!empty($salaire->membre->matricule))
+
+                                                <span class="member-role">
+                                                    {{ $salaire->membre->matricule }}
+                                                </span>
+
+                                            @endif
+
+                                        @else
+
+                                            <span class="member-name">
+                                                Membre supprimé
+                                            </span>
+
+                                            <span class="member-role">
+                                                —
+                                            </span>
+
+                                        @endif
+
+                                    </div>
+
                                 </div>
-                                @else
-                                <span style="color: #94A3B8; font-style: italic;">Poste vacant</span>
-                                @endif
+
                             </td>
 
-                            {{-- Poste --}}
-                            <td>{{ $organe->poste }}</td>
 
-                            {{-- Structure --}}
+                            {{-- Organe --}}
                             <td>
-                                @if($organe->structure)
-                                    <span style="font-size: 12px;">{{ $organe->structure->nom }}</span>
-                                @else
-                                    <span style="color: #94A3B8;">—</span>
-                                @endif
+
+                                <div class="organe-cell">
+
+                                    @if($salaire->organe)
+
+                                        <span class="organe-name">
+                                            {{ $salaire->organe->nom }}
+                                        </span>
+
+                                    @else
+
+                                        <span class="organe-empty">
+                                            —
+                                        </span>
+
+                                    @endif
+
+                                </div>
+
                             </td>
 
-                            {{-- Niveau --}}
+
+                            {{-- Mois --}}
                             <td>
-                                @if($organe->niveau)
-                                    <span style="font-size: 12px;">{{ $organe->niveauLibelle() }}</span>
-                                @else
-                                    <span style="color: #94A3B8;">—</span>
-                                @endif
+
+                                <div class="month-cell">
+
+                                    <span class="month-value">
+                                        {{ $dateGrille->translatedFormat('M Y') }}
+                                    </span>
+
+                                </div>
+
                             </td>
 
-                            {{-- Dernier salaire --}}
+
+                            {{-- Référence --}}
                             <td>
-                                @if($organe->salaires->count() > 0)
-                                    @php $dernierSalaire = $organe->salaires->first(); @endphp
-                                    <span class="grille-montant">{{ number_format($dernierSalaire->salaire_net, 2, ',', ' ') }} $</span>
-                                @else
-                                    <span style="color: #94A3B8;">—</span>
-                                @endif
+
+                                <a
+                                    href="{{ route(
+                                        'admin.salaires.show',
+                                        $salaire
+                                    ) }}"
+                                    class="month-value"
+                                >
+                                    {{ $salaire->reference }}
+                                </a>
+
                             </td>
 
-                            {{-- Dernier mois --}}
-                            <td>
-                                @if($organe->salaires->count() > 0)
-                                    <span style="font-size: 12px;">{{ $organe->salaires->first()->mois }}</span>
-                                @else
-                                    <span style="color: #94A3B8;">—</span>
-                                @endif
+
+                            {{-- Salaire de base --}}
+                            <td class="text-right">
+
+                                <span class="amount amount-base">
+                                    {{ number_format(
+                                        $salaireBase,
+                                        2,
+                                        ',',
+                                        ' '
+                                    ) }}
+                                </span>
+
                             </td>
+
+
+                            {{-- Primes --}}
+                            <td class="text-right">
+
+                                <span class="amount amount-primes">
+                                    {{ number_format(
+                                        $primes,
+                                        2,
+                                        ',',
+                                        ' '
+                                    ) }}
+                                </span>
+
+                            </td>
+
+
+                            {{-- Retenues --}}
+                            <td class="text-right">
+
+                                <span class="amount amount-retenues">
+                                    {{ number_format(
+                                        $retenues,
+                                        2,
+                                        ',',
+                                        ' '
+                                    ) }}
+                                </span>
+
+                            </td>
+
+
+                            {{-- Net --}}
+                            <td class="text-right">
+
+                                <strong class="amount amount-net">
+                                    {{ number_format(
+                                        $net,
+                                        2,
+                                        ',',
+                                        ' '
+                                    ) }}
+                                </strong>
+
+                            </td>
+
+
+                            {{-- Payé --}}
+                            <td class="text-right">
+
+                                <span class="amount amount-paid">
+                                    {{ number_format(
+                                        $totalPayeLigne,
+                                        2,
+                                        ',',
+                                        ' '
+                                    ) }}
+                                </span>
+
+                            </td>
+
+
+                            {{-- Reste --}}
+                            <td class="text-right">
+
+                                @if($reste > 0)
+
+                                    <span class="amount amount-rest">
+                                        {{ number_format(
+                                            $reste,
+                                            2,
+                                            ',',
+                                            ' '
+                                        ) }}
+                                    </span>
+
+                                @else
+
+                                    <span class="amount amount-rest is-zero">
+                                        0,00
+                                    </span>
+
+                                @endif
+
+                            </td>
+
+
+                            {{-- Progression du paiement --}}
+                            <td>
+
+                                <div class="payment-progress">
+
+                                    <div class="payment-progress-top">
+
+                                        <span class="payment-progress-label">
+                                            Paiement
+                                        </span>
+
+                                        <span class="payment-progress-value">
+                                            {{ number_format(
+                                                $pourcentage,
+                                                0,
+                                                ',',
+                                                ' '
+                                            ) }} %
+                                        </span>
+
+                                    </div>
+
+                                    <div
+                                        class="payment-progress-bar"
+                                        aria-hidden="true"
+                                    >
+                                        <span
+                                            class="payment-progress-fill {{ $progressClass }}"
+                                            data-progress="{{ $pourcentage }}"
+                                            style="width: {{ $pourcentage }}%;"
+                                        ></span>
+                                    </div>
+
+                                </div>
+
+                            </td>
+
 
                             {{-- Statut --}}
                             <td>
-                                @if($organe->salaires->count() > 0 && $organe->salaires->first()->statut === 'paye')
-                                    <span class="grille-badge-paye"><i class="fas fa-check-circle"></i> Payé</span>
-                                @elseif($organe->salaires->count() > 0 && $organe->salaires->first()->statut === 'valide')
-                                    <span class="grille-badge-valide"><i class="fas fa-check"></i> Validé</span>
-                                @elseif(!$organe->membre)
-                                    <span class="grille-badge-vacant"><i class="fas fa-user-slash"></i> Vacant</span>
-                                @else
-                                    <span style="color: #94A3B8;">—</span>
-                                @endif
+
+                                @switch($salaire->statut)
+
+                                    @case('brouillon')
+
+                                        <span class="badge badge-neutral">
+                                            <i
+                                                class="fas fa-pencil-alt"
+                                                aria-hidden="true"
+                                            ></i>
+                                            Brouillon
+                                        </span>
+
+                                        @break
+
+
+                                    @case('valide')
+
+                                        <span class="badge badge-info">
+                                            <i
+                                                class="fas fa-check"
+                                                aria-hidden="true"
+                                            ></i>
+                                            Validé
+                                        </span>
+
+                                        @break
+
+
+                                    @case('partiellement_paye')
+
+                                        <span class="badge badge-warning">
+                                            <i
+                                                class="fas fa-hourglass-half"
+                                                aria-hidden="true"
+                                            ></i>
+                                            Partiellement payé
+                                        </span>
+
+                                        @break
+
+
+                                    @case('paye')
+
+                                        <span class="badge badge-success">
+                                            <i
+                                                class="fas fa-check-double"
+                                                aria-hidden="true"
+                                            ></i>
+                                            Payé
+                                        </span>
+
+                                        @break
+
+
+                                    @case('annule')
+
+                                        <span class="badge badge-danger">
+                                            <i
+                                                class="fas fa-ban"
+                                                aria-hidden="true"
+                                            ></i>
+                                            Annulé
+                                        </span>
+
+                                        @break
+
+
+                                    @default
+
+                                        <span class="badge badge-neutral">
+                                            {{ $salaire->statut ?? 'Inconnu' }}
+                                        </span>
+
+                                @endswitch
+
                             </td>
+
+
+                            {{-- Action --}}
+                            <td class="text-right">
+
+                                <a
+                                    href="{{ route(
+                                        'admin.salaires.show',
+                                        $salaire
+                                    ) }}"
+                                    class="btn btn-sm btn-outline"
+                                    title="Voir le salaire"
+                                    aria-label="Voir le salaire de {{ $membreNom }}"
+                                >
+                                    <i
+                                        class="fas fa-eye"
+                                        aria-hidden="true"
+                                    ></i>
+                                </a>
+
+                            </td>
+
                         </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+
+                    @endforeach
+
+                </tbody>
+
+
+                {{-- =================================================
+                     TOTAL
+                ================================================== --}}
+                <tfoot>
+
+                    @php
+
+                        $totalBase = $salaires->sum(
+                            fn ($salaire) =>
+                                (float) ($salaire->salaire_base ?? 0)
+                        );
+
+                        $totalPrimes = $salaires->sum(
+                            fn ($salaire) =>
+                                (float) ($salaire->primes ?? 0)
+                        );
+
+                        $totalRetenues = $salaires->sum(
+                            fn ($salaire) =>
+                                (float) ($salaire->retenues ?? 0)
+                        );
+
+                        $totalNetGrille = $salaires->sum(
+                            fn ($salaire) =>
+                                (float) ($salaire->salaire_net ?? 0)
+                        );
+
+                        $totalPayeGrille = $salaires->sum(
+                            fn ($salaire) =>
+                                (float) ($salaire->paiements_sum_montant ?? 0)
+                        );
+
+                        $totalResteGrille = $salaires->sum(
+                            fn ($salaire) =>
+                                max(
+                                    (float) ($salaire->salaire_net ?? 0)
+                                    -
+                                    (float) ($salaire->paiements_sum_montant ?? 0),
+                                    0
+                                )
+                        );
+
+                    @endphp
+
+                    <tr class="total-row">
+
+                        <th
+                            colspan="5"
+                            class="total-label"
+                        >
+                            TOTAL
+                        </th>
+
+                        <th class="text-right total-value">
+                            {{ number_format(
+                                $totalBase,
+                                2,
+                                ',',
+                                ' '
+                            ) }}
+                        </th>
+
+                        <th class="text-right total-value">
+                            {{ number_format(
+                                $totalPrimes,
+                                2,
+                                ',',
+                                ' '
+                            ) }}
+                        </th>
+
+                        <th class="text-right total-value">
+                            {{ number_format(
+                                $totalRetenues,
+                                2,
+                                ',',
+                                ' '
+                            ) }}
+                        </th>
+
+                        <th class="text-right total-value">
+                            {{ number_format(
+                                $totalNetGrille,
+                                2,
+                                ',',
+                                ' '
+                            ) }}
+                        </th>
+
+                        <th class="text-right total-paid">
+                            {{ number_format(
+                                $totalPayeGrille,
+                                2,
+                                ',',
+                                ' '
+                            ) }}
+                        </th>
+
+                        <th class="text-right total-rest {{ $totalResteGrille <= 0 ? 'is-zero' : '' }}">
+                            {{ number_format(
+                                $totalResteGrille,
+                                2,
+                                ',',
+                                ' '
+                            ) }}
+                        </th>
+
+                        <th colspan="3"></th>
+
+                    </tr>
+
+                </tfoot>
+
+            </table>
+
         </div>
-        @endforeach
+
+
+        {{-- ====================================================
+             PIED DE GRILLE
+        ===================================================== --}}
+        <div class="grid-card-footer">
+
+            <div class="grid-footer-info">
+
+                <i
+                    class="fas fa-info-circle"
+                    aria-hidden="true"
+                ></i>
+
+                <span>
+                    Les montants affichés correspondent à la période
+                    sélectionnée.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        {{-- ====================================================
+             PAGINATION
+        ===================================================== --}}
+        @if(method_exists($salaires, 'links'))
+
+            <div class="pagination-wrapper">
+
+                <div class="pagination-info">
+
+                    @if($salaires->total() > 0)
+
+                        Affichage de
+                        <strong>{{ $salaires->firstItem() }}</strong>
+                        à
+                        <strong>{{ $salaires->lastItem() }}</strong>
+                        sur
+                        <strong>{{ $salaires->total() }}</strong>
+                        salaire(s)
+
+                    @endif
+
+                </div>
+
+                <nav aria-label="Pagination des salaires">
+                    {{ $salaires->appends([
+                        'mois' => $moisGrille
+                    ])->links() }}
+                </nav>
+
+            </div>
+
+        @endif
+
+
     @else
-    <div class="projets-empty">
-        <div class="projets-empty-icon"><i class="fas fa-table"></i></div>
-        <h4>Aucun organe actif</h4>
-        <p>Aucun poste actif dans l'organigramme pour le moment.</p>
-        <a href="{{ route('admin.gouvernance.index') }}" class="btn btn-outline btn-sm mt-3">
-            <i class="fas fa-sitemap"></i> Gérer la gouvernance
-        </a>
-    </div>
+
+        {{-- ==================================================
+             ÉTAT VIDE
+        =================================================== --}}
+        <div class="empty-state">
+
+            <div
+                class="empty-state-icon"
+                aria-hidden="true"
+            >
+                <i class="fas fa-calendar-times"></i>
+            </div>
+
+            <h3 class="empty-state-title">
+                Aucun salaire pour cette période
+            </h3>
+
+            <p class="empty-state-text">
+                Aucun salaire n'a été enregistré pour le mois
+                sélectionné.
+            </p>
+
+            @can('create', App\Models\Salaire::class)
+
+                <a
+                    href="{{ route('admin.salaires.create') }}"
+                    class="btn btn-primary"
+                >
+                    <i
+                        class="fas fa-plus"
+                        aria-hidden="true"
+                    ></i>
+                    Créer un salaire
+                </a>
+
+            @endcan
+
+        </div>
+
     @endif
 
+</section>
+```
+
+</div>
+
 @endsection
 
-@section('scripts')
-    <script src="{{ asset('assets/js/admin-common.js') }}"></script>
-@endsection
+{{-- ============================================================
+JAVASCRIPT SPÉCIFIQUE À LA PAGE
+============================================================ --}}
+@push('scripts') <script
+     src="{{ asset('assets/js/admin/salaires/grille.js') }}"
+ ></script>
+@endpush

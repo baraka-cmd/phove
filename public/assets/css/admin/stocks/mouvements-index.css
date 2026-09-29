@@ -1,0 +1,881 @@
+/* ============================================================
+   PHOVE — STYLE : LISTE DES MOUVEMENTS DE STOCK
+   Vue : resources/views/admin/stocks/mouvements/index.blade.php
+   Route : admin.stocks.mouvements.index
+
+   Ce fichier complète stocks-common.css.
+   Il n'ajoute QUE ce qui est spécifique à la liste des mouvements.
+   ============================================================ */
+
+
+/* ----------------------------------------------------------
+   1. CONTENEUR DE PAGE
+   ---------------------------------------------------------- */
+
+.stock-mouvements-page {
+    /* Conteneur principal */
+}
+
+
+/* ----------------------------------------------------------
+   2. EN-TÊTE
+   ---------------------------------------------------------- */
+
+.stock-mouvements-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    flex-wrap: wrap;
+}
+
+.stock-mouvements-header__content {
+    flex: 1;
+    min-width: 0;
+}
+
+.stock-mouvements-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.stock-mouvements-breadcrumb a {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.stock-mouvements-breadcrumb a:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+}
+
+.stock-mouvements-breadcrumb__separator {
+    color: var(--color-text-muted);
+    opacity: 0.6;
+}
+
+.stock-mouvements-title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.stock-mouvements-title-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--border-radius);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.stock-mouvements-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+    line-height: 1.2;
+}
+
+.stock-mouvements-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+.stock-mouvements-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+
+/* ----------------------------------------------------------
+   3. BOUTONS
+   ---------------------------------------------------------- */
+
+.stock-mouvements-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: 10px 18px;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    border: 2px solid transparent;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+}
+
+.stock-mouvements-button--primary {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    border-color: var(--color-primary);
+}
+
+.stock-mouvements-button--primary:hover {
+    background: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.stock-mouvements-button--secondary {
+    background: transparent;
+    color: var(--color-text-secondary);
+    border-color: var(--border-color);
+}
+
+.stock-mouvements-button--secondary:hover {
+    background: var(--color-bg-light);
+    border-color: var(--color-text-muted);
+    color: var(--color-text-primary);
+}
+
+
+/* ----------------------------------------------------------
+   4. ALERTES
+   ---------------------------------------------------------- */
+
+.stock-mouvements-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-lg);
+    border-left: 4px solid transparent;
+}
+
+.stock-mouvements-alert--success {
+    background: var(--color-success-light);
+    border-left-color: var(--color-success);
+}
+
+.stock-mouvements-alert--danger {
+    background: var(--color-error-light);
+    border-left-color: var(--color-error);
+}
+
+.stock-mouvements-alert__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.stock-mouvements-alert--success .stock-mouvements-alert__icon {
+    color: var(--color-success);
+}
+
+.stock-mouvements-alert--danger .stock-mouvements-alert__icon {
+    color: var(--color-error);
+}
+
+.stock-mouvements-alert__content strong {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: 4px;
+}
+
+.stock-mouvements-alert--success .stock-mouvements-alert__content strong,
+.stock-mouvements-alert--success .stock-mouvements-alert__content p {
+    color: #065F46;
+}
+
+.stock-mouvements-alert--danger .stock-mouvements-alert__content strong,
+.stock-mouvements-alert--danger .stock-mouvements-alert__content p {
+    color: #B91C1C;
+}
+
+.stock-mouvements-alert__content p {
+    font-size: var(--font-size-sm);
+    line-height: 1.5;
+}
+
+
+/* ----------------------------------------------------------
+   5. STATISTIQUES (4 KPI)
+   ---------------------------------------------------------- */
+
+.stock-mouvements-statistics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.stock-mouvements-stat-card {
+    background: var(--color-bg-white);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+}
+
+.stock-mouvements-stat-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.stock-mouvements-stat-card__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.stock-mouvements-stat-card--entry .stock-mouvements-stat-card__icon {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+.stock-mouvements-stat-card--exit .stock-mouvements-stat-card__icon {
+    background: var(--color-error-light);
+    color: #B91C1C;
+}
+
+.stock-mouvements-stat-card--adjustment .stock-mouvements-stat-card__icon {
+    background: var(--color-warning-light);
+    color: #92400E;
+}
+
+.stock-mouvements-stat-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.stock-mouvements-stat-card__content span {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.stock-mouvements-stat-card__content strong {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    line-height: 1.1;
+}
+
+.stock-mouvements-stat-card__content small {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-top: 2px;
+}
+
+
+/* ----------------------------------------------------------
+   6. CARTES GÉNÉRIQUES
+   ---------------------------------------------------------- */
+
+.stock-mouvements-card {
+    background: var(--color-bg-white);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-xl);
+    overflow: hidden;
+}
+
+.stock-mouvements-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color-light);
+    background: var(--color-bg-light);
+    flex-wrap: wrap;
+}
+
+.stock-mouvements-card__header h2 {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+}
+
+.stock-mouvements-card__header p {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.stock-mouvements-card__header-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.stock-mouvements-card__body {
+    padding: var(--spacing-lg);
+}
+
+.stock-mouvements-results-count {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+}
+
+
+/* ----------------------------------------------------------
+   7. FILTRES
+   ---------------------------------------------------------- */
+
+.stock-mouvements-filter-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.stock-mouvements-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.stock-mouvements-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.stock-mouvements-form-group label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.stock-mouvements-form-group input,
+.stock-mouvements-form-group select {
+    width: 100%;
+    padding: 9px 12px;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background: var(--color-bg-white);
+    color: var(--color-text-primary);
+    transition: all var(--transition-base);
+}
+
+.stock-mouvements-form-group input:focus,
+.stock-mouvements-form-group select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 91, 156, 0.1);
+}
+
+.stock-mouvements-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.stock-mouvements-input-wrapper i {
+    position: absolute;
+    left: 12px;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    pointer-events: none;
+}
+
+.stock-mouvements-input-wrapper input {
+    padding-left: 38px;
+}
+
+.stock-mouvements-filter-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    justify-content: flex-end;
+}
+
+
+/* ----------------------------------------------------------
+   8. TABLEAU
+   ---------------------------------------------------------- */
+
+.stock-mouvements-table-wrapper {
+    overflow-x: auto;
+}
+
+.stock-mouvements-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stock-mouvements-table thead {
+    background: var(--color-bg-light);
+}
+
+.stock-mouvements-table thead th {
+    padding: 12px 16px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-color-light);
+    white-space: nowrap;
+}
+
+.stock-mouvements-table thead th.text-right {
+    text-align: right;
+}
+
+.stock-mouvements-table tbody td {
+    padding: 14px 16px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--border-color-light);
+    vertical-align: middle;
+}
+
+.stock-mouvements-table tbody td.text-right {
+    text-align: right;
+}
+
+.stock-mouvements-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.stock-mouvements-table tbody tr:hover {
+    background: var(--color-bg-light);
+}
+
+
+/* ----------------------------------------------------------
+   9. CELLULE DATE
+   ---------------------------------------------------------- */
+
+.stock-mouvements-date {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stock-mouvements-date strong {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+}
+
+.stock-mouvements-date small {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+
+/* ----------------------------------------------------------
+   10. CELLULE RÉFÉRENCE
+   ---------------------------------------------------------- */
+
+.stock-mouvements-reference {
+    font-family: 'Courier New', monospace;
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    background: var(--color-primary-lighter);
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    font-weight: var(--font-weight-semibold);
+}
+
+
+/* ----------------------------------------------------------
+   11. CELLULE ARTICLE
+   ---------------------------------------------------------- */
+
+.stock-mouvements-article {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.stock-mouvements-article__icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+}
+
+.stock-mouvements-article__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.stock-mouvements-article__content strong {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.stock-mouvements-article__content small {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-family: 'Courier New', monospace;
+}
+
+
+/* ----------------------------------------------------------
+   12. BADGES DE TYPE
+   ---------------------------------------------------------- */
+
+.stock-mouvements-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: var(--border-radius-full);
+    font-size: 11px;
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+}
+
+.stock-mouvements-badge i {
+    font-size: 10px;
+}
+
+.stock-mouvements-badge--entry {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+.stock-mouvements-badge--exit {
+    background: var(--color-error-light);
+    color: #B91C1C;
+}
+
+.stock-mouvements-badge--adjustment {
+    background: var(--color-warning-light);
+    color: #92400E;
+}
+
+.stock-mouvements-badge--neutral {
+    background: #F1F5F9;
+    color: #475569;
+}
+
+
+/* ----------------------------------------------------------
+   13. QUANTITÉ
+   ---------------------------------------------------------- */
+
+.stock-mouvements-quantity {
+    font-family: 'Courier New', monospace;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    white-space: nowrap;
+}
+
+.stock-mouvements-quantity--positive {
+    color: var(--color-success);
+}
+
+.stock-mouvements-quantity--negative {
+    color: var(--color-error);
+}
+
+
+/* ----------------------------------------------------------
+   14. CELLULE UTILISATEUR
+   ---------------------------------------------------------- */
+
+.stock-mouvements-user {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.stock-mouvements-user__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: var(--font-weight-bold);
+    flex-shrink: 0;
+    text-transform: uppercase;
+}
+
+.stock-mouvements-user__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.stock-mouvements-user__content strong {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stock-mouvements-user__content small {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stock-mouvements-muted {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+
+/* ----------------------------------------------------------
+   15. ACTIONS DE LIGNE
+   ---------------------------------------------------------- */
+
+.stock-mouvements-table-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-color-light);
+    background: var(--color-bg-white);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+}
+
+.stock-mouvements-table-action:hover {
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+
+/* ----------------------------------------------------------
+   16. ÉTAT VIDE
+   ---------------------------------------------------------- */
+
+.stock-mouvements-empty {
+    padding: var(--spacing-3xl) var(--spacing-xl);
+    text-align: center;
+}
+
+.stock-mouvements-empty__icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-lg);
+    border-radius: 50%;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.stock-mouvements-empty h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.stock-mouvements-empty p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    max-width: 500px;
+    margin: 0 auto var(--spacing-lg);
+    line-height: 1.6;
+}
+
+
+/* ----------------------------------------------------------
+   17. PAGINATION
+   ---------------------------------------------------------- */
+
+.stock-mouvements-pagination {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-color-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* ----------------------------------------------------------
+   18. CARTE INFORMATION (bas de page)
+   ---------------------------------------------------------- */
+
+.stock-mouvements-information {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    background: var(--color-info-light);
+    border-left: 4px solid var(--color-info);
+    border-radius: var(--border-radius-sm);
+    margin-top: var(--spacing-lg);
+}
+
+.stock-mouvements-information__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    color: var(--color-info);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.stock-mouvements-information__content strong {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: #1E40AF;
+    margin-bottom: 4px;
+}
+
+.stock-mouvements-information__content p {
+    font-size: var(--font-size-sm);
+    color: #1E3A8A;
+    line-height: 1.6;
+}
+
+
+/* ----------------------------------------------------------
+   19. RESPONSIVE
+   ---------------------------------------------------------- */
+
+@media (max-width: 992px) {
+    .stock-mouvements-filter-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .stock-mouvements-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .stock-mouvements-header__actions {
+        justify-content: flex-end;
+    }
+
+    .stock-mouvements-title-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stock-mouvements-statistics {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-mouvements-filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-mouvements-filter-actions {
+        justify-content: stretch;
+    }
+
+    .stock-mouvements-filter-actions .stock-mouvements-button {
+        flex: 1;
+    }
+
+    .stock-mouvements-table thead th,
+    .stock-mouvements-table tbody td {
+        padding: 10px 12px;
+    }
+
+    .stock-mouvements-information {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 576px) {
+    .stock-mouvements-user__content {
+        max-width: 100px;
+    }
+
+    .stock-mouvements-user__content small {
+        display: none;
+    }
+}

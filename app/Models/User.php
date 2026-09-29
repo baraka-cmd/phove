@@ -336,6 +336,18 @@ class User extends Authenticatable
     }
 
     /**
+ * Scope : utilisateurs actifs uniquement.
+ *
+ * À utiliser partout où on liste des utilisateurs dans
+ * les formulaires métier (bons de sortie, inventaires,
+ * réservations, etc.).
+ */
+public function scopeActifs(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+{
+    return $query->where('statut', 'actif');
+}
+
+    /**
      * Vérifie si l'utilisateur peut valider les salaires.
      *
      * @return bool

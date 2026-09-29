@@ -1,10 +1,14 @@
 @extends('layouts.admin')
 
-@section('title', 'Gestion des membres')
+@section('title', 'Gestion des membres | PHOVE')
 
 @section('page_title', 'Membres')
 @section('page_icon', 'users')
 @section('page_subtitle', 'Gérez l\'ensemble des membres de l\'organisation : adhérents, fondateurs, sympathisants.')
+
+@php
+    $breadcrumb = ['Membres' => null];
+@endphp
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/admin-membres.css') }}">
@@ -65,7 +69,6 @@
         <div class="membres-filtres">
             <select name="categorie" class="membres-filtre-select">
                 <option value="">Toutes les catégories</option>
-                <option value="initiateur" {{ request('categorie') === 'initiateur' ? 'selected' : '' }}>Initiateur</option>
                 <option value="fondateur" {{ request('categorie') === 'fondateur' ? 'selected' : '' }}>Fondateur</option>
                 <option value="adherent" {{ request('categorie') === 'adherent' ? 'selected' : '' }}>Adhérent</option>
                 <option value="honneur" {{ request('categorie') === 'honneur' ? 'selected' : '' }}>Honneur</option>

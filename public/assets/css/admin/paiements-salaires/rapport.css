@@ -1,0 +1,2107 @@
+/* ============================================================
+   PHOVE — ADMINISTRATION
+   MODULE : PAIEMENTS DES SALAIRES
+   VUE    : RAPPORT DES PAIEMENTS
+   FICHIER: rapport.css
+
+   Blade associé :
+   resources/views/admin/paiements-salaires/rapport.blade.php
+
+   OBJECTIFS :
+   - Rapport financier professionnel
+   - Interface administrative compacte
+   - Filtres clairs
+   - Statistiques lisibles
+   - Répartition des modes de paiement
+   - Tableau détaillé
+   - Impression A4
+   - Responsive
+   - Accessibilité
+   - Aucun Bootstrap
+   - Aucun style inline
+   ============================================================ */
+
+
+/* ============================================================
+   1. VARIABLES
+   ============================================================ */
+
+.salary-payment-report {
+    --report-primary: var(--primary-color, #1d4ed8);
+    --report-primary-dark: var(--primary-dark, #1e40af);
+
+    --report-success: var(--success-color, #15803d);
+    --report-warning: var(--warning-color, #b45309);
+    --report-danger: var(--danger-color, #b91c1c);
+
+    --report-bg: #f1f5f9;
+    --report-surface: #ffffff;
+
+    --report-text: #1f2937;
+    --report-muted: #64748b;
+
+    --report-border: #dbe1e8;
+    --report-border-dark: #cbd5e1;
+
+    --report-radius: 9px;
+    --report-radius-sm: 6px;
+
+    --report-shadow:
+        0 5px 18px rgba(15, 23, 42, 0.06);
+
+    --report-transition: 0.2s ease;
+}
+
+
+/* ============================================================
+   2. RESET LOCAL
+   ============================================================ */
+
+.salary-payment-report *,
+.salary-payment-report *::before,
+.salary-payment-report *::after {
+    box-sizing: border-box;
+}
+
+.salary-payment-report {
+    width: 100%;
+    min-width: 0;
+
+    min-height: 100vh;
+
+    padding: 24px;
+
+    background: var(--report-bg);
+
+    color: var(--report-text);
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+}
+
+.salary-payment-report button,
+.salary-payment-report input,
+.salary-payment-report select,
+.salary-payment-report textarea {
+    font-family: inherit;
+}
+
+
+/* ============================================================
+   3. EN-TÊTE DE PAGE
+   ============================================================ */
+
+.salary-payment-report .report-page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+}
+
+.salary-payment-report .report-title-area {
+    min-width: 0;
+}
+
+.salary-payment-report .report-title {
+    margin: 0 0 5px;
+
+    color: var(--report-text);
+
+    font-size: 1.3rem;
+
+    font-weight: 850;
+
+    line-height: 1.25;
+}
+
+.salary-payment-report .report-subtitle {
+    max-width: 750px;
+
+    margin: 0;
+
+    color: var(--report-muted);
+
+    font-size: 0.68rem;
+
+    line-height: 1.5;
+}
+
+.salary-payment-report .report-actions {
+    display: flex;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    flex: 0 0 auto;
+}
+
+
+/* ============================================================
+   4. BOUTONS
+   ============================================================ */
+
+.salary-payment-report .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 37px;
+
+    padding: 8px 13px;
+
+    border: 1px solid transparent;
+
+    border-radius: var(--report-radius-sm);
+
+    outline: none;
+
+    cursor: pointer;
+
+    font-size: 0.68rem;
+
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    transition:
+        background-color var(--report-transition),
+        border-color var(--report-transition),
+        color var(--report-transition),
+        box-shadow var(--report-transition),
+        transform var(--report-transition);
+}
+
+.salary-payment-report .btn:hover {
+    transform: translateY(-1px);
+}
+
+.salary-payment-report .btn:active {
+    transform: translateY(0);
+}
+
+.salary-payment-report .btn-primary {
+    background: var(--report-primary);
+
+    border-color: var(--report-primary);
+
+    color: #ffffff;
+}
+
+.salary-payment-report .btn-primary:hover {
+    background: var(--report-primary-dark);
+
+    border-color: var(--report-primary-dark);
+}
+
+.salary-payment-report .btn-outline {
+    background: #ffffff;
+
+    border-color: var(--report-border-dark);
+
+    color: var(--report-text);
+}
+
+.salary-payment-report .btn-outline:hover {
+    background: #eff6ff;
+
+    border-color: var(--report-primary);
+
+    color: var(--report-primary);
+}
+
+.salary-payment-report .btn-success {
+    background: var(--report-success);
+
+    border-color: var(--report-success);
+
+    color: #ffffff;
+}
+
+.salary-payment-report .btn-secondary {
+    background: #64748b;
+
+    border-color: #64748b;
+
+    color: #ffffff;
+}
+
+.salary-payment-report .btn-danger {
+    background: var(--report-danger);
+
+    border-color: var(--report-danger);
+
+    color: #ffffff;
+}
+
+
+/* ============================================================
+   5. ALERTES
+   ============================================================ */
+
+.salary-payment-report .alert {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 9px;
+
+    padding: 11px 13px;
+
+    margin-bottom: 15px;
+
+    border: 1px solid transparent;
+
+    border-radius: var(--report-radius-sm);
+
+    font-size: 0.63rem;
+
+    line-height: 1.5;
+}
+
+.salary-payment-report .alert i {
+    flex: 0 0 auto;
+
+    margin-top: 2px;
+}
+
+.salary-payment-report .alert-success {
+    border-color: #bbf7d0;
+
+    background: #f0fdf4;
+
+    color: #166534;
+}
+
+.salary-payment-report .alert-warning {
+    border-color: #fde68a;
+
+    background: #fffbeb;
+
+    color: #92400e;
+}
+
+.salary-payment-report .alert-danger {
+    border-color: #fecaca;
+
+    background: #fef2f2;
+
+    color: #991b1b;
+}
+
+.salary-payment-report .alert-info {
+    border-color: #bfdbfe;
+
+    background: #eff6ff;
+
+    color: #1e40af;
+}
+
+
+/* ============================================================
+   6. EN-TÊTE OFFICIEL DU RAPPORT
+   ============================================================ */
+
+.salary-payment-report .report-document-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 25px;
+
+    padding: 18px 20px;
+
+    margin-bottom: 18px;
+
+    border: 1px solid var(--report-border);
+
+    border-radius: var(--report-radius);
+
+    background: var(--report-surface);
+
+    box-shadow: var(--report-shadow);
+}
+
+.salary-payment-report .organization-block {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    min-width: 0;
+}
+
+.salary-payment-report .organization-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 55px;
+
+    width: 55px;
+    height: 55px;
+
+    overflow: hidden;
+
+    border: 1px solid var(--report-border);
+
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+    color: var(--report-primary);
+
+    font-size: 0.58rem;
+
+    font-weight: 800;
+
+    text-align: center;
+}
+
+.salary-payment-report .organization-logo img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+.salary-payment-report .organization-name {
+    margin: 0 0 4px;
+
+    color: var(--report-text);
+
+    font-size: 0.92rem;
+
+    font-weight: 850;
+
+    line-height: 1.25;
+
+    text-transform: uppercase;
+}
+
+.salary-payment-report .organization-meta {
+    margin: 2px 0;
+
+    color: var(--report-muted);
+
+    font-size: 0.57rem;
+
+    line-height: 1.4;
+}
+
+.salary-payment-report .report-document-info {
+    flex: 0 0 auto;
+
+    text-align: right;
+}
+
+.salary-payment-report .report-document-label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--report-muted);
+
+    font-size: 0.52rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+}
+
+.salary-payment-report .report-document-name {
+    margin: 0;
+
+    color: var(--report-primary);
+
+    font-size: 1rem;
+
+    font-weight: 900;
+
+    letter-spacing: 0.02em;
+
+    text-transform: uppercase;
+}
+
+.salary-payment-report .report-generated-date {
+    margin-top: 4px;
+
+    color: var(--report-muted);
+
+    font-size: 0.54rem;
+}
+
+
+/* ============================================================
+   7. CARTE GÉNÉRALE
+   ============================================================ */
+
+.salary-payment-report .report-card {
+    margin-bottom: 18px;
+
+    border: 1px solid var(--report-border);
+
+    border-radius: var(--report-radius);
+
+    background: var(--report-surface);
+
+    box-shadow: var(--report-shadow);
+
+    overflow: hidden;
+}
+
+.salary-payment-report .report-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    min-height: 49px;
+
+    padding: 10px 15px;
+
+    border-bottom: 1px solid var(--report-border);
+
+    background: #fafbfc;
+}
+
+.salary-payment-report .report-card-title {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0;
+
+    color: var(--report-text);
+
+    font-size: 0.69rem;
+
+    font-weight: 800;
+}
+
+.salary-payment-report .report-card-title i {
+    color: var(--report-primary);
+}
+
+.salary-payment-report .report-card-body {
+    padding: 15px;
+}
+
+
+/* ============================================================
+   8. FILTRES
+   ============================================================ */
+
+.salary-payment-report .filters-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 12px;
+}
+
+.salary-payment-report .filter-field {
+    min-width: 0;
+}
+
+.salary-payment-report .filter-field.search-field {
+    grid-column: span 2;
+}
+
+.salary-payment-report .filter-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--report-text);
+
+    font-size: 0.57rem;
+
+    font-weight: 750;
+}
+
+.salary-payment-report .filter-control {
+    width: 100%;
+
+    min-height: 38px;
+
+    padding: 8px 10px;
+
+    border: 1px solid var(--report-border-dark);
+
+    border-radius: var(--report-radius-sm);
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: var(--report-text);
+
+    font-size: 0.63rem;
+
+    transition:
+        border-color var(--report-transition),
+        box-shadow var(--report-transition);
+}
+
+.salary-payment-report .filter-control:hover {
+    border-color: #94a3b8;
+}
+
+.salary-payment-report .filter-control:focus {
+    border-color: var(--report-primary);
+
+    box-shadow:
+        0 0 0 3px rgba(29, 78, 216, 0.1);
+}
+
+.salary-payment-report textarea.filter-control {
+    min-height: 80px;
+
+    resize: vertical;
+}
+
+.salary-payment-report .filter-actions {
+    display: flex;
+    align-items: flex-end;
+
+    gap: 8px;
+}
+
+.salary-payment-report .filter-actions .btn {
+    min-height: 38px;
+}
+
+
+/* ============================================================
+   9. FILTRES ACTIFS
+   ============================================================ */
+
+.salary-payment-report .active-filters {
+    display: flex;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    padding: 10px 15px;
+
+    border-top: 1px solid var(--report-border);
+
+    background: #f8fafc;
+}
+
+.salary-payment-report .active-filters-label {
+    color: var(--report-muted);
+
+    font-size: 0.55rem;
+
+    font-weight: 700;
+
+    margin-right: 3px;
+}
+
+.salary-payment-report .filter-chip {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    min-height: 25px;
+
+    padding: 4px 8px;
+
+    border: 1px solid #bfdbfe;
+
+    border-radius: 999px;
+
+    background: #eff6ff;
+
+    color: var(--report-primary);
+
+    font-size: 0.52rem;
+
+    font-weight: 700;
+}
+
+.salary-payment-report .filter-chip strong {
+    font-weight: 850;
+}
+
+
+/* ============================================================
+   10. STATISTIQUES
+   ============================================================ */
+
+.salary-payment-report .report-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 13px;
+
+    margin-bottom: 18px;
+}
+
+.salary-payment-report .stat-card {
+    position: relative;
+
+    min-width: 0;
+
+    padding: 15px;
+
+    border: 1px solid var(--report-border);
+
+    border-radius: var(--report-radius);
+
+    background: var(--report-surface);
+
+    box-shadow: var(--report-shadow);
+
+    overflow: hidden;
+}
+
+.salary-payment-report .stat-card::before {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 3px;
+
+    background: var(--report-primary);
+
+    content: "";
+}
+
+.salary-payment-report .stat-card.success::before {
+    background: var(--report-success);
+}
+
+.salary-payment-report .stat-card.warning::before {
+    background: var(--report-warning);
+}
+
+.salary-payment-report .stat-card.danger::before {
+    background: var(--report-danger);
+}
+
+.salary-payment-report .stat-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 10px;
+}
+
+.salary-payment-report .stat-label {
+    color: var(--report-muted);
+
+    font-size: 0.55rem;
+
+    font-weight: 750;
+
+    text-transform: uppercase;
+}
+
+.salary-payment-report .stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 31px;
+    height: 31px;
+
+    border-radius: 8px;
+
+    background: #eff6ff;
+
+    color: var(--report-primary);
+
+    font-size: 0.68rem;
+}
+
+.salary-payment-report .stat-card.success .stat-icon {
+    background: #f0fdf4;
+
+    color: var(--report-success);
+}
+
+.salary-payment-report .stat-card.warning .stat-icon {
+    background: #fffbeb;
+
+    color: var(--report-warning);
+}
+
+.salary-payment-report .stat-card.danger .stat-icon {
+    background: #fef2f2;
+
+    color: var(--report-danger);
+}
+
+.salary-payment-report .stat-value {
+    display: block;
+
+    color: var(--report-text);
+
+    font-size: 1.12rem;
+
+    font-weight: 850;
+
+    line-height: 1.2;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.salary-payment-report .stat-description {
+    margin: 5px 0 0;
+
+    color: var(--report-muted);
+
+    font-size: 0.53rem;
+
+    line-height: 1.4;
+}
+
+
+/* ============================================================
+   11. RÉPARTITION PAR MODE
+   ============================================================ */
+
+.salary-payment-report .payment-distribution {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 11px;
+}
+
+.salary-payment-report .distribution-card {
+    padding: 12px;
+
+    border: 1px solid var(--report-border);
+
+    border-radius: var(--report-radius-sm);
+
+    background: #ffffff;
+}
+
+.salary-payment-report .distribution-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 8px;
+}
+
+.salary-payment-report .distribution-name {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    color: var(--report-text);
+
+    font-size: 0.58rem;
+
+    font-weight: 750;
+}
+
+.salary-payment-report .distribution-name i {
+    color: var(--report-primary);
+}
+
+.salary-payment-report .distribution-value {
+    color: var(--report-text);
+
+    font-size: 0.59rem;
+
+    font-weight: 850;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.salary-payment-report .distribution-track {
+    width: 100%;
+
+    height: 6px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #e2e8f0;
+}
+
+.salary-payment-report .distribution-bar {
+    width: 0;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: var(--report-primary);
+
+    transition: width 0.3s ease;
+}
+
+.salary-payment-report .distribution-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 8px;
+
+    margin-top: 6px;
+}
+
+.salary-payment-report .distribution-count {
+    color: var(--report-muted);
+
+    font-size: 0.51rem;
+}
+
+.salary-payment-report .distribution-percent {
+    color: var(--report-primary);
+
+    font-size: 0.51rem;
+
+    font-weight: 800;
+}
+
+
+/* ============================================================
+   12. TABLEAU
+   ============================================================ */
+
+.salary-payment-report .table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+.salary-payment-report .report-table {
+    width: 100%;
+
+    min-width: 900px;
+
+    border-collapse: collapse;
+
+    table-layout: auto;
+}
+
+.salary-payment-report .report-table thead th {
+    padding: 10px 12px;
+
+    border-bottom: 1px solid var(--report-border-dark);
+
+    background: #f8fafc;
+
+    color: #475569;
+
+    font-size: 0.53rem;
+
+    font-weight: 800;
+
+    letter-spacing: 0.02em;
+
+    text-align: left;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+.salary-payment-report .report-table tbody td {
+    padding: 10px 12px;
+
+    border-bottom: 1px solid #edf0f3;
+
+    color: var(--report-text);
+
+    font-size: 0.6rem;
+
+    line-height: 1.4;
+
+    vertical-align: middle;
+}
+
+.salary-payment-report .report-table tbody tr {
+    transition: background-color var(--report-transition);
+}
+
+.salary-payment-report .report-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.salary-payment-report .report-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+
+/* ============================================================
+   13. RÉFÉRENCES
+   ============================================================ */
+
+.salary-payment-report .payment-reference {
+    color: var(--report-primary);
+
+    font-family: "Courier New", monospace;
+
+    font-size: 0.57rem;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+.salary-payment-report .salary-reference {
+    color: #475569;
+
+    font-family: "Courier New", monospace;
+
+    font-size: 0.54rem;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   14. BÉNÉFICIAIRE
+   ============================================================ */
+
+.salary-payment-report .employee-cell {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    min-width: 170px;
+}
+
+.salary-payment-report .employee-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 29px;
+
+    width: 29px;
+    height: 29px;
+
+    border-radius: 50%;
+
+    background: #eff6ff;
+
+    color: var(--report-primary);
+
+    font-size: 0.55rem;
+
+    font-weight: 800;
+}
+
+.salary-payment-report .employee-info {
+    min-width: 0;
+}
+
+.salary-payment-report .employee-name {
+    display: block;
+
+    overflow: hidden;
+
+    color: var(--report-text);
+
+    font-size: 0.59rem;
+
+    font-weight: 750;
+
+    line-height: 1.3;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+.salary-payment-report .employee-meta {
+    display: block;
+
+    overflow: hidden;
+
+    margin-top: 2px;
+
+    color: var(--report-muted);
+
+    font-size: 0.5rem;
+
+    line-height: 1.3;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   15. MONTANT
+   ============================================================ */
+
+.salary-payment-report .amount-cell {
+    color: var(--report-text);
+
+    font-weight: 800;
+
+    text-align: right;
+
+    white-space: nowrap;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.salary-payment-report .currency {
+    margin-left: 2px;
+
+    color: var(--report-muted);
+
+    font-size: 0.49rem;
+
+    font-weight: 700;
+}
+
+
+/* ============================================================
+   16. DATE
+   ============================================================ */
+
+.salary-payment-report .date-cell {
+    white-space: nowrap;
+}
+
+.salary-payment-report .date-main {
+    display: block;
+
+    color: var(--report-text);
+
+    font-size: 0.58rem;
+
+    font-weight: 700;
+}
+
+.salary-payment-report .date-time {
+    display: block;
+
+    margin-top: 2px;
+
+    color: var(--report-muted);
+
+    font-size: 0.49rem;
+}
+
+
+/* ============================================================
+   17. BADGES MODE DE PAIEMENT
+   ============================================================ */
+
+.salary-payment-report .payment-mode {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 4px 8px;
+
+    border: 1px solid #bfdbfe;
+
+    border-radius: 999px;
+
+    background: #eff6ff;
+
+    color: #1d4ed8;
+
+    font-size: 0.5rem;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+.salary-payment-report .payment-mode.especes {
+    border-color: #bbf7d0;
+
+    background: #f0fdf4;
+
+    color: #15803d;
+}
+
+.salary-payment-report .payment-mode.virement {
+    border-color: #bfdbfe;
+
+    background: #eff6ff;
+
+    color: #1d4ed8;
+}
+
+.salary-payment-report .payment-mode.mobile-money {
+    border-color: #ddd6fe;
+
+    background: #f5f3ff;
+
+    color: #7c3aed;
+}
+
+.salary-payment-report .payment-mode.cheque {
+    border-color: #fde68a;
+
+    background: #fffbeb;
+
+    color: #a16207;
+}
+
+
+/* ============================================================
+   18. PAYEUR
+   ============================================================ */
+
+.salary-payment-report .payer-cell {
+    color: #475569;
+
+    font-size: 0.56rem;
+
+    font-weight: 650;
+}
+
+
+/* ============================================================
+   19. ÉTAT DU SALAIRE
+   ============================================================ */
+
+.salary-payment-report .salary-status {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    font-size: 0.5rem;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+.salary-payment-report .salary-status.valide {
+    border: 1px solid #bfdbfe;
+
+    background: #eff6ff;
+
+    color: #1d4ed8;
+}
+
+.salary-payment-report .salary-status.partiellement-paye {
+    border: 1px solid #fde68a;
+
+    background: #fffbeb;
+
+    color: #a16207;
+}
+
+.salary-payment-report .salary-status.paye {
+    border: 1px solid #bbf7d0;
+
+    background: #f0fdf4;
+
+    color: #15803d;
+}
+
+.salary-payment-report .salary-status.annule {
+    border: 1px solid #fecaca;
+
+    background: #fef2f2;
+
+    color: #b91c1c;
+}
+
+
+/* ============================================================
+   20. ACTIONS DU TABLEAU
+   ============================================================ */
+
+.salary-payment-report .table-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+}
+
+.salary-payment-report .table-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 29px;
+    height: 29px;
+
+    border: 1px solid var(--report-border);
+
+    border-radius: 6px;
+
+    background: #ffffff;
+
+    color: var(--report-muted);
+
+    text-decoration: none;
+
+    transition:
+        color var(--report-transition),
+        border-color var(--report-transition),
+        background-color var(--report-transition);
+}
+
+.salary-payment-report .table-action:hover {
+    border-color: var(--report-primary);
+
+    background: #eff6ff;
+
+    color: var(--report-primary);
+}
+
+.salary-payment-report .table-action.danger:hover {
+    border-color: #fecaca;
+
+    background: #fef2f2;
+
+    color: var(--report-danger);
+}
+
+
+/* ============================================================
+   21. RÉSUMÉ DES RÉSULTATS
+   ============================================================ */
+
+.salary-payment-report .result-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 10px 15px;
+
+    border-top: 1px solid var(--report-border);
+
+    background: #fafbfc;
+}
+
+.salary-payment-report .result-count {
+    color: var(--report-muted);
+
+    font-size: 0.55rem;
+}
+
+.salary-payment-report .result-total {
+    color: var(--report-text);
+
+    font-size: 0.61rem;
+
+    font-weight: 800;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.salary-payment-report .result-total strong {
+    color: var(--report-primary);
+}
+
+
+/* ============================================================
+   22. PAGINATION
+   ============================================================ */
+
+.salary-payment-report .pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    padding: 13px 15px;
+
+    border-top: 1px solid var(--report-border);
+
+    background: #ffffff;
+}
+
+.salary-payment-report .pagination {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+}
+
+.salary-payment-report .pagination a,
+.salary-payment-report .pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 29px;
+    height: 29px;
+
+    padding: 0 7px;
+
+    border: 1px solid var(--report-border);
+
+    border-radius: 5px;
+
+    background: #ffffff;
+
+    color: var(--report-text);
+
+    font-size: 0.53rem;
+
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+.salary-payment-report .pagination a:hover {
+    border-color: var(--report-primary);
+
+    background: #eff6ff;
+
+    color: var(--report-primary);
+}
+
+.salary-payment-report .pagination .active,
+.salary-payment-report .pagination span[aria-current="page"] {
+    border-color: var(--report-primary);
+
+    background: var(--report-primary);
+
+    color: #ffffff;
+}
+
+.salary-payment-report .pagination .disabled {
+    opacity: 0.45;
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   23. ÉTAT VIDE
+   ============================================================ */
+
+.salary-payment-report .empty-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    min-height: 260px;
+
+    padding: 30px;
+
+    text-align: center;
+}
+
+.salary-payment-report .empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 54px;
+    height: 54px;
+
+    margin-bottom: 13px;
+
+    border-radius: 14px;
+
+    background: #f1f5f9;
+
+    color: #94a3b8;
+
+    font-size: 1rem;
+}
+
+.salary-payment-report .empty-title {
+    margin: 0 0 5px;
+
+    color: var(--report-text);
+
+    font-size: 0.82rem;
+
+    font-weight: 800;
+}
+
+.salary-payment-report .empty-text {
+    max-width: 430px;
+
+    margin: 0;
+
+    color: var(--report-muted);
+
+    font-size: 0.59rem;
+
+    line-height: 1.5;
+}
+
+
+/* ============================================================
+   24. OBSERVATIONS
+   ============================================================ */
+
+.salary-payment-report .observations-box {
+    padding: 14px 15px;
+
+    border-left: 3px solid var(--report-primary);
+
+    border-radius: 0 var(--report-radius-sm) var(--report-radius-sm) 0;
+
+    background: #f8fafc;
+}
+
+.salary-payment-report .observations-title {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin: 0 0 6px;
+
+    color: var(--report-text);
+
+    font-size: 0.63rem;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+.salary-payment-report .observations-title i {
+    color: var(--report-primary);
+}
+
+.salary-payment-report .observations-text {
+    margin: 0;
+
+    color: var(--report-muted);
+
+    font-size: 0.58rem;
+
+    line-height: 1.55;
+
+    text-align: justify;
+}
+
+
+/* ============================================================
+   25. SIGNATURES
+   ============================================================ */
+
+.salary-payment-report .signatures {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 25px;
+
+    padding: 20px 15px;
+
+    margin-top: 5px;
+}
+
+.salary-payment-report .signature-box {
+    min-height: 105px;
+
+    text-align: center;
+}
+
+.salary-payment-report .signature-title {
+    margin: 0 0 48px;
+
+    color: var(--report-muted);
+
+    font-size: 0.54rem;
+
+    font-weight: 750;
+
+    text-transform: uppercase;
+}
+
+.salary-payment-report .signature-line {
+    width: 80%;
+
+    height: 1px;
+
+    margin: 0 auto 6px;
+
+    background: var(--report-text);
+}
+
+.salary-payment-report .signature-name {
+    margin: 0;
+
+    color: var(--report-text);
+
+    font-size: 0.56rem;
+
+    font-weight: 750;
+}
+
+.salary-payment-report .signature-role {
+    margin: 2px 0 0;
+
+    color: var(--report-muted);
+
+    font-size: 0.49rem;
+}
+
+
+/* ============================================================
+   26. PIED DE RAPPORT
+   ============================================================ */
+
+.salary-payment-report .report-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding-top: 14px;
+
+    margin-top: 4px;
+
+    border-top: 1px solid var(--report-border);
+}
+
+.salary-payment-report .footer-text {
+    max-width: 650px;
+
+    margin: 0;
+
+    color: var(--report-muted);
+
+    font-size: 0.49rem;
+
+    line-height: 1.5;
+}
+
+.salary-payment-report .footer-reference {
+    flex: 0 0 auto;
+
+    color: #94a3b8;
+
+    font-family: "Courier New", monospace;
+
+    font-size: 0.47rem;
+
+    text-align: right;
+}
+
+
+/* ============================================================
+   27. BADGE DE TRAÇABILITÉ
+   ============================================================ */
+
+.salary-payment-report .traceability-badge {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 5px 8px;
+
+    border: 1px solid #bbf7d0;
+
+    border-radius: 999px;
+
+    background: #f0fdf4;
+
+    color: #166534;
+
+    font-size: 0.49rem;
+
+    font-weight: 750;
+}
+
+
+/* ============================================================
+   28. UTILITAIRES
+   ============================================================ */
+
+.salary-payment-report .text-primary {
+    color: var(--report-primary) !important;
+}
+
+.salary-payment-report .text-success {
+    color: var(--report-success) !important;
+}
+
+.salary-payment-report .text-warning {
+    color: var(--report-warning) !important;
+}
+
+.salary-payment-report .text-danger {
+    color: var(--report-danger) !important;
+}
+
+.salary-payment-report .text-muted {
+    color: var(--report-muted) !important;
+}
+
+.salary-payment-report .text-right {
+    text-align: right !important;
+}
+
+.salary-payment-report .text-center {
+    text-align: center !important;
+}
+
+.salary-payment-report .font-mono {
+    font-family: "Courier New", monospace;
+}
+
+.salary-payment-report .tabular {
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* ============================================================
+   29. RESPONSIVE — 1200 PX
+   ============================================================ */
+
+@media (max-width: 1200px) {
+
+    .salary-payment-report .filters-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+    .salary-payment-report .filter-field.search-field {
+        grid-column: span 2;
+    }
+
+    .salary-payment-report .report-stats {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .salary-payment-report .payment-distribution {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* ============================================================
+   30. RESPONSIVE — 900 PX
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .salary-payment-report {
+        padding: 16px;
+    }
+
+    .salary-payment-report .report-page-header {
+        flex-direction: column;
+    }
+
+    .salary-payment-report .report-actions {
+        width: 100%;
+    }
+
+    .salary-payment-report .report-actions .btn {
+        flex: 1;
+    }
+
+    .salary-payment-report .report-document-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .salary-payment-report .report-document-info {
+        width: 100%;
+
+        text-align: left;
+    }
+
+    .salary-payment-report .filters-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .salary-payment-report .filter-field.search-field {
+        grid-column: span 2;
+    }
+
+    .salary-payment-report .signatures {
+        gap: 15px;
+    }
+}
+
+
+/* ============================================================
+   31. RESPONSIVE — 680 PX
+   ============================================================ */
+
+@media (max-width: 680px) {
+
+    .salary-payment-report {
+        padding: 10px;
+    }
+
+    .salary-payment-report .report-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .salary-payment-report .payment-distribution {
+        grid-template-columns: 1fr;
+    }
+
+    .salary-payment-report .filters-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .salary-payment-report .filter-field.search-field {
+        grid-column: auto;
+    }
+
+    .salary-payment-report .filter-actions {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+    .salary-payment-report .filter-actions .btn {
+        width: 100%;
+    }
+
+    .salary-payment-report .signatures {
+        grid-template-columns: 1fr;
+    }
+
+    .salary-payment-report .report-footer {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .salary-payment-report .footer-reference {
+        text-align: left;
+    }
+
+    .salary-payment-report .result-summary {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+}
+
+
+/* ============================================================
+   32. RESPONSIVE — 480 PX
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+    .salary-payment-report .report-page-header {
+        margin-bottom: 14px;
+    }
+
+    .salary-payment-report .report-title {
+        font-size: 1.05rem;
+    }
+
+    .salary-payment-report .report-subtitle {
+        font-size: 0.61rem;
+    }
+
+    .salary-payment-report .report-actions {
+        flex-direction: column;
+    }
+
+    .salary-payment-report .report-actions .btn {
+        width: 100%;
+    }
+
+    .salary-payment-report .report-document-header {
+        padding: 14px;
+    }
+
+    .salary-payment-report .organization-logo {
+        flex-basis: 45px;
+
+        width: 45px;
+        height: 45px;
+    }
+
+    .salary-payment-report .organization-name {
+        font-size: 0.8rem;
+    }
+
+    .salary-payment-report .report-card-body {
+        padding: 11px;
+    }
+
+    .salary-payment-report .active-filters {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+}
+
+
+/* ============================================================
+   33. IMPRESSION A4
+   ============================================================ */
+
+@page {
+    size: A4 portrait;
+
+    margin: 10mm;
+}
+
+@media print {
+
+    html,
+    body {
+        width: 210mm;
+
+        min-height: 297mm;
+
+        margin: 0;
+
+        padding: 0;
+
+        background: #ffffff !important;
+    }
+
+    .salary-payment-report {
+        width: 210mm;
+
+        min-height: auto;
+
+        padding: 0;
+
+        margin: 0;
+
+        background: #ffffff !important;
+
+        color: #000000;
+    }
+
+    /*
+     * Éléments d'interface inutiles sur le document imprimé.
+     */
+    .salary-payment-report .report-page-header,
+    .salary-payment-report .filters-card,
+    .salary-payment-report .report-actions,
+    .salary-payment-report .active-filters,
+    .salary-payment-report .pagination-wrapper,
+    .salary-payment-report .table-actions {
+        display: none !important;
+    }
+
+    .salary-payment-report .report-document-header,
+    .salary-payment-report .report-card,
+    .salary-payment-report .stat-card {
+        box-shadow: none;
+
+        border-color: #cbd5e1;
+    }
+
+    .salary-payment-report .report-document-header {
+        margin-bottom: 10px;
+
+        border-radius: 0;
+    }
+
+    .salary-payment-report .report-card {
+        margin-bottom: 10px;
+
+        border-radius: 0;
+    }
+
+    .salary-payment-report .report-card-header {
+        min-height: 35px;
+
+        padding: 7px 10px;
+    }
+
+    .salary-payment-report .report-card-body {
+        padding: 9px;
+    }
+
+    .salary-payment-report .report-stats {
+        gap: 7px;
+
+        margin-bottom: 10px;
+    }
+
+    .salary-payment-report .stat-card {
+        padding: 9px;
+
+        border-radius: 4px;
+    }
+
+    .salary-payment-report .stat-icon {
+        display: none;
+    }
+
+    .salary-payment-report .stat-value {
+        font-size: 0.85rem;
+    }
+
+    .salary-payment-report .payment-distribution {
+        gap: 7px;
+    }
+
+    .salary-payment-report .distribution-card {
+        padding: 8px;
+    }
+
+    .salary-payment-report .report-table {
+        min-width: 0;
+    }
+
+    .salary-payment-report .report-table thead th {
+        padding: 6px 7px;
+
+        font-size: 0.45rem;
+    }
+
+    .salary-payment-report .report-table tbody td {
+        padding: 6px 7px;
+
+        font-size: 0.48rem;
+    }
+
+    .salary-payment-report .employee-cell {
+        min-width: 0;
+    }
+
+    .salary-payment-report .employee-avatar {
+        display: none;
+    }
+
+    .salary-payment-report .employee-name {
+        font-size: 0.48rem;
+    }
+
+    .salary-payment-report .employee-meta {
+        font-size: 0.42rem;
+    }
+
+    .salary-payment-report .payment-mode {
+        padding: 2px 5px;
+
+        font-size: 0.42rem;
+    }
+
+    .salary-payment-report .signatures {
+        break-inside: avoid;
+
+        page-break-inside: avoid;
+    }
+
+    .salary-payment-report .report-card,
+    .salary-payment-report .stat-card,
+    .salary-payment-report .distribution-card,
+    .salary-payment-report .observations-box,
+    .salary-payment-report .signatures {
+        break-inside: avoid;
+
+        page-break-inside: avoid;
+    }
+
+    .salary-payment-report .distribution-bar {
+        print-color-adjust: exact;
+
+        -webkit-print-color-adjust: exact;
+    }
+
+    .salary-payment-report .payment-mode,
+    .salary-payment-report .salary-status,
+    .salary-payment-report .traceability-badge {
+        print-color-adjust: exact;
+
+        -webkit-print-color-adjust: exact;
+    }
+
+    .salary-payment-report .report-footer {
+        margin-top: 10px;
+    }
+
+    .salary-payment-report a {
+        color: inherit;
+
+        text-decoration: none;
+    }
+}
+
+
+/* ============================================================
+   34. ACCESSIBILITÉ
+   ============================================================ */
+
+.salary-payment-report button:focus-visible,
+.salary-payment-report a:focus-visible,
+.salary-payment-report input:focus-visible,
+.salary-payment-report select:focus-visible,
+.salary-payment-report textarea:focus-visible {
+    outline: 3px solid rgba(29, 78, 216, 0.2);
+
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   35. RÉDUCTION DES ANIMATIONS
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .salary-payment-report *,
+    .salary-payment-report *::before,
+    .salary-payment-report *::after {
+        animation: none !important;
+
+        transition: none !important;
+    }
+}

@@ -133,7 +133,13 @@
                             <div class="projet-cell-titre">
                                 <div class="projet-cell-image">
                                     @if($projet->image_principale)
-                                        <img src="{{ asset('storage/' . $projet->image_principale) }}" alt="{{ $projet->titre }}" loading="lazy">
+                                        <img src="{{ route('media.show', ['path' => $projet->image_principale]) }}" 
+                                            alt="{{ $projet->titre }}" 
+                                            loading="lazy"
+                                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                        <div class="projet-cell-image-placeholder" style="display: none;">
+                                            <i class="fas fa-project-diagram"></i>
+                                        </div>
                                     @else
                                         <div class="projet-cell-image-placeholder">
                                             <i class="fas fa-project-diagram"></i>

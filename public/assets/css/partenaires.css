@@ -637,3 +637,399 @@
         font-size: 2.5rem;
     }
 }
+
+
+/* ============================================================
+   PARTENAIRES — LOGO, FALLBACK, PAGINATION
+   ============================================================ */
+
+/* --- Wrapper du logo --- */
+.partenaire-logo-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    background: #FFFFFF;
+    border-radius: 14px;
+    border: 1px solid #E2E8F0;
+    min-height: 220px;
+    position: relative;
+}
+
+/* --- Image du logo --- */
+.partenaire-logo-img {
+    max-width: 160px;
+    max-height: 100px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.partenaire-card:hover .partenaire-logo-img {
+    transform: scale(1.06);
+}
+
+/* --- Fallback (initiales) --- */
+.partenaire-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #E8F0F8, #DBEAFE);
+    color: #1A5B9C;
+    border: 3px solid #FFFFFF;
+    box-shadow: 0 6px 20px rgba(26, 91, 156, 0.15);
+    flex-shrink: 0;
+}
+
+.partenaire-logo > span,
+.partenaire-logo-fallback > span {
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #1A5B9C;
+    line-height: 1;
+}
+
+.partenaire-logo-fallback {
+    display: none;
+}
+
+/* --- Badge type --- */
+.partenaire-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: #1A5B9C;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 50px;
+    box-shadow: 0 3px 10px rgba(26, 91, 156, 0.2);
+    margin-top: auto;
+}
+
+.partenaire-type-badge i {
+    font-size: 11px;
+}
+
+/* --- Nom + sigle --- */
+.partenaire-name-sigle {
+    color: #64748B;
+    font-weight: 600;
+    font-size: 0.85em;
+    margin-left: 4px;
+}
+
+/* --- Liens dans les meta --- */
+.partenaire-meta-item a {
+    color: #1A5B9C;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.partenaire-meta-item a:hover {
+    color: #124270;
+    text-decoration: underline;
+}
+
+/* --- Tags de projets --- */
+.partenaire-projet-tag i {
+    font-size: 9px;
+}
+
+.partenaire-projet-more {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+/* --- Pagination --- */
+.partenaires-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+/* --- État vide --- */
+.partenaires-empty a {
+    color: #1A5B9C;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .partenaire-logo-wrapper {
+        min-height: 180px;
+        padding: 16px;
+    }
+
+    .partenaire-logo-img {
+        max-width: 130px;
+        max-height: 80px;
+    }
+
+    .partenaire-logo {
+        width: 90px;
+        height: 90px;
+    }
+
+    .partenaire-logo > span,
+    .partenaire-logo-fallback > span {
+        font-size: 22px;
+    }
+}
+
+
+/* ============================================================
+   SECTION STATISTIQUES PARTENAIRES
+   ------------------------------------------------------------
+   Affiche 4 cartes KPI en haut de la page /partenaires
+   ============================================================ */
+
+/* ============================================================
+   1. SECTION CONTENEUR
+   ============================================================ */
+
+.partenaires-stats-section {
+    padding: 50px 0;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.partenaires-stats-section .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* ============================================================
+   2. GRILLE
+   ============================================================ */
+
+.partenaires-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+}
+
+/* ============================================================
+   3. CARTE STATISTIQUE
+   ============================================================ */
+
+.partenaire-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 24px 22px;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 14px;
+    transition: transform 0.3s ease,
+                box-shadow 0.3s ease,
+                border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Barre colorée à gauche (accent visuel) */
+.partenaire-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #1A5B9C, #3A7BC8);
+    opacity: 0.9;
+}
+
+.partenaire-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(26, 91, 156, 0.10);
+    border-color: #1A5B9C;
+}
+
+/* ============================================================
+   4. ICÔNE
+   ============================================================ */
+
+.partenaire-stat-icon {
+    width: 56px;
+    height: 56px;
+    min-width: 56px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #E8F0F8, #DBEAFE);
+    color: #1A5B9C;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.partenaire-stat-card:hover .partenaire-stat-icon {
+    transform: scale(1.08) rotate(-3deg);
+    background: linear-gradient(135deg, #1A5B9C, #3A7BC8);
+    color: #FFFFFF;
+}
+
+/* ============================================================
+   5. INFO (NOMBRE + LABEL)
+   ============================================================ */
+
+.partenaire-stat-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.partenaire-stat-number {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1E293B;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    font-variant-numeric: tabular-nums;
+}
+
+.partenaire-stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    line-height: 1.4;
+}
+
+/* ============================================================
+   6. VARIANTES DE COULEUR PAR CARTE (optionnel)
+   ------------------------------------------------------------
+   Si tu veux différencier les 4 cartes par couleur.
+   Applique des classes comme .partenaire-stat-card--blue
+   ============================================================ */
+
+.partenaire-stat-card:nth-child(1) .partenaire-stat-icon {
+    background: linear-gradient(135deg, #E8F0F8, #DBEAFE);
+    color: #1A5B9C;
+}
+
+.partenaire-stat-card:nth-child(2) .partenaire-stat-icon {
+    background: linear-gradient(135deg, #DBEAFE, #BFDBFE);
+    color: #1E40AF;
+}
+
+.partenaire-stat-card:nth-child(3) .partenaire-stat-icon {
+    background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+    color: #92400E;
+}
+
+.partenaire-stat-card:nth-child(4) .partenaire-stat-icon {
+    background: linear-gradient(135deg, #D1FAE5, #A7F3D0);
+    color: #065F46;
+}
+
+/* Barres de couleur assorties */
+.partenaire-stat-card:nth-child(1)::before {
+    background: linear-gradient(180deg, #1A5B9C, #3A7BC8);
+}
+
+.partenaire-stat-card:nth-child(2)::before {
+    background: linear-gradient(180deg, #3B82F6, #60A5FA);
+}
+
+.partenaire-stat-card:nth-child(3)::before {
+    background: linear-gradient(180deg, #F59E0B, #FBBF24);
+}
+
+.partenaire-stat-card:nth-child(4)::before {
+    background: linear-gradient(180deg, #10B981, #34D399);
+}
+
+/* ============================================================
+   7. RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 992px) {
+    .partenaires-stats-section {
+        padding: 40px 0;
+    }
+
+    .partenaires-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .partenaire-stat-card {
+        padding: 20px 18px;
+        gap: 14px;
+    }
+
+    .partenaire-stat-icon {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        font-size: 19px;
+    }
+
+    .partenaire-stat-number {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 576px) {
+    .partenaires-stats-section {
+        padding: 30px 0;
+    }
+
+    .partenaires-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .partenaire-stat-card {
+        padding: 18px 16px;
+    }
+
+    .partenaire-stat-number {
+        font-size: 22px;
+    }
+
+    .partenaire-stat-label {
+        font-size: 10px;
+    }
+}
+
+/* ============================================================
+   8. ACCESSIBILITÉ — Reduced Motion
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    .partenaire-stat-card,
+    .partenaire-stat-icon {
+        transition: none !important;
+    }
+
+    .partenaire-stat-card:hover {
+        transform: none;
+    }
+
+    .partenaire-stat-card:hover .partenaire-stat-icon {
+        transform: none;
+    }
+}

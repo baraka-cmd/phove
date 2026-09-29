@@ -1,6 +1,6 @@
 @extends('layouts.public')
 
-@section('title', 'Nos Partenaires')
+@section('title', 'Nos Partenaires | PHOVE')
 
 @section('meta_description', 'Découvrez les organisations internationales qui soutiennent PHOVE : FAO, WFP, OCHA, UNESCO, GPE et la République Démocratique du Congo.')
 
@@ -32,7 +32,7 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION STATISTIQUES RAPIDES --}}
+    {{-- STATISTIQUES RAPIDES --}}
     {{-- ============================================ --}}
     <section class="partenaires-stats-section">
         <div class="container">
@@ -78,7 +78,7 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION INTRODUCTION --}}
+    {{-- INTRODUCTION + FILTRES --}}
     {{-- ============================================ --}}
     <section class="page-section page-section-white">
         <div class="container">
@@ -86,20 +86,21 @@
                 <span class="section-subtitle">Notre réseau</span>
                 <h2 class="section-title">Ils nous accompagnent</h2>
                 <p class="section-description">
-                    PHOVE collabore avec des organisations internationales et des institutions 
-                    qui partagent notre mission d'assistance aux personnes vulnérables. 
-                    Leur soutien financier, technique et logistique nous permet de mener 
+                    PHOVE collabore avec des organisations internationales et des institutions
+                    qui partagent notre mission d'assistance aux personnes vulnérables.
+                    Leur soutien financier, technique et logistique nous permet de mener
                     à bien nos actions humanitaires.
                 </p>
             </div>
 
             {{-- Filtres par type --}}
             <div class="partenaires-filter">
-                <a href="{{ route('partenaires') }}" class="partenaire-filter-btn {{ !$type ? 'active' : '' }}">
+                <a href="{{ route('partenaires') }}"
+                   class="partenaire-filter-btn {{ !$type ? 'active' : '' }}">
                     <i class="fas fa-th-list"></i> Tous
                 </a>
                 @foreach($types as $value => $label)
-                    <a href="{{ route('partenaires', ['type' => $value]) }}" 
+                    <a href="{{ route('partenaires', ['type' => $value]) }}"
                        class="partenaire-filter-btn {{ $type === $value ? 'active' : '' }}">
                         {{ $label }}
                     </a>
@@ -109,29 +110,54 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION LISTE DES PARTENAIRES --}}
+    {{-- LISTE DES PARTENAIRES --}}
     {{-- ============================================ --}}
     <section class="page-section page-section-light">
         <div class="container">
 
             @if($partenaires->count() > 0)
                 @foreach($partenaires as $partenaire)
+                @php
+                    // ✅ URL du logo via la route custom media.show
+                    $logoUrl = $partenaire->logo
+                        ? route('media.show', ['path' => ltrim($partenaire->logo, '/')])
+                        : null;
+
+                    $sigle = $partenaire->sigleOuInitiales();
+
+                    $typeIcone = match($partenaire->type) {
+                        'international'  => 'globe-africa',
+                        'institutionnel' => 'building',
+                        'bailleur_fonds' => 'coins',
+                        'technique'      => 'tools',
+                        'local'          => 'map-marker-alt',
+                        default          => 'handshake',
+                    };
+                @endphp
                 <div class="partenaire-card">
                     <div class="partenaire-card-grid">
+
                         {{-- Logo / Initiales --}}
                         <div class="partenaire-logo-wrapper">
-                            @if($partenaire->logo)
-                                <img src="{{ asset('storage/' . $partenaire->logo) }}" 
-                                     alt="{{ $partenaire->nom }}" 
+                            @if($logoUrl)
+                                <img src="{{ $logoUrl }}"
+                                     alt="Logo {{ $partenaire->nom }}"
                                      class="partenaire-logo-img"
-                                     loading="lazy">
+                                     loading="lazy"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+
+                                {{-- Fallback si l'image échoue --}}
+                                <div class="partenaire-logo partenaire-logo-fallback" style="display: none;">
+                                    <span>{{ $sigle }}</span>
+                                </div>
                             @else
                                 <div class="partenaire-logo">
-                                    <span>{{ $partenaire->sigleOuInitiales() }}</span>
+                                    <span>{{ $sigle }}</span>
                                 </div>
                             @endif
+
                             <div class="partenaire-type-badge">
-                                <i class="fas fa-{{ $partenaire->type === 'international' ? 'globe-africa' : ($partenaire->type === 'institutionnel' ? 'building' : 'handshake') }}"></i> 
+                                <i class="fas fa-{{ $typeIcone }}"></i>
                                 {{ $partenaire->typeLibelle() }}
                             </div>
                         </div>
@@ -141,12 +167,12 @@
                             <h2 class="partenaire-name">
                                 {{ $partenaire->nom }}
                                 @if($partenaire->sigle)
-                                    <small style="color: #64748B; font-weight: 600;">({{ $partenaire->sigle }})</small>
+                                    <small class="partenaire-name-sigle">({{ $partenaire->sigle }})</small>
                                 @endif
                             </h2>
-                            
+
                             @if($partenaire->description)
-                            <p class="partenaire-description">{{ $partenaire->description }}</p>
+                                <p class="partenaire-description">{{ $partenaire->description }}</p>
                             @endif
 
                             <div class="partenaire-meta">
@@ -156,11 +182,13 @@
                                     <span>Partenaire depuis <strong>{{ $partenaire->date_debut->format('Y') }}</strong></span>
                                 </div>
                                 @endif
-                                
+
                                 @if($partenaire->site_web)
                                 <div class="partenaire-meta-item">
                                     <i class="fas fa-globe"></i>
-                                    <a href="{{ $partenaire->urlSiteWeb() }}" target="_blank" rel="noopener noreferrer" style="color: #1A5B9C;">
+                                    <a href="{{ $partenaire->urlSiteWeb() }}"
+                                       target="_blank"
+                                       rel="noopener noreferrer">
                                         {{ Str::limit($partenaire->site_web, 40) }}
                                     </a>
                                 </div>
@@ -169,7 +197,7 @@
                                 @if($partenaire->email)
                                 <div class="partenaire-meta-item">
                                     <i class="fas fa-envelope"></i>
-                                    <a href="mailto:{{ $partenaire->email }}" style="color: #1A5B9C;">
+                                    <a href="mailto:{{ $partenaire->email }}">
                                         {{ $partenaire->email }}
                                     </a>
                                 </div>
@@ -180,15 +208,16 @@
                             @if($partenaire->projets->count() > 0)
                             <div class="partenaire-projets">
                                 <span class="partenaire-projets-label">
-                                    <i class="fas fa-project-diagram"></i> Projets soutenus ({{ $partenaire->projets->count() }}) :
+                                    <i class="fas fa-project-diagram"></i>
+                                    Projets soutenus ({{ $partenaire->projets->count() }}) :
                                 </span>
                                 <div class="partenaire-projets-tags">
                                     @foreach($partenaire->projets->take(4) as $projet)
                                         <span class="partenaire-projet-tag">
-                                            <i class="fas fa-tag" style="font-size: 9px;"></i> 
+                                            <i class="fas fa-tag"></i>
                                             {{ Str::limit($projet->titre, 40) }}
                                             @if($projet->code_projet)
-                                                <small style="opacity: 0.7;">({{ $projet->code_projet }})</small>
+                                                <small>({{ $projet->code_projet }})</small>
                                             @endif
                                         </span>
                                     @endforeach
@@ -204,6 +233,14 @@
                     </div>
                 </div>
                 @endforeach
+
+                {{-- Pagination --}}
+                @if($partenaires->hasPages())
+                    <div class="partenaires-pagination">
+                        {{ $partenaires->links() }}
+                    </div>
+                @endif
+
             @else
                 <div class="partenaires-empty">
                     <div class="partenaires-empty-icon">
@@ -211,8 +248,8 @@
                     </div>
                     <h3>Aucun partenaire trouvé</h3>
                     <p>
-                        Aucun partenaire ne correspond à ce filtre. 
-                        <a href="{{ route('partenaires') }}" style="color: #1A5B9C;">Voir tous les partenaires</a>.
+                        Aucun partenaire ne correspond à ce filtre.
+                        <a href="{{ route('partenaires') }}">Voir tous les partenaires</a>.
                     </p>
                 </div>
             @endif
@@ -221,7 +258,7 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION TYPES DE PARTENARIAT --}}
+    {{-- TYPES DE PARTENARIAT --}}
     {{-- ============================================ --}}
     <section class="page-section page-section-white">
         <div class="container">
@@ -235,45 +272,37 @@
 
             <div class="partenariat-types-grid">
                 <div class="partenariat-type-card">
-                    <div class="partenariat-type-icon">
-                        <i class="fas fa-coins"></i>
-                    </div>
+                    <div class="partenariat-type-icon"><i class="fas fa-coins"></i></div>
                     <h3 class="partenariat-type-title">Bailleur de fonds</h3>
                     <p class="partenariat-type-text">
-                        Financez un ou plusieurs de nos projets humanitaires. Vous recevrez des rapports 
+                        Financez un ou plusieurs de nos projets humanitaires. Vous recevrez des rapports
                         détaillés sur l'utilisation des fonds et l'impact de votre contribution.
                     </p>
                 </div>
 
                 <div class="partenariat-type-card">
-                    <div class="partenariat-type-icon">
-                        <i class="fas fa-tools"></i>
-                    </div>
+                    <div class="partenariat-type-icon"><i class="fas fa-tools"></i></div>
                     <h3 class="partenariat-type-title">Partenaire technique</h3>
                     <p class="partenariat-type-text">
-                        Apportez votre expertise technique, vos équipements ou votre savoir-faire 
+                        Apportez votre expertise technique, vos équipements ou votre savoir-faire
                         pour renforcer la qualité de nos interventions sur le terrain.
                     </p>
                 </div>
 
                 <div class="partenariat-type-card">
-                    <div class="partenariat-type-icon">
-                        <i class="fas fa-truck"></i>
-                    </div>
+                    <div class="partenariat-type-icon"><i class="fas fa-truck"></i></div>
                     <h3 class="partenariat-type-title">Partenaire logistique</h3>
                     <p class="partenariat-type-text">
-                        Soutenez nos opérations en fournissant du matériel, des véhicules, des 
+                        Soutenez nos opérations en fournissant du matériel, des véhicules, des
                         fournitures ou des locaux pour nos activités.
                     </p>
                 </div>
 
                 <div class="partenariat-type-card">
-                    <div class="partenariat-type-icon">
-                        <i class="fas fa-bullhorn"></i>
-                    </div>
+                    <div class="partenariat-type-icon"><i class="fas fa-bullhorn"></i></div>
                     <h3 class="partenariat-type-title">Partenaire média</h3>
                     <p class="partenariat-type-text">
-                        Aidez-nous à amplifier notre message en relayant nos actions, nos campagnes 
+                        Aidez-nous à amplifier notre message en relayant nos actions, nos campagnes
                         de sensibilisation et nos appels aux dons.
                     </p>
                 </div>
@@ -282,7 +311,7 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- SECTION DEVENIR PARTENAIRE --}}
+    {{-- DEVENIR PARTENAIRE --}}
     {{-- ============================================ --}}
     <section class="devenir-partenaire-section">
         <div class="container">
@@ -291,28 +320,16 @@
                     <span class="section-subtitle">Rejoignez-nous</span>
                     <h2 class="section-title text-left">Devenir partenaire</h2>
                     <p class="content-block-text">
-                        Vous représentez une organisation, une institution ou une entreprise ? 
-                        Vous partagez nos valeurs de compassion et de solidarité ? 
-                        Rejoignez notre réseau de partenaires et contribuez à changer des vies 
+                        Vous représentez une organisation, une institution ou une entreprise ?
+                        Vous partagez nos valeurs de compassion et de solidarité ?
+                        Rejoignez notre réseau de partenaires et contribuez à changer des vies
                         en République Démocratique du Congo.
                     </p>
                     <ul class="check-list">
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Visibilité sur notre plateforme et nos supports de communication</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Rapports détaillés sur l'impact de votre contribution</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Participation aux visites de terrain et aux événements</span>
-                        </li>
-                        <li>
-                            <i class="fas fa-check-circle"></i>
-                            <span>Attestations de partenariat officielles</span>
-                        </li>
+                        <li><i class="fas fa-check-circle"></i> <span>Visibilité sur notre plateforme et nos supports de communication</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span>Rapports détaillés sur l'impact de votre contribution</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span>Participation aux visites de terrain et aux événements</span></li>
+                        <li><i class="fas fa-check-circle"></i> <span>Attestations de partenariat officielles</span></li>
                     </ul>
                     <div class="devenir-partenaire-actions">
                         <a href="{{ url('/contact') }}" class="btn btn-accent btn-lg">
@@ -336,7 +353,7 @@
     </section>
 
     {{-- ============================================ --}}
-    {{-- CTA --}}
+    {{-- CTA FINAL --}}
     {{-- ============================================ --}}
     <section class="cta-section-partenaires">
         <div class="cta-decoration cta-decoration-left"></div>
@@ -348,7 +365,7 @@
                     Construisons <span class="highlight-partenaires">ensemble</span> l'avenir
                 </h2>
                 <p class="cta-text-partenaires">
-                    Chaque partenariat est une pierre apportée à l'édifice de la compassion 
+                    Chaque partenariat est une pierre apportée à l'édifice de la compassion
                     et de la solidarité envers les orphelins, veuves et personnes démunies.
                 </p>
                 <div class="cta-buttons-partenaires">

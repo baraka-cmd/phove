@@ -26,9 +26,17 @@
     <div class="membre-show-header">
         <div class="membre-show-avatar">
             @if($membre->photo)
-                <img src="{{ asset('storage/' . $membre->photo) }}" alt="{{ $membre->nomComplet() }}">
+                <img src="{{ route('media.show', ['path' => $membre->photo]) }}" 
+                    alt="{{ $membre->nomComplet() }}"
+                    loading="lazy"
+                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <span style="display: none;">
+                    {{ Str::upper(Str::substr($membre->nom, 0, 1) . Str::substr($membre->prenom ?? '', 0, 1)) }}
+                </span>
             @else
-                <span>{{ Str::upper(Str::substr($membre->nom, 0, 1) . Str::substr($membre->prenom, 0, 1)) }}</span>
+                <span>
+                    {{ Str::upper(Str::substr($membre->nom, 0, 1) . Str::substr($membre->prenom ?? '', 0, 1)) }}
+                </span>
             @endif
         </div>
         <div class="membre-show-info">

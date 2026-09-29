@@ -73,6 +73,17 @@
                 <input type="hidden" name="group" value="{{ $activeGroup }}">
 
                 @foreach($settings as $setting)
+                    @php
+                        $inputName    = 'setting_' . $setting->key;
+                        $oldValue     = old($inputName, $setting->value);
+                        $hasImage     = !empty($setting->value);
+                        $imageUrl     = $hasImage
+                            ? route('media.show', ['path' => ltrim($setting->value, '/')])
+                            : null;
+                        $switchOn     = (string) $oldValue === '1';
+                        $placeholderSize = $setting->key === 'site_favicon' ? '32×32 px' : '200×60 px';
+                    @endphp
+
                     <div class="settings-field-group">
 
                         {{-- Label et description --}}
@@ -84,86 +95,74 @@
                         @endif
 
                         {{-- ============================================ --}}
-                        {{-- GESTION DES TYPES DE CHAMPS --}}
+                        {{-- TEXT --}}
                         {{-- ============================================ --}}
                         @if($setting->type === 'text')
-                            <input type="text" name="setting_{{ $setting->key }}" 
+                            <input type="text" 
+                                   name="{{ $inputName }}" 
                                    class="settings-input" 
-                                   value="{{ old('setting_' . $setting->key, $setting->value) }}" 
+                                   value="{{ $oldValue }}" 
                                    placeholder="{{ $setting->description }}"
                                    maxlength="255">
 
+                        {{-- ============================================ --}}
+                        {{-- TEXTAREA --}}
+                        {{-- ============================================ --}}
                         @elseif($setting->type === 'textarea')
-                            <textarea name="setting_{{ $setting->key }}" 
+                            <textarea name="{{ $inputName }}" 
                                       class="settings-input settings-textarea" 
                                       rows="6" 
-                                      maxlength="5000">{{ old('setting_' . $setting->key, $setting->value) }}</textarea>
+                                      maxlength="5000">{{ $oldValue }}</textarea>
 
+                        {{-- ============================================ --}}
+                        {{-- IMAGE --}}
+                        {{-- ============================================ --}}
                         @elseif($setting->type === 'image')
                             <div class="settings-image-upload">
                                 <label for="file_{{ $setting->key }}" class="settings-image-preview">
-                                    @if($setting->value)
-                                        <img id="preview_{{ $setting->key }}" 
-                                             src="{{ asset('storage/' . $setting->value) }}" 
-                                             alt="{{ $setting->label }}" 
-                                             style="display: block;"
-                                             loading="lazy">
-                                        <div id="placeholder_{{ $setting->key }}" class="settings-image-placeholder" style="display: none;">
-                                            <i class="fas fa-image"></i>
-                                            <span>{{ $setting->key === 'site_favicon' ? '32×32 px' : '200×60 px' }}</span>
-                                        </div>
-                                    @else
-                                        <img id="preview_{{ $setting->key }}" src="" alt="Aperçu" style="display: none;">
-                                        <div id="placeholder_{{ $setting->key }}" class="settings-image-placeholder">
-                                            <i class="fas fa-image"></i>
-                                            <span>{{ $setting->key === 'site_favicon' ? '32×32 px' : '200×60 px' }}</span>
-                                        </div>
-                                    @endif
+                                    <img id="preview_{{ $setting->key }}" 
+                                         src="{{ $imageUrl ?? '' }}" 
+                                         alt="{{ $setting->label }}" 
+                                         class="{{ $hasImage ? 'is-visible' : 'is-hidden' }}"
+                                         loading="lazy">
+                                    <div id="placeholder_{{ $setting->key }}" 
+                                         class="settings-image-placeholder {{ $hasImage ? 'is-hidden' : 'is-visible' }}">
+                                        <i class="fas fa-image"></i>
+                                        <span>{{ $placeholderSize }}</span>
+                                    </div>
                                 </label>
                                 <div class="settings-image-info">
-                                    <p>
-                                        @if($setting->value)
-                                            <span style="color: var(--color-success);">
+                                    <p class="settings-image-status">
+                                        @if($hasImage)
+                                            <span class="settings-image-status-ok">
                                                 <i class="fas fa-check-circle"></i> Image actuelle
                                             </span>
                                         @else
-                                            Aucune image définie
+                                            <span class="settings-image-status-empty">Aucune image définie</span>
                                         @endif
                                     </p>
-                                    <ul>
+                                    <ul class="settings-image-rules">
                                         <li><i class="fas fa-check-circle"></i> JPG, PNG, WebP, ICO ou SVG</li>
                                         <li><i class="fas fa-check-circle"></i> Taille max : 2 Mo</li>
                                     </ul>
                                     <div class="settings-image-actions">
-                                        <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('file_{{ $setting->key }}').click();">
+                                        <button type="button" 
+                                                class="btn btn-outline btn-sm" 
+                                                onclick="document.getElementById('file_{{ $setting->key }}').click();">
                                             <i class="fas fa-upload"></i> Choisir un fichier
                                         </button>
-                                        @if($setting->value)
-                                            <button type="button" 
-                                                    id="removeBtn_{{ $setting->key }}" 
-                                                    class="btn btn-outline btn-sm btn-remove-image"
-                                                    style="border-color: #EF4444; color: #EF4444;"
-                                                    data-preview="preview_{{ $setting->key }}"
-                                                    data-placeholder="placeholder_{{ $setting->key }}"
-                                                    data-input="file_{{ $setting->key }}"
-                                                    data-remove-flag="remove_{{ $setting->key }}">
-                                                <i class="fas fa-trash-alt"></i> Supprimer
-                                            </button>
-                                        @else
-                                            <button type="button" 
-                                                    id="removeBtn_{{ $setting->key }}" 
-                                                    class="btn btn-outline btn-sm btn-remove-image"
-                                                    style="border-color: #EF4444; color: #EF4444; display: none;"
-                                                    data-preview="preview_{{ $setting->key }}"
-                                                    data-placeholder="placeholder_{{ $setting->key }}"
-                                                    data-input="file_{{ $setting->key }}"
-                                                    data-remove-flag="remove_{{ $setting->key }}">
-                                                <i class="fas fa-trash-alt"></i> Supprimer
-                                            </button>
-                                        @endif
+                                        <button type="button" 
+                                                id="removeBtn_{{ $setting->key }}" 
+                                                class="btn btn-outline btn-sm btn-remove-image {{ $hasImage ? '' : 'is-hidden' }}"
+                                                data-preview="preview_{{ $setting->key }}"
+                                                data-placeholder="placeholder_{{ $setting->key }}"
+                                                data-input="file_{{ $setting->key }}"
+                                                data-remove-flag="remove_{{ $setting->key }}">
+                                            <i class="fas fa-trash-alt"></i> Supprimer
+                                        </button>
                                     </div>
                                     <input type="file" 
-                                           name="setting_{{ $setting->key }}" 
+                                           name="{{ $inputName }}" 
                                            id="file_{{ $setting->key }}" 
                                            class="settings-image-input"
                                            data-preview="preview_{{ $setting->key }}"
@@ -171,59 +170,73 @@
                                            data-remove-btn="removeBtn_{{ $setting->key }}"
                                            data-remove-flag="remove_{{ $setting->key }}"
                                            accept="image/jpeg,image/jpg,image/png,image/webp,image/x-icon,image/vnd.microsoft.icon,image/svg+xml"
-                                           style="display: none;">
+                                           hidden>
                                     <input type="hidden" name="remove_{{ $setting->key }}" id="remove_{{ $setting->key }}" value="0">
                                 </div>
                             </div>
 
+                        {{-- ============================================ --}}
+                        {{-- URL --}}
+                        {{-- ============================================ --}}
                         @elseif($setting->type === 'url')
                             <div class="settings-input-icon">
                                 <i class="fas fa-link"></i>
-                                <input type="url" name="setting_{{ $setting->key }}" 
+                                <input type="url" 
+                                       name="{{ $inputName }}" 
                                        class="settings-input" 
-                                       value="{{ old('setting_' . $setting->key, $setting->value) }}" 
+                                       value="{{ $oldValue }}" 
                                        placeholder="https://"
                                        maxlength="255">
                             </div>
 
+                        {{-- ============================================ --}}
+                        {{-- EMAIL --}}
+                        {{-- ============================================ --}}
                         @elseif($setting->type === 'email')
                             <div class="settings-input-icon">
                                 <i class="fas fa-envelope"></i>
-                                <input type="email" name="setting_{{ $setting->key }}" 
+                                <input type="email" 
+                                       name="{{ $inputName }}" 
                                        class="settings-input" 
-                                       value="{{ old('setting_' . $setting->key, $setting->value) }}" 
+                                       value="{{ $oldValue }}" 
                                        placeholder="phovemonde@gmail.com"
                                        maxlength="255">
                             </div>
 
+                        {{-- ============================================ --}}
+                        {{-- PHONE --}}
+                        {{-- ============================================ --}}
                         @elseif($setting->type === 'phone')
                             <div class="settings-input-icon">
                                 <i class="fas fa-phone"></i>
-                                <input type="text" name="setting_{{ $setting->key }}" 
+                                <input type="text" 
+                                       name="{{ $inputName }}" 
                                        class="settings-input" 
-                                       value="{{ old('setting_' . $setting->key, $setting->value) }}" 
+                                       value="{{ $oldValue }}" 
                                        placeholder="+243 000 000 000"
                                        maxlength="30">
                             </div>
 
+                        {{-- ============================================ --}}
+                        {{-- SWITCH --}}
+                        {{-- ============================================ --}}
                         @elseif($setting->type === 'switch')
-                            <div style="display: flex; align-items: center; gap: 16px;">
+                            <div class="settings-switch-row">
                                 <label class="settings-switch">
                                     <input type="checkbox" 
-                                           name="setting_{{ $setting->key }}" 
+                                           name="{{ $inputName }}" 
                                            value="1" 
-                                           {{ old('setting_' . $setting->key, $setting->value) === '1' ? 'checked' : '' }}
+                                           {{ $switchOn ? 'checked' : '' }}
                                            data-state="state_{{ $setting->key }}">
                                     <div class="settings-switch-track">
                                         <div class="settings-switch-thumb"></div>
                                     </div>
                                 </label>
-                                <span class="settings-switch-state" id="state_{{ $setting->key }}" 
-                                      style="color: {{ old('setting_' . $setting->key, $setting->value) === '1' ? '#10B981' : '#64748B' }};">
-                                    {{ old('setting_' . $setting->key, $setting->value) === '1' ? 'Activé' : 'Désactivé' }}
+                                <span class="settings-switch-state {{ $switchOn ? 'is-on' : 'is-off' }}" 
+                                      id="state_{{ $setting->key }}">
+                                    {{ $switchOn ? 'Activé' : 'Désactivé' }}
                                 </span>
                             </div>
-
                         @endif
 
                     </div>
@@ -236,11 +249,6 @@
                         <strong>Conseil :</strong> Les modifications sont appliquées immédiatement après l'enregistrement. 
                         Utilisez <strong>Ctrl+S</strong> pour sauvegarder rapidement.
                     </div>
-                </div>
-
-                {{-- Bouton caché dans le footer de la carte --}}
-                <div style="display: none;">
-                    <button type="submit" id="hiddenSubmit"></button>
                 </div>
             </form>
         </div>

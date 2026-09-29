@@ -20,7 +20,6 @@ class Partenaire extends Model
      */
     protected $fillable = [
         'nom',
-        'sigle',
         'type',
         'email',
         'telephone',
@@ -42,7 +41,7 @@ class Partenaire extends Model
     {
         return [
             'date_debut' => 'date',
-            'date_fin' => 'date',
+            'date_fin'   => 'date',
         ];
     }
 
@@ -70,35 +69,16 @@ class Partenaire extends Model
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * Scope : uniquement les partenaires actifs.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function scopeActif($query)
     {
         return $query->where('statut', 'actif');
     }
 
-    /**
-     * Scope : filtrer par type.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $type
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function scopeType($query, string $type)
     {
         return $query->where('type', $type);
     }
 
-    /**
-     * Scope : partenaires internationaux.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
     public function scopeInternationaux($query)
     {
         return $query->where('type', 'international');
@@ -112,8 +92,6 @@ class Partenaire extends Model
 
     /**
      * Vérifie si le partenaire est actif.
-     *
-     * @return bool
      */
     public function estActif(): bool
     {
@@ -122,47 +100,61 @@ class Partenaire extends Model
 
     /**
      * Récupère le nom du type de partenaire en français.
-     *
-     * @return string
      */
     public function typeLibelle(): string
     {
         return match($this->type) {
             'bailleur_fonds' => 'Bailleur de fonds',
-            'technique' => 'Partenaire technique',
-            'local' => 'Partenaire local',
-            'international' => 'Partenaire international',
+            'technique'      => 'Partenaire technique',
+            'local'          => 'Partenaire local',
+            'international'  => 'Partenaire international',
             'institutionnel' => 'Partenaire institutionnel',
-            default => $this->type ?? 'Non défini',
+            default          => $this->type ?? 'Non défini',
         };
     }
 
     /**
-     * Retourne le sigle du partenaire ou les initiales si non défini.
+     * Retourne les initiales du partenaire calculées à partir du nom.
      *
-     * @return string
+     * ⚠️ La colonne "sigle" n'existe pas en BDD — on utilise les initiales.
+     *
+     * Exemples :
+     *   "Food and Agriculture Organization" → "FAO"
+     *   "World Food Programme"              → "WFP"
+     *   "Office for the Coordination..."    → "OC"
      */
     public function sigleOuInitiales(): string
     {
-        if ($this->sigle) {
-            return strtoupper($this->sigle);
+        if (empty($this->nom)) {
+            return '?';
         }
 
-        // Générer les initiales à partir du nom
-        $mots = explode(' ', $this->nom);
+        // Mots ignorés (articles, prépositions) pour un acronyme propre
+        $ignorer = ['de', 'du', 'des', 'la', 'le', 'les', 'et', 'for', 'of', 'the', 'and', 'a', 'an', 'in', 'on'];
+
+        $mots = preg_split('/[\s\-]+/u', trim($this->nom));
         $initiales = '';
+
         foreach ($mots as $mot) {
-            if (strlen($mot) > 2) {
-                $initiales .= strtoupper(substr($mot, 0, 1));
+            if ($mot === '') {
+                continue;
             }
+            if (in_array(mb_strtolower($mot), $ignorer, true)) {
+                continue;
+            }
+            $initiales .= mb_strtoupper(mb_substr($mot, 0, 1));
         }
-        return $initiales ?: strtoupper(substr($this->nom, 0, 2));
+
+        // Fallback : si rien trouvé, on prend les 2 premières lettres du nom
+        if ($initiales === '') {
+            $initiales = mb_strtoupper(mb_substr($this->nom, 0, 2));
+        }
+
+        return $initiales;
     }
 
     /**
      * Retourne l'URL du site web avec https:// si non défini.
-     *
-     * @return string|null
      */
     public function urlSiteWeb(): ?string
     {
@@ -170,7 +162,8 @@ class Partenaire extends Model
             return null;
         }
 
-        if (str_starts_with($this->site_web, 'http://') || str_starts_with($this->site_web, 'https://')) {
+        if (str_starts_with($this->site_web, 'http://') 
+            || str_starts_with($this->site_web, 'https://')) {
             return $this->site_web;
         }
 
@@ -178,22 +171,23 @@ class Partenaire extends Model
     }
 
     /**
-     * Retourne l'URL du logo ou null si non défini.
+     * Retourne l'URL du logo via la route custom "media.show".
      *
-     * @return string|null
+     * ✅ Corrigé : utilise route('media.show') au lieu de asset('storage/...')
      */
     public function urlLogo(): ?string
     {
-        if ($this->logo) {
-            return asset('storage/' . $this->logo);
+        if (!$this->logo) {
+            return null;
         }
-        return null;
+
+        return route('media.show', [
+            'path' => ltrim($this->logo, '/'),
+        ]);
     }
 
     /**
      * Retourne le nombre de projets associés.
-     *
-     * @return int
      */
     public function nombreProjets(): int
     {
@@ -202,11 +196,9 @@ class Partenaire extends Model
 
     /**
      * Retourne le total des contributions financières.
-     *
-     * @return float
      */
     public function totalContributions(): float
     {
-        return $this->projets()->sum('contribution');
+        return (float) $this->projets()->sum('contribution');
     }
 }

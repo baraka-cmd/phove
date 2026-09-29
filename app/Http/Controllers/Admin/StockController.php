@@ -2,431 +2,348 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\StatutLot;
+use App\Enums\StatutReservation;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreStockRequest;
+use App\Http\Requests\UpdateStockRequest;
+use App\Models\EmplacementStock;
+use App\Models\InventaireStock;
+use App\Models\LotStock;
 use App\Models\MouvementStock;
-use App\Models\Projet;
+use App\Models\ReservationStock;
 use App\Models\Stock;
+use App\Services\Stock\StockService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
+/**
+ * Controller du catalogue d'articles de stock.
+ *
+ * PÉRIMÈTRE :
+ *
+ *   Ce controller gère UNIQUEMENT le catalogue (fiche article) :
+ *     - liste, création, modification, affichage ;
+ *     - archivage.
+ *
+ *   Il ne touche JAMAIS aux quantités. Les opérations de stock
+ *   (entrées, sorties, inventaires, réservations) sont portées
+ *   par leurs propres controllers.
+ *
+ * SÉPARATION :
+ *
+ *   Toute la logique métier est dans StockService.
+ *   Ce controller ne fait que :
+ *     - autoriser via Policy ;
+ *     - valider via FormRequest ;
+ *     - appeler le Service ;
+ *     - rediriger avec un message de session.
+ */
 class StockController extends Controller
 {
-    /**
-     * Nombre d'articles par page.
-     *
-     * @var int
-     */
-    protected int $perPage = 15;
+    public function __construct(
+        private readonly StockService $stockService
+    ) {
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | LISTE
+    |--------------------------------------------------------------------------
+    */
 
     /**
-     * Catégories de produits.
+     * Liste des articles de stock.
      *
-     * @var array<string, string>
+     * GET /admin/stocks
      */
-    protected array $categories = [
-        'vivres' => 'Vivres',
-        'medicaments' => 'Médicaments',
-        'habillement' => 'Habillement',
-        'abris' => 'Abris',
-        'materiel' => 'Matériel',
-        'semences' => 'Semences',
-        'outils' => 'Outils aratoires',
-        'autre' => 'Autre',
-    ];
-
-    /**
-     * Unités de mesure.
-     *
-     * @var array<string, string>
-     */
-    protected array $unites = [
-        'kg' => 'Kilogrammes (kg)',
-        'g' => 'Grammes (g)',
-        'l' => 'Litres (l)',
-        'ml' => 'Millilitres (ml)',
-        'pièce' => 'Pièce',
-        'sac' => 'Sac',
-        'boîte' => 'Boîte',
-        'carton' => 'Carton',
-        'lot' => 'Lot',
-        'mètre' => 'Mètre',
-        'm²' => 'Mètre carré (m²)',
-        'unité' => 'Unité',
-    ];
-
-    /**
-     * Affiche la liste paginée et filtrée des stocks.
-     *
-     * @param Request $request
-     * @return \Illuminate\View\View
-     */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        $query = Stock::withCount('mouvements');
+        $this->authorize('viewAny', Stock::class);
 
-        // Filtre par catégorie
-        if ($request->filled('categorie')) {
-            $query->where('categorie', $request->categorie);
-        }
+        /*
+         * Construction de la requête via le Service.
+         */
+        $query = $this->stockService->requete(
+            recherche: $request->input('recherche'),
+            categorie: $request->input('categorie'),
+            statut:    $request->input('statut'),
+            actif:     $request->has('actif')
+                ? $request->boolean('actif')
+                : null
+        );
 
-        // Filtre par statut
-        if ($request->filled('statut')) {
-            $query->where('statut', $request->statut);
-        }
+        /*
+         * Pagination + relations + agrégats.
+         */
+        $stocks = $this->stockService->paginer($query, 15);
 
-        // Recherche
-        if ($request->filled('recherche')) {
-            $recherche = $request->recherche;
-            $query->where(function ($q) use ($recherche) {
-                $q->where('reference', 'like', '%' . $recherche . '%')
-                  ->orWhere('designation', 'like', '%' . $recherche . '%')
-                  ->orWhere('emplacement', 'like', '%' . $recherche . '%');
-            });
-        }
+        /*
+         * Statistiques globales.
+         */
+        $stats = $this->stockService->statistiques();
 
-        $stocks = $query->orderBy('designation')
-            ->paginate($this->perPage)
-            ->withQueryString();
+        /*
+         * Listes pour les filtres.
+         */
+        $categories = [
+            'vivres'       => 'Vivres',
+            'medicaments'  => 'Médicaments',
+            'habillement'  => 'Habillement',
+            'abris'        => 'Abris',
+            'materiel'     => 'Matériel',
+            'semences'     => 'Semences',
+            'outils'       => 'Outils',
+            'autre'        => 'Autre',
+        ];
 
-        // Statistiques
-        $totalArticles = Stock::count();
-        $articlesDisponibles = Stock::where('statut', 'disponible')->count();
-        $articlesFaibles = Stock::where('statut', 'faible')->count();
-        $articlesRupture = Stock::where('statut', 'rupture')->count();
+        $statuts = [
+            'actif'   => 'Actif',
+            'inactif' => 'Inactif',
+            'archive' => 'Archivé',
+        ];
 
         return view('admin.stocks.index', compact(
             'stocks',
-            'totalArticles',
-            'articlesDisponibles',
-            'articlesFaibles',
-            'articlesRupture'
+            'stats',
+            'categories',
+            'statuts'
+        ));
+    }
+
+
+        /*
+    |--------------------------------------------------------------------------
+    | VUE D'ENSEMBLE
+    |--------------------------------------------------------------------------
+    |
+    | Tableau de bord synthétique du module Stock.
+    | Fournit les données pour la page admin.stocks.overview.
+    */
+
+    /**
+     * Vue d'ensemble du module Stock.
+     *
+     * @return View
+     */
+    public function overview(): View
+    {
+        $this->authorize('viewAny', Stock::class);
+
+        /*
+         * Statistiques globales du catalogue.
+         */
+        $stats = $this->stockService->statistiques();
+
+        /*
+         * Derniers mouvements (10).
+         */
+        $derniersMouvements = MouvementStock::query()
+            ->with(['stock', 'utilisateur'])
+            ->orderByDesc('date_mouvement')
+            ->orderByDesc('id')
+            ->limit(10)
+            ->get();
+
+        /*
+         * Lots expirant bientôt (30 jours).
+         */
+        $lotsExpirantBientot = LotStock::query()
+            ->with('stock')
+            ->where('statut', StatutLot::ACTIF->value)
+            ->where('quantite_actuelle', '>', 0)
+            ->whereNotNull('date_expiration')
+            ->whereDate('date_expiration', '>=', now()->toDateString())
+            ->whereDate('date_expiration', '<=', now()->addDays(30)->toDateString())
+            ->orderBy('date_expiration')
+            ->limit(10)
+            ->get();
+
+        /*
+         * Réservations actives (confirmées ou partielles).
+         */
+        $reservationsActives = ReservationStock::query()
+            ->with(['demandeur', 'projet'])
+            ->whereIn('statut', [
+                StatutReservation::CONFIRMEE->value,
+                StatutReservation::PARTIELLE->value,
+            ])
+            ->withCount('lignes')
+            ->orderByDesc('date_reservation')
+            ->limit(10)
+            ->get();
+
+        /*
+         * Inventaires en cours (brouillon ou en_cours).
+         */
+        $inventairesEnCours = InventaireStock::query()
+            ->with('emplacement')
+            ->whereIn('statut', ['brouillon', 'en_cours'])
+            ->withCount('lignes')
+            ->orderByDesc('date_debut')
+            ->limit(10)
+            ->get();
+
+        return view('admin.stocks.overview', compact(
+            'stats',
+            'derniersMouvements',
+            'lotsExpirantBientot',
+            'reservationsActives',
+            'inventairesEnCours'
+        ));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | CRÉATION
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Formulaire de création d'un article.
+     *
+     * GET /admin/stocks/create
+     */
+    public function create(): View
+    {
+        $this->authorize('create', Stock::class);
+
+        $emplacements = EmplacementStock::query()
+            ->where('actif', true)
+            ->orderBy('nom')
+            ->get();
+
+        return view('admin.stocks.create', compact('emplacements'));
+    }
+
+    /**
+     * Enregistre un nouvel article.
+     *
+     * POST /admin/stocks
+     */
+    public function store(StoreStockRequest $request): RedirectResponse
+    {
+        $stock = $this->stockService->creer(
+            $request->validatedData()
+        );
+
+        return redirect()
+            ->route('admin.stocks.show', $stock)
+            ->with(
+                'success',
+                'L’article de stock a été créé avec succès.'
+            );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | AFFICHAGE
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Fiche détaillée d'un article.
+     *
+     * GET /admin/stocks/{stock}
+     */
+    public function show(Stock $stock): View
+    {
+        $this->authorize('view', $stock);
+
+        /*
+         * Chargement des relations nécessaires à la fiche.
+         */
+        $stock->load([
+            'emplacementPrincipal',
+            'lots' => function ($query) {
+                $query->fefo();
+            },
+        ]);
+
+        /*
+         * Calculs via le Service.
+         */
+        $quantites     = $this->stockService->quantites($stock);
+        $statistiques  = $this->stockService->statistiquesArticle($stock);
+
+        return view('admin.stocks.show', compact(
+            'stock',
+            'quantites',
+            'statistiques'
+        ));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | MODIFICATION
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Formulaire de modification d'un article.
+     *
+     * GET /admin/stocks/{stock}/edit
+     */
+    public function edit(Stock $stock): View
+    {
+        $this->authorize('update', $stock);
+
+        $emplacements = EmplacementStock::query()
+            ->where('actif', true)
+            ->orderBy('nom')
+            ->get();
+
+        return view('admin.stocks.edit', compact(
+            'stock',
+            'emplacements'
         ));
     }
 
     /**
-     * Affiche le formulaire de création d'un article.
+     * Mise à jour des informations descriptives.
      *
-     * @return \Illuminate\View\View
+     * PUT/PATCH /admin/stocks/{stock}
      */
-    public function create()
-    {
-        $referenceAuto = Stock::genererReference();
+    public function update(
+        UpdateStockRequest $request,
+        Stock $stock
+    ): RedirectResponse {
+        $this->stockService->modifier(
+            $stock,
+            $request->validatedData()
+        );
 
-        return view('admin.stocks.create', [
-            'categories' => $this->categories,
-            'unites' => $this->unites,
-            'referenceAuto' => $referenceAuto,
-        ]);
-    }
-
-    /**
-     * Enregistre un nouvel article en stock.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'reference' => ['required', 'string', 'max:50', 'unique:stocks,reference'],
-            'designation' => ['required', 'string', 'max:255'],
-            'categorie' => ['required', 'in:' . implode(',', array_keys($this->categories))],
-            'unite' => ['required', 'string', 'max:20'],
-            'quantite_initiale' => ['required', 'numeric', 'min:0'],
-            'seuil_alerte' => ['nullable', 'numeric', 'min:0'],
-            'emplacement' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:5000'],
-        ], [
-            'reference.required' => 'La référence est obligatoire.',
-            'reference.unique' => 'Cette référence est déjà utilisée.',
-            'designation.required' => 'La désignation est obligatoire.',
-            'categorie.required' => 'La catégorie est obligatoire.',
-            'unite.required' => 'L\'unité est obligatoire.',
-            'quantite_initiale.required' => 'La quantité initiale est obligatoire.',
-            'quantite_initiale.min' => 'La quantité ne peut pas être négative.',
-        ]);
-
-        // Définir la quantité actuelle = quantité initiale
-        $validated['quantite_actuelle'] = $validated['quantite_initiale'];
-
-        // Calculer le statut initial
-        if ($validated['quantite_actuelle'] <= 0) {
-            $validated['statut'] = 'rupture';
-        } elseif (isset($validated['seuil_alerte']) && $validated['quantite_actuelle'] <= $validated['seuil_alerte']) {
-            $validated['statut'] = 'faible';
-        } else {
-            $validated['statut'] = 'disponible';
-        }
-
-        $stock = Stock::create($validated);
-
-        // Si quantité initiale > 0, créer un mouvement d'entrée
-        if ($validated['quantite_initiale'] > 0) {
-            MouvementStock::create([
-                'stock_id' => $stock->id,
-                'type_mouvement' => 'entree',
-                'quantite' => $validated['quantite_initiale'],
-                'date_mouvement' => now()->format('Y-m-d'),
-                'reference_document' => 'INIT-' . $stock->reference,
-                'motif' => 'Stock initial',
-                'effectue_par' => auth()->id(),
-                'notes' => 'Mouvement automatique de création du stock initial',
-            ]);
-        }
-
-        return redirect()->route('admin.stocks.show', $stock)
-            ->with('success', 'L\'article « ' . $stock->designation . ' » a été créé avec succès.');
-    }
-
-    /**
-     * Affiche la fiche détaillée d'un article.
-     *
-     * @param Stock $stock
-     * @return \Illuminate\View\View
-     */
-    public function show(Stock $stock)
-    {
-        $stock->load(['mouvements' => function ($query) {
-            $query->orderBy('date_mouvement', 'desc')
-                  ->orderBy('created_at', 'desc')
-                  ->with(['effectuePar', 'projet']);
-        }]);
-
-        return view('admin.stocks.show', compact('stock'));
-    }
-
-    /**
-     * Affiche le formulaire de modification d'un article.
-     *
-     * @param Stock $stock
-     * @return \Illuminate\View\View
-     */
-    public function edit(Stock $stock)
-    {
-        return view('admin.stocks.edit', [
-            'stock' => $stock,
-            'categories' => $this->categories,
-            'unites' => $this->unites,
-        ]);
-    }
-
-    /**
-     * Met à jour un article en stock.
-     *
-     * @param Request $request
-     * @param Stock $stock
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function update(Request $request, Stock $stock)
-    {
-        $validated = $request->validate([
-            'reference' => ['required', 'string', 'max:50', 'unique:stocks,reference,' . $stock->id],
-            'designation' => ['required', 'string', 'max:255'],
-            'categorie' => ['required', 'in:' . implode(',', array_keys($this->categories))],
-            'unite' => ['required', 'string', 'max:20'],
-            'quantite_initiale' => ['required', 'numeric', 'min:0'],
-            'seuil_alerte' => ['nullable', 'numeric', 'min:0'],
-            'emplacement' => ['nullable', 'string', 'max:255'],
-            'description' => ['nullable', 'string', 'max:5000'],
-        ], [
-            'reference.required' => 'La référence est obligatoire.',
-            'reference.unique' => 'Cette référence est déjà utilisée.',
-            'designation.required' => 'La désignation est obligatoire.',
-        ]);
-
-        $stock->update($validated);
-
-        // Recalculer le statut
-        $stock->calculerStatut();
-
-        return redirect()->route('admin.stocks.show', $stock)
-            ->with('success', 'L\'article « ' . $stock->designation . ' » a été mis à jour avec succès.');
-    }
-
-    /**
-     * Affiche le formulaire d'entrée de stock.
-     *
-     * @param Stock $stock
-     * @return \Illuminate\View\View
-     */
-    public function formEntree(Stock $stock)
-    {
-        $projets = Projet::where('statut', 'en_cours')->orderBy('titre')->get();
-
-        return view('admin.stocks.entree', compact('stock', 'projets'));
-    }
-
-    /**
-     * Enregistre une entrée de stock.
-     *
-     * @param Request $request
-     * @param Stock $stock
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function entree(Request $request, Stock $stock)
-    {
-        $validated = $request->validate([
-            'quantite' => ['required', 'numeric', 'min:0.01'],
-            'date_mouvement' => ['required', 'date'],
-            'reference_document' => ['nullable', 'string', 'max:50'],
-            'motif' => ['nullable', 'string', 'max:255'],
-            'destinataire' => ['nullable', 'string', 'max:255'],
-            'projet_id' => ['nullable', 'exists:projets,id'],
-            'notes' => ['nullable', 'string', 'max:5000'],
-        ], [
-            'quantite.required' => 'La quantité est obligatoire.',
-            'quantite.min' => 'La quantité doit être supérieure à 0.',
-            'date_mouvement.required' => 'La date est obligatoire.',
-        ]);
-
-        try {
-            $stock->entrer(
-                $validated['quantite'],
-                $validated['motif'] ?? null,
-                $validated['destinataire'] ?? null,
-                $validated['reference_document'] ?? null,
-                $validated['projet_id'] ?? null,
-                $validated['notes'] ?? null
+        return redirect()
+            ->route('admin.stocks.show', $stock)
+            ->with(
+                'success',
+                'L’article de stock a été modifié avec succès.'
             );
-
-            return redirect()->route('admin.stocks.show', $stock)
-                ->with('success', 'Entrée de ' . $validated['quantite'] . ' ' . $stock->unite . ' enregistrée avec succès.');
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', $e->getMessage());
-        }
     }
 
-    /**
-     * Affiche le formulaire de sortie de stock.
-     *
-     * @param Stock $stock
-     * @return \Illuminate\View\View
-     */
-    public function formSortie(Stock $stock)
-    {
-        $projets = Projet::where('statut', 'en_cours')->orderBy('titre')->get();
-
-        return view('admin.stocks.sortie', compact('stock', 'projets'));
-    }
+    /*
+    |--------------------------------------------------------------------------
+    | ARCHIVAGE
+    |--------------------------------------------------------------------------
+    */
 
     /**
-     * Enregistre une sortie de stock.
+     * Archive un article.
      *
-     * @param Request $request
-     * @param Stock $stock
-     * @return \Illuminate\Http\RedirectResponse
+     * PATCH /admin/stocks/{stock}/archive
      */
-    public function sortie(Request $request, Stock $stock)
+    public function archive(Stock $stock): RedirectResponse
     {
-        $validated = $request->validate([
-            'quantite' => ['required', 'numeric', 'min:0.01'],
-            'date_mouvement' => ['required', 'date'],
-            'reference_document' => ['nullable', 'string', 'max:50'],
-            'motif' => ['nullable', 'string', 'max:255'],
-            'destinataire' => ['nullable', 'string', 'max:255'],
-            'projet_id' => ['nullable', 'exists:projets,id'],
-            'notes' => ['nullable', 'string', 'max:5000'],
-        ], [
-            'quantite.required' => 'La quantité est obligatoire.',
-            'quantite.min' => 'La quantité doit être supérieure à 0.',
-            'date_mouvement.required' => 'La date est obligatoire.',
-        ]);
+        $this->authorize('archive', $stock);
 
-        try {
-            $stock->sortir(
-                $validated['quantite'],
-                $validated['motif'] ?? null,
-                $validated['destinataire'] ?? null,
-                $validated['reference_document'] ?? null,
-                $validated['projet_id'] ?? null,
-                $validated['notes'] ?? null
+        $this->stockService->archiver($stock);
+
+        return redirect()
+            ->route('admin.stocks.show', $stock)
+            ->with(
+                'success',
+                'L’article de stock a été archivé avec succès.'
             );
-
-            return redirect()->route('admin.stocks.show', $stock)
-                ->with('success', 'Sortie de ' . $validated['quantite'] . ' ' . $stock->unite . ' enregistrée avec succès.');
-        } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', $e->getMessage());
-        }
-    }
-
-    /**
-     * Affiche tous les mouvements de stock.
-     *
-     * @param Request $request
-     * @return \Illuminate\View\View
-     */
-    public function mouvements(Request $request)
-    {
-        $query = MouvementStock::with(['stock', 'effectuePar', 'projet']);
-
-        // Filtre par type
-        if ($request->filled('type')) {
-            $query->where('type_mouvement', $request->type);
-        }
-
-        // Filtre par date
-        if ($request->filled('date')) {
-            $query->whereDate('date_mouvement', $request->date);
-        }
-
-        // Filtre par stock
-        if ($request->filled('stock_id')) {
-            $query->where('stock_id', $request->stock_id);
-        }
-
-        // Recherche
-        if ($request->filled('recherche')) {
-            $recherche = $request->recherche;
-            $query->where(function ($q) use ($recherche) {
-                $q->where('reference_document', 'like', '%' . $recherche . '%')
-                  ->orWhere('motif', 'like', '%' . $recherche . '%')
-                  ->orWhere('destinataire', 'like', '%' . $recherche . '%');
-            });
-        }
-
-        $mouvements = $query->orderBy('date_mouvement', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->paginate($this->perPage)
-            ->withQueryString();
-
-        $stocks = Stock::orderBy('designation')->get();
-
-        // Statistiques
-        $totalEntrees = MouvementStock::where('type_mouvement', 'entree')->sum('quantite');
-        $totalSorties = MouvementStock::where('type_mouvement', 'sortie')->sum('quantite');
-
-        return view('admin.stocks.mouvements', compact(
-            'mouvements',
-            'stocks',
-            'totalEntrees',
-            'totalSorties'
-        ));
-    }
-
-    /**
-     * Supprime un article en stock.
-     *
-     * @param Stock $stock
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function destroy(Stock $stock)
-    {
-        // Vérifier s'il y a des mouvements
-        $nombreMouvements = $stock->mouvements()->count();
-
-        // Supprimer les mouvements (cascade)
-        $stock->mouvements()->delete();
-
-        $stock->delete();
-
-        $message = 'L\'article « ' . $stock->designation . ' » a été supprimé.';
-        if ($nombreMouvements > 0) {
-            $message .= ' ' . $nombreMouvements . ' mouvement(s) supprimé(s).';
-        }
-
-        return redirect()->route('admin.stocks.index')
-            ->with('success', $message);
     }
 }

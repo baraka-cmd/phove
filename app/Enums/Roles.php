@@ -2,108 +2,233 @@
 
 namespace App\Enums;
 
+use InvalidArgumentException;
+
 /**
- * Enum des rôles hiérarchiques PHOVE.
+ * Rôles hiérarchiques PHOVE.
  *
- * Cette classe centralise tous les rôles disponibles dans l'application
- * ainsi que leurs niveaux hiérarchiques et leurs libellés français.
+ * SÉMANTIQUE :
  *
- * Hiérarchie (du plus haut au plus bas) :
- * 5 = Super Admin
- * 4 = Directeur Général
- * 3 = Chef de Mission / Chargé de Programme
- * 2 = Secrétaire Exécutif / Comptable
- * 1 = Caissier / Éditeur
- * 0 = Utilisateur (consultation seule)
+ *   Cette classe centralise tous les rôles de l'application
+ *   ainsi que :
+ *     - leurs libellés français ;
+ *     - leurs niveaux hiérarchiques ;
+ *     - les regroupements fonctionnels (qui peut faire quoi).
+ *
+ * POURQUOI UNE CLASSE ET PAS UN ENUM ?
+ *
+ *   Les rôles PHOVE sont utilisés partout comme des CHAÎNES
+ *   (dans les middleware, policies, validations, base de données).
+ *
+ *   Un enum PHP aurait obligé à appeler `->value` à chaque usage,
+ *   ce qui aurait pollué tout le code existant.
+ *
+ *   Cette classe utilise donc des constantes de type string,
+ *   ce qui garantit :
+ *     - la cohérence (une seule source de vérité) ;
+ *     - la compatibilité avec l'existant ;
+ *     - la simplicité d'usage.
+ *
+ * UTILISATION TYPIQUE :
+ *
+ *   Roles::SUPER_ADMIN                       // 'super_admin'
+ *   Roles::all()                             // [role => libellé]
+ *   Roles::gestionStocks()                   // [roles autorisés]
+ *   Roles::existe($role)                     // bool
+ *   Roles::niveau($role)                     // int
  */
 final class Roles
 {
-    /**
-     * Rôle Super Admin — Accès total.
-     */
-    public const SUPER_ADMIN = 'super_admin';
+    /*
+    |--------------------------------------------------------------------------
+    | CONSTANTES DE RÔLES
+    |--------------------------------------------------------------------------
+    */
+
+    public const SUPER_ADMIN       = 'super_admin';
+    public const DG                = 'dg';
+    public const CHEF_MISSION      = 'chef_mission';
+    public const CHARGE_PROGRAMME  = 'charge_programme';
+    public const SECRETAIRE        = 'secretaire';
+    public const COMPTABLE         = 'comptable';
+    public const CAISSIER          = 'caissier';
+    public const EDITEUR           = 'editeur';
+    public const UTILISATEUR       = 'utilisateur';
+
+    /*
+    |--------------------------------------------------------------------------
+    | NIVEAUX HIÉRARCHIQUES
+    |--------------------------------------------------------------------------
+    |
+    | Du plus haut (5) au plus bas (0).
+    |
+    | Les niveaux servent à comparer des rôles, jamais à
+    | accorder automatiquement des droits (règle de sécurité).
+    */
+
+    public const NIVEAU_SUPER_ADMIN      = 5;
+    public const NIVEAU_DG               = 4;
+    public const NIVEAU_COORDINATION     = 3;
+    public const NIVEAU_EXECUTION        = 2;
+    public const NIVEAU_OPERATIONNEL     = 1;
+    public const NIVEAU_CONSULTATION     = 0;
+
+    /*
+    |--------------------------------------------------------------------------
+    | RÉFÉRENTIEL
+    |--------------------------------------------------------------------------
+    */
 
     /**
-     * Rôle Directeur Général — Coordonne tout (Article 18).
-     */
-    public const DG = 'dg';
-
-    /**
-     * Rôle Chef de Mission — Coordonne par continent (Article 19).
-     */
-    public const CHEF_MISSION = 'chef_mission';
-
-    /**
-     * Rôle Chargé de Programme — Coordonne par pays (Article 20).
-     */
-    public const CHARGE_PROGRAMME = 'charge_programme';
-
-    /**
-     * Rôle Secrétaire Exécutif — Rédige les rapports (Article 21).
-     */
-    public const SECRETAIRE = 'secretaire';
-
-    /**
-     * Rôle Comptable — Gère les finances (Article 22).
-     */
-    public const COMPTABLE = 'comptable';
-
-    /**
-     * Rôle Caissier — Gère les paiements (Article 24).
-     */
-    public const CAISSIER = 'caissier';
-
-    /**
-     * Rôle Éditeur — Rédige les articles et contenus.
-     */
-    public const EDITEUR = 'editeur';
-
-    /**
-     * Rôle Utilisateur — Consultation seule.
-     */
-    public const UTILISATEUR = 'utilisateur';
-
-    /**
-     * Retourne tous les rôles avec leurs libellés français.
+     * Retourne tous les rôles avec leurs libellés.
      *
      * @return array<string, string>
      */
     public static function all(): array
     {
         return [
-            self::SUPER_ADMIN => 'Super Administrateur',
-            self::DG => 'Directeur Général',
-            self::CHEF_MISSION => 'Chef de Mission',
+            self::SUPER_ADMIN      => 'Super Administrateur',
+            self::DG               => 'Directeur Général',
+            self::CHEF_MISSION     => 'Chef de Mission',
             self::CHARGE_PROGRAMME => 'Chargé de Programme',
-            self::SECRETAIRE => 'Secrétaire Exécutif',
-            self::COMPTABLE => 'Comptable',
-            self::CAISSIER => 'Caissier',
-            self::EDITEUR => 'Éditeur',
-            self::UTILISATEUR => 'Utilisateur',
+            self::SECRETAIRE       => 'Secrétaire Exécutif',
+            self::COMPTABLE        => 'Comptable',
+            self::CAISSIER         => 'Caissier',
+            self::EDITEUR          => 'Éditeur',
+            self::UTILISATEUR      => 'Utilisateur',
         ];
     }
 
     /**
-     * Retourne les rôles administratifs (accès au back-office).
+     * Retourne la liste brute des rôles.
+     *
+     * Utile pour les validations `in:` et les tests.
+     *
+     * @return array<int, string>
+     */
+    public static function valeurs(): array
+    {
+        return array_keys(self::all());
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATION
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Vérifie si un rôle existe.
+     */
+    public static function existe(string $role): bool
+    {
+        return array_key_exists($role, self::all());
+    }
+
+    /**
+     * Vérifie qu'un rôle existe, et lance une exception sinon.
+     *
+     * Utilisation recommandée dans les Services pour éviter
+     * les comportements silencieux.
+     */
+    public static function valider(string $role): void
+    {
+        if (!self::existe($role)) {
+            throw new InvalidArgumentException(
+                sprintf('Rôle inconnu : "%s".', $role)
+            );
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | LIBELLÉS ET NIVEAUX
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Retourne le libellé français d'un rôle.
+     *
+     * Si le rôle est inconnu, on retourne le rôle brut.
+     * Pour un contrôle strict, utiliser `valider()` avant.
+     */
+    public static function libelle(string $role): string
+    {
+        return self::all()[$role] ?? $role;
+    }
+
+    /**
+     * Retourne le niveau hiérarchique d'un rôle.
+     *
+     * Renvoie -1 pour un rôle inconnu, afin de NE JAMAIS
+     * donner un niveau positif par défaut.
+     *
+     * (L'ancienne version retournait 0, ce qui rendait
+     * un rôle inconnu équivalent à UTILISATEUR → dangereux.)
+     */
+    public static function niveau(string $role): int
+    {
+        return match ($role) {
+            self::SUPER_ADMIN      => self::NIVEAU_SUPER_ADMIN,
+            self::DG               => self::NIVEAU_DG,
+            self::CHEF_MISSION,
+            self::CHARGE_PROGRAMME => self::NIVEAU_COORDINATION,
+            self::SECRETAIRE,
+            self::COMPTABLE        => self::NIVEAU_EXECUTION,
+            self::CAISSIER,
+            self::EDITEUR          => self::NIVEAU_OPERATIONNEL,
+            self::UTILISATEUR      => self::NIVEAU_CONSULTATION,
+            default                => -1,
+        };
+    }
+
+    /**
+     * Un rôle a-t-il un niveau supérieur ou égal à un autre ?
+     *
+     * Si l'un des rôles est inconnu, on renvoie `false`.
+     */
+    public static function superieurOuEgal(
+        string $role1,
+        string $role2
+    ): bool {
+        $niveau1 = self::niveau($role1);
+        $niveau2 = self::niveau($role2);
+
+        if ($niveau1 < 0 || $niveau2 < 0) {
+            return false;
+        }
+
+        return $niveau1 >= $niveau2;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | GROUPES FONCTIONNELS
+    |--------------------------------------------------------------------------
+    |
+    | Un groupe = un ensemble de rôles ayant accès à un
+    | domaine fonctionnel donné.
+    |
+    | Ces listes sont utilisées par les Policies et les
+    | vérifications d'accès.
+    */
+
+    /**
+     * Rôles ayant accès au back-office en général.
      *
      * @return array<string, string>
      */
     public static function adminRoles(): array
     {
-        return [
-            self::SUPER_ADMIN => 'Super Administrateur',
-            self::DG => 'Directeur Général',
-            self::CHEF_MISSION => 'Chef de Mission',
-            self::CHARGE_PROGRAMME => 'Chargé de Programme',
-            self::SECRETAIRE => 'Secrétaire Exécutif',
-            self::COMPTABLE => 'Comptable',
-            self::CAISSIER => 'Caissier',
-            self::EDITEUR => 'Éditeur',
-        ];
+        $tous = self::all();
+
+        unset($tous[self::UTILISATEUR]);
+
+        return $tous;
     }
 
     /**
-     * Retourne les rôles ayant accès à la gestion des membres.
+     * Rôles ayant accès à la gestion des membres.
      *
      * @return array<int, string>
      */
@@ -117,7 +242,7 @@ final class Roles
     }
 
     /**
-     * Retourne les rôles ayant accès à la gestion financière complète.
+     * Rôles ayant accès à la gestion financière complète.
      *
      * @return array<int, string>
      */
@@ -131,7 +256,7 @@ final class Roles
     }
 
     /**
-     * Retourne les rôles ayant accès à la validation des salaires.
+     * Rôles ayant accès à la validation des salaires.
      *
      * @return array<int, string>
      */
@@ -144,7 +269,10 @@ final class Roles
     }
 
     /**
-     * Retourne les rôles ayant accès à la gestion des stocks.
+     * Rôles ayant accès à la gestion des stocks.
+     *
+     * NB : Le magasinier (si ce rôle est ajouté plus tard)
+     * doit être explicitement ajouté ici.
      *
      * @return array<int, string>
      */
@@ -158,7 +286,7 @@ final class Roles
     }
 
     /**
-     * Retourne les rôles ayant accès à la gestion des projets.
+     * Rôles ayant accès à la gestion des projets.
      *
      * @return array<int, string>
      */
@@ -173,7 +301,7 @@ final class Roles
     }
 
     /**
-     * Retourne les rôles ayant accès à la gestion des dossiers.
+     * Rôles ayant accès à la gestion des dossiers.
      *
      * @return array<int, string>
      */
@@ -187,7 +315,7 @@ final class Roles
     }
 
     /**
-     * Retourne les rôles ayant accès à la gestion des utilisateurs.
+     * Rôles ayant accès à la gestion des utilisateurs.
      *
      * @return array<int, string>
      */
@@ -199,7 +327,7 @@ final class Roles
     }
 
     /**
-     * Retourne les rôles ayant accès à la gestion des paramètres.
+     * Rôles ayant accès à la gestion des paramètres.
      *
      * @return array<int, string>
      */
@@ -211,7 +339,7 @@ final class Roles
     }
 
     /**
-     * Retourne les rôles ayant accès à la gestion de la gouvernance.
+     * Rôles ayant accès à la gestion de la gouvernance.
      *
      * @return array<int, string>
      */
@@ -224,7 +352,7 @@ final class Roles
     }
 
     /**
-     * Retourne les rôles ayant accès à la gestion des structures territoriales.
+     * Rôles ayant accès à la gestion des structures territoriales.
      *
      * @return array<int, string>
      */
@@ -239,7 +367,7 @@ final class Roles
     }
 
     /**
-     * Retourne les rôles ayant accès à la rédaction de contenu.
+     * Rôles ayant accès à la rédaction de contenu.
      *
      * @return array<int, string>
      */
@@ -253,7 +381,7 @@ final class Roles
     }
 
     /**
-     * Retourne les rôles ayant accès à la messagerie interne.
+     * Rôles ayant accès à la messagerie interne.
      *
      * @return array<int, string>
      */
@@ -266,58 +394,5 @@ final class Roles
             self::CHARGE_PROGRAMME,
             self::SECRETAIRE,
         ];
-    }
-
-    /**
-     * Vérifie si un rôle existe.
-     *
-     * @param string $role
-     * @return bool
-     */
-    public static function existe(string $role): bool
-    {
-        return array_key_exists($role, self::all());
-    }
-
-    /**
-     * Retourne le libellé français d'un rôle.
-     *
-     * @param string $role
-     * @return string
-     */
-    public static function libelle(string $role): string
-    {
-        return self::all()[$role] ?? $role;
-    }
-
-    /**
-     * Retourne le niveau hiérarchique d'un rôle.
-     *
-     * @param string $role
-     * @return int
-     */
-    public static function niveau(string $role): int
-    {
-        return match($role) {
-            self::SUPER_ADMIN => 5,
-            self::DG => 4,
-            self::CHEF_MISSION, self::CHARGE_PROGRAMME => 3,
-            self::SECRETAIRE, self::COMPTABLE => 2,
-            self::CAISSIER, self::EDITEUR => 1,
-            self::UTILISATEUR => 0,
-            default => 0,
-        };
-    }
-
-    /**
-     * Vérifie si un rôle a un niveau supérieur ou égal à un autre.
-     *
-     * @param string $role1
-     * @param string $role2
-     * @return bool
-     */
-    public static function superieurOuEgal(string $role1, string $role2): bool
-    {
-        return self::niveau($role1) >= self::niveau($role2);
     }
 }

@@ -158,7 +158,9 @@
     border-radius: 16px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
     border: 1px solid rgba(0, 0, 0, 0.03);
-    overflow: hidden;
+    /* ⚠️ PAS d'overflow: hidden — ça cache la barre de scroll */
+    overflow: visible;
+    position: relative;
 }
 
 .table-membres {
@@ -278,6 +280,8 @@
 .membre-action-btn.view:hover { color: var(--color-info); border-color: var(--color-info); }
 .membre-action-btn.edit:hover { color: var(--color-primary); border-color: var(--color-primary); }
 .membre-action-btn.delete:hover { color: var(--color-accent); border-color: var(--color-accent); background: var(--color-error-light); }
+
+
 
 /* ============================================================
    PARTIE 4 : PAGINATION
@@ -609,4 +613,71 @@
 #motif_suspend_autre_group,
 #motif_exclure_autre_group {
     display: none;
+}
+
+
+
+
+/* ============================================================
+   FIX DÉFINITIF — Tableau des membres scrollable
+   ------------------------------------------------------------
+   Force une largeur minimale PLUS GRANDE que le conteneur
+   pour garantir un débordement horizontal.
+   ============================================================ */
+
+.membres-table-card .table-responsive {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 4px;
+}
+
+/* 🔑 LA CLÉ : min-width supérieur au conteneur */
+.membres-table-card .table-responsive > .table-membres {
+    min-width: 1800px !important;   /* ← force le débordement */
+    width: max-content !important;
+    table-layout: auto !important;
+}
+
+.membres-table-card .table-membres th,
+.membres-table-card .table-membres td {
+    white-space: nowrap !important;
+}
+
+/* Barre de scroll bien visible */
+.membres-table-card .table-responsive::-webkit-scrollbar {
+    height: 14px !important;
+    background: #E2E8F0 !important;
+}
+
+.membres-table-card .table-responsive::-webkit-scrollbar-thumb {
+    background: #1A5B9C !important;
+    border-radius: 7px !important;
+    border: 2px solid #E2E8F0 !important;
+}
+
+.membres-table-card .table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #124270 !important;
+}
+
+/* Colonne Actions fixée à droite */
+.membres-table-card .table-membres thead th:last-child,
+.membres-table-card .table-membres tbody td:last-child {
+    position: sticky !important;
+    right: 0;
+    background: #FFFFFF;
+    box-shadow: -6px 0 10px rgba(0, 0, 0, 0.06);
+    z-index: 2;
+}
+
+.membres-table-card .table-membres thead th:last-child {
+    background: #F8FAFC;
+    z-index: 3;
+}
+
+.membres-table-card .table-membres tbody tr:hover td:last-child {
+    background: #F8FAFC;
 }

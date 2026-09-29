@@ -1,26 +1,29 @@
 /* ============================================================
-   AHD-RDC — STYLES GOUVERNANCE — DÉTAIL ORGANE
-   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   GOUVERNANCE — PAGE ORGANE
+   ------------------------------------------------------------
+   Styles pour /admin/gouvernance/organes/{organe}
    ============================================================ */
 
-/* ----------------------------------------------------------
-   1. GRILLE PRINCIPALE (TABLEAU + FORMULAIRE)
-   ---------------------------------------------------------- */
+/* ============================================================
+   1. GRILLE PRINCIPALE
+   ============================================================ */
+
 .gouvernance-detail-grid {
     display: grid;
     grid-template-columns: 1fr 380px;
-    gap: var(--spacing-xl);
+    gap: 24px;
     align-items: start;
 }
 
-/* ----------------------------------------------------------
-   2. TABLEAU DES MEMBRES
-   ---------------------------------------------------------- */
+/* ============================================================
+   2. CARTE TABLEAU
+   ============================================================ */
+
 .gouvernance-table-card {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.03);
+    background: #FFFFFF;
+    border-radius: 14px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     overflow: hidden;
 }
 
@@ -30,152 +33,224 @@
 }
 
 .table-gouvernance thead {
-    background: var(--color-bg-light);
+    background: #F8FAFC;
 }
 
 .table-gouvernance thead th {
-    padding: 14px 16px;
+    padding: 12px 16px;
     font-size: 11px;
     font-weight: 700;
-    color: var(--color-text-muted);
+    color: #64748B;
     text-align: left;
     text-transform: uppercase;
-    letter-spacing: 0.8px;
-    border-bottom: 2px solid var(--border-color-light);
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #E2E8F0;
     white-space: nowrap;
+}
+
+.table-gouvernance thead th.th-actions {
+    width: 120px;
 }
 
 .table-gouvernance tbody td {
     padding: 14px 16px;
     font-size: 13px;
-    color: var(--color-text-secondary);
-    border-bottom: 1px solid var(--border-color-light);
+    color: #334155;
+    border-bottom: 1px solid #F1F5F9;
     vertical-align: middle;
 }
 
-.table-gouvernance tbody tr {
-    transition: background 0.2s ease;
-}
-
 .table-gouvernance tbody tr:hover {
-    background: var(--color-bg-light);
+    background: #F8FAFC;
 }
 
 .table-gouvernance tbody tr:last-child td {
     border-bottom: none;
 }
 
-/* Cellule membre */
-.gouvernance-cell-membre {
+/* ============================================================
+   3. AVATAR / ITEM MEMBRE
+   ============================================================ */
+
+.gouvernance-membre-item {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.gouvernance-cell-avatar {
-    width: 40px;
-    height: 40px;
+.gouvernance-membre-avatar {
+    position: relative;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background: var(--color-primary-lighter);
-    color: var(--color-primary);
-    font-size: 0.8rem;
-    font-weight: 700;
+    overflow: hidden;
+    background: #E8F0F8;
+    color: #1A5B9C;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
     flex-shrink: 0;
-    overflow: hidden;
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 2px 6px rgba(26, 91, 156, 0.15);
 }
 
-.gouvernance-cell-avatar img {
+.gouvernance-membre-avatar img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+    display: block;
 }
 
-.gouvernance-cell-nom {
+.gouvernance-membre-avatar > span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    letter-spacing: 0.5px;
+}
+
+.gouvernance-membre-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.gouvernance-membre-nom {
     font-size: 13px;
-    font-weight: 600;
-    color: #1a1a1a;
+    font-weight: 700;
+    color: #1E293B;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* Poste */
+.gouvernance-membre-email {
+    font-size: 11px;
+    color: #64748B;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ============================================================
+   4. CELLULES TEXTE
+   ============================================================ */
+
 .gouvernance-poste {
     font-size: 13px;
-    font-weight: 600;
-    color: var(--color-primary);
+    font-weight: 700;
+    color: #1A5B9C;
 }
 
-/* Statut badge */
-.gouvernance-statut-badge {
+.gouvernance-date {
+    font-size: 13px;
+    color: #334155;
+}
+
+/* ============================================================
+   5. BADGES STATUT
+   ============================================================ */
+
+.membre-badge {
     display: inline-flex;
     align-items: center;
     gap: 4px;
     padding: 4px 10px;
     border-radius: 50px;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
-.gouvernance-statut-actif {
-    background: var(--color-success-light);
-    color: var(--color-success);
+.membre-badge-success {
+    background: #D1FAE5;
+    color: #065F46;
 }
 
-.gouvernance-statut-termine {
-    background: var(--color-info-light);
-    color: var(--color-info);
+.membre-badge-info {
+    background: #DBEAFE;
+    color: #1E40AF;
 }
 
-/* Actions */
-.gouvernance-actions {
+/* ============================================================
+   6. ACTIONS
+   ============================================================ */
+
+.membre-actions {
     display: flex;
-    gap: 4px;
+    gap: 6px;
+    align-items: center;
 }
 
-.gouvernance-action-btn {
+.membre-action-btn {
     width: 34px;
     height: 34px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    background: #fff;
-    color: var(--color-text-muted);
-    font-size: 13px;
-    cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    text-decoration: none;
+    border-radius: 8px;
+    background: #F8FAFC;
+    color: #64748B;
+    font-size: 13px;
+    border: 1px solid #E2E8F0;
+    cursor: pointer;
     transition: all 0.2s ease;
+    padding: 0;
+    text-decoration: none;
 }
 
-.gouvernance-action-btn:hover {
-    background: var(--color-bg-light);
+.membre-action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
-.gouvernance-action-btn.edit:hover {
-    color: var(--color-primary);
-    border-color: var(--color-primary);
+.membre-action-btn.edit {
+    color: #D97706;
 }
 
-.gouvernance-action-btn.remove:hover {
-    color: var(--color-accent);
-    border-color: var(--color-accent);
-    background: var(--color-error-light);
+.membre-action-btn.edit:hover {
+    background: #FEF3C7;
+    border-color: #F59E0B;
 }
 
-/* État vide */
+.membre-action-btn.delete {
+    color: #EF4444;
+}
+
+.membre-action-btn.delete:hover {
+    background: #FEE2E2;
+    border-color: #EF4444;
+    color: #B91C1C;
+}
+
+.form-inline {
+    display: inline;
+}
+
+/* ============================================================
+   7. ÉTAT VIDE
+   ============================================================ */
+
 .gouvernance-empty {
+    padding: 60px 20px;
     text-align: center;
-    padding: 50px 20px;
-    color: #999;
+    color: #94A3B8;
 }
 
 .gouvernance-empty i {
-    font-size: 2.5rem;
+    font-size: 42px;
+    opacity: 0.5;
     display: block;
     margin-bottom: 12px;
-    opacity: 0.4;
 }
 
 .gouvernance-empty p {
@@ -183,139 +258,271 @@
     margin: 0;
 }
 
-/* ----------------------------------------------------------
-   3. FORMULAIRE D'AJOUT (SIDEBAR)
-   ---------------------------------------------------------- */
+/* ============================================================
+   8. CARTE FORMULAIRE
+   ============================================================ */
+
 .gouvernance-form-card {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.03);
+    background: #FFFFFF;
+    border-radius: 14px;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     padding: 24px;
     position: sticky;
-    top: calc(var(--topbar-height) + 25px);
+    top: 90px;
+}
+
+.gouvernance-form-card-edit {
+    margin-top: 24px;
+    max-width: 640px;
+    position: static;
 }
 
 .gouvernance-form-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: #1a1a1a;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid var(--color-primary-lighter);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1E293B;
+    margin: 0 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #E8F0F8;
 }
 
 .gouvernance-form-title i {
-    color: var(--color-primary);
+    color: #1A5B9C;
+    font-size: 15px;
 }
 
+/* ============================================================
+   9. CHAMPS DE FORMULAIRE
+   ============================================================ */
+
 .gouvernance-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
     margin-bottom: 16px;
 }
 
 .gouvernance-form-label {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 6px;
-    display: block;
+    color: #334155;
 }
 
 .gouvernance-form-label .required {
-    color: var(--color-accent);
+    color: #EF4444;
+    margin-left: 2px;
+}
+
+.gouvernance-form-label small {
+    font-weight: 400;
+    color: #94A3B8;
+    font-size: 11px;
 }
 
 .gouvernance-form-input,
 .gouvernance-form-select {
     width: 100%;
-    padding: 10px 12px;
-    font-family: var(--font-primary);
-    font-size: 13px;
-    border: 2px solid var(--border-color);
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    color: #1E293B;
+    background: #FFFFFF;
+    border: 2px solid #CBD5E1;
     border-radius: 8px;
     outline: none;
-    transition: all 0.25s ease;
-    background: #fafbfc;
-    color: #1a1a1a;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .gouvernance-form-input:focus,
 .gouvernance-form-select:focus {
-    border-color: var(--color-primary);
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.08);
+    border-color: #1A5B9C;
+    box-shadow: 0 0 0 3px rgba(26, 91, 156, 0.12);
 }
 
 .gouvernance-form-select {
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    padding-right: 36px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23777' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 38px;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
 }
 
-.gouvernance-form-submit {
-    width: 100%;
-    padding: 11px;
-    background: var(--color-primary);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-family: var(--font-primary);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.gouvernance-form-error {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #EF4444;
+    font-weight: 500;
+}
+
+.gouvernance-form-error i {
+    font-size: 11px;
+}
+
+/* ============================================================
+   10. UPLOAD PHOTO
+   ============================================================ */
+
+.gouvernance-photo-upload {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gouvernance-photo-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #F1F5F9;
+    border: 3px dashed #CBD5E1;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.gouvernance-photo-preview:hover {
+    border-color: #1A5B9C;
+    background: #F0F7FF;
+}
+
+.gouvernance-photo-preview img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.gouvernance-photo-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #64748B;
+    padding: 8px;
+    text-align: center;
+}
+
+.gouvernance-photo-placeholder i {
+    font-size: 24px;
+    color: #1A5B9C;
+    opacity: 0.7;
+}
+
+.gouvernance-photo-placeholder span {
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.gouvernance-photo-remove {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #EF4444;
+    color: #FFFFFF;
+    border: 2px solid #FFFFFF;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    transition: transform 0.2s ease;
+    padding: 0;
+    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.3);
+}
+
+.gouvernance-photo-remove:hover {
+    transform: scale(1.1);
+}
+
+/* ============================================================
+   11. CHECKBOX
+   ============================================================ */
+
+.gouvernance-checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #334155;
+    padding: 10px 14px;
+    background: #F8FAFC;
+    border: 2px solid #E2E8F0;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.gouvernance-checkbox-row:hover {
+    border-color: #1A5B9C;
+    background: #F0F7FF;
+}
+
+.gouvernance-checkbox-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #1A5B9C;
+    cursor: pointer;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   12. BOUTON SUBMIT
+   ============================================================ */
+
+.gouvernance-form-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     gap: 8px;
+    width: 100%;
+    padding: 12px 20px;
+    background: #1A5B9C;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 8px;
 }
 
 .gouvernance-form-submit:hover {
-    background: var(--color-primary-dark);
+    background: #124270;
     transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(22, 85, 143, 0.3);
+    box-shadow: 0 6px 16px rgba(26, 91, 156, 0.25);
 }
 
-/* ----------------------------------------------------------
-   4. FORMULAIRE D'ÉDITION (CACHÉ)
-   ---------------------------------------------------------- */
-.gouvernance-edit-card {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.03);
-    padding: 24px;
-    margin-top: var(--spacing-xl);
-    border-left: 4px solid var(--color-primary);
-}
+/* ============================================================
+   13. RESPONSIVE
+   ============================================================ */
 
-/* ----------------------------------------------------------
-   5. ANIMATIONS
-   ---------------------------------------------------------- */
-.gouvernance-table-card,
-.gouvernance-form-card {
-    animation: fadeIn 0.5s ease forwards;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* ----------------------------------------------------------
-   6. RESPONSIVE
-   ---------------------------------------------------------- */
 @media (max-width: 992px) {
     .gouvernance-detail-grid {
         grid-template-columns: 1fr;
     }
+
     .gouvernance-form-card {
         position: static;
     }
@@ -324,23 +531,18 @@
 @media (max-width: 768px) {
     .table-gouvernance thead th,
     .table-gouvernance tbody td {
-        padding: 10px 8px;
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+
+    .gouvernance-membre-avatar {
+        width: 36px;
+        height: 36px;
         font-size: 11px;
     }
-    .gouvernance-cell-avatar {
-        width: 32px;
-        height: 32px;
-        font-size: 0.7rem;
-    }
-    .gouvernance-form-card,
-    .gouvernance-edit-card {
-        padding: 18px;
-    }
-}
 
-@media (max-width: 576px) {
-    .gouvernance-actions {
-        flex-direction: column;
-        gap: 4px;
+    .gouvernance-photo-preview {
+        width: 100px;
+        height: 100px;
     }
 }

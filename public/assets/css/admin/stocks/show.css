@@ -1,0 +1,751 @@
+/* ============================================================
+   PHOVE — STYLE : FICHE DÉTAILLÉE D'UN ARTICLE DE STOCK
+   Vue : resources/views/admin/stocks/show.blade.php
+   Route : admin.stocks.show
+
+   Ce fichier complète stocks-common.css.
+   Il n'ajoute QUE ce qui est spécifique à la fiche article.
+   ============================================================ */
+
+
+/* ----------------------------------------------------------
+   1. CONTENEUR DE PAGE
+   ---------------------------------------------------------- */
+
+.stock-show-page {
+    /* Conteneur principal */
+}
+
+
+/* ----------------------------------------------------------
+   2. EN-TÊTE DE PAGE
+   ----------------------------------------------------------
+   .page-header, .page-header-content, .page-title-row,
+   .breadcrumb, .status-badge viennent de stocks-common.css.
+   On ajuste juste la disposition du statut à droite.
+   ---------------------------------------------------------- */
+
+.stock-show-page .page-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.stock-status-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Statuts spécifiques à la fiche article */
+.status-active {
+    background: var(--color-success-light);
+    color: #065F46;
+    padding: 6px 14px;
+    font-size: var(--font-size-xs);
+}
+
+.status-inactive {
+    background: var(--color-warning-light);
+    color: #92400E;
+    padding: 6px 14px;
+    font-size: var(--font-size-xs);
+}
+
+.status-archived {
+    background: #F1F5F9;
+    color: #475569;
+    padding: 6px 14px;
+    font-size: var(--font-size-xs);
+}
+
+.stock-show-page .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    display: inline-block;
+}
+
+
+/* ----------------------------------------------------------
+   3. OVERVIEW (4 KPI de quantités)
+   ----------------------------------------------------------
+   .stock-overview et .stock-kpi-card viennent de stocks-common.css.
+   On ajuste juste l'espacement interne et la mise en valeur de
+   la carte "disponible".
+   ---------------------------------------------------------- */
+
+.stock-show-page .stock-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+}
+
+.stock-show-page .stock-kpi-card {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: var(--spacing-lg);
+    position: relative;
+    overflow: hidden;
+}
+
+.stock-show-page .stock-kpi-card .stock-kpi-icon {
+    margin-bottom: var(--spacing-sm);
+}
+
+.stock-show-page .stock-kpi-value {
+    font-size: var(--font-size-2xl);
+    line-height: 1.1;
+    margin-bottom: 2px;
+}
+
+.stock-show-page .stock-kpi-unit {
+    display: block;
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.stock-show-page .stock-kpi-card-highlight {
+    border-color: var(--color-primary);
+    background: linear-gradient(
+        to bottom right,
+        var(--color-primary-lighter) 0%,
+        var(--color-bg-white) 60%
+    );
+}
+
+.stock-show-page .stock-kpi-card-highlight .stock-kpi-icon {
+    background: var(--color-primary);
+    color: #FFFFFF;
+}
+
+
+/* ----------------------------------------------------------
+   4. GRILLE PRINCIPALE (2 colonnes)
+   ---------------------------------------------------------- */
+
+.stock-show-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+    align-items: start;
+}
+
+
+/* ----------------------------------------------------------
+   5. CARTES (.card générique)
+   ----------------------------------------------------------
+   .card, .card-header, .card-title viennent de stocks-common.css.
+   On ajuste juste le body et le header icon.
+   ---------------------------------------------------------- */
+
+.stock-show-page .card {
+    background: var(--color-bg-white);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.stock-show-page .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color-light);
+    background: var(--color-bg-light);
+    margin-bottom: 0;
+    padding-bottom: var(--spacing-lg);
+}
+
+.stock-show-page .card-title {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+}
+
+.stock-show-page .card-subtitle {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.stock-show-page .card-header-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--border-radius-sm);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.stock-show-page .card-body {
+    padding: var(--spacing-lg);
+}
+
+.stock-show-page .card-body-table {
+    padding: 0;
+}
+
+.stock-show-page .card-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.stock-show-page .count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+}
+
+
+/* ----------------------------------------------------------
+   6. INFORMATIONS DE L'ARTICLE
+   ---------------------------------------------------------- */
+
+.stock-information-card {
+    grid-column: 1 / -1;
+}
+
+.information-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+}
+
+.information-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: var(--spacing-md);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+    border-left: 3px solid var(--color-primary);
+}
+
+.information-label {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: var(--font-weight-semibold);
+}
+
+.information-value {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+    word-break: break-word;
+}
+
+.information-reference {
+    font-family: 'Courier New', monospace;
+    color: var(--color-primary);
+}
+
+.information-secondary {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-style: italic;
+    display: block;
+    margin-top: 2px;
+}
+
+/* Section description */
+.description-section {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px dashed var(--border-color-light);
+}
+
+.section-mini-title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.description-content,
+.long-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    padding: var(--spacing-md);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+    border-left: 3px solid var(--color-primary);
+}
+
+
+/* ----------------------------------------------------------
+   7. ÉTAT DU STOCK
+   ---------------------------------------------------------- */
+
+.stock-state-card {
+    grid-column: 1 / -1;
+}
+
+.stock-state-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.state-main-value {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.state-main-value strong {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    line-height: 1;
+}
+
+.state-main-value span {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-weight: var(--font-weight-medium);
+}
+
+/* Badges disponibilité */
+.availability-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+}
+
+.availability-danger {
+    background: var(--color-error-light);
+    color: #B91C1C;
+}
+
+.availability-warning {
+    background: var(--color-warning-light);
+    color: #92400E;
+}
+
+.availability-success {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+.availability-neutral {
+    background: #F1F5F9;
+    color: #475569;
+}
+
+
+/* ----------------------------------------------------------
+   8. BARRE DE PROGRESSION
+   ---------------------------------------------------------- */
+
+.stock-progress-section {
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+}
+
+.progress-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+}
+
+.progress-header strong {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-bold);
+}
+
+.progress-bar {
+    height: 10px;
+    background: var(--border-color-light);
+    border-radius: var(--border-radius-full);
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        var(--color-primary),
+        var(--color-primary-light)
+    );
+    border-radius: var(--border-radius-full);
+    transition: width var(--transition-slow);
+    min-width: 3px;
+}
+
+.progress-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+
+/* ----------------------------------------------------------
+   9. RÉCAPITULATIF DE CALCUL
+   ---------------------------------------------------------- */
+
+.stock-calculation {
+    padding: var(--spacing-md);
+    background: var(--color-bg-light);
+    border-radius: var(--border-radius-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.calculation-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.calculation-row strong {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+}
+
+.calculation-row-minus strong {
+    color: var(--color-warning);
+}
+
+.calculation-divider {
+    height: 1px;
+    background: var(--border-color-light);
+    margin: var(--spacing-xs) 0;
+}
+
+.calculation-row-total {
+    font-size: var(--font-size-md);
+}
+
+.calculation-row-total strong {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-md);
+}
+
+
+/* ----------------------------------------------------------
+   10. TABLEAU DES LOTS
+   ---------------------------------------------------------- */
+
+.stock-lots-card {
+    grid-column: 1 / -1;
+}
+
+.stock-lots-table {
+    font-size: var(--font-size-sm);
+}
+
+.stock-lots-table thead th {
+    white-space: nowrap;
+}
+
+.stock-lots-table tbody td {
+    vertical-align: middle;
+}
+
+/* Lien dans le tableau */
+.stock-lots-table .table-primary-link {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+    font-family: 'Courier New', monospace;
+    font-size: var(--font-size-xs);
+    text-decoration: none;
+}
+
+.stock-lots-table .table-primary-link:hover {
+    text-decoration: underline;
+}
+
+/* Expiration */
+.expiration-value {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: var(--border-radius-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+}
+
+.expiration-expired {
+    background: var(--color-error-light);
+    color: #B91C1C;
+}
+
+.expiration-warning {
+    background: var(--color-warning-light);
+    color: #92400E;
+}
+
+.expiration-normal {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+/* Statuts de lot dans le tableau */
+.table-status {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: var(--border-radius-full);
+    font-size: 11px;
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+}
+
+.table-status.status-active {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+.table-status.status-danger {
+    background: var(--color-error-light);
+    color: #B91C1C;
+}
+
+.table-status.status-warning {
+    background: var(--color-warning-light);
+    color: #92400E;
+}
+
+.table-status.status-neutral {
+    background: #F1F5F9;
+    color: #475569;
+}
+
+.table-unit {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-left: 2px;
+}
+
+.table-action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-color-light);
+    background: var(--color-bg-white);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+}
+
+.table-action-button:hover {
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+
+/* ----------------------------------------------------------
+   11. CARTE RÉSERVATIONS
+   ---------------------------------------------------------- */
+
+.stock-reservations-card {
+    grid-column: 1 / -1;
+}
+
+
+/* ----------------------------------------------------------
+   12. CARTE MOUVEMENTS
+   ---------------------------------------------------------- */
+
+.stock-movements-card {
+    grid-column: 1 / -1;
+}
+
+.movements-table {
+    font-size: var(--font-size-sm);
+}
+
+.movement-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: var(--border-radius-full);
+    font-size: 11px;
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+}
+
+.movement-entry {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+.movement-exit {
+    background: var(--color-error-light);
+    color: #B91C1C;
+}
+
+.movement-transfer {
+    background: var(--color-info-light);
+    color: #1E40AF;
+}
+
+.movement-adjustment {
+    background: var(--color-warning-light);
+    color: #92400E;
+}
+
+.document-reference {
+    display: inline-block;
+    padding: 3px 8px;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    border-radius: 4px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    font-family: 'Courier New', monospace;
+}
+
+
+/* ----------------------------------------------------------
+   13. CARTE DESCRIPTION (bas de page)
+   ---------------------------------------------------------- */
+
+.stock-description-card {
+    grid-column: 1 / -1;
+}
+
+
+/* ----------------------------------------------------------
+   14. BOUTONS SPÉCIFIQUES
+   ---------------------------------------------------------- */
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: var(--font-size-xs);
+}
+
+.btn-danger {
+    background: var(--color-error);
+    color: #FFFFFF;
+    border-color: var(--color-error);
+}
+
+.btn-danger:hover {
+    background: #DC2626;
+    border-color: #DC2626;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.archive-form {
+    display: inline-block;
+}
+
+
+/* ----------------------------------------------------------
+   15. RESPONSIVE
+   ---------------------------------------------------------- */
+
+@media (max-width: 1200px) {
+    .stock-show-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 992px) {
+    .information-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .stock-show-page .stock-kpi-card {
+        padding: var(--spacing-md);
+    }
+
+    .stock-show-page .stock-kpi-value {
+        font-size: var(--font-size-xl);
+    }
+
+    .state-main-value strong {
+        font-size: var(--font-size-xl);
+    }
+
+    .stock-state-summary {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stock-show-page .page-header-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 576px) {
+    .stock-show-page .stock-overview {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-show-page .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stock-show-page .card-header-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+}

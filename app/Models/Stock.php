@@ -2,46 +2,73 @@
 
 namespace App\Models;
 
+use App\Enums\StatutStock;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * Article du catalogue de stock.
+ *
+ * IMPORTANT — SÉMANTIQUE :
+ *
+ *   Ce modèle représente UNIQUEMENT la fiche descriptive
+ *   d'un article. Il ne contient AUCUNE quantité.
+ *
+ *   Les quantités réelles sont portées par les lots
+ *   (`LotStock`), et leur historique par les mouvements
+ *   (`MouvementStock`).
+ *
+ *   La quantité physique d'un article est calculée
+ *   dynamiquement à partir de ses lots :
+ *
+ *     physique    = somme quantite_actuelle
+ *                 des lots ACTIF + BLOQUE
+ *
+ *     réservée    = somme (quantite_reservee - quantite_consommee)
+ *                 des lignes de réservations actives
+ *
+ *     disponible  = physique - réservée  (>= 0)
+ *
+ *   Le statut `statut` (actif / inactif / archive) est un état
+ *   ADMINISTRATIF, il ne reflète PAS un niveau de quantité.
+ */
 class Stock extends Model
 {
-    /**
-     * La table associée au modèle.
-     *
-     * @var string
-     */
+    use HasFactory;
+
     protected $table = 'stocks';
 
     /**
-     * Les attributs modifiables en masse.
+     * Attributs assignables en masse.
      *
-     * @var array<int, string>
+     * On exclut volontairement :
+     *   - toute quantité (calculée) ;
+     *   - tout statut opérationnel (géré par les services).
      */
     protected $fillable = [
         'reference',
         'designation',
         'categorie',
         'unite',
-        'quantite_initiale',
-        'quantite_actuelle',
         'seuil_alerte',
-        'emplacement',
+        'emplacement_principal_id',
         'description',
         'statut',
     ];
 
     /**
-     * Cast des attributs.
-     *
-     * @return array<string, string>
+     * Casts.
      */
     protected function casts(): array
     {
         return [
-            'quantite_initiale' => 'decimal:2',
-            'quantite_actuelle' => 'decimal:2',
-            'seuil_alerte' => 'decimal:2',
+            'statut'          => StatutStock::class,
+            'seuil_alerte'    => 'decimal:3',
+            'created_at'      => 'datetime',
+            'updated_at'      => 'datetime',
         ];
     }
 
@@ -52,33 +79,169 @@ class Stock extends Model
     */
 
     /**
-     * Les mouvements de ce stock (entrées et sorties).
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Emplacement principal de l'article.
      */
-    public function mouvements()
+    public function emplacementPrincipal(): BelongsTo
+    {
+        return $this->belongsTo(
+            EmplacementStock::class,
+            'emplacement_principal_id'
+        );
+    }
+
+    /**
+     * Lots de l'article.
+     */
+    public function lots(): HasMany
+    {
+        return $this->hasMany(LotStock::class, 'stock_id');
+    }
+
+    /**
+     * Mouvements de l'article.
+     */
+    public function mouvements(): HasMany
     {
         return $this->hasMany(MouvementStock::class, 'stock_id');
     }
 
     /**
-     * Les entrées de ce stock.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Lignes de réservation concernant cet article.
      */
-    public function entrees()
+    public function lignesReservations(): HasMany
     {
-        return $this->hasMany(MouvementStock::class, 'stock_id')->where('type_mouvement', 'entree');
+        return $this->hasMany(LigneReservationStock::class, 'stock_id');
     }
 
     /**
-     * Les sorties de ce stock.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * Lignes de bon de sortie concernant cet article.
      */
-    public function sorties()
+    public function lignesBonsSortie(): HasMany
     {
-        return $this->hasMany(MouvementStock::class, 'stock_id')->where('type_mouvement', 'sortie');
+        return $this->hasMany(LigneBonSortie::class, 'stock_id');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | MÉTHODES MÉTIER — QUANTITÉS
+    |--------------------------------------------------------------------------
+    |
+    | Ces méthodes sont STRICTEMENT en lecture.
+    | Elles ne modifient JAMAIS le stock.
+    |
+    | Toute modification passe obligatoirement par un Service
+    | métier, dans une transaction, avec verrouillage.
+    |
+    */
+
+    /**
+     * Quantité physique réellement présente en stock.
+     *
+     * Calculée à partir des lots ACTIF et BLOQUE.
+     *
+     * On inclut BLOQUE car un lot bloqué reste physiquement
+     * présent (il n'est juste pas utilisable pour une sortie).
+     */
+    public function quantitePhysique(): float
+    {
+        return (float) $this->lots()
+            ->whereIn('statut', [
+                \App\Enums\StatutLot::ACTIF->value,
+                \App\Enums\StatutLot::BLOQUE->value,
+            ])
+            ->sum('quantite_actuelle');
+    }
+
+    /**
+     * Quantité réservée active.
+     *
+     * Seules les réservations confirmées ou partielles sont
+     * considérées comme actives. Le solde pris en compte est :
+     *
+     *   quantite_reservee - quantite_consommee
+     *
+     * pour ne pas compter les quantités déjà sorties.
+     */
+    public function quantiteReservee(): float
+    {
+        return (float) $this->lignesReservations()
+            ->whereHas('reservation', function (Builder $q) {
+                $q->whereIn('statut', [
+                    \App\Enums\StatutReservation::CONFIRMEE->value,
+                    \App\Enums\StatutReservation::PARTIELLE->value,
+                ]);
+            })
+            ->selectRaw(
+                'COALESCE(SUM(quantite_reservee - quantite_consommee), 0) AS total'
+            )
+            ->value('total');
+    }
+
+    /**
+     * Quantité disponible.
+     *
+     *   disponible = physique - réservée
+     *
+     * Bornée à zéro pour ne jamais exposer de négatif.
+     */
+    public function quantiteDisponible(): float
+    {
+        return max(
+            0.0,
+            $this->quantitePhysique() - $this->quantiteReservee()
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | MÉTHODES MÉTIER — ÉTATS
+    |--------------------------------------------------------------------------
+    */
+
+    public function estActif(): bool
+    {
+        return $this->statut === StatutStock::ACTIF;
+    }
+
+    public function estInactif(): bool
+    {
+        return $this->statut === StatutStock::INACTIF;
+    }
+
+    public function estArchive(): bool
+    {
+        return $this->statut === StatutStock::ARCHIVE;
+    }
+
+    /**
+     * Rupture : aucune quantité disponible.
+     */
+    public function estEnRupture(): bool
+    {
+        return $this->quantiteDisponible() <= 0;
+    }
+
+    /**
+     * Sous le seuil d'alerte (si un seuil est configuré).
+     */
+    public function estSousSeuil(): bool
+    {
+        if ($this->seuil_alerte === null) {
+            return false;
+        }
+
+        return $this->quantiteDisponible()
+            <= (float) $this->seuil_alerte;
+    }
+
+    /**
+     * L'article peut-il être utilisé dans une nouvelle opération ?
+     *
+     * Seul un article ACTIF peut être utilisé.
+     */
+    public function peutEtreUtilise(): bool
+    {
+        return $this->estActif();
     }
 
     /*
@@ -87,276 +250,52 @@ class Stock extends Model
     |--------------------------------------------------------------------------
     */
 
-    /**
-     * Scope : produits disponibles.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeDisponible($query)
+    public function scopeActifs(Builder $query): Builder
     {
-        return $query->where('statut', 'disponible');
+        return $query->where(
+            'statut',
+            StatutStock::ACTIF->value
+        );
     }
 
-    /**
-     * Scope : produits en stock faible.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeFaible($query)
+    public function scopeArchives(Builder $query): Builder
     {
-        return $query->where('statut', 'faible');
+        return $query->where(
+            'statut',
+            StatutStock::ARCHIVE->value
+        );
     }
 
-    /**
-     * Scope : produits en rupture.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeRupture($query)
-    {
-        return $query->where('statut', 'rupture');
-    }
+    public function scopeCategorie(
+        Builder $query,
+        ?string $categorie
+    ): Builder {
+        if (!$categorie) {
+            return $query;
+        }
 
-    /**
-     * Scope : filtrer par catégorie.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $categorie
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeCategorie($query, string $categorie)
-    {
         return $query->where('categorie', $categorie);
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | MÉTHODES UTILITAIRES
-    |--------------------------------------------------------------------------
-    */
-
     /**
-     * Libellé de la catégorie en français.
-     *
-     * @return string
+     * Recherche par référence, désignation ou description.
      */
-    public function categorieLibelle(): string
-    {
-        return match($this->categorie) {
-            'vivres' => 'Vivres',
-            'medicaments' => 'Médicaments',
-            'habillement' => 'Habillement',
-            'abris' => 'Abris',
-            'materiel' => 'Matériel',
-            'semences' => 'Semences',
-            'outils' => 'Outils aratoires',
-            'autre' => 'Autre',
-            default => $this->categorie,
-        };
-    }
+    public function scopeRecherche(
+        Builder $query,
+        ?string $recherche
+    ): Builder {
+        $recherche = $recherche !== null
+            ? trim($recherche)
+            : null;
 
-    /**
-     * Libellé du statut en français.
-     *
-     * @return string
-     */
-    public function statutLibelle(): string
-    {
-        return match($this->statut) {
-            'disponible' => 'Disponible',
-            'faible' => 'Stock faible',
-            'rupture' => 'Rupture de stock',
-            default => $this->statut,
-        };
-    }
-
-    /**
-     * Calcule et met à jour le statut en fonction de la quantité actuelle.
-     *
-     * @return string
-     */
-    public function calculerStatut(): string
-    {
-        if ($this->quantite_actuelle <= 0) {
-            $this->statut = 'rupture';
-        } elseif ($this->seuil_alerte !== null && $this->quantite_actuelle <= $this->seuil_alerte) {
-            $this->statut = 'faible';
-        } else {
-            $this->statut = 'disponible';
+        if ($recherche === null || $recherche === '') {
+            return $query;
         }
 
-        $this->save();
-        return $this->statut;
-    }
-
-    /**
-     * Enregistre une entrée de stock.
-     *
-     * @param float $quantite
-     * @param string|null $motif
-     * @param string|null $destinataire
-     * @param string|null $referenceDocument
-     * @param int|null $projetId
-     * @param string|null $notes
-     * @return MouvementStock
-     */
-    public function entrer(
-        float $quantite,
-        ?string $motif = null,
-        ?string $destinataire = null,
-        ?string $referenceDocument = null,
-        ?int $projetId = null,
-        ?string $notes = null
-    ): MouvementStock {
-        // Créer le mouvement
-        $mouvement = MouvementStock::create([
-            'stock_id' => $this->id,
-            'type_mouvement' => 'entree',
-            'quantite' => $quantite,
-            'date_mouvement' => now()->format('Y-m-d'),
-            'reference_document' => $referenceDocument,
-            'motif' => $motif,
-            'destinataire' => $destinataire,
-            'projet_id' => $projetId,
-            'effectue_par' => auth()->id(),
-            'notes' => $notes,
-        ]);
-
-        // Mettre à jour la quantité
-        $this->quantite_actuelle += $quantite;
-        $this->save();
-
-        // Recalculer le statut
-        $this->calculerStatut();
-
-        return $mouvement;
-    }
-
-    /**
-     * Enregistre une sortie de stock.
-     *
-     * @param float $quantite
-     * @param string|null $motif
-     * @param string|null $destinataire
-     * @param string|null $referenceDocument
-     * @param int|null $projetId
-     * @param string|null $notes
-     * @return MouvementStock
-     * @throws \Exception Si la quantité demandée dépasse le stock disponible
-     */
-    public function sortir(
-        float $quantite,
-        ?string $motif = null,
-        ?string $destinataire = null,
-        ?string $referenceDocument = null,
-        ?int $projetId = null,
-        ?string $notes = null
-    ): MouvementStock {
-        // Vérifier que la quantité est suffisante
-        if ($quantite > $this->quantite_actuelle) {
-            throw new \Exception(
-                'Quantité insuffisante en stock. Disponible : ' . $this->quantite_actuelle . ' ' . $this->unite
-            );
-        }
-
-        // Créer le mouvement
-        $mouvement = MouvementStock::create([
-            'stock_id' => $this->id,
-            'type_mouvement' => 'sortie',
-            'quantite' => $quantite,
-            'date_mouvement' => now()->format('Y-m-d'),
-            'reference_document' => $referenceDocument,
-            'motif' => $motif,
-            'destinataire' => $destinataire,
-            'projet_id' => $projetId,
-            'effectue_par' => auth()->id(),
-            'notes' => $notes,
-        ]);
-
-        // Mettre à jour la quantité
-        $this->quantite_actuelle -= $quantite;
-        $this->save();
-
-        // Recalculer le statut
-        $this->calculerStatut();
-
-        return $mouvement;
-    }
-
-    /**
-     * Retourne le total des entrées.
-     *
-     * @return float
-     */
-    public function totalEntrees(): float
-    {
-        return $this->entrees()->sum('quantite');
-    }
-
-    /**
-     * Retourne le total des sorties.
-     *
-     * @return float
-     */
-    public function totalSorties(): float
-    {
-        return $this->sorties()->sum('quantite');
-    }
-
-    /**
-     * Retourne la valeur formatée avec l'unité.
-     *
-     * @param float $quantite
-     * @return string
-     */
-    public function formaterQuantite(float $quantite): string
-    {
-        return number_format($quantite, 2, ',', ' ') . ' ' . $this->unite;
-    }
-
-    /**
-     * Vérifie si le stock est en dessous du seuil d'alerte.
-     *
-     * @return bool
-     */
-    public function estSousSeuil(): bool
-    {
-        return $this->seuil_alerte !== null && $this->quantite_actuelle <= $this->seuil_alerte;
-    }
-
-    /**
-     * Vérifie si le stock est en rupture.
-     *
-     * @return bool
-     */
-    public function estEnRupture(): bool
-    {
-        return $this->quantite_actuelle <= 0;
-    }
-
-    /**
-     * Génère une référence unique si non fournie.
-     *
-     * @return string
-     */
-    public static function genererReference(): string
-    {
-        $annee = date('Y');
-        $mois = date('m');
-        $prefix = 'STK-' . $annee . $mois . '-';
-        $dernier = self::where('reference', 'like', $prefix . '%')
-            ->orderBy('reference', 'desc')
-            ->first();
-
-        if ($dernier) {
-            $numero = (int) substr($dernier->reference, -4) + 1;
-        } else {
-            $numero = 1;
-        }
-
-        return $prefix . str_pad($numero, 4, '0', STR_PAD_LEFT);
+        return $query->where(function (Builder $q) use ($recherche) {
+            $q->where('reference', 'like', "%{$recherche}%")
+              ->orWhere('designation', 'like', "%{$recherche}%")
+              ->orWhere('description', 'like', "%{$recherche}%");
+        });
     }
 }

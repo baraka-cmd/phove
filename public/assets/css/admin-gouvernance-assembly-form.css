@@ -1,124 +1,139 @@
 /* ============================================================
-   AHD-RDC — STYLES GOUVERNANCE — FORMULAIRE AG
-   Palette : Bleu #16558F | Rouge #D32F2F | Noir #1A1A1A
+   ASSEMBLÉE GÉNÉRALE — FORMULAIRE
+   ------------------------------------------------------------
+   Styles dédiés à la page /admin/gouvernance/assemblies/create
    ============================================================ */
 
-/* ----------------------------------------------------------
-   1. CONTAINER DU FORMULAIRE
-   ---------------------------------------------------------- */
+/* ============================================================
+   1. CARTE FORMULAIRE
+   ============================================================ */
+
 .assembly-form-card {
-    background: #fff;
-    border-radius: 18px;
-    padding: 36px 40px;
-    max-width: 850px;
+    background: #FFFFFF;
+    border-radius: 16px;
+    border: 1px solid #E2E8F0;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 32px;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
-/* ----------------------------------------------------------
+/* ============================================================
    2. EN-TÊTE
-   ---------------------------------------------------------- */
+   ============================================================ */
+
 .assembly-form-header {
     display: flex;
     align-items: center;
     gap: 16px;
     margin-bottom: 28px;
     padding-bottom: 20px;
-    border-bottom: 2px solid #f0f0f0;
+    border-bottom: 2px solid #F0F0F0;
 }
 
 .assembly-form-header-icon {
-    width: 50px;
-    height: 50px;
+    width: 52px;
+    height: 52px;
     border-radius: 14px;
-    background: var(--color-primary);
-    color: #fff;
-    font-size: 1.3rem;
+    background: linear-gradient(135deg, #1A5B9C, #3A7BC8);
+    color: #FFFFFF;
+    font-size: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    box-shadow: 0 6px 16px rgba(26, 91, 156, 0.25);
 }
 
-.assembly-form-header h2 {
-    font-size: 1.3rem;
+.assembly-form-header-text h2 {
+    font-size: 20px;
     font-weight: 700;
-    color: #1a1a1a;
-    margin: 0;
+    color: #1E293B;
+    margin: 0 0 4px;
+    line-height: 1.2;
 }
 
-.assembly-form-header p {
+.assembly-form-header-text p {
     font-size: 13px;
-    color: #888;
-    margin: 4px 0 0 0;
+    color: #64748B;
+    margin: 0;
+    line-height: 1.5;
 }
 
-/* ----------------------------------------------------------
-   3. SECTIONS
-   ---------------------------------------------------------- */
+/* ============================================================
+   3. SECTION
+   ============================================================ */
+
 .assembly-form-section {
-    margin-bottom: 28px;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #F1F5F9;
 }
 
-.assembly-form-section:last-child {
-    margin-bottom: 0;
+.assembly-form-section:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 24px;
 }
 
 .assembly-form-section-title {
     font-size: 14px;
     font-weight: 700;
-    color: #1a1a1a;
-    margin-bottom: 18px;
+    color: #1E293B;
+    margin: 0 0 20px;
     padding-bottom: 10px;
-    border-bottom: 2px solid var(--color-primary-lighter);
+    border-bottom: 2px solid #E8F0F8;
     display: flex;
     align-items: center;
     gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
 .assembly-form-section-title i {
-    color: #fff;
-    background: var(--color-primary);
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
+    color: #1A5B9C;
+    font-size: 15px;
 }
 
-/* ----------------------------------------------------------
-   4. GRILLE DU FORMULAIRE
-   ---------------------------------------------------------- */
+/* ============================================================
+   4. GRILLE
+   ============================================================ */
+
 .assembly-form-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 20px;
+}
+
+.assembly-form-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.assembly-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
 }
 
 .assembly-form-full {
     grid-column: 1 / -1;
 }
 
-/* ----------------------------------------------------------
-   5. GROUPES DE CHAMPS
-   ---------------------------------------------------------- */
-.assembly-form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 18px;
-}
+/* ============================================================
+   5. LABELS ET INPUTS
+   ============================================================ */
 
 .assembly-form-label {
     font-size: 13px;
     font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 7px;
+    color: #334155;
+    line-height: 1.3;
 }
 
 .assembly-form-label .required {
-    color: var(--color-accent);
+    color: #EF4444;
+    margin-left: 2px;
 }
 
 .assembly-form-input,
@@ -126,185 +141,192 @@
 .assembly-form-textarea {
     width: 100%;
     padding: 11px 14px;
-    font-family: var(--font-primary);
-    font-size: 13px;
-    border: 2px solid var(--border-color);
+    font-family: inherit;
+    font-size: 14px;
+    color: #1E293B;
+    background: #FFFFFF;
+    border: 2px solid #CBD5E1;
     border-radius: 8px;
     outline: none;
-    transition: all 0.25s ease;
-    background: #fafbfc;
-    color: #1a1a1a;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    line-height: 1.4;
+}
+
+.assembly-form-input::placeholder,
+.assembly-form-textarea::placeholder {
+    color: #94A3B8;
 }
 
 .assembly-form-input:focus,
 .assembly-form-select:focus,
 .assembly-form-textarea:focus {
-    border-color: var(--color-primary);
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(22, 85, 143, 0.08);
-}
-
-.assembly-form-input::placeholder,
-.assembly-form-textarea::placeholder {
-    color: #bbb;
-    font-style: italic;
-}
-
-.assembly-form-input.error,
-.assembly-form-select.error {
-    border-color: var(--color-accent);
-    background: #fffbfb;
+    border-color: #1A5B9C;
+    box-shadow: 0 0 0 3px rgba(26, 91, 156, 0.12);
 }
 
 .assembly-form-select {
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    padding-right: 36px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23777' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
     background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 38px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
 }
 
 .assembly-form-textarea {
     resize: vertical;
-    min-height: 100px;
+    min-height: 90px;
+    font-family: inherit;
 }
 
-.assembly-form-error {
-    font-size: 11px;
-    color: var(--color-accent);
-    margin-top: 5px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+.assembly-form-file {
+    padding: 10px 14px;
+    font-size: 13px;
+    background: #FFFFFF;
+    border: 2px dashed #CBD5E1;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: border-color 0.2s ease;
+}
+
+.assembly-form-file:hover {
+    border-color: #1A5B9C;
+    background: #F0F7FF;
 }
 
 .assembly-form-hint {
     font-size: 11px;
-    color: var(--color-text-muted);
-    margin-top: 4px;
+    color: #64748B;
     font-style: italic;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
-/* ----------------------------------------------------------
-   6. INDICATEUR DE QUORUM
-   ---------------------------------------------------------- */
-.quorum-info-box {
-    padding: 16px 18px;
+.assembly-form-error {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #EF4444;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.assembly-form-error i {
+    font-size: 11px;
+}
+
+.assembly-form-input.error,
+.assembly-form-select.error,
+.assembly-form-textarea.error {
+    border-color: #EF4444;
+    background: #FEF2F2;
+}
+
+/* ============================================================
+   6. BOÎTE QUORUM
+   ============================================================ */
+
+.assembly-quorum-box {
+    padding: 12px 16px;
     border-radius: 10px;
     font-size: 13px;
     font-weight: 600;
     text-align: center;
-    width: 100%;
-    transition: all 0.3s ease;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 4px;
+    min-height: 46px;
+    line-height: 1.4;
+    transition: background 0.3s ease, color 0.3s ease;
+    border: 2px solid transparent;
 }
 
-.quorum-info-default {
-    background: var(--color-bg-light);
-    color: #888;
+.assembly-quorum-box small {
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.85;
+    display: block;
+    margin-top: 2px;
 }
 
-.quorum-info-atteint {
-    background: var(--color-success-light);
-    color: var(--color-success);
+/* États du quorum */
+.assembly-quorum-box[data-state="empty"] {
+    background: #F1F5F9;
+    color: #64748B;
+    border-color: #E2E8F0;
 }
 
-.quorum-info-non-atteint {
-    background: var(--color-error-light);
-    color: var(--color-accent);
+.assembly-quorum-box[data-state="success"] {
+    background: #D1FAE5;
+    color: #065F46;
+    border-color: #6EE7B7;
 }
 
-/* ----------------------------------------------------------
-   7. UPLOAD FICHIER
-   ---------------------------------------------------------- */
-.assembly-file-upload {
-    position: relative;
+.assembly-quorum-box[data-state="warning"] {
+    background: #FEF3C7;
+    color: #92400E;
+    border-color: #FCD34D;
 }
 
-.assembly-file-input {
-    width: 100%;
-    padding: 10px 12px;
-    font-size: 12px;
-}
+/* ============================================================
+   7. ACTIONS
+   ============================================================ */
 
-.assembly-file-input::file-selector-button {
-    padding: 7px 16px;
-    background: var(--color-bg-light);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-family: var(--font-primary);
-    font-size: 12px;
-    cursor: pointer;
-    margin-right: 10px;
-    transition: all 0.2s ease;
-}
-
-.assembly-file-input::file-selector-button:hover {
-    background: var(--color-primary-lighter);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-}
-
-/* ----------------------------------------------------------
-   8. BARRE D'ACTIONS
-   ---------------------------------------------------------- */
 .assembly-form-actions {
     display: flex;
+    align-items: center;
     justify-content: flex-end;
-    gap: 10px;
-    margin-top: 28px;
-    padding-top: 22px;
-    border-top: 2px solid #f0f0f0;
+    gap: 12px;
+    padding-top: 24px;
+    border-top: 1px solid #F1F5F9;
+    flex-wrap: wrap;
 }
 
-/* ----------------------------------------------------------
-   9. ANIMATIONS
-   ---------------------------------------------------------- */
-.assembly-form-card {
-    animation: fadeIn 0.5s ease forwards;
-}
+/* ============================================================
+   8. RESPONSIVE
+   ============================================================ */
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* ----------------------------------------------------------
-   10. RESPONSIVE
-   ---------------------------------------------------------- */
 @media (max-width: 992px) {
     .assembly-form-card {
-        padding: 28px 24px;
+        padding: 24px;
+    }
+
+    .assembly-form-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 768px) {
-    .assembly-form-grid {
-        grid-template-columns: 1fr;
-    }
     .assembly-form-card {
-        padding: 22px 18px;
+        padding: 20px 16px;
+        border-radius: 12px;
     }
-    .assembly-form-header {
-        flex-direction: column;
-        text-align: center;
-    }
-    .assembly-form-header-icon {
-        margin: 0 auto;
-    }
-}
 
-@media (max-width: 576px) {
-    .assembly-form-card {
-        padding: 18px 14px;
-        border-radius: 14px;
+    .assembly-form-grid,
+    .assembly-form-grid-4 {
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
+
     .assembly-form-section-title {
         font-size: 13px;
+    }
+
+    .assembly-form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .assembly-form-actions .btn {
+        width: 100%;
+        justify-content: center;
     }
 }

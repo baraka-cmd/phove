@@ -1,0 +1,1735 @@
+/* ============================================================
+   PHOVE — ADMINISTRATION
+   MODULE : SALAIRES
+   VUE    : BULLETIN DE SALAIRE
+   FICHIER: bulletin.css
+
+   Blade associé :
+   resources/views/admin/salaires/bulletin.blade.php
+
+   OBJECTIFS :
+   - Document professionnel
+   - Lecture écran + impression
+   - Format A4
+   - Présentation administrative officielle
+   - Aucun Bootstrap
+   - Aucun style inline
+   - Responsive
+   ============================================================ */
+
+
+/* ============================================================
+   1. VARIABLES
+   ============================================================ */
+
+.salary-bulletin {
+    --bulletin-primary: var(--primary-color, #2563eb);
+    --bulletin-primary-dark: var(--primary-dark, #1d4ed8);
+
+    --bulletin-success: var(--success-color, #16a34a);
+    --bulletin-warning: var(--warning-color, #d97706);
+    --bulletin-danger: var(--danger-color, #dc2626);
+
+    --bulletin-bg: #f3f5f8;
+    --bulletin-paper: #ffffff;
+
+    --bulletin-text: #1f2937;
+    --bulletin-muted: #64748b;
+
+    --bulletin-border: #dfe4ea;
+    --bulletin-border-dark: #cbd5e1;
+
+    --bulletin-radius: 9px;
+
+    --bulletin-shadow:
+        0 8px 30px rgba(15, 23, 42, 0.08);
+
+    --bulletin-transition: 0.2s ease;
+}
+
+
+/* ============================================================
+   2. RESET LOCAL
+   ============================================================ */
+
+.salary-bulletin *,
+.salary-bulletin *::before,
+.salary-bulletin *::after {
+    box-sizing: border-box;
+}
+
+.salary-bulletin {
+    width: 100%;
+
+    color: var(--bulletin-text);
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+}
+
+.salary-bulletin img {
+    max-width: 100%;
+}
+
+.salary-bulletin button,
+.salary-bulletin input,
+.salary-bulletin textarea,
+.salary-bulletin select {
+    font: inherit;
+}
+
+
+/* ============================================================
+   3. CONTENEUR GLOBAL
+   ============================================================ */
+
+.salary-bulletin .bulletin-page {
+    width: 100%;
+}
+
+.salary-bulletin .bulletin-container {
+    width: 100%;
+
+    max-width: 1000px;
+
+    margin: 0 auto;
+}
+
+
+/* ============================================================
+   4. BARRE D'ACTIONS
+   ============================================================ */
+
+.salary-bulletin .bulletin-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 18px;
+
+    padding: 12px 14px;
+
+    border: 1px solid var(--bulletin-border);
+
+    border-radius: var(--bulletin-radius);
+
+    background: #ffffff;
+
+    box-shadow: var(--bulletin-shadow);
+}
+
+.salary-bulletin .toolbar-left,
+.salary-bulletin .toolbar-right {
+    display: flex;
+    align-items: center;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.salary-bulletin .toolbar-title {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0;
+
+    color: var(--bulletin-text);
+
+    font-size: 0.84rem;
+
+    font-weight: 750;
+}
+
+.salary-bulletin .toolbar-title i {
+    color: var(--bulletin-primary);
+}
+
+
+/* ============================================================
+   5. BOUTONS
+   ============================================================ */
+
+.salary-bulletin .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 37px;
+
+    padding: 8px 13px;
+
+    border: 1px solid transparent;
+
+    border-radius: 7px;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    color: inherit;
+
+    font-size: 0.74rem;
+
+    font-weight: 650;
+
+    line-height: 1.2;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    transition:
+        background-color var(--bulletin-transition),
+        border-color var(--bulletin-transition),
+        color var(--bulletin-transition),
+        transform var(--bulletin-transition);
+}
+
+.salary-bulletin .btn:hover {
+    transform: translateY(-1px);
+}
+
+.salary-bulletin .btn:active {
+    transform: translateY(0);
+}
+
+.salary-bulletin .btn-primary {
+    background: var(--bulletin-primary);
+
+    border-color: var(--bulletin-primary);
+
+    color: #ffffff;
+}
+
+.salary-bulletin .btn-primary:hover {
+    background: var(--bulletin-primary-dark);
+
+    border-color: var(--bulletin-primary-dark);
+}
+
+.salary-bulletin .btn-secondary {
+    background: #64748b;
+
+    border-color: #64748b;
+
+    color: #ffffff;
+}
+
+.salary-bulletin .btn-secondary:hover {
+    background: #475569;
+
+    border-color: #475569;
+}
+
+.salary-bulletin .btn-outline {
+    border-color: var(--bulletin-border);
+
+    background: #ffffff;
+
+    color: var(--bulletin-text);
+}
+
+.salary-bulletin .btn-outline:hover {
+    border-color: var(--bulletin-primary);
+
+    color: var(--bulletin-primary);
+
+    background: #f8fafc;
+}
+
+.salary-bulletin .btn-danger {
+    background: var(--bulletin-danger);
+
+    border-color: var(--bulletin-danger);
+
+    color: #ffffff;
+}
+
+
+/* ============================================================
+   6. ALERTES / AVERTISSEMENTS
+   ============================================================ */
+
+.salary-bulletin .bulletin-alert {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    padding: 12px 14px;
+
+    margin-bottom: 15px;
+
+    border: 1px solid transparent;
+
+    border-radius: 7px;
+
+    font-size: 0.74rem;
+
+    line-height: 1.55;
+}
+
+.salary-bulletin .bulletin-alert i {
+    margin-top: 2px;
+}
+
+.salary-bulletin .bulletin-alert-warning {
+    border-color: #fde68a;
+
+    background: #fffbeb;
+
+    color: #92400e;
+}
+
+.salary-bulletin .bulletin-alert-danger {
+    border-color: #fecaca;
+
+    background: #fef2f2;
+
+    color: #991b1b;
+}
+
+.salary-bulletin .bulletin-alert-success {
+    border-color: #bbf7d0;
+
+    background: #f0fdf4;
+
+    color: #166534;
+}
+
+.salary-bulletin .bulletin-alert-info {
+    border-color: #bae6fd;
+
+    background: #f0f9ff;
+
+    color: #075985;
+}
+
+
+/* ============================================================
+   7. FEUILLE A4
+   ============================================================ */
+
+.salary-bulletin .bulletin-paper {
+    width: 100%;
+
+    min-height: 1120px;
+
+    padding: 38px 42px;
+
+    background: var(--bulletin-paper);
+
+    border: 1px solid var(--bulletin-border);
+
+    box-shadow: var(--bulletin-shadow);
+}
+
+
+/* ============================================================
+   8. EN-TÊTE ORGANISATION
+   ============================================================ */
+
+.salary-bulletin .organization-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 25px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 2px solid var(--bulletin-primary);
+}
+
+.salary-bulletin .organization-identity {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    min-width: 0;
+}
+
+.salary-bulletin .organization-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 64px;
+
+    width: 64px;
+    height: 64px;
+
+    overflow: hidden;
+
+    border: 1px solid var(--bulletin-border);
+
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+    color: var(--bulletin-primary);
+
+    font-size: 1.25rem;
+
+    font-weight: 800;
+}
+
+.salary-bulletin .organization-logo img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+}
+
+.salary-bulletin .organization-info {
+    min-width: 0;
+}
+
+.salary-bulletin .organization-name {
+    margin: 0 0 4px;
+
+    color: var(--bulletin-text);
+
+    font-size: 1.08rem;
+
+    font-weight: 800;
+
+    line-height: 1.3;
+}
+
+.salary-bulletin .organization-description {
+    margin: 0;
+
+    color: var(--bulletin-muted);
+
+    font-size: 0.68rem;
+
+    line-height: 1.45;
+}
+
+.salary-bulletin .organization-contact {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    margin-top: 6px;
+
+    color: var(--bulletin-muted);
+
+    font-size: 0.63rem;
+}
+
+.salary-bulletin .organization-contact-item {
+    display: flex;
+    align-items: center;
+
+    gap: 5px;
+}
+
+.salary-bulletin .organization-contact-item i {
+    width: 12px;
+
+    color: var(--bulletin-primary);
+
+    text-align: center;
+}
+
+
+/* ============================================================
+   9. BLOC DOCUMENT
+   ============================================================ */
+
+.salary-bulletin .document-meta {
+    flex: 0 0 auto;
+
+    min-width: 190px;
+
+    text-align: right;
+}
+
+.salary-bulletin .document-type {
+    margin: 0 0 5px;
+
+    color: var(--bulletin-primary);
+
+    font-size: 1.02rem;
+
+    font-weight: 850;
+
+    letter-spacing: 0.03em;
+
+    text-transform: uppercase;
+}
+
+.salary-bulletin .document-number {
+    margin: 0 0 3px;
+
+    color: var(--bulletin-text);
+
+    font-family: "Courier New", monospace;
+
+    font-size: 0.68rem;
+
+    font-weight: 700;
+}
+
+.salary-bulletin .document-date {
+    margin: 0;
+
+    color: var(--bulletin-muted);
+
+    font-size: 0.63rem;
+}
+
+
+/* ============================================================
+   10. TITRE BULLETIN
+   ============================================================ */
+
+.salary-bulletin .bulletin-heading {
+    padding: 25px 0 20px;
+
+    text-align: center;
+}
+
+.salary-bulletin .bulletin-title {
+    margin: 0 0 6px;
+
+    color: var(--bulletin-text);
+
+    font-size: 1.28rem;
+
+    font-weight: 850;
+
+    letter-spacing: 0.035em;
+
+    text-transform: uppercase;
+}
+
+.salary-bulletin .bulletin-period {
+    margin: 0;
+
+    color: var(--bulletin-muted);
+
+    font-size: 0.74rem;
+
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   11. IDENTIFICATION DU SALARIÉ
+   ============================================================ */
+
+.salary-bulletin .employee-section {
+    margin-bottom: 20px;
+
+    border: 1px solid var(--bulletin-border);
+
+    border-radius: 6px;
+
+    overflow: hidden;
+}
+
+.salary-bulletin .section-title {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0;
+
+    padding: 10px 13px;
+
+    border-bottom: 1px solid var(--bulletin-border);
+
+    background: #f8fafc;
+
+    color: var(--bulletin-text);
+
+    font-size: 0.75rem;
+
+    font-weight: 750;
+
+    text-transform: uppercase;
+}
+
+.salary-bulletin .section-title i {
+    color: var(--bulletin-primary);
+}
+
+.salary-bulletin .employee-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 0;
+}
+
+.salary-bulletin .employee-item {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    padding: 11px 13px;
+
+    border-bottom: 1px solid var(--bulletin-border);
+
+}
+
+.salary-bulletin .employee-item:nth-child(odd) {
+    border-right: 1px solid var(--bulletin-border);
+}
+
+.salary-bulletin .employee-item:nth-last-child(-n + 2) {
+    border-bottom: 0;
+}
+
+.salary-bulletin .employee-label {
+    flex: 0 0 105px;
+
+    color: var(--bulletin-muted);
+
+    font-size: 0.64rem;
+
+    font-weight: 600;
+}
+
+.salary-bulletin .employee-value {
+    min-width: 0;
+
+    color: var(--bulletin-text);
+
+    font-size: 0.69rem;
+
+    font-weight: 700;
+
+    line-height: 1.4;
+}
+
+
+/* ============================================================
+   12. TABLEAU FINANCIER
+   ============================================================ */
+
+.salary-bulletin .financial-section {
+    margin-bottom: 20px;
+
+    border: 1px solid var(--bulletin-border);
+
+    border-radius: 6px;
+
+    overflow: hidden;
+}
+
+.salary-bulletin .financial-table-wrapper {
+    overflow-x: auto;
+}
+
+.salary-bulletin .financial-table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.salary-bulletin .financial-table th {
+    padding: 10px 12px;
+
+    border-bottom: 1px solid var(--bulletin-border);
+
+    background: #f8fafc;
+
+    color: var(--bulletin-muted);
+
+    font-size: 0.62rem;
+
+    font-weight: 750;
+
+    text-align: left;
+
+    text-transform: uppercase;
+}
+
+.salary-bulletin .financial-table th.amount-column {
+    width: 180px;
+
+    text-align: right;
+}
+
+.salary-bulletin .financial-table td {
+    padding: 11px 12px;
+
+    border-bottom: 1px solid var(--bulletin-border);
+
+    color: var(--bulletin-text);
+
+    font-size: 0.7rem;
+
+    vertical-align: middle;
+}
+
+.salary-bulletin .financial-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.salary-bulletin .financial-table .description {
+    font-weight: 600;
+}
+
+.salary-bulletin .financial-table .amount {
+    text-align: right;
+
+    font-weight: 700;
+
+    font-variant-numeric: tabular-nums;
+
+    white-space: nowrap;
+}
+
+.salary-bulletin .financial-table .amount.positive {
+    color: var(--bulletin-success);
+}
+
+.salary-bulletin .financial-table .amount.negative {
+    color: var(--bulletin-danger);
+}
+
+.salary-bulletin .financial-total-row td {
+    border-top: 2px solid var(--bulletin-primary);
+
+    background: #f8fafc;
+}
+
+.salary-bulletin .financial-total-label {
+    font-weight: 800 !important;
+
+    text-transform: uppercase;
+}
+
+.salary-bulletin .financial-total-value {
+    color: var(--bulletin-primary) !important;
+
+    font-size: 0.92rem !important;
+
+    font-weight: 850 !important;
+}
+
+
+/* ============================================================
+   13. MONTANT NET MIS EN ÉVIDENCE
+   ============================================================ */
+
+.salary-bulletin .net-salary-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 15px 17px;
+
+    margin-bottom: 20px;
+
+    border: 1px solid rgba(37, 99, 235, 0.20);
+
+    border-radius: 7px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(37, 99, 235, 0.07),
+            rgba(37, 99, 235, 0.025)
+        );
+}
+
+.salary-bulletin .net-salary-label {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    color: var(--bulletin-text);
+
+    font-size: 0.76rem;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+.salary-bulletin .net-salary-label i {
+    color: var(--bulletin-primary);
+}
+
+.salary-bulletin .net-salary-value {
+    color: var(--bulletin-primary);
+
+    font-size: 1.15rem;
+
+    font-weight: 900;
+
+    font-variant-numeric: tabular-nums;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   14. STATUT DU PAIEMENT
+   ============================================================ */
+
+.salary-bulletin .payment-status-section {
+    margin-bottom: 20px;
+
+    padding: 15px;
+
+    border: 1px solid var(--bulletin-border);
+
+    border-radius: 6px;
+}
+
+.salary-bulletin .payment-status-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 12px;
+}
+
+.salary-bulletin .payment-status-title {
+    margin: 0;
+
+    color: var(--bulletin-text);
+
+    font-size: 0.77rem;
+
+    font-weight: 750;
+}
+
+.salary-bulletin .status-badge {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+
+    padding: 6px 10px;
+
+    border: 1px solid transparent;
+
+    border-radius: 999px;
+
+    font-size: 0.64rem;
+
+    font-weight: 750;
+
+    white-space: nowrap;
+}
+
+.salary-bulletin .status-brouillon {
+    border-color: #cbd5e1;
+
+    background: #f1f5f9;
+
+    color: #475569;
+}
+
+.salary-bulletin .status-valide {
+    border-color: #bfdbfe;
+
+    background: #eff6ff;
+
+    color: #1d4ed8;
+}
+
+.salary-bulletin .status-partiellement-paye {
+    border-color: #fde68a;
+
+    background: #fffbeb;
+
+    color: #92400e;
+}
+
+.salary-bulletin .status-paye {
+    border-color: #bbf7d0;
+
+    background: #f0fdf4;
+
+    color: #166534;
+}
+
+.salary-bulletin .status-annule {
+    border-color: #fecaca;
+
+    background: #fef2f2;
+
+    color: #991b1b;
+}
+
+
+/* ============================================================
+   15. PROGRESSION DU PAIEMENT
+   ============================================================ */
+
+.salary-bulletin .payment-progress {
+    width: 100%;
+}
+
+.salary-bulletin .payment-progress-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+
+    margin-bottom: 7px;
+}
+
+.salary-bulletin .payment-progress-label {
+    color: var(--bulletin-muted);
+
+    font-size: 0.64rem;
+
+    font-weight: 600;
+}
+
+.salary-bulletin .payment-progress-percentage {
+    color: var(--bulletin-text);
+
+    font-size: 0.67rem;
+
+    font-weight: 800;
+}
+
+.salary-bulletin .payment-progress-track {
+    width: 100%;
+
+    height: 8px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #e5e7eb;
+}
+
+.salary-bulletin .payment-progress-bar {
+    width: 0;
+
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: var(--bulletin-primary);
+
+    transition: width 0.35s ease;
+}
+
+.salary-bulletin .payment-progress-bar.partial {
+    background: var(--bulletin-warning);
+}
+
+.salary-bulletin .payment-progress-bar.complete {
+    background: var(--bulletin-success);
+}
+
+
+/* ============================================================
+   16. RÉSUMÉ DU RÈGLEMENT
+   ============================================================ */
+
+.salary-bulletin .settlement-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 10px;
+
+    margin-top: 13px;
+}
+
+.salary-bulletin .settlement-item {
+    padding: 9px 10px;
+
+    border: 1px solid var(--bulletin-border);
+
+    border-radius: 5px;
+
+    background: #fcfcfd;
+}
+
+.salary-bulletin .settlement-label {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: var(--bulletin-muted);
+
+    font-size: 0.59rem;
+}
+
+.salary-bulletin .settlement-value {
+    display: block;
+
+    color: var(--bulletin-text);
+
+    font-size: 0.7rem;
+
+    font-weight: 750;
+
+    font-variant-numeric: tabular-nums;
+}
+
+.salary-bulletin .settlement-value.success {
+    color: var(--bulletin-success);
+}
+
+.salary-bulletin .settlement-value.warning {
+    color: var(--bulletin-warning);
+}
+
+
+/* ============================================================
+   17. HISTORIQUE DES PAIEMENTS
+   ============================================================ */
+
+.salary-bulletin .payment-history {
+    margin-bottom: 20px;
+
+    border: 1px solid var(--bulletin-border);
+
+    border-radius: 6px;
+
+    overflow: hidden;
+}
+
+.salary-bulletin .history-table-wrapper {
+    overflow-x: auto;
+}
+
+.salary-bulletin .history-table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.salary-bulletin .history-table th {
+    padding: 9px 10px;
+
+    border-bottom: 1px solid var(--bulletin-border);
+
+    background: #f8fafc;
+
+    color: var(--bulletin-muted);
+
+    font-size: 0.59rem;
+
+    font-weight: 750;
+
+    text-align: left;
+
+    text-transform: uppercase;
+}
+
+.salary-bulletin .history-table td {
+    padding: 10px;
+
+    border-bottom: 1px solid var(--bulletin-border);
+
+    color: var(--bulletin-text);
+
+    font-size: 0.65rem;
+}
+
+.salary-bulletin .history-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.salary-bulletin .history-reference {
+    font-family: "Courier New", monospace;
+
+    font-size: 0.59rem;
+
+    font-weight: 700;
+}
+
+.salary-bulletin .history-amount {
+    color: var(--bulletin-success);
+
+    font-weight: 750;
+
+    font-variant-numeric: tabular-nums;
+
+    white-space: nowrap;
+}
+
+.salary-bulletin .history-mode {
+    color: var(--bulletin-muted);
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   18. NOTES
+   ============================================================ */
+
+.salary-bulletin .notes-section {
+    margin-bottom: 20px;
+
+    padding: 13px 15px;
+
+    border: 1px solid var(--bulletin-border);
+
+    border-left: 3px solid var(--bulletin-primary);
+
+    border-radius: 5px;
+
+    background: #fcfcfd;
+}
+
+.salary-bulletin .notes-title {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin: 0 0 7px;
+
+    color: var(--bulletin-text);
+
+    font-size: 0.7rem;
+
+    font-weight: 750;
+}
+
+.salary-bulletin .notes-title i {
+    color: var(--bulletin-primary);
+}
+
+.salary-bulletin .notes-content {
+    margin: 0;
+
+    color: var(--bulletin-muted);
+
+    font-size: 0.66rem;
+
+    line-height: 1.6;
+
+    white-space: pre-line;
+}
+
+
+/* ============================================================
+   19. ANNULATION
+   ============================================================ */
+
+.salary-bulletin .cancellation-section {
+    margin-bottom: 20px;
+
+    padding: 14px 15px;
+
+    border: 1px solid #fecaca;
+
+    border-left: 3px solid var(--bulletin-danger);
+
+    border-radius: 5px;
+
+    background: #fffafa;
+}
+
+.salary-bulletin .cancellation-title {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin: 0 0 7px;
+
+    color: #991b1b;
+
+    font-size: 0.72rem;
+
+    font-weight: 800;
+}
+
+.salary-bulletin .cancellation-title i {
+    color: var(--bulletin-danger);
+}
+
+.salary-bulletin .cancellation-content {
+    margin: 0;
+
+    color: #b91c1c;
+
+    font-size: 0.66rem;
+
+    line-height: 1.55;
+
+    white-space: pre-line;
+}
+
+
+/* ============================================================
+   20. SIGNATURES
+   ============================================================ */
+
+.salary-bulletin .signature-section {
+    margin-top: 38px;
+
+    page-break-inside: avoid;
+}
+
+.salary-bulletin .signature-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 55px;
+}
+
+.salary-bulletin .signature-box {
+    min-height: 100px;
+
+    text-align: center;
+}
+
+.salary-bulletin .signature-role {
+    margin: 0 0 45px;
+
+    color: var(--bulletin-text);
+
+    font-size: 0.67rem;
+
+    font-weight: 750;
+}
+
+.salary-bulletin .signature-line {
+    width: 80%;
+
+    height: 1px;
+
+    margin: 0 auto 6px;
+
+    background: #64748b;
+}
+
+.salary-bulletin .signature-name {
+    margin: 0;
+
+    color: var(--bulletin-muted);
+
+    font-size: 0.61rem;
+}
+
+
+/* ============================================================
+   21. PIED DE PAGE
+   ============================================================ */
+
+.salary-bulletin .bulletin-footer {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding-top: 18px;
+
+    margin-top: 28px;
+
+    border-top: 1px solid var(--bulletin-border);
+
+    color: var(--bulletin-muted);
+
+    font-size: 0.57rem;
+
+    line-height: 1.45;
+}
+
+.salary-bulletin .footer-left {
+    max-width: 65%;
+}
+
+.salary-bulletin .footer-right {
+    text-align: right;
+}
+
+.salary-bulletin .footer-security {
+    margin-top: 3px;
+
+    font-family: "Courier New", monospace;
+
+    font-size: 0.54rem;
+}
+
+
+/* ============================================================
+   22. FILIGRANE / DOCUMENT ANNULÉ
+   ============================================================ */
+
+.salary-bulletin .cancelled-watermark {
+    position: absolute;
+
+    top: 45%;
+
+    left: 50%;
+
+    z-index: 5;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(-25deg);
+
+    padding: 10px 30px;
+
+    border: 4px solid rgba(220, 38, 38, 0.22);
+
+    color: rgba(220, 38, 38, 0.24);
+
+    font-size: 3.4rem;
+
+    font-weight: 900;
+
+    letter-spacing: 0.12em;
+
+    pointer-events: none;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+.salary-bulletin .bulletin-paper {
+    position: relative;
+}
+
+
+/* ============================================================
+   23. ÉTAT BROUILLON
+   ============================================================ */
+
+.salary-bulletin .draft-watermark {
+    position: absolute;
+
+    top: 45%;
+
+    left: 50%;
+
+    z-index: 5;
+
+    transform:
+        translate(-50%, -50%)
+        rotate(-25deg);
+
+    padding: 9px 27px;
+
+    border: 3px solid rgba(100, 116, 139, 0.20);
+
+    color: rgba(100, 116, 139, 0.20);
+
+    font-size: 2.8rem;
+
+    font-weight: 900;
+
+    letter-spacing: 0.1em;
+
+    pointer-events: none;
+
+    text-transform: uppercase;
+
+    white-space: nowrap;
+}
+
+
+/* ============================================================
+   24. SÉPARATEUR
+   ============================================================ */
+
+.salary-bulletin .separator {
+    width: 100%;
+
+    height: 1px;
+
+    margin: 15px 0;
+
+    background: var(--bulletin-border);
+}
+
+
+/* ============================================================
+   25. UTILITAIRES
+   ============================================================ */
+
+.salary-bulletin .text-muted {
+    color: var(--bulletin-muted) !important;
+}
+
+.salary-bulletin .text-primary {
+    color: var(--bulletin-primary) !important;
+}
+
+.salary-bulletin .text-success {
+    color: var(--bulletin-success) !important;
+}
+
+.salary-bulletin .text-warning {
+    color: var(--bulletin-warning) !important;
+}
+
+.salary-bulletin .text-danger {
+    color: var(--bulletin-danger) !important;
+}
+
+.salary-bulletin .text-center {
+    text-align: center !important;
+}
+
+.salary-bulletin .text-right {
+    text-align: right !important;
+}
+
+.salary-bulletin .font-bold {
+    font-weight: 750 !important;
+}
+
+
+/* ============================================================
+   26. RESPONSIVE — 900 PX
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    .salary-bulletin .bulletin-paper {
+        padding: 30px;
+    }
+
+    .salary-bulletin .organization-header {
+        flex-direction: column;
+    }
+
+    .salary-bulletin .document-meta {
+        width: 100%;
+
+        text-align: left;
+    }
+
+    .salary-bulletin .employee-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .salary-bulletin .employee-item:nth-child(odd) {
+        border-right: 0;
+    }
+
+    .salary-bulletin .employee-item:nth-last-child(-n + 2) {
+        border-bottom: 1px solid var(--bulletin-border);
+    }
+
+    .salary-bulletin .employee-item:last-child {
+        border-bottom: 0;
+    }
+}
+
+
+/* ============================================================
+   27. RESPONSIVE — 680 PX
+   ============================================================ */
+
+@media (max-width: 680px) {
+
+    .salary-bulletin .bulletin-toolbar {
+        align-items: stretch;
+
+        flex-direction: column;
+    }
+
+    .salary-bulletin .toolbar-left,
+    .salary-bulletin .toolbar-right {
+        width: 100%;
+    }
+
+    .salary-bulletin .toolbar-right {
+        justify-content: stretch;
+    }
+
+    .salary-bulletin .toolbar-right .btn {
+        flex: 1;
+    }
+
+    .salary-bulletin .bulletin-paper {
+        min-height: auto;
+
+        padding: 22px 18px;
+    }
+
+    .salary-bulletin .organization-identity {
+        align-items: flex-start;
+    }
+
+    .salary-bulletin .organization-logo {
+        flex-basis: 52px;
+
+        width: 52px;
+        height: 52px;
+    }
+
+    .salary-bulletin .organization-name {
+        font-size: 0.95rem;
+    }
+
+    .salary-bulletin .bulletin-title {
+        font-size: 1.05rem;
+    }
+
+    .salary-bulletin .net-salary-box {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 7px;
+    }
+
+    .salary-bulletin .settlement-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .salary-bulletin .signature-grid {
+        grid-template-columns: 1fr;
+
+        gap: 30px;
+    }
+
+    .salary-bulletin .signature-section {
+        margin-top: 25px;
+    }
+
+    .salary-bulletin .bulletin-footer {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .salary-bulletin .footer-left {
+        max-width: none;
+    }
+
+    .salary-bulletin .footer-right {
+        width: 100%;
+
+        text-align: left;
+    }
+}
+
+
+/* ============================================================
+   28. RESPONSIVE — 480 PX
+   ============================================================ */
+
+@media (max-width: 480px) {
+
+    .salary-bulletin .bulletin-paper {
+        padding: 18px 13px;
+    }
+
+    .salary-bulletin .organization-identity {
+        gap: 10px;
+    }
+
+    .salary-bulletin .organization-logo {
+        flex-basis: 44px;
+
+        width: 44px;
+        height: 44px;
+    }
+
+    .salary-bulletin .organization-name {
+        font-size: 0.86rem;
+    }
+
+    .salary-bulletin .organization-description,
+    .salary-bulletin .organization-contact {
+        font-size: 0.58rem;
+    }
+
+    .salary-bulletin .employee-item {
+        flex-direction: column;
+
+        gap: 3px;
+    }
+
+    .salary-bulletin .employee-label {
+        flex-basis: auto;
+    }
+
+    .salary-bulletin .financial-table th,
+    .salary-bulletin .financial-table td,
+    .salary-bulletin .history-table th,
+    .salary-bulletin .history-table td {
+        padding: 8px;
+    }
+
+    .salary-bulletin .cancelled-watermark {
+        font-size: 2rem;
+
+        padding: 7px 18px;
+    }
+
+    .salary-bulletin .draft-watermark {
+        font-size: 1.65rem;
+
+        padding: 6px 15px;
+    }
+}
+
+
+/* ============================================================
+   29. IMPRESSION — A4
+   ============================================================ */
+
+@page {
+    size: A4 portrait;
+
+    margin: 12mm;
+}
+
+@media print {
+
+    html,
+    body {
+        background: #ffffff !important;
+    }
+
+    .salary-bulletin {
+        width: 100%;
+
+        margin: 0;
+
+        padding: 0;
+
+        background: #ffffff !important;
+    }
+
+    .salary-bulletin .bulletin-container {
+        max-width: none;
+
+        margin: 0;
+    }
+
+    .salary-bulletin .bulletin-toolbar,
+    .salary-bulletin .bulletin-alert {
+        display: none !important;
+    }
+
+    .salary-bulletin .bulletin-paper {
+        width: 100%;
+
+        min-height: auto;
+
+        margin: 0;
+
+        padding: 0;
+
+        border: 0;
+
+        box-shadow: none;
+    }
+
+    .salary-bulletin .organization-header {
+        break-inside: avoid;
+    }
+
+    .salary-bulletin .employee-section,
+    .salary-bulletin .financial-section,
+    .salary-bulletin .payment-status-section,
+    .salary-bulletin .payment-history,
+    .salary-bulletin .notes-section,
+    .salary-bulletin .cancellation-section {
+        break-inside: avoid;
+    }
+
+    .salary-bulletin .financial-table tr,
+    .salary-bulletin .history-table tr {
+        break-inside: avoid;
+    }
+
+    .salary-bulletin .signature-section {
+        break-inside: avoid;
+    }
+
+    .salary-bulletin .bulletin-footer {
+        break-inside: avoid;
+    }
+
+    .salary-bulletin .payment-progress-bar {
+        print-color-adjust: exact;
+
+        -webkit-print-color-adjust: exact;
+    }
+
+    .salary-bulletin .status-badge,
+    .salary-bulletin .net-salary-box,
+    .salary-bulletin .financial-total-row td {
+        print-color-adjust: exact;
+
+        -webkit-print-color-adjust: exact;
+    }
+
+    .salary-bulletin .cancelled-watermark,
+    .salary-bulletin .draft-watermark {
+        print-color-adjust: exact;
+
+        -webkit-print-color-adjust: exact;
+    }
+}
+
+
+/* ============================================================
+   30. ACCESSIBILITÉ
+   ============================================================ */
+
+.salary-bulletin .btn:focus-visible,
+.salary-bulletin a:focus-visible,
+.salary-bulletin button:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.22);
+
+    outline-offset: 2px;
+}
+
+
+/* ============================================================
+   31. RÉDUCTION DES ANIMATIONS
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .salary-bulletin *,
+    .salary-bulletin *::before,
+    .salary-bulletin *::after {
+        animation: none !important;
+
+        transition: none !important;
+    }
+}

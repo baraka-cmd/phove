@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Media extends Model
 {
@@ -37,7 +38,7 @@ class Media extends Model
     {
         return [
             'date_prise' => 'date',
-            'publier' => 'boolean',
+            'publier'    => 'boolean',
         ];
     }
 
@@ -116,21 +117,80 @@ class Media extends Model
     }
 
     /**
-     * Retourne le chemin complet du fichier pour l'affichage.
+     * Retourne l'URL publique du fichier via la route custom "media.show".
+     *
+     * ⚠️ Ne PAS utiliser asset('storage/' . ...) car la route /media/{path}
+     *    contourne le 403 de php artisan serve.
      */
-    public function url(): string
+    public function url(): ?string
     {
-        return asset('storage/' . $this->fichier);
+        if (!$this->fichier) {
+            return null;
+        }
+
+        return route('media.show', [
+            'path' => ltrim($this->fichier, '/'),
+        ]);
     }
 
     /**
-     * Retourne le chemin de la miniature ou une miniature par défaut.
+     * Retourne l'URL de la miniature si elle existe,
+     * sinon retombe sur l'URL du fichier principal.
      */
-    public function urlMiniature(): string
+    public function urlMiniature(): ?string
     {
         if ($this->miniature) {
-            return asset('storage/' . $this->miniature);
+            return route('media.show', [
+                'path' => ltrim($this->miniature, '/'),
+            ]);
         }
+
         return $this->url();
+    }
+
+    /**
+     * Vérifie si le fichier principal existe réellement sur le disque.
+     *
+     * Utile pour afficher un placeholder si le fichier a été supprimé
+     * manuellement sans mise à jour de la BDD.
+     */
+    public function fichierExiste(): bool
+    {
+        if (!$this->fichier) {
+            return false;
+        }
+
+        return Storage::disk('public')->exists($this->fichier);
+    }
+
+    /**
+     * Vérifie si la miniature existe réellement sur le disque.
+     */
+    public function miniatureExiste(): bool
+    {
+        if (!$this->miniature) {
+            return false;
+        }
+
+        return Storage::disk('public')->exists($this->miniature);
+    }
+
+    /**
+     * Retourne la taille du fichier formatée pour l'affichage.
+     * Retourne null si le fichier n'existe pas.
+     */
+    public function tailleFormatee(): ?string
+    {
+        if (!$this->fichier || !Storage::disk('public')->exists($this->fichier)) {
+            return null;
+        }
+
+        $taille = Storage::disk('public')->size($this->fichier);
+
+        if ($taille > 1048576) {
+            return round($taille / 1048576, 1) . ' Mo';
+        }
+
+        return round($taille / 1024, 1) . ' Ko';
     }
 }

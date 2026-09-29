@@ -1,106 +1,122 @@
-/**
- * AHD-RDC — SCRIPTS GOUVERNANCE — DÉTAIL ORGANE
- * Action Humanitaire pour le Développement en RD Congo
- * « Être ensemble pour le bien de la communauté »
- */
+/* ============================================================
+   GOUVERNANCE — PAGE ORGANE
+   ------------------------------------------------------------
+   - Formulaire d'édition de poste (masqué par défaut)
+   - Prévisualisation de la photo avant upload
+   - Suppression de la photo sélectionnée
+   ============================================================ */
 
 document.addEventListener('DOMContentLoaded', function () {
 
-    // ============================================================
-    // 1. CONFIRMATION DE RETRAIT D'UN MEMBRE
-    // ============================================================
-    const retirerButtons = document.querySelectorAll('.btn-retirer-membre');
+    /* ========================================================
+       1. FORMULAIRE D'ÉDITION DU POSTE
+       ======================================================== */
 
-    retirerButtons.forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            const nom = this.getAttribute('data-nom') || 'ce membre';
-            const poste = this.getAttribute('data-poste') || '';
-            const message = 'Êtes-vous sûr de vouloir retirer ' + nom + ' du poste de ' + poste + ' ?\n\nSon mandat sera marqué comme terminé.';
-
-            if (!confirm(message)) {
-                e.preventDefault();
-            }
-        });
-    });
-
-    // ============================================================
-    // 2. GESTION DU FORMULAIRE D'ÉDITION
-    // ============================================================
     const editFormCard = document.getElementById('editFormCard');
-    const editForm = document.getElementById('editForm');
+    const editForm     = document.getElementById('editForm');
+    const editPoste    = document.getElementById('edit_poste');
+    const editDateDeb  = document.getElementById('edit_date_debut');
+    const editDateFin  = document.getElementById('edit_date_fin');
+    const editActif    = document.getElementById('edit_actif');
+    const editOrdre    = document.getElementById('edit_ordre');
 
     if (editFormCard && editForm) {
-        document.querySelectorAll('.btn-edit-poste').forEach(btn => {
+
+        document.querySelectorAll('.btn-edit-poste').forEach(function (btn) {
             btn.addEventListener('click', function (e) {
                 e.preventDefault();
 
-                const id = this.getAttribute('data-id');
-                const poste = this.getAttribute('data-poste');
-                const dateDebut = this.getAttribute('data-date-debut');
-                const dateFin = this.getAttribute('data-date-fin');
-                const actif = this.getAttribute('data-actif');
-                const ordre = this.getAttribute('data-ordre');
+                const id         = this.dataset.id;
+                const poste      = this.dataset.poste;
+                const dateDebut  = this.dataset.dateDebut;
+                const dateFin    = this.dataset.dateFin;
+                const actif      = this.dataset.actif;
+                const ordre      = this.dataset.ordre;
 
-                editForm.action = '/admin/gouvernance/organes/' + id + '/update';
-                document.getElementById('edit_poste').value = poste;
-                document.getElementById('edit_date_debut').value = dateDebut;
-                document.getElementById('edit_date_fin').value = dateFin;
-                document.getElementById('edit_actif').checked = actif === '1';
-                document.getElementById('edit_ordre').value = ordre;
+                // URL dynamique : /admin/gouvernance/organes/{id}/update
+                const baseUrl = editForm.dataset.actionBase;
+                editForm.action = baseUrl + '/' + id + '/update';
 
+                // Remplissage des champs
+                if (editPoste)    editPoste.value    = poste;
+                if (editDateDeb)  editDateDeb.value  = dateDebut;
+                if (editDateFin)  editDateFin.value  = dateFin || '';
+                if (editActif)    editActif.checked  = actif === '1';
+                if (editOrdre)    editOrdre.value    = ordre;
+
+                // Affichage + scroll
                 editFormCard.style.display = 'block';
-                editFormCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-                // Animation d'attention
-                editFormCard.style.boxShadow = '0 0 0 4px rgba(22, 85, 143, 0.2)';
-                setTimeout(() => {
-                    editFormCard.style.boxShadow = '';
-                    editFormCard.style.transition = 'box-shadow 0.6s ease';
-                }, 1500);
+                editFormCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
     }
 
-    // ============================================================
-    // 3. ANIMATION DES LIGNES DU TABLEAU
-    // ============================================================
-    const tableRows = document.querySelectorAll('.table-gouvernance tbody tr');
+    /* ========================================================
+       2. PRÉVISUALISATION DE LA PHOTO
+       ======================================================== */
 
-    tableRows.forEach(row => {
-        row.addEventListener('mouseenter', function () {
-            this.style.transition = 'background 0.2s ease';
-        });
-    });
+    const photoInput      = document.getElementById('photo');
+    const photoPreviewImg = document.getElementById('photoPreviewImg');
+    const photoPlaceholder= document.getElementById('photoPlaceholder');
+    const photoRemoveBtn  = document.getElementById('photoRemoveBtn');
 
-    // ============================================================
-    // 4. ANIMATION DU FORMULAIRE D'AJOUT AU SCROLL
-    // ============================================================
-    const formCard = document.querySelector('.gouvernance-form-card');
+    if (photoInput && photoPreviewImg && photoPlaceholder) {
 
-    if (formCard && 'IntersectionObserver' in window) {
-        const formObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                    formObserver.unobserve(entry.target);
+        photoInput.addEventListener('change', function () {
+            const file = this.files[0];
+
+            if (!file) {
+                resetPhotoPreview();
+                return;
+            }
+
+            // Validation côté client
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+
+            if (!allowedTypes.includes(file.type)) {
+                alert('Format non supporté. Utilisez JPG, PNG ou WebP.');
+                resetPhotoPreview();
+                return;
+            }
+
+            if (file.size > 2 * 1024 * 1024) {
+                alert('La photo ne doit pas dépasser 2 Mo.');
+                resetPhotoPreview();
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                photoPreviewImg.src = e.target.result;
+                photoPreviewImg.style.display = 'block';
+                photoPlaceholder.style.display = 'none';
+
+                if (photoRemoveBtn) {
+                    photoRemoveBtn.style.display = 'flex';
                 }
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        // Suppression de la photo sélectionnée
+        if (photoRemoveBtn) {
+            photoRemoveBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                resetPhotoPreview();
             });
-        }, { threshold: 0.2 });
+        }
 
-        formCard.style.opacity = '0';
-        formCard.style.transform = 'translateY(20px)';
-        formCard.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        formObserver.observe(formCard);
+        function resetPhotoPreview() {
+            photoInput.value = '';
+            photoPreviewImg.src = '';
+            photoPreviewImg.style.display = 'none';
+            photoPlaceholder.style.display = 'flex';
+
+            if (photoRemoveBtn) {
+                photoRemoveBtn.style.display = 'none';
+            }
+        }
     }
-
-    // ============================================================
-    // 5. INITIALISATION
-    // ============================================================
-    console.log(
-        '%c🏛️ AHD-RDC %c— Détail Organe chargé',
-        'color: #16558F; font-weight: bold;',
-        'color: #777;'
-    );
-
 });

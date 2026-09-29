@@ -16,6 +16,7 @@
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/admin-common.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/admin-controlle-forms.css') }}">
 @endsection
 
 @section('content')

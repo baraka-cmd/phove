@@ -1,0 +1,749 @@
+/* ============================================================
+   PHOVE — STYLE : LISTE DES BONS DE SORTIE
+   Vue : resources/views/admin/stocks/sorties/index.blade.php
+   Route : admin.stocks.sorties.index
+
+   Ce fichier complète stocks-common.css.
+   Il n'ajoute QUE ce qui est spécifique à la liste des bons.
+   ============================================================ */
+
+
+/* ----------------------------------------------------------
+   1. CONTENEUR DE PAGE
+   ---------------------------------------------------------- */
+
+.stock-sorties-page {
+    /* Conteneur principal */
+}
+
+
+/* ----------------------------------------------------------
+   2. EN-TÊTE DE PAGE
+   ----------------------------------------------------------
+   .page-header, .page-header-content viennent de stocks-common.css.
+   .page-header-title : icône + textes
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .page-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.stock-sorties-page .page-header-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex: 1;
+    min-width: 0;
+}
+
+.stock-sorties-page .page-header-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--border-radius);
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.stock-sorties-page .page-header-title h1 {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+    line-height: 1.3;
+}
+
+.stock-sorties-page .page-header-title p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+.stock-sorties-page .page-header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+
+/* ----------------------------------------------------------
+   3. MESSAGES DE SESSION
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .alert {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--border-radius-sm);
+    margin-bottom: var(--spacing-lg);
+    font-size: var(--font-size-sm);
+}
+
+.stock-sorties-page .alert-success {
+    background: var(--color-success-light);
+    color: #065F46;
+    border: 1px solid #6EE7B7;
+}
+
+.stock-sorties-page .alert-danger {
+    background: var(--color-error-light);
+    color: #B91C1C;
+    border: 1px solid #FCA5A5;
+}
+
+.stock-sorties-page .alert-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.stock-sorties-page .alert-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.stock-sorties-page .alert-close {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.5);
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-xs);
+    transition: background var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.stock-sorties-page .alert-close:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+
+/* ----------------------------------------------------------
+   4. STATISTIQUES (6 KPI)
+   ----------------------------------------------------------
+   .stats-grid, .stat-card viennent de stocks-common.css.
+   On ajuste juste les icônes colorées.
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .stat-card-icon {
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+}
+
+.stock-sorties-page .stat-card:nth-child(2) .stat-card-icon {
+    background: #F1F5F9;
+    color: #475569;
+}
+
+.stock-sorties-page .stat-card:nth-child(3) .stat-card-icon {
+    background: var(--color-info-light);
+    color: #1E40AF;
+}
+
+.stock-sorties-page .stat-card:nth-child(4) .stat-card-icon {
+    background: var(--color-warning-light);
+    color: #92400E;
+}
+
+.stock-sorties-page .stat-card:nth-child(5) .stat-card-icon {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+.stock-sorties-page .stat-card:nth-child(6) .stat-card-icon {
+    background: var(--color-error-light);
+    color: #B91C1C;
+}
+
+
+/* ----------------------------------------------------------
+   5. CARTE DE FILTRE
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .filters-card {
+    background: var(--color-bg-white);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-xl);
+    overflow: hidden;
+}
+
+.stock-sorties-page .filters-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color-light);
+    background: var(--color-bg-light);
+    flex-wrap: wrap;
+}
+
+.stock-sorties-page .filters-title {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.stock-sorties-page .filters-title i {
+    color: var(--color-primary);
+    font-size: 1.1rem;
+}
+
+.stock-sorties-page .filters-title h2 {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+}
+
+.stock-sorties-page .filters-reset {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--font-size-xs);
+    color: var(--color-primary);
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: var(--border-radius-sm);
+    transition: background var(--transition-fast);
+}
+
+.stock-sorties-page .filters-reset:hover {
+    background: var(--color-primary-lighter);
+    text-decoration: none;
+}
+
+.stock-sorties-page .filters-form {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    align-items: end;
+}
+
+.stock-sorties-page .filters-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: 0;
+}
+
+.stock-sorties-page .filters-form .form-group label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.stock-sorties-page .filters-form .form-control {
+    width: 100%;
+    padding: 9px 12px;
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background: var(--color-bg-white);
+    color: var(--color-text-primary);
+    transition: all var(--transition-base);
+}
+
+.stock-sorties-page .filters-form .form-control:focus {
+    border-color: var(--color-primary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 91, 156, 0.1);
+}
+
+.stock-sorties-page .filters-submit {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    grid-column: -2 / -1;
+}
+
+.stock-sorties-page .input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.stock-sorties-page .input-with-icon i {
+    position: absolute;
+    left: 12px;
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+    pointer-events: none;
+}
+
+.stock-sorties-page .input-with-icon input {
+    padding-left: 38px;
+}
+
+
+/* ----------------------------------------------------------
+   6. TABLEAU DES BONS
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .table-card {
+    background: var(--color-bg-white);
+    border: 1px solid var(--border-color-light);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.stock-sorties-page .table-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color-light);
+    flex-wrap: wrap;
+}
+
+.stock-sorties-page .table-card-header h2 {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+}
+
+.stock-sorties-page .table-card-header p {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+.stock-sorties-page .data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stock-sorties-page .data-table thead {
+    background: var(--color-bg-light);
+}
+
+.stock-sorties-page .data-table thead th {
+    padding: 12px 16px;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--border-color-light);
+    white-space: nowrap;
+}
+
+.stock-sorties-page .data-table tbody td {
+    padding: 14px 16px;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--border-color-light);
+    vertical-align: middle;
+}
+
+.stock-sorties-page .data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.stock-sorties-page .data-table tbody tr:hover {
+    background: var(--color-bg-light);
+}
+
+
+/* ----------------------------------------------------------
+   7. CELLULE DOCUMENT (numéro)
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .document-reference {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+    font-family: 'Courier New', monospace;
+    font-size: var(--font-size-sm);
+    text-decoration: none;
+    padding: 3px 8px;
+    background: var(--color-primary-lighter);
+    border-radius: 4px;
+    display: inline-block;
+    transition: all var(--transition-fast);
+}
+
+.stock-sorties-page .document-reference:hover {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+
+/* ----------------------------------------------------------
+   8. CELLULE DATE
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .date-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stock-sorties-page .date-primary {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+    white-space: nowrap;
+}
+
+.stock-sorties-page .date-secondary {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+}
+
+
+/* ----------------------------------------------------------
+   9. CELLULE PERSONNE (demandeur)
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .person-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.stock-sorties-page .person-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: var(--font-weight-bold);
+    flex-shrink: 0;
+    text-transform: uppercase;
+}
+
+.stock-sorties-page .person-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.stock-sorties-page .person-info strong {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* ----------------------------------------------------------
+   10. CELLULE DESTINATAIRE
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .destination-cell {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+
+/* ----------------------------------------------------------
+   11. BADGE PROJET
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .project-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    background: var(--color-accent-light);
+    color: #92400E;
+    border-radius: var(--border-radius-full);
+    font-size: 11px;
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stock-sorties-page .project-badge i {
+    font-size: 10px;
+}
+
+.stock-sorties-page .empty-value {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+
+/* ----------------------------------------------------------
+   12. CELLULE ARTICLES (nombre)
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .items-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.stock-sorties-page .items-cell strong {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-primary);
+    line-height: 1;
+}
+
+.stock-sorties-page .items-cell span {
+    font-size: 11px;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+
+/* ----------------------------------------------------------
+   13. BADGE STATUT (workflow)
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border-radius: var(--border-radius-full);
+    font-size: 11px;
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+}
+
+.stock-sorties-page .status-badge i {
+    font-size: 10px;
+}
+
+.stock-sorties-page .status-brouillon {
+    background: #F1F5F9;
+    color: #475569;
+}
+
+.stock-sorties-page .status-soumis {
+    background: var(--color-info-light);
+    color: #1E40AF;
+}
+
+.stock-sorties-page .status-valide {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+.stock-sorties-page .status-en_preparation {
+    background: var(--color-warning-light);
+    color: #92400E;
+}
+
+.stock-sorties-page .status-sorti {
+    background: var(--color-success-light);
+    color: #065F46;
+}
+
+.stock-sorties-page .status-annule {
+    background: var(--color-error-light);
+    color: #B91C1C;
+}
+
+
+/* ----------------------------------------------------------
+   14. ACTIONS
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .table-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.stock-sorties-page .action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-color-light);
+    background: var(--color-bg-white);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+}
+
+.stock-sorties-page .action-button:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.stock-sorties-page .action-view:hover {
+    background: var(--color-primary-lighter);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.stock-sorties-page .action-submit:hover {
+    background: var(--color-info-light);
+    border-color: var(--color-info);
+    color: var(--color-info);
+}
+
+.stock-sorties-page .action-validate:hover {
+    background: var(--color-success-light);
+    border-color: var(--color-success);
+    color: var(--color-success);
+}
+
+.stock-sorties-page .action-prepare:hover {
+    background: var(--color-warning-light);
+    border-color: var(--color-warning);
+    color: #92400E;
+}
+
+.stock-sorties-page .action-out:hover {
+    background: var(--color-error-light);
+    border-color: var(--color-error);
+    color: var(--color-error);
+}
+
+.stock-sorties-page .inline-action-form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.stock-sorties-page .inline-action-form button {
+    padding: 0;
+    border: 1px solid var(--border-color-light);
+    background: var(--color-bg-white);
+}
+
+
+/* ----------------------------------------------------------
+   15. ÉTAT VIDE
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .empty-state {
+    padding: var(--spacing-3xl) var(--spacing-xl);
+    text-align: center;
+}
+
+.stock-sorties-page .empty-state-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-lg);
+    border-radius: 50%;
+    background: var(--color-primary-lighter);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.stock-sorties-page .empty-state h3 {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.stock-sorties-page .empty-state p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+    max-width: 500px;
+    margin: 0 auto var(--spacing-lg);
+    line-height: 1.6;
+}
+
+
+/* ----------------------------------------------------------
+   16. PAGINATION
+   ---------------------------------------------------------- */
+
+.stock-sorties-page .pagination-wrapper {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--border-color-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* ----------------------------------------------------------
+   17. RESPONSIVE
+   ---------------------------------------------------------- */
+
+@media (max-width: 1200px) {
+    .stock-sorties-page .filters-form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stock-sorties-page .filters-submit {
+        grid-column: 1 / -1;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 768px) {
+    .stock-sorties-page .page-header-content {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .stock-sorties-page .page-header-actions {
+        justify-content: flex-end;
+    }
+
+    .stock-sorties-page .filters-form {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-sorties-page .data-table thead th,
+    .stock-sorties-page .data-table tbody td {
+        padding: 10px 12px;
+    }
+
+    .stock-sorties-page .project-badge {
+        max-width: 100px;
+    }
+}
+
+@media (max-width: 576px) {
+    .stock-sorties-page .date-secondary {
+        display: none;
+    }
+
+    .stock-sorties-page .person-info strong {
+        max-width: 100px;
+    }
+}
