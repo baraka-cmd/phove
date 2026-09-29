@@ -41,7 +41,7 @@
                 <div class="content-block">
                     <span class="section-subtitle">Notre histoire</span>
                     <h2 class="section-title text-left">Une organisation née d'une inspiration divine</h2>
-                    
+                    Commune de Karisimbi
                     <p class="content-block-text">
                         <strong>PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies)</strong> 
                         est une organisation non gouvernementale apolitique à caractère social et spirituel, 
@@ -268,8 +268,8 @@
                     </p>
 
                     <p class="content-block-text">
-                        Notre siège social est établi <strong>Rue Georges BUSHU N°092, Quartier Katoyi, 
-                        Commune de Karisimbi, Goma, Nord-Kivu</strong>. Le siège peut être transféré 
+                        Notre siège social est établi <strong>Avenue Jacarandes au N° 08, Quartier les volcans, 
+                        Commune de Goma, Ville de Goma, Nord-Kivu</strong>. Le siège peut être transféré 
                         sur décision motivée des 2/3 des membres effectifs.
                     </p>
 
@@ -317,7 +317,7 @@
                     </div>
                     <h3 class="info-card-title">Orphelins</h3>
                     <p class="info-card-text">
-                        Scolarisation, alimentation, habillement et encadrement spirituel.
+                        Soins médicaux, Scolarisation, alimentation, habillement, logement et encadrement spirituel.
                     </p>
                 </div>
 
@@ -327,7 +327,7 @@
                     </div>
                     <h3 class="info-card-title">Veuves</h3>
                     <p class="info-card-text">
-                        Assistance sociale, accompagnement économique et soutien spirituel.
+                        Soins médicaux, Assistance sociale, accompagnement économique,logement et soutien spirituel.
                     </p>
                 </div>
 
@@ -347,7 +347,7 @@
                     </div>
                     <h3 class="info-card-title">3ème âge</h3>
                     <p class="info-card-text">
-                        Protection, assistance et accompagnement des personnes âgées.
+                        Soins médicaux, protection, assistance, logement et accompagnement des personnes âgées.
                     </p>
                 </div>
             </div>

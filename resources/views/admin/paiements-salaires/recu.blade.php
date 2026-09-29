@@ -1,4 +1,4 @@
-```blade
+blade
 @extends('layouts.admin')
 
 @section('title', 'Reçu de paiement ' . $paiement->reference)

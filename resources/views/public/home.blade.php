@@ -5,7 +5,10 @@
 @section('meta_description', 'PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies. ONG humanitaire congolaise créée en 2012 à Goma. Compassion avec la population.')
 
 @section('styles')
+    <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/public-home.css') }}">
+    
+    <link rel="stylesheet" href="{{ asset('assets/css/projets-index.css') }}">
 @endsection
 
 @section('content')
@@ -313,10 +316,12 @@
     </section>
 
     {{-- ============================================ --}}
-{{-- SECTION PROJETS RÉCENTS (DYNAMIQUE) --}}
+{{-- SECTION PROJETS RÉCENTS --}}
 {{-- ============================================ --}}
-<section class="projects-section" id="projects">
+<section class="projets-liste-section" id="projets">
     <div class="container">
+
+        {{-- En-tête --}}
         <div class="section-header">
             <span class="section-subtitle">Nos actions</span>
             <h2 class="section-title">Projets en cours et réalisés</h2>
@@ -326,23 +331,28 @@
             </p>
         </div>
 
-        <div class="projects-grid">
+        {{-- Grille des projets --}}
+        <div class="projets-grid" id="projetsGrid">
             @forelse($projets as $projet)
                 @include('public.partials.projet-card', ['projet' => $projet])
             @empty
-                <div class="projects-empty">
-                    <i class="fas fa-project-diagram"></i>
+                <div class="projets-empty">
+                    <div class="projets-empty-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
                     <h3>Aucun projet publié pour le moment</h3>
                     <p>Revenez bientôt pour découvrir nos actions sur le terrain.</p>
                 </div>
             @endforelse
         </div>
 
-        <div class="section-footer">
+        {{-- Bouton voir tous --}}
+        <div class="projets-section-footer">
             <a href="{{ route('projets.index') }}" class="btn btn-outline">
                 <i class="fas fa-list-ul"></i> Voir tous les projets
             </a>
         </div>
+
     </div>
 </section>
 

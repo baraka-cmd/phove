@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
@@ -8,6 +10,7 @@ use App\Models\Beneficiaire;
 use App\Models\Document;
 use App\Models\RapportFinancier;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ActualiteController extends Controller
 {
@@ -16,22 +19,27 @@ class ActualiteController extends Controller
      */
     protected int $perPage = 6;
 
+    /*
+    |--------------------------------------------------------------------------
+    | INDEX — Liste des actualités
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Affiche la liste paginée et filtrée des actualités.
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        // 1. Récupérer les paramètres de filtre
         $categorie = $request->input('categorie');
         $recherche = $request->input('recherche');
 
-        // 2. Construire la requête de base
+        // Requête de base
         $query = Article::query()
             ->where('statut', 'publie')
             ->where('date_publication', '<=', now())
             ->with('auteur');
 
-        // 3. Appliquer les filtres
+        // Filtres
         if ($categorie) {
             $query->where('categorie', $categorie);
         }
@@ -44,13 +52,12 @@ class ActualiteController extends Controller
             });
         }
 
-        // 4. Trier par date de publication (plus récent d'abord)
-        $query->orderBy('date_publication', 'desc');
+        // Tri + pagination
+        $articles = $query->orderBy('date_publication', 'desc')
+            ->paginate($this->perPage)
+            ->withQueryString();
 
-        // 5. Paginer les résultats
-        $articles = $query->paginate($this->perPage)->withQueryString();
-
-        // 6. Articles épinglés (toujours en premier)
+        // Articles épinglés
         $articlesEpingles = Article::where('statut', 'publie')
             ->where('epingle', true)
             ->where('date_publication', '<=', now())
@@ -58,17 +65,17 @@ class ActualiteController extends Controller
             ->orderBy('date_publication', 'desc')
             ->get();
 
-        // 7. Catégories pour le filtre
+        // Catégories
         $categories = [
-            'actualite' => 'Actualités',
-            'projet' => 'Projets',
-            'evenement' => 'Événements',
-            'rapport' => 'Rapports',
+            'actualite'  => 'Actualités',
+            'projet'     => 'Projets',
+            'evenement'  => 'Événements',
+            'rapport'    => 'Rapports',
             'temoignage' => 'Témoignages',
             'communique' => 'Communiqués',
         ];
 
-        // 8. Statistiques
+        // Statistiques
         $totalArticles = Article::where('statut', 'publie')
             ->where('date_publication', '<=', now())
             ->count();
@@ -83,22 +90,36 @@ class ActualiteController extends Controller
         ));
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | SHOW — Détail d'un article
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Affiche le détail d'un article.
      */
-    public function show(string $slug)
+    public function show(string $slug): View
     {
-        // 1. Trouver l'article par son slug
+        // 1. Récupérer l'article avec l'auteur, le projet ET les médias publiés
         $article = Article::where('slug', $slug)
             ->where('statut', 'publie')
             ->where('date_publication', '<=', now())
-            ->with('auteur', 'projet')
+            ->with([
+                'auteur',
+                'projet',
+                'medias' => function ($q) {
+                    $q->where('publier', true)
+                      ->orderBy('ordre')
+                      ->orderBy('created_at', 'desc');
+                },
+            ])
             ->firstOrFail();
 
-        // 2. Incrémenter le compteur de vues
+        // 2. Incrémenter les vues
         $article->increment('vues');
 
-        // 3. Articles connexes (même catégorie, exclure l'article actuel)
+        // 3. Articles connexes (même catégorie)
         $articlesConnexes = Article::where('statut', 'publie')
             ->where('date_publication', '<=', now())
             ->where('id', '!=', $article->id)
@@ -108,70 +129,90 @@ class ActualiteController extends Controller
             ->limit(3)
             ->get();
 
-        return view('public.actualites.show', compact('article', 'articlesConnexes'));
+        return view('public.actualites.show', compact(
+            'article',
+            'articlesConnexes'
+        ));
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | TÉMOIGNAGES
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Affiche la page des témoignages.
      */
-    public function temoignages(Request $request)
+    public function temoignages(Request $request): View
     {
-        // 1. Récupérer le filtre de zone
         $zone = $request->input('zone');
 
-        // 2. Construire la requête
         $query = Beneficiaire::where('temoignage_public', true)
             ->whereNotNull('temoignage')
             ->with('projet');
 
-        // 3. Appliquer le filtre de zone
         if ($zone) {
             $query->where('localisation', 'like', '%' . $zone . '%');
         }
 
-        // 4. Paginer
         $temoignages = $query->orderBy('created_at', 'desc')
             ->paginate(9)
             ->withQueryString();
 
-        // 5. Zones distinctes pour le filtre
         $zones = Beneficiaire::where('temoignage_public', true)
             ->whereNotNull('temoignage')
             ->distinct()
             ->pluck('localisation')
-            ->map(function ($loc) {
-                return trim($loc);
-            })
+            ->map(fn ($loc) => trim((string) $loc))
+            ->filter()
             ->unique()
             ->sort()
             ->values();
 
-        return view('public.temoignages', compact('temoignages', 'zones', 'zone'));
+        return view('public.temoignages', compact(
+            'temoignages',
+            'zones',
+            'zone'
+        ));
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | TRANSPARENCE
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Affiche la page transparence.
      */
-    public function transparence(Request $request)
+    public function transparence(Request $request): View
     {
-        // 1. Onglet actif
         $tab = $request->input('tab', 'financiers');
 
-        // 2. Rapports financiers publics
+        // Rapports financiers publics
         $rapportsFinanciers = RapportFinancier::where('public', true)
             ->where('statut', 'publie')
             ->orderBy('periode', 'desc')
             ->get();
 
-        // 3. Rapports annuels (documents de type rapport_annuel)
+        // Rapports annuels
         $rapportsAnnuels = Document::where('public', true)
             ->where('type', 'rapport_annuel')
             ->orderBy('date_document', 'desc')
             ->get();
 
-        // 4. Documents officiels
+        // Documents officiels
         $documentsOfficiels = Document::where('public', true)
-            ->whereIn('type', ['statuts', 'roi', 'proces_verbal', 'convention', 'guide_procedure', 'politique_interne', 'communique_officiel'])
+            ->whereIn('type', [
+                'statuts',
+                'roi',
+                'proces_verbal',
+                'convention',
+                'guide_procedure',
+                'politique_interne',
+                'communique_officiel',
+            ])
             ->orderBy('date_document', 'desc')
             ->get();
 

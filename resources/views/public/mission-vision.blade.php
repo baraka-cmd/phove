@@ -324,7 +324,7 @@
                     <div class="info-card-icon">
                         <i class="fas fa-utensils"></i>
                     </div>
-                    <h3 class="info-card-title">Alimentation & Santé</h3>
+                    <h3 class="info-card-title">Santé & Alimentation</h3>
                     <p class="info-card-text">
                         Alimentation, habillement et soins médicaux.
                     </p>

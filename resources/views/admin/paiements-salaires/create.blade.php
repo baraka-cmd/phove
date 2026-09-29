@@ -1155,7 +1155,7 @@ $initiale = strtoupper(
     </div>
 
 @endif
-```
+
 
 </div>
 

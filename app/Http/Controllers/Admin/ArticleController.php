@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use App\Models\Media;
 use App\Models\Projet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -28,6 +29,12 @@ class ArticleController extends Controller
         'communique' => 'Communiqué',
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | INDEX / CREATE / STORE
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Affiche la liste paginée et filtrée des articles.
      */
@@ -35,17 +42,14 @@ class ArticleController extends Controller
     {
         $query = Article::with('auteur');
 
-        // Filtre par catégorie
         if ($request->filled('categorie')) {
             $query->where('categorie', $request->categorie);
         }
 
-        // Filtre par statut
         if ($request->filled('statut')) {
             $query->where('statut', $request->statut);
         }
 
-        // Recherche
         if ($request->filled('recherche')) {
             $recherche = $request->recherche;
             $query->where(function ($q) use ($recherche) {
@@ -60,11 +64,10 @@ class ArticleController extends Controller
             ->paginate($this->perPage)
             ->withQueryString();
 
-        // Statistiques
-        $totalArticles = Article::count();
-        $articlesPublies = Article::where('statut', 'publie')->count();
+        $totalArticles      = Article::count();
+        $articlesPublies    = Article::where('statut', 'publie')->count();
         $articlesBrouillons = Article::where('statut', 'brouillon')->count();
-        $articlesEpingles = Article::where('epingle', true)->count();
+        $articlesEpingles   = Article::where('epingle', true)->count();
 
         return view('admin.articles.index', compact(
             'articles',
@@ -99,24 +102,31 @@ class ArticleController extends Controller
             'date_publication' => ['nullable', 'date'],
             'projet_id' => ['nullable', 'exists:projets,id'],
             'epingle' => ['nullable', 'boolean'],
+
+            // ─────────────────────────────────────────
+            // GALERIE MÉDIA
+            // ─────────────────────────────────────────
+            'galerie' => ['nullable', 'array', 'max:20'],
+            'galerie.*' => [
+                'file',
+                'mimes:jpeg,jpg,png,webp,mp4,webm,ogg',
+                'max:51200', // 50 Mo
+            ],
         ], [
             'titre.required' => 'Le titre est obligatoire.',
             'contenu.required' => 'Le contenu est obligatoire.',
             'categorie.required' => 'La catégorie est obligatoire.',
+            'galerie.array' => 'La galerie doit être un ensemble de fichiers.',
+            'galerie.max' => 'Vous ne pouvez pas uploader plus de 20 fichiers à la fois.',
+            'galerie.*.file' => 'Chaque élément doit être un fichier valide.',
+            'galerie.*.mimes' => 'Les fichiers doivent être au format JPG, PNG, WebP, MP4, WebM ou OGG.',
+            'galerie.*.max' => 'Chaque fichier ne doit pas dépasser 50 Mo.',
         ]);
 
-        // Générer le slug
-        $validated['slug'] = Str::slug($validated['titre']);
-        
-        // Vérifier l'unicité du slug
-        $count = 1;
-        $originalSlug = $validated['slug'];
-        while (Article::where('slug', $validated['slug'])->exists()) {
-            $validated['slug'] = $originalSlug . '-' . $count;
-            $count++;
-        }
+        // Slug unique
+        $validated['slug'] = $this->genererSlugUnique($validated['titre']);
 
-        // Upload image
+        // Upload image de couverture
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('articles/images', 'public');
         }
@@ -124,23 +134,43 @@ class ArticleController extends Controller
         $validated['user_id'] = auth()->id();
         $validated['epingle'] = $request->boolean('epingle');
 
-        // Date de publication
         if ($validated['statut'] === 'publie' && empty($validated['date_publication'])) {
             $validated['date_publication'] = now();
         }
 
-        Article::create($validated);
+        // Créer l'article
+        $article = Article::create($validated);
+
+        // ─────────────────────────────────────────
+        // GALERIE MÉDIA
+        // ─────────────────────────────────────────
+        if ($request->hasFile('galerie')) {
+            $this->uploadGalerie($request, $article);
+        }
 
         return redirect()->route('admin.articles.index')
             ->with('success', 'L\'article a été créé avec succès.');
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | SHOW / EDIT / UPDATE
+    |--------------------------------------------------------------------------
+    */
+
     /**
-     * Affiche la fiche détaillée d'un article (prévisualisation admin).
+     * Affiche la fiche détaillée d'un article.
      */
     public function show(Article $article)
     {
-        $article->load('auteur', 'projet');
+        $article->load([
+            'auteur',
+            'projet',
+            'medias' => function ($q) {
+                $q->orderBy('ordre')->orderBy('created_at', 'desc');
+            },
+        ]);
+
         return view('admin.articles.show', compact('article'));
     }
 
@@ -150,6 +180,11 @@ class ArticleController extends Controller
     public function edit(Article $article)
     {
         $projets = Projet::orderBy('titre')->get();
+
+        $article->load(['medias' => function ($q) {
+            $q->orderBy('ordre')->orderBy('created_at', 'desc');
+        }]);
+
         return view('admin.articles.edit', compact('article', 'projets'));
     }
 
@@ -168,22 +203,28 @@ class ArticleController extends Controller
             'date_publication' => ['nullable', 'date'],
             'projet_id' => ['nullable', 'exists:projets,id'],
             'epingle' => ['nullable', 'boolean'],
+
+            // ─────────────────────────────────────────
+            // GALERIE MÉDIA
+            // ─────────────────────────────────────────
+            'galerie' => ['nullable', 'array', 'max:20'],
+            'galerie.*' => [
+                'file',
+                'mimes:jpeg,jpg,png,webp,mp4,webm,ogg',
+                'max:51200',
+            ],
+            'medias_supprimer' => ['nullable', 'array'],
+            'medias_supprimer.*' => ['integer', 'exists:medias,id'],
         ]);
 
-        // Mettre à jour le slug si le titre change
+        // Slug unique (si le titre change)
         if ($article->titre !== $validated['titre']) {
-            $validated['slug'] = Str::slug($validated['titre']);
-            $count = 1;
-            $originalSlug = $validated['slug'];
-            while (Article::where('slug', $validated['slug'])->where('id', '!=', $article->id)->exists()) {
-                $validated['slug'] = $originalSlug . '-' . $count;
-                $count++;
-            }
+            $validated['slug'] = $this->genererSlugUnique($validated['titre'], $article->id);
         }
 
-        // Upload image
+        // Upload image de couverture
         if ($request->hasFile('image')) {
-            if ($article->image) {
+            if ($article->image && Storage::disk('public')->exists($article->image)) {
                 Storage::disk('public')->delete($article->image);
             }
             $validated['image'] = $request->file('image')->store('articles/images', 'public');
@@ -191,24 +232,68 @@ class ArticleController extends Controller
 
         $validated['epingle'] = $request->boolean('epingle');
 
-        // Date de publication
         if ($validated['statut'] === 'publie' && empty($validated['date_publication']) && !$article->date_publication) {
             $validated['date_publication'] = now();
         }
 
+        // Mettre à jour l'article
         $article->update($validated);
+
+        // ─────────────────────────────────────────
+        // SUPPRESSION DES MÉDIAS COCHÉS
+        // ─────────────────────────────────────────
+        if ($request->filled('medias_supprimer')) {
+            $mediasASupprimer = Media::whereIn('id', $request->input('medias_supprimer'))
+                ->where('article_id', $article->id)
+                ->get();
+
+            foreach ($mediasASupprimer as $media) {
+                if ($media->fichier && Storage::disk('public')->exists($media->fichier)) {
+                    Storage::disk('public')->delete($media->fichier);
+                }
+                if ($media->miniature && Storage::disk('public')->exists($media->miniature)) {
+                    Storage::disk('public')->delete($media->miniature);
+                }
+                $media->delete();
+            }
+        }
+
+        // ─────────────────────────────────────────
+        // AJOUT DES NOUVEAUX MÉDIAS
+        // ─────────────────────────────────────────
+        if ($request->hasFile('galerie')) {
+            $this->uploadGalerie($request, $article);
+        }
 
         return redirect()->route('admin.articles.index')
             ->with('success', 'L\'article a été mis à jour avec succès.');
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | DESTROY / TOGGLES
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Supprime un article.
      */
     public function destroy(Article $article)
     {
-        if ($article->image) {
+        // Supprimer l'image de couverture
+        if ($article->image && Storage::disk('public')->exists($article->image)) {
             Storage::disk('public')->delete($article->image);
+        }
+
+        // Supprimer les médias liés
+        foreach ($article->medias as $media) {
+            if ($media->fichier && Storage::disk('public')->exists($media->fichier)) {
+                Storage::disk('public')->delete($media->fichier);
+            }
+            if ($media->miniature && Storage::disk('public')->exists($media->miniature)) {
+                Storage::disk('public')->delete($media->miniature);
+            }
+            $media->delete();
         }
 
         $article->delete();
@@ -245,5 +330,163 @@ class ArticleController extends Controller
         $message = $article->epingle ? 'L\'article a été épinglé.' : 'L\'article a été désépinglé.';
 
         return redirect()->back()->with('success', $message);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | MÉTHODES PRIVÉES
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Génère un slug unique.
+     */
+    protected function genererSlugUnique(string $titre, ?int $excludeId = null): string
+    {
+        $slug = Str::slug($titre);
+        $originalSlug = $slug;
+        $count = 1;
+
+        $query = Article::where('slug', $slug);
+
+        if ($excludeId) {
+            $query->where('id', '!=', $excludeId);
+        }
+
+        while ($query->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+
+            $query = Article::where('slug', $slug);
+            if ($excludeId) {
+                $query->where('id', '!=', $excludeId);
+            }
+        }
+
+        return $slug;
+    }
+
+    /**
+     * Upload une galerie de fichiers (images et vidéos) liée à un article.
+     */
+    protected function uploadGalerie(Request $request, Article $article): void
+{
+    \Log::info('🔵 uploadGalerie démarré pour article #' . $article->id);
+    \Log::info('🔵 Nombre de fichiers : ' . count($request->file('galerie')));
+
+    $formatsImages = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+    $formatsVideos = ['mp4', 'webm', 'ogg'];
+
+    $ordre = Media::where('article_id', $article->id)->max('ordre') ?? 0;
+
+    foreach ($request->file('galerie') as $index => $fichier) {
+        \Log::info('🔵 Traitement fichier #' . $index . ' : ' . $fichier->getClientOriginalName());
+
+        $extension = strtolower($fichier->getClientOriginalExtension());
+        $type      = in_array($extension, $formatsImages) ? 'image' : 'video';
+
+        \Log::info('🔵 Type détecté : ' . $type);
+
+        $nomFichier = Str::uuid() . '.' . $extension;
+        $dossier    = $type === 'image' ? 'medias/images' : 'medias/videos';
+        $chemin     = $fichier->storeAs($dossier, $nomFichier, 'public');
+
+        \Log::info('🔵 Chemin stocké : ' . $chemin);
+
+        $cheminMiniature = null;
+
+        $ordre++;
+
+        $media = Media::create([
+            'titre'       => pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME),
+            'type'        => $type,
+            'fichier'     => $chemin,
+            'miniature'   => $cheminMiniature,
+            'taille'      => $fichier->getSize(),
+            'article_id'  => $article->id,
+            'album'       => 'Article : ' . Str::limit($article->titre, 60),
+            'publier'     => true,
+            'ordre'       => $ordre,
+            'user_id'     => auth()->id(),
+            'auteur'      => auth()->user()->nom ?? 'Admin',
+        ]);
+
+        \Log::info('✅ Média créé avec ID : ' . $media->id);
+    }
+
+    \Log::info('🟢 uploadGalerie terminé');
+}
+
+    /**
+     * Génère une miniature pour une image.
+     */
+    protected function genererMiniature($fichier, string $nomOriginal): ?string
+    {
+        try {
+            $sourcePath = $fichier->getRealPath();
+            $extension  = strtolower($fichier->getClientOriginalExtension());
+
+            $sourceImage = match ($extension) {
+                'jpeg', 'jpg' => @imagecreatefromjpeg($sourcePath),
+                'png'         => @imagecreatefrompng($sourcePath),
+                'webp'        => @imagecreatefromwebp($sourcePath),
+                'gif'         => @imagecreatefromgif($sourcePath),
+                default       => null,
+            };
+
+            if (!$sourceImage) {
+                return null;
+            }
+
+            $originalWidth  = imagesx($sourceImage);
+            $originalHeight = imagesy($sourceImage);
+
+            $maxWidth  = 400;
+            $maxHeight = 300;
+
+            $ratio     = min($maxWidth / $originalWidth, $maxHeight / $originalHeight);
+            $newWidth  = (int) round($originalWidth * $ratio);
+            $newHeight = (int) round($originalHeight * $ratio);
+
+            $thumbImage = imagecreatetruecolor($newWidth, $newHeight);
+
+            if (in_array($extension, ['png', 'gif'], true)) {
+                imagealphablending($thumbImage, false);
+                imagesavealpha($thumbImage, true);
+                $transparent = imagecolorallocatealpha($thumbImage, 0, 0, 0, 127);
+                imagefilledrectangle($thumbImage, 0, 0, $newWidth, $newHeight, $transparent);
+            }
+
+            imagecopyresampled(
+                $thumbImage, $sourceImage,
+                0, 0, 0, 0,
+                $newWidth, $newHeight,
+                $originalWidth, $originalHeight
+            );
+
+            $nomMiniature    = 'thumb_' . $nomOriginal;
+            $cheminMiniature = 'medias/thumbnails/' . $nomMiniature;
+            $fullPath        = Storage::disk('public')->path($cheminMiniature);
+
+            $dir = dirname($fullPath);
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+
+            match ($extension) {
+                'jpeg', 'jpg' => imagejpeg($thumbImage, $fullPath, 80),
+                'png'         => imagepng($thumbImage, $fullPath, 7),
+                'webp'        => imagewebp($thumbImage, $fullPath, 80),
+                'gif'         => imagegif($thumbImage, $fullPath),
+                default       => null,
+            };
+
+            imagedestroy($sourceImage);
+            imagedestroy($thumbImage);
+
+            return $cheminMiniature;
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 }

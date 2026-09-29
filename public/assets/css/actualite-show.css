@@ -1039,3 +1039,200 @@
         transition-duration: 0.01ms !important;
     }
 }
+
+
+/* ============================================================
+   GALERIE MÉDIA — Article public
+   ============================================================ */
+
+.article-galerie {
+    margin: 32px 0;
+    padding: 28px;
+    background: #F8FAFC;
+    border-radius: 16px;
+    border: 1px solid #E2E8F0;
+}
+
+.article-galerie-header {
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #E2E8F0;
+}
+
+.article-galerie-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: #1E293B;
+    margin: 0 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.article-galerie-title i {
+    color: #1A5B9C;
+}
+
+.article-galerie-count {
+    font-weight: 400;
+    font-size: 12px;
+    color: #64748B;
+    margin-left: 6px;
+}
+
+.article-galerie-description {
+    font-size: 13px;
+    color: #64748B;
+    margin: 0;
+    font-style: italic;
+}
+
+.article-galerie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+}
+
+.article-galerie-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.article-galerie-item:hover {
+    transform: translateY(-3px);
+}
+
+.article-galerie-thumb {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #F1F5F9;
+    border: 1px solid #E2E8F0;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.article-galerie-item:hover .article-galerie-thumb {
+    border-color: #1A5B9C;
+    box-shadow: 0 10px 24px rgba(26, 91, 156, 0.15);
+}
+
+.article-galerie-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.article-galerie-item:hover .article-galerie-thumb img {
+    transform: scale(1.06);
+}
+
+.article-galerie-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #E8F0F8, #F1F5F9);
+    color: #1A5B9C;
+    font-size: 34px;
+    opacity: 0.5;
+}
+
+/* Badge type */
+.article-galerie-type {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: #FFFFFF;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    z-index: 2;
+}
+
+.article-galerie-type-image {
+    background: rgba(26, 91, 156, 0.95);
+}
+
+.article-galerie-type-video {
+    background: rgba(220, 38, 38, 0.95);
+}
+
+/* Overlay */
+.article-galerie-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    opacity: 0;
+    transition: opacity 0.25s ease, background 0.25s ease;
+    z-index: 1;
+}
+
+.article-galerie-item:hover .article-galerie-overlay {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+/* Légende */
+.article-galerie-caption {
+    font-size: 12px;
+    color: #475569;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.3;
+    padding: 0 4px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .article-galerie {
+        padding: 20px 16px;
+        margin: 24px 0;
+    }
+
+    .article-galerie-title {
+        font-size: 16px;
+    }
+
+    .article-galerie-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .article-galerie-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .article-galerie-type {
+        font-size: 9px;
+        padding: 2px 7px;
+    }
+}

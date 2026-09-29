@@ -242,7 +242,7 @@ $ligneDepart = method_exists($listePaiements, 'firstItem')
 
 <div class="salary-payment-report payment-report">
 
-```
+
 {{-- =========================================================
      EN-TÊTE DE PAGE
      ========================================================= --}}
@@ -1972,7 +1972,7 @@ $ligneDepart = method_exists($listePaiements, 'firstItem')
     </button>
 
 </div>
-```
+
 
 </div>
 

@@ -170,7 +170,7 @@ $valeurNotes = old(
 
 <div class="admin-content">
 
-```
+
 <div
     class="salary-edit"
     data-status="{{ $statut }}"
@@ -1637,7 +1637,7 @@ $valeurNotes = old(
     </div>
 
 </div>
-```
+
 
 </div>
 

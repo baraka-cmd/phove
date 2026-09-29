@@ -149,7 +149,7 @@ $modeLabels = [
 
 <div class="salary-bulletin">
 
-```
+
 <div class="bulletin-page">
 
     <div class="bulletin-container">
@@ -1155,7 +1155,7 @@ $modeLabels = [
     </div>
 
 </div>
-```
+
 
 </div>
 

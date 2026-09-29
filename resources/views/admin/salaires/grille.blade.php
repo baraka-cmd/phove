@@ -19,7 +19,7 @@ CSS SPÉCIFIQUE À LA PAGE
     data-month="{{ $mois ?? request('mois') ?? now()->format('Y-m') }}"
 >
 
-```
+
 {{-- ========================================================
      EN-TÊTE DE PAGE
 ========================================================= --}}
@@ -1178,7 +1178,7 @@ CSS SPÉCIFIQUE À LA PAGE
     @endif
 
 </section>
-```
+
 
 </div>
 

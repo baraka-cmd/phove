@@ -20,7 +20,9 @@ class Media extends Model
         'type',
         'fichier',
         'miniature',
+        'taille',
         'projet_id',
+        'article_id',      // ⭐ AJOUTER CETTE LIGNE
         'album',
         'description',
         'date_prise',

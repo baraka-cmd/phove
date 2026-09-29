@@ -285,7 +285,7 @@ $payeParNom = $payePar?->name
 
 <div class="salary-payment-show">
 
-```
+
 {{-- =========================================================
      EN-TÊTE DE PAGE
      ========================================================= --}}
@@ -1868,7 +1868,7 @@ $payeParNom = $payePar?->name
     </div>
 
 </footer>
-```
+
 
 </div>
 

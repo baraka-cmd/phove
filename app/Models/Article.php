@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Models\Media;
 
 class Article extends Model
 {
@@ -77,6 +78,16 @@ class Article extends Model
         return $query->where('statut', 'publie')
                      ->where('date_publication', '<=', now());
     }
+
+    /**
+ * Un article peut avoir plusieurs médias (photos, vidéos).
+ *
+ * @return \Illuminate\Database\Eloquent\Relations\HasMany
+ */
+public function medias()
+{
+    return $this->hasMany(Media::class);
+}
 
     /**
      * Scope : articles épinglés en premier.
