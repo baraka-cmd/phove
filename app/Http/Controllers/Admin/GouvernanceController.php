@@ -176,8 +176,8 @@ public function storeMembre(Request $request): RedirectResponse
 
     if ($request->hasFile('photo') && $membre) {
         // Supprimer l'ancienne photo si elle existe
-        if ($membre->photo && Storage::disk('public')->exists($membre->photo)) {
-            Storage::disk('public')->delete($membre->photo);
+        if ($membre->photo) {
+            media_delete($membre->photo);
         }
 
         // Stocker la nouvelle
@@ -239,8 +239,8 @@ public function updateMembre(Request $request, Organe $organe): RedirectResponse
         $membre = $organe->membre;
 
         // Supprimer l'ancienne
-        if ($membre->photo && Storage::disk('public')->exists($membre->photo)) {
-            Storage::disk('public')->delete($membre->photo);
+        if ($membre->photo) {
+            media_delete($membre->photo);
         }
 
         // Stocker la nouvelle
@@ -389,7 +389,7 @@ public function updateMembre(Request $request, Organe $organe): RedirectResponse
 
         if ($request->hasFile('pv_fichier')) {
             if ($assembly->pv_fichier) {
-                Storage::disk('public')->delete($assembly->pv_fichier);
+                media_delete($assembly->pv_fichier);
             }
             $validated['pv_fichier'] = $request->file('pv_fichier')->store('assemblees/pv', 'public');
         }
@@ -434,7 +434,7 @@ public function updateMembre(Request $request, Organe $organe): RedirectResponse
     public function destroyAssembly(AssembleeGenerale $assembly)
     {
         if ($assembly->pv_fichier) {
-            Storage::disk('public')->delete($assembly->pv_fichier);
+            media_delete($assembly->pv_fichier);
         }
         $assembly->delete();
         return redirect()->route('admin.gouvernance.assemblies')

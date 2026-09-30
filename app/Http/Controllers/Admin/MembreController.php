@@ -150,7 +150,7 @@ class MembreController extends Controller
         ]);
 
         if ($request->hasFile('photo')) {
-            $validated['photo'] = $request->file('photo')->store('membres/photos', 'public');
+            $validated['photo'] = media_store($request->file('photo'), 'membres/photos');
         }
 
         $validated['frais_adhesion']       = $validated['frais_adhesion'] ?? 50.00;
@@ -225,9 +225,9 @@ class MembreController extends Controller
 
         if ($request->hasFile('photo')) {
             if ($membre->photo) {
-                Storage::disk('public')->delete($membre->photo);
+                media_delete($membre->photo);
             }
-            $validated['photo'] = $request->file('photo')->store('membres/photos', 'public');
+            $validated['photo'] = media_store($request->file('photo'), 'membres/photos');
         }
 
         $membre->update($validated);
@@ -242,7 +242,7 @@ class MembreController extends Controller
     public function destroy(Membre $membre): RedirectResponse
     {
         if ($membre->photo) {
-            Storage::disk('public')->delete($membre->photo);
+            media_delete($membre->photo);
         }
 
         $membre->delete();

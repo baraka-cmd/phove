@@ -226,8 +226,8 @@ class DossierPersonnelController extends Controller
 
         // Supprimer l'ancien fichier s'il existe
         if ($document->fichier) {
-            if (Storage::disk('public')->exists($document->fichier)) {
-                Storage::disk('public')->delete($document->fichier);
+            if ($document->fichier) {
+                media_delete($document->fichier);
             }
         }
 
@@ -266,8 +266,8 @@ class DossierPersonnelController extends Controller
 
         // Supprimer le fichier physique
         if ($document->fichier) {
-            if (Storage::disk('public')->exists($document->fichier)) {
-                Storage::disk('public')->delete($document->fichier);
+            if ($document->fichier) {
+                media_delete($document->fichier);
             }
         }
 
@@ -354,7 +354,7 @@ class DossierPersonnelController extends Controller
                     if ($document && $document->dossier_id === $dossier->id) {
                         // Supprimer l'ancien fichier
                         if ($document->fichier) {
-                            Storage::disk('public')->delete($document->fichier);
+                            media_delete($document->fichier);
                         }
                         // Stocker le nouveau avec nom original
                         $nomFichier = $this->genererNomFichier($file, $document->type_document);
@@ -402,8 +402,8 @@ class DossierPersonnelController extends Controller
         // Supprimer tous les fichiers physiques
         foreach ($dossier->documents as $document) {
             if ($document->fichier) {
-                if (Storage::disk('public')->exists($document->fichier)) {
-                    Storage::disk('public')->delete($document->fichier);
+                if ($document->fichier) {
+                    media_delete($document->fichier);
                 }
             }
         }

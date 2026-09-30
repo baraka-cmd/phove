@@ -156,7 +156,7 @@ class TemoignageController extends Controller
 
         // Upload photo
         if ($request->hasFile('photo')) {
-            $validated['photo'] = $request->file('photo')->store('temoignages/photos', 'public');
+            $validated['photo'] = media_store($request->file('photo'), 'temoignages/photos');
         }
 
         // Date de soumission
@@ -236,11 +236,10 @@ class TemoignageController extends Controller
 
         // Upload photo
         if ($request->hasFile('photo')) {
-            // Supprimer l'ancienne photo
             if ($temoignage->photo) {
-                Storage::disk('public')->delete($temoignage->photo);
+                media_delete($temoignage->photo);
             }
-            $validated['photo'] = $request->file('photo')->store('temoignages/photos', 'public');
+            $validated['photo'] = media_store($request->file('photo'), 'temoignages/photos');
         }
 
         // Si le statut passe à "approuve", enregistrer la validation
@@ -269,7 +268,7 @@ class TemoignageController extends Controller
     {
         // Supprimer la photo
         if ($temoignage->photo) {
-            Storage::disk('public')->delete($temoignage->photo);
+            media_delete($temoignage->photo);
         }
 
         $temoignage->delete();

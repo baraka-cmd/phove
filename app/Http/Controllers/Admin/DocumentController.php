@@ -233,8 +233,8 @@ class DocumentController extends Controller
     public function destroy(Document $document)
     {
         // Supprimer le fichier physique
-        if ($document->fichier && Storage::disk('public')->exists($document->fichier)) {
-            Storage::disk('public')->delete($document->fichier);
+        if ($document->fichier) {
+            media_delete($document->fichier);
         }
 
         $document->delete();
@@ -270,8 +270,8 @@ class DocumentController extends Controller
         $chemin = $fichier->storeAs('documents', $nomFichier, 'public');
 
         // Supprimer l'ancien fichier
-        if ($document->fichier && Storage::disk('public')->exists($document->fichier)) {
-            Storage::disk('public')->delete($document->fichier);
+        if ($document->fichier) {
+            media_delete($document->fichier);
         }
 
         $document->update([
@@ -297,33 +297,45 @@ class DocumentController extends Controller
     }
 
     /**
-     * Télécharge un document et incrémente le compteur.
-     */
-    public function download(Document $document)
-    {
-        if (!$document->fichier || !Storage::disk('public')->exists($document->fichier)) {
-            return redirect()->back()
-                ->with('error', 'Le fichier est introuvable.');
-        }
-
-        // Incrémenter le compteur
-        $document->increment('telechargements');
-
-        $nomFichier = Str::slug($document->titre) . '.' . $document->extension;
-
-        return Storage::disk('public')->download($document->fichier, $nomFichier);
+ * Télécharge un document et incrémente le compteur.
+ */
+public function download(Document $document)
+{
+    if (!$document->fichier) {
+        return redirect()->back()
+            ->with('error', 'Le fichier est introuvable.');
     }
+
+    // Incrémenter le compteur
+    $document->increment('telechargements');
+
+    $nomFichier = Str::slug($document->titre) . '.' . $document->extension;
+
+    // URL Cloudinary → redirection
+    if (str_starts_with($document->fichier, 'http')) {
+        return redirect($document->fichier);
+    }
+
+    // Fichier local → téléchargement classique
+    return Storage::disk('public')->download($document->fichier, $nomFichier);
+}
 
     /**
-     * Affiche le fichier dans le navigateur (pour PDF).
-     */
-    public function preview(Document $document)
-    {
-        if (!$document->fichier || !Storage::disk('public')->exists($document->fichier)) {
-            return redirect()->back()
-                ->with('error', 'Le fichier est introuvable.');
-        }
-
-        return response()->file(Storage::disk('public')->path($document->fichier));
+ * Affiche le fichier dans le navigateur (pour PDF).
+ */
+public function preview(Document $document)
+{
+    if (!$document->fichier) {
+        return redirect()->back()
+            ->with('error', 'Le fichier est introuvable.');
     }
+
+    // URL Cloudinary → redirection
+    if (str_starts_with($document->fichier, 'http')) {
+        return redirect($document->fichier);
+    }
+
+    // Fichier local → aperçu direct
+    return response()->file(Storage::disk('public')->path($document->fichier));
+}
 }

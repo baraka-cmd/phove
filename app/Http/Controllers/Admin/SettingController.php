@@ -168,8 +168,8 @@ class SettingController extends Controller
                 // Suppression demandée
                 $removeName = 'remove_' . $setting->key;
                 if ($request->input($removeName) === '1') {
-                    if ($setting->value && Storage::disk('public')->exists($setting->value)) {
-                        Storage::disk('public')->delete($setting->value);
+                    if ($setting->value) {
+                        media_delete($setting->value);
                     }
                     $setting->update(['value' => null]);
                     $updatedCount++;
@@ -178,12 +178,18 @@ class SettingController extends Controller
 
                 // Nouveau fichier envoyé
                 if ($request->hasFile($inputName)) {
-                    if ($setting->value && Storage::disk('public')->exists($setting->value)) {
-                        Storage::disk('public')->delete($setting->value);
+                    // Supprimer l'ancien fichier (local ou Cloudinary)
+                    if ($setting->value) {
+                        media_delete($setting->value);
                     }
-                    $path = $request->file($inputName)->store('settings', 'public');
-                    $setting->update(['value' => $path]);
-                    $updatedCount++;
+
+                    // Upload du nouveau fichier
+                    $path = media_store($request->file($inputName), 'settings');
+
+                    if ($path) {
+                        $setting->update(['value' => $path]);
+                        $updatedCount++;
+                    }
                 }
             }
             // ---- Switch (checkbox) ----
@@ -266,8 +272,8 @@ class SettingController extends Controller
         }
 
         // Supprimer le fichier physique
-        if (Storage::disk('public')->exists($setting->value)) {
-            Storage::disk('public')->delete($setting->value);
+        if ($setting->value) {
+            media_delete($setting->value);
         }
 
         // Mettre à jour la base de données

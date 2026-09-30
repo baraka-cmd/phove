@@ -128,7 +128,7 @@ class ArticleController extends Controller
 
         // Upload image de couverture
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('articles/images', 'public');
+            $validated['image'] = media_store($request->file('image'), 'articles/images');
         }
 
         $validated['user_id'] = auth()->id();
@@ -224,10 +224,10 @@ class ArticleController extends Controller
 
         // Upload image de couverture
         if ($request->hasFile('image')) {
-            if ($article->image && Storage::disk('public')->exists($article->image)) {
-                Storage::disk('public')->delete($article->image);
+            if ($article->image) {
+                media_delete($article->image);
             }
-            $validated['image'] = $request->file('image')->store('articles/images', 'public');
+            $validated['image'] = media_store($request->file('image'), 'articles/images');
         }
 
         $validated['epingle'] = $request->boolean('epingle');
@@ -248,11 +248,11 @@ class ArticleController extends Controller
                 ->get();
 
             foreach ($mediasASupprimer as $media) {
-                if ($media->fichier && Storage::disk('public')->exists($media->fichier)) {
-                    Storage::disk('public')->delete($media->fichier);
+                if ($media->fichier) {
+                    media_delete($media->fichier);
                 }
-                if ($media->miniature && Storage::disk('public')->exists($media->miniature)) {
-                    Storage::disk('public')->delete($media->miniature);
+                if ($media->miniature) {
+                    media_delete($media->miniature);
                 }
                 $media->delete();
             }
@@ -281,17 +281,17 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         // Supprimer l'image de couverture
-        if ($article->image && Storage::disk('public')->exists($article->image)) {
-            Storage::disk('public')->delete($article->image);
+        if ($article->image) {
+            media_delete($article->image);
         }
 
         // Supprimer les médias liés
         foreach ($article->medias as $media) {
-            if ($media->fichier && Storage::disk('public')->exists($media->fichier)) {
-                Storage::disk('public')->delete($media->fichier);
+            if ($media->fichier) {
+                media_delete($media->fichier);
             }
-            if ($media->miniature && Storage::disk('public')->exists($media->miniature)) {
-                Storage::disk('public')->delete($media->miniature);
+            if ($media->miniature) {
+                media_delete($media->miniature);
             }
             $media->delete();
         }
@@ -369,124 +369,49 @@ class ArticleController extends Controller
     /**
      * Upload une galerie de fichiers (images et vidéos) liée à un article.
      */
-    protected function uploadGalerie(Request $request, Article $article): void
+    /**
+ * Upload une galerie de fichiers (images et vidéos) liée à un article.
+ */
+protected function uploadGalerie(Request $request, Article $article): void
 {
-    \Log::info('🔵 uploadGalerie démarré pour article #' . $article->id);
-    \Log::info('🔵 Nombre de fichiers : ' . count($request->file('galerie')));
-
     $formatsImages = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
     $formatsVideos = ['mp4', 'webm', 'ogg'];
 
     $ordre = Media::where('article_id', $article->id)->max('ordre') ?? 0;
 
-    foreach ($request->file('galerie') as $index => $fichier) {
-        \Log::info('🔵 Traitement fichier #' . $index . ' : ' . $fichier->getClientOriginalName());
-
-        $extension = strtolower($fichier->getClientOriginalExtension());
-        $type      = in_array($extension, $formatsImages) ? 'image' : 'video';
-
-        \Log::info('🔵 Type détecté : ' . $type);
-
-        $nomFichier = Str::uuid() . '.' . $extension;
-        $dossier    = $type === 'image' ? 'medias/images' : 'medias/videos';
-        $chemin     = $fichier->storeAs($dossier, $nomFichier, 'public');
-
-        \Log::info('🔵 Chemin stocké : ' . $chemin);
-
-        $cheminMiniature = null;
-
-        $ordre++;
-
-        $media = Media::create([
-            'titre'       => pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME),
-            'type'        => $type,
-            'fichier'     => $chemin,
-            'miniature'   => $cheminMiniature,
-            'taille'      => $fichier->getSize(),
-            'article_id'  => $article->id,
-            'album'       => 'Article : ' . Str::limit($article->titre, 60),
-            'publier'     => true,
-            'ordre'       => $ordre,
-            'user_id'     => auth()->id(),
-            'auteur'      => auth()->user()->nom ?? 'Admin',
-        ]);
-
-        \Log::info('✅ Média créé avec ID : ' . $media->id);
-    }
-
-    \Log::info('🟢 uploadGalerie terminé');
-}
-
-    /**
-     * Génère une miniature pour une image.
-     */
-    protected function genererMiniature($fichier, string $nomOriginal): ?string
-    {
+    foreach ($request->file('galerie') as $fichier) {
         try {
-            $sourcePath = $fichier->getRealPath();
-            $extension  = strtolower($fichier->getClientOriginalExtension());
+            $extension = strtolower($fichier->getClientOriginalExtension());
+            $type      = in_array($extension, $formatsImages) ? 'image' : 'video';
 
-            $sourceImage = match ($extension) {
-                'jpeg', 'jpg' => @imagecreatefromjpeg($sourcePath),
-                'png'         => @imagecreatefrompng($sourcePath),
-                'webp'        => @imagecreatefromwebp($sourcePath),
-                'gif'         => @imagecreatefromgif($sourcePath),
-                default       => null,
-            };
+            $dossier = $type === 'image' ? 'medias/images' : 'medias/videos';
 
-            if (!$sourceImage) {
-                return null;
+            // Upload via helper (Cloudinary en prod, local en dev)
+            $chemin = media_store($fichier, $dossier);
+
+            if (!$chemin) {
+                continue; // échec d'upload → on saute
             }
 
-            $originalWidth  = imagesx($sourceImage);
-            $originalHeight = imagesy($sourceImage);
+            $ordre++;
 
-            $maxWidth  = 400;
-            $maxHeight = 300;
-
-            $ratio     = min($maxWidth / $originalWidth, $maxHeight / $originalHeight);
-            $newWidth  = (int) round($originalWidth * $ratio);
-            $newHeight = (int) round($originalHeight * $ratio);
-
-            $thumbImage = imagecreatetruecolor($newWidth, $newHeight);
-
-            if (in_array($extension, ['png', 'gif'], true)) {
-                imagealphablending($thumbImage, false);
-                imagesavealpha($thumbImage, true);
-                $transparent = imagecolorallocatealpha($thumbImage, 0, 0, 0, 127);
-                imagefilledrectangle($thumbImage, 0, 0, $newWidth, $newHeight, $transparent);
-            }
-
-            imagecopyresampled(
-                $thumbImage, $sourceImage,
-                0, 0, 0, 0,
-                $newWidth, $newHeight,
-                $originalWidth, $originalHeight
-            );
-
-            $nomMiniature    = 'thumb_' . $nomOriginal;
-            $cheminMiniature = 'medias/thumbnails/' . $nomMiniature;
-            $fullPath        = Storage::disk('public')->path($cheminMiniature);
-
-            $dir = dirname($fullPath);
-            if (!is_dir($dir)) {
-                mkdir($dir, 0755, true);
-            }
-
-            match ($extension) {
-                'jpeg', 'jpg' => imagejpeg($thumbImage, $fullPath, 80),
-                'png'         => imagepng($thumbImage, $fullPath, 7),
-                'webp'        => imagewebp($thumbImage, $fullPath, 80),
-                'gif'         => imagegif($thumbImage, $fullPath),
-                default       => null,
-            };
-
-            imagedestroy($sourceImage);
-            imagedestroy($thumbImage);
-
-            return $cheminMiniature;
+            Media::create([
+                'titre'       => pathinfo($fichier->getClientOriginalName(), PATHINFO_FILENAME),
+                'type'        => $type,
+                'fichier'     => $chemin,
+                'miniature'   => null, // Cloudinary génère les miniatures à la volée
+                'taille'      => $fichier->getSize(),
+                'article_id'  => $article->id,
+                'album'       => 'Article : ' . Str::limit($article->titre, 60),
+                'publier'     => true,
+                'ordre'       => $ordre,
+                'user_id'     => auth()->id(),
+                'auteur'      => auth()->user()->nom ?? 'Admin',
+            ]);
         } catch (\Throwable $e) {
-            return null;
+            // Silencieux : on continue avec les fichiers suivants
         }
     }
+}
+
 }

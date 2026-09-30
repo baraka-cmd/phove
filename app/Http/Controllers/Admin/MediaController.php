@@ -238,17 +238,10 @@ class MediaController extends Controller
 
                 // Dossier de stockage
                 $dossier = $type === 'image' ? 'medias/images' : 'medias/videos';
-                $chemin  = $fichier->storeAs($dossier, $nomFichier, 'public');
+                $chemin = media_store($fichier, $dossier);
 
-                // Miniature pour les images
+                // Cloudinary génère les miniatures à la volée (transformations d'URL)
                 $cheminMiniature = null;
-                if ($type === 'image' && in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
-                    try {
-                        $cheminMiniature = $this->genererMiniature($fichier, $nomFichier);
-                    } catch (\Exception $e) {
-                        // On continue sans miniature si ça échoue
-                    }
-                }
 
                 // Calcul de l'ordre : par album s'il existe, sinon global
                 $ordre = (int) Media::when(
@@ -500,17 +493,10 @@ class MediaController extends Controller
         // Stocker le nouveau
         $nomFichier = Str::uuid() . '.' . $extension;
         $dossier    = $type === 'image' ? 'medias/images' : 'medias/videos';
-        $chemin     = $fichier->storeAs($dossier, $nomFichier, 'public');
+        $chemin = media_store($fichier, $dossier);
 
-        // Générer une miniature si image
+        // Cloudinary génère les miniatures à la volée (transformations d'URL)
         $cheminMiniature = null;
-        if ($type === 'image' && in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
-            try {
-                $cheminMiniature = $this->genererMiniature($fichier, $nomFichier);
-            } catch (\Exception $e) {
-                // Silencieux
-            }
-        }
 
         $media->update([
             'type'      => $type,
@@ -571,106 +557,16 @@ class MediaController extends Controller
      */
     private function supprimerFichiersPhysiques(Media $media): void
     {
-        if ($media->fichier && Storage::disk('public')->exists($media->fichier)) {
-            Storage::disk('public')->delete($media->fichier);
+        if ($media->fichier) {
+            media_delete($media->fichier);
         }
 
-        if ($media->miniature && Storage::disk('public')->exists($media->miniature)) {
-            Storage::disk('public')->delete($media->miniature);
-        }
-    }
-
-    /**
-     * Génère une miniature pour une image (sans package externe).
-     */
-    private function genererMiniature($fichier, string $nomOriginal): ?string
-    {
-        try {
-            $sourcePath = $fichier->getRealPath();
-            $extension  = strtolower($fichier->getClientOriginalExtension());
-
-            // Créer l'image source selon le format
-            switch ($extension) {
-                case 'jpeg':
-                case 'jpg':
-                    $sourceImage = @imagecreatefromjpeg($sourcePath);
-                    break;
-                case 'png':
-                    $sourceImage = @imagecreatefrompng($sourcePath);
-                    break;
-                case 'webp':
-                    $sourceImage = @imagecreatefromwebp($sourcePath);
-                    break;
-                case 'gif':
-                    $sourceImage = @imagecreatefromgif($sourcePath);
-                    break;
-                default:
-                    return null;
-            }
-
-            if (!$sourceImage) {
-                return null;
-            }
-
-            $originalWidth  = imagesx($sourceImage);
-            $originalHeight = imagesy($sourceImage);
-
-            $maxWidth  = 400;
-            $maxHeight = 300;
-
-            $ratio     = min($maxWidth / $originalWidth, $maxHeight / $originalHeight);
-            $newWidth  = (int) round($originalWidth * $ratio);
-            $newHeight = (int) round($originalHeight * $ratio);
-
-            $thumbImage = imagecreatetruecolor($newWidth, $newHeight);
-
-            // Préserver la transparence pour PNG et GIF
-            if ($extension === 'png' || $extension === 'gif') {
-                imagealphablending($thumbImage, false);
-                imagesavealpha($thumbImage, true);
-                $transparent = imagecolorallocatealpha($thumbImage, 0, 0, 0, 127);
-                imagefilledrectangle($thumbImage, 0, 0, $newWidth, $newHeight, $transparent);
-            }
-
-            imagecopyresampled(
-                $thumbImage, $sourceImage,
-                0, 0, 0, 0,
-                $newWidth, $newHeight, $originalWidth, $originalHeight
-            );
-
-            $nomMiniature    = 'thumb_' . $nomOriginal;
-            $cheminMiniature = 'medias/thumbnails/' . $nomMiniature;
-            $fullPath        = Storage::disk('public')->path($cheminMiniature);
-
-            $dir = dirname($fullPath);
-            if (!is_dir($dir)) {
-                mkdir($dir, 0755, true);
-            }
-
-            switch ($extension) {
-                case 'jpeg':
-                case 'jpg':
-                    imagejpeg($thumbImage, $fullPath, 80);
-                    break;
-                case 'png':
-                    imagepng($thumbImage, $fullPath, 7);
-                    break;
-                case 'webp':
-                    imagewebp($thumbImage, $fullPath, 80);
-                    break;
-                case 'gif':
-                    imagegif($thumbImage, $fullPath);
-                    break;
-            }
-
-            imagedestroy($sourceImage);
-            imagedestroy($thumbImage);
-
-            return $cheminMiniature;
-        } catch (\Exception $e) {
-            return null;
+        if ($media->miniature) {
+            media_delete($media->miniature);
         }
     }
+
+    
 
     /**
      * Convertit des coordonnées GPS EXIF en chaîne lisible.

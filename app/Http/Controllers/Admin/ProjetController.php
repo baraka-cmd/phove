@@ -195,8 +195,7 @@ public function store(Request $request)
 
     // Gérer l'upload de l'image principale
     if ($request->hasFile('image_principale')) {
-        $validated['image_principale'] = $request->file('image_principale')
-            ->store('projets/images', 'public');
+        $validated['image_principale'] = media_store($request->file('image_principale'), 'projets/images');
     }
 
     $validated['publier'] = $request->boolean('publier');
@@ -322,11 +321,10 @@ public function update(Request $request, Projet $projet)
     // Gérer l'upload de l'image principale
     if ($request->hasFile('image_principale')) {
         // Supprimer l'ancienne image
-        if ($projet->image_principale && Storage::disk('public')->exists($projet->image_principale)) {
-            Storage::disk('public')->delete($projet->image_principale);
+        if ($projet->image_principale) {
+            media_delete($projet->image_principale);
         }
-        $validated['image_principale'] = $request->file('image_principale')
-            ->store('projets/images', 'public');
+        $validated['image_principale'] = media_store($request->file('image_principale'), 'projets/images');
     }
 
     $validated['publier'] = $request->boolean('publier');
@@ -344,11 +342,11 @@ public function update(Request $request, Projet $projet)
 
         foreach ($mediasASupprimer as $media) {
             // Supprimer les fichiers physiques
-            if ($media->fichier && Storage::disk('public')->exists($media->fichier)) {
-                Storage::disk('public')->delete($media->fichier);
+            if ($media->fichier) {
+                media_delete($media->fichier);
             }
-            if ($media->miniature && Storage::disk('public')->exists($media->miniature)) {
-                Storage::disk('public')->delete($media->miniature);
+            if ($media->miniature) {
+                media_delete($media->miniature);
             }
             $media->delete();
         }
@@ -398,17 +396,10 @@ protected function uploadGalerie(Request $request, Projet $projet): void
             $dossier = $type === 'image' ? 'medias/images' : 'medias/videos';
 
             // Stocker le fichier
-            $chemin = $fichier->storeAs($dossier, $nomFichier, 'public');
+            $chemin = media_store($fichier, $dossier);
 
-            // Générer une miniature pour les images
+            // Cloudinary génère les miniatures à la volée (via transformations d'URL)
             $cheminMiniature = null;
-            if ($type === 'image' && in_array($extension, ['jpg', 'jpeg', 'png', 'webp'])) {
-                try {
-                    $cheminMiniature = $this->genererMiniature($fichier, $nomFichier);
-                } catch (\Throwable $e) {
-                    // Silencieux : on continue sans miniature
-                }
-            }
 
             $ordre++;
 
@@ -435,86 +426,6 @@ protected function uploadGalerie(Request $request, Projet $projet): void
     }
 }
 
-/**
- * Génère une miniature pour une image.
- *
- * @param  \Illuminate\Http\UploadedFile  $fichier
- * @param  string  $nomOriginal
- * @return string|null
- */
-protected function genererMiniature($fichier, string $nomOriginal): ?string
-{
-    try {
-        $sourcePath = $fichier->getRealPath();
-        $extension  = strtolower($fichier->getClientOriginalExtension());
-
-        // Créer l'image source
-        $sourceImage = match ($extension) {
-            'jpeg', 'jpg' => @imagecreatefromjpeg($sourcePath),
-            'png'         => @imagecreatefrompng($sourcePath),
-            'webp'        => @imagecreatefromwebp($sourcePath),
-            'gif'         => @imagecreatefromgif($sourcePath),
-            default       => null,
-        };
-
-        if (!$sourceImage) {
-            return null;
-        }
-
-        $originalWidth  = imagesx($sourceImage);
-        $originalHeight = imagesy($sourceImage);
-
-        $maxWidth  = 400;
-        $maxHeight = 300;
-
-        $ratio     = min($maxWidth / $originalWidth, $maxHeight / $originalHeight);
-        $newWidth  = (int) round($originalWidth * $ratio);
-        $newHeight = (int) round($originalHeight * $ratio);
-
-        $thumbImage = imagecreatetruecolor($newWidth, $newHeight);
-
-        // Préserver la transparence pour PNG et GIF
-        if (in_array($extension, ['png', 'gif'], true)) {
-            imagealphablending($thumbImage, false);
-            imagesavealpha($thumbImage, true);
-            $transparent = imagecolorallocatealpha($thumbImage, 0, 0, 0, 127);
-            imagefilledrectangle($thumbImage, 0, 0, $newWidth, $newHeight, $transparent);
-        }
-
-        imagecopyresampled(
-            $thumbImage, $sourceImage,
-            0, 0, 0, 0,
-            $newWidth, $newHeight,
-            $originalWidth, $originalHeight
-        );
-
-        $nomMiniature    = 'thumb_' . $nomOriginal;
-        $cheminMiniature = 'medias/thumbnails/' . $nomMiniature;
-        $fullPath        = Storage::disk('public')->path($cheminMiniature);
-
-        // Créer le dossier si nécessaire
-        $dir = dirname($fullPath);
-        if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
-        }
-
-        // Sauvegarder selon le format
-        match ($extension) {
-            'jpeg', 'jpg' => imagejpeg($thumbImage, $fullPath, 80),
-            'png'         => imagepng($thumbImage, $fullPath, 7),
-            'webp'        => imagewebp($thumbImage, $fullPath, 80),
-            'gif'         => imagegif($thumbImage, $fullPath),
-            default       => null,
-        };
-
-        imagedestroy($sourceImage);
-        imagedestroy($thumbImage);
-
-        return $cheminMiniature;
-    } catch (\Throwable $e) {
-        return null;
-    }
-}
 
     /**
      * Supprime un projet.
@@ -526,9 +437,7 @@ protected function genererMiniature($fichier, string $nomOriginal): ?string
     {
         // Supprimer l'image
         if ($projet->image_principale) {
-            if (Storage::disk('public')->exists($projet->image_principale)) {
-                Storage::disk('public')->delete($projet->image_principale);
-            }
+            media_delete($projet->image_principale);
         }
 
         // Détacher les partenaires

@@ -149,8 +149,7 @@ class PartenaireController extends Controller
     );
 
     if ($request->hasFile('logo')) {
-        $validated['logo'] = $request->file('logo')
-            ->store('partenaires/logos', 'public');
+        $validated['logo'] = media_store($request->file('logo'), 'partenaires/logos');
     }
 
     $partenaire = Partenaire::create($validated);
@@ -214,10 +213,9 @@ class PartenaireController extends Controller
 
     if ($request->hasFile('logo')) {
         if ($partenaire->logo) {
-            Storage::disk('public')->delete($partenaire->logo);
+            media_delete($partenaire->logo);
         }
-        $validated['logo'] = $request->file('logo')
-            ->store('partenaires/logos', 'public');
+        $validated['logo'] = media_store($request->file('logo'), 'partenaires/logos');
     }
 
     $partenaire->update($validated);
@@ -249,8 +247,8 @@ class PartenaireController extends Controller
         $nombreProjets = $partenaire->projets()->count();
 
         // Supprimer le logo
-        if ($partenaire->logo && Storage::disk('public')->exists($partenaire->logo)) {
-            Storage::disk('public')->delete($partenaire->logo);
+        if ($partenaire->logo) {
+            media_delete($partenaire->logo);
         }
 
         // Détacher les projets

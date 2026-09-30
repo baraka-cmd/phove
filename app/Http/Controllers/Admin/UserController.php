@@ -148,8 +148,7 @@ class UserController extends Controller
 
         // Upload photo
         if ($request->hasFile('photo_profil')) {
-            $validated['photo_profil'] = $request->file('photo_profil')
-                ->store('users/photos', 'public');
+            $validated['photo_profil'] = media_store($request->file('photo_profil'), 'users/photos');
         }
 
         // Hasher le mot de passe
@@ -222,12 +221,10 @@ class UserController extends Controller
 
         // Upload photo
         if ($request->hasFile('photo_profil')) {
-            // Supprimer l'ancienne photo
             if ($user->photo_profil) {
-                Storage::disk('public')->delete($user->photo_profil);
+                media_delete($user->photo_profil);
             }
-            $validated['photo_profil'] = $request->file('photo_profil')
-                ->store('users/photos', 'public');
+            $validated['photo_profil'] = media_store($request->file('photo_profil'), 'users/photos');
         }
 
         $user->update($validated);
@@ -256,7 +253,7 @@ class UserController extends Controller
 
         // Supprimer la photo
         if ($user->photo_profil) {
-            Storage::disk('public')->delete($user->photo_profil);
+            media_delete($user->photo_profil);
         }
 
         $user->delete();
