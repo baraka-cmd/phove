@@ -210,7 +210,7 @@
                             <div class="cotisation-cell-membre">
                                 <div class="cotisation-cell-avatar">
                                     @if($cotisation->membre && $cotisation->membre->photo)
-                                        <img src="{{ route('media.show', ['path' => $cotisation->membre->photo]) }}" 
+                                        <img src="{{ img_url($cotisation->membre->photo) }}" 
                                             alt="{{ $cotisation->membre->nomComplet() }}"
                                             loading="lazy"
                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">

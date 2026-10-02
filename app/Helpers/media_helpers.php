@@ -106,7 +106,7 @@ if (!function_exists('media_url')) {
             return $path;
         }
 
-        return route('media.show', ['path' => ltrim($path, '/')]);
+        return img_url($path);
     }
 }
 
@@ -128,14 +128,13 @@ if (!function_exists('media_miniature')) {
 
         // Miniature locale
         if ($miniature) {
-            return route('media.show', ['path' => ltrim($miniature, '/')]);
+            return img_url($miniature);
         }
 
         // Fallback
         if ($fichier) {
-            return route('media.show', ['path' => ltrim($fichier, '/')]);
+            return img_url($fichier);
         }
-
         return null;
     }
 }

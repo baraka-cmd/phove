@@ -116,7 +116,7 @@
                             <div class="article-cell-titre">
                                 <div class="article-cell-image">
                                     @if($article->image)
-                                        <img src="{{ route('media.show', ['path' => ltrim($article->image, '/')]) }}"
+                                        <img src="{{ img_url($article->image) }}"
                                             alt="{{ $article->titre }}"
                                             loading="lazy">
                                     @else

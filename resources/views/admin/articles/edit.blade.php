@@ -13,7 +13,7 @@
     ];
 
     $imageUrl = $article->image
-        ? route('media.show', ['path' => ltrim($article->image, '/')])
+        ? img_url($article->image)
         : null;
 
     $datePub = old('date_publication', $article->date_publication);
@@ -348,9 +348,9 @@
                             @foreach($article->medias as $media)
                                 @php
                                     $thumbUrl = $media->miniature
-                                        ? route('media.show', ['path' => ltrim($media->miniature, '/')])
+                                        ? img_url($media->miniature)
                                         : ($media->fichier
-                                            ? route('media.show', ['path' => ltrim($media->fichier, '/')])
+                                            ? img_url($media->fichier)
                                             : null);
                                 @endphp
 
