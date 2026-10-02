@@ -8,7 +8,7 @@
     {{-- Image de l'article --}}
     <div class="article-card-image">
         @if($article->image)
-            <img src="{{ route('media.show', ['path' => $article->image]) }}" 
+            <img src="{{ img_url($article->image) }}" 
                  alt="{{ $article->titre }}" 
                  loading="lazy"
                  class="article-card-img"

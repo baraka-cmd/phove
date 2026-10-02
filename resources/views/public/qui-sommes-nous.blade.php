@@ -112,7 +112,7 @@
                 @php
                     $membrePrincipal = $fondateurPrincipal->membre;
                     $photoUrl = ($membrePrincipal && $membrePrincipal->photo)
-                        ? route('media.show', ['path' => ltrim($membrePrincipal->photo, '/')])
+                        ? img_url($membrePrincipal->photo)
                         : null;
                     $initiales = $membrePrincipal
                         ? \Illuminate\Support\Str::upper(

@@ -177,7 +177,7 @@
                     <div class="user-photo-upload">
                         @php
                             $photoUrl = $user->photo_profil
-                                ? route('media.show', ['path' => ltrim($user->photo_profil, '/')])
+                                ? img_url($user->photo_profil)
                                 : null;
                         @endphp
 

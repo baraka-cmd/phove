@@ -120,7 +120,7 @@
                 @php
                     // ✅ URL du logo via la route custom media.show
                     $logoUrl = $partenaire->logo
-                        ? route('media.show', ['path' => ltrim($partenaire->logo, '/')])
+                        ? img_url($partenaire->logo)
                         : null;
 
                     $sigle = $partenaire->sigleOuInitiales();

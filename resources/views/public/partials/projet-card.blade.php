@@ -6,7 +6,7 @@
 
 @php
     $imageUrl = $projet->image_principale
-        ? route('media.show', ['path' => ltrim($projet->image_principale, '/')])
+        ? img_url($projet->image_principale)
         : null;
 
     $pourcentage = $projet->budget_total > 0

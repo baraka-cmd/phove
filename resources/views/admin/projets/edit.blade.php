@@ -364,7 +364,7 @@
                 {{-- Image actuelle --}}
                 @if($projet->image_principale)
                     <div class="projet-current-image">
-                        <img src="{{ route('media.show', ['path' => ltrim($projet->image_principale, '/')]) }}"
+                        <img src="{{ img_url($projet->image_principale) }}"
                              alt="Image actuelle"
                              loading="lazy">
                         <div>
@@ -443,9 +443,9 @@
                             @foreach($projet->medias as $media)
                                 @php
                                     $thumbUrl = $media->miniature
-                                        ? route('media.show', ['path' => ltrim($media->miniature, '/')])
+                                        ? img_url($media->miniature)
                                         : ($media->fichier
-                                            ? route('media.show', ['path' => ltrim($media->fichier, '/')])
+                                            ? img_url($media->fichier)
                                             : null);
                                 @endphp
 

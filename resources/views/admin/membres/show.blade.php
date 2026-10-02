@@ -26,7 +26,7 @@
     <div class="membre-show-header">
         <div class="membre-show-avatar">
             @if($membre->photo)
-                <img src="{{ route('media.show', ['path' => $membre->photo]) }}" 
+                <img src="{{ img_url($membre->photo) }}" 
                     alt="{{ $membre->nomComplet() }}"
                     loading="lazy"
                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">

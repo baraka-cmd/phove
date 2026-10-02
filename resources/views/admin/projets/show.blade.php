@@ -28,7 +28,7 @@
         {{-- Image --}}
         <div class="projet-show-image">
             @if($projet->image_principale)
-                <img src="{{ route('media.show', ['path' => ltrim($projet->image_principale, '/')]) }}"
+                <img src="{{ img_url($projet->image_principale) }}"
                      alt="{{ $projet->titre }}"
                      loading="lazy"
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
@@ -325,13 +325,13 @@
                     @foreach($projet->medias as $media)
                         @php
                             $thumbUrl = $media->miniature
-                                ? route('media.show', ['path' => ltrim($media->miniature, '/')])
+                                ? img_url($media->miniature)
                                 : ($media->fichier
-                                    ? route('media.show', ['path' => ltrim($media->fichier, '/')])
+                                    ? img_url($media->fichier)
                                     : null);
 
                             $fichierUrl = $media->fichier
-                                ? route('media.show', ['path' => ltrim($media->fichier, '/')])
+                                ? img_url($media->fichier)
                                 : null;
                         @endphp
 

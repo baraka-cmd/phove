@@ -113,7 +113,7 @@
                             <div class="membre-cell-identite">
                                 <div class="membre-cell-avatar">
                                     @if($demande->photo)
-                                        <img src="{{ route('media.show', ['path' => ltrim($demande->photo, '/')]) }}"
+                                        <img src="{{ img_url($demande->photo) }}"
                                             alt="{{ $demande->nomComplet() }}"
                                             loading="lazy"
                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">

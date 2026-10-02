@@ -142,7 +142,7 @@
                     {{-- Image principale --}}
                     <div class="projet-main-image">
                         @if($projet->image_principale)
-                            <img src="{{ route('media.show', ['path' => ltrim($projet->image_principale, '/')]) }}"
+                            <img src="{{ img_url($projet->image_principale) }}"
                                 alt="{{ $projet->titre }}"
                                 class="projet-featured-image"
                                 loading="lazy"
@@ -200,12 +200,12 @@
                                 @php
                                     // Fichier principal (pleine résolution)
                                     $fichierUrl = $media->fichier
-                                        ? route('media.show', ['path' => ltrim($media->fichier, '/')])
+                                        ? img_url($media->fichier)
                                         : null;
 
                                     // Miniature (fallback sur le fichier principal)
                                     $thumbUrl = $media->miniature
-                                        ? route('media.show', ['path' => ltrim($media->miniature, '/')])
+                                        ? img_url($media->miniature)
                                         : $fichierUrl;
                                 @endphp
 

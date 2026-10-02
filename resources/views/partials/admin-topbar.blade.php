@@ -9,7 +9,7 @@
 
     // URL de la photo de profil via la route custom media.show
     $userPhotoUrl = ($user && !empty($user->photo_profil))
-        ? route('media.show', ['path' => ltrim($user->photo_profil, '/')])
+        ? img_url($user->photo_profil)
         : null;
 
     // Libellé du rôle

@@ -99,7 +99,7 @@
             <div class="partenaire-card-header">
                 <div class="partenaire-logo">
                     @if($partenaire->logo)
-                        <img src="{{ route('media.show', ['path' => ltrim($partenaire->logo, '/')]) }}"
+                        <img src="{{ img_url($partenaire->logo) }}"
                              alt="{{ $partenaire->nom }}"
                              loading="lazy">
                     @else

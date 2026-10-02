@@ -52,7 +52,7 @@
                                             {{-- Avatar (photo ou initiales) --}}
                                             <div class="gouvernance-membre-avatar">
                                                 @if($organe->membre && $organe->membre->photo)
-                                                    <img src="{{ route('media.show', ['path' => ltrim($organe->membre->photo, '/')]) }}"
+                                                    <img src="{{ img_url($organe->membre->photo) }}"
                                                          alt="{{ $organe->membre->nomComplet() }}"
                                                          loading="lazy"
                                                          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">

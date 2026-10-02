@@ -133,7 +133,7 @@
                             <div class="projet-cell-titre">
                                 <div class="projet-cell-image">
                                     @if($projet->image_principale)
-                                        <img src="{{ route('media.show', ['path' => $projet->image_principale]) }}" 
+                                        <img src="{{ img_url($projet->image_principale) }}" 
                                             alt="{{ $projet->titre }}" 
                                             loading="lazy"
                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">

@@ -7,7 +7,7 @@
     $membre = $fondateur->membre;
 
     $photoUrl = ($membre && $membre->photo)
-        ? route('media.show', ['path' => ltrim($membre->photo, '/')])
+        ? img_url($membre->photo)
         : null;
 
     $initiales = $membre

@@ -12,7 +12,7 @@
 
     // Photo via media.show (ou null)
     $photoUrl = $temoignage->photo
-        ? route('media.show', ['path' => ltrim($temoignage->photo, '/')])
+        ? img_url($temoignage->photo)
         : null;
 
     // Rôle / localisation (ex: "Veuve bénéficiaire, Muja")

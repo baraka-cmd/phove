@@ -376,7 +376,7 @@
                 <article class="news-card">
                     <div class="news-card-image">
                         @if($article->image)
-                            <img src="{{ route('media.show', ['path' => $article->image]) }}" 
+                            <img src="{{ img_url($article->image) }}" 
                                  alt="{{ $article->titre }}" 
                                  loading="lazy"
                                  onerror="this.src='{{ asset('assets/images/slide1.jpg') }}'">

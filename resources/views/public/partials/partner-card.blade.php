@@ -17,7 +17,7 @@
 
     // URL du logo via media.show (ou null si absent)
     $logoUrl = $partenaire->logo
-        ? route('media.show', ['path' => ltrim($partenaire->logo, '/')])
+        ? img_url($partenaire->logo)
         : null;
 
     // Sigle ou initiales (fallback)

@@ -78,7 +78,7 @@
                         $oldValue     = old($inputName, $setting->value);
                         $hasImage     = !empty($setting->value);
                         $imageUrl     = $hasImage
-                            ? route('media.show', ['path' => ltrim($setting->value, '/')])
+                            ? img_url($setting->value)
                             : null;
                         $switchOn     = (string) $oldValue === '1';
                         $placeholderSize = $setting->key === 'site_favicon' ? '32×32 px' : '200×60 px';
