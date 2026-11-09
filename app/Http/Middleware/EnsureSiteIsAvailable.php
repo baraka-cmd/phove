@@ -21,11 +21,11 @@ class EnsureSiteIsAvailable
         }
 
         try {
-            if ((string) Setting::get('maintenance_mode', '0') === '1') {
-                $message = Setting::get(
-                    'maintenance_message',
-                    'Notre site est momentanément indisponible pour maintenance. Merci de revenir bientôt.'
-                );
+            $settings = Setting::allValues();
+
+            if ((string) ($settings['maintenance_mode'] ?? '0') === '1') {
+                $message = $settings['maintenance_message']
+                    ?? 'Notre site est momentanément indisponible pour maintenance. Merci de revenir bientôt.';
 
                 return response()
                     ->view('public.maintenance', ['message' => $message], 503)
