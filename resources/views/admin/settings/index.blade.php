@@ -142,7 +142,7 @@
                                         @endif
                                     </p>
                                     <ul class="settings-image-rules">
-                                        <li><i class="fas fa-check-circle"></i> JPG, PNG, WebP, ICO ou SVG</li>
+                                        <li><i class="fas fa-check-circle"></i> JPG, PNG ou WebP</li>
                                         <li><i class="fas fa-check-circle"></i> Taille max : 2 Mo</li>
                                     </ul>
                                     <div class="settings-image-actions">
@@ -169,7 +169,7 @@
                                            data-placeholder="placeholder_{{ $setting->key }}"
                                            data-remove-btn="removeBtn_{{ $setting->key }}"
                                            data-remove-flag="remove_{{ $setting->key }}"
-                                           accept="image/jpeg,image/jpg,image/png,image/webp,image/x-icon,image/vnd.microsoft.icon,image/svg+xml"
+                                           accept="image/jpeg,image/png,image/webp"
                                            hidden>
                                     <input type="hidden" name="remove_{{ $setting->key }}" id="remove_{{ $setting->key }}" value="0">
                                 </div>
@@ -220,6 +220,20 @@
                         {{-- ============================================ --}}
                         {{-- SWITCH --}}
                         {{-- ============================================ --}}
+                        @elseif($setting->type === 'number')
+                            <input type="number"
+                                   name="{{ $inputName }}"
+                                   class="settings-input"
+                                   value="{{ $oldValue }}"
+                                   step="any">
+                        @elseif($setting->type === 'color')
+                            <div class="settings-input-icon">
+                                <input type="color"
+                                       name="{{ $inputName }}"
+                                       class="settings-input"
+                                       value="{{ preg_match('/^#[0-9a-fA-F]{6}$/', (string) $oldValue) ? $oldValue : '#0F766E' }}">
+                            </div>
+
                         @elseif($setting->type === 'switch')
                             <div class="settings-switch-row">
                                 <label class="settings-switch">
@@ -258,7 +272,7 @@
             <a href="{{ route('admin.dashboard') }}" class="btn btn-outline">
                 <i class="fas fa-arrow-left"></i> Retour au tableau de bord
             </a>
-            <button type="button" class="btn btn-primary" onclick="document.getElementById('settingsForm').submit();">
+            <button type="button" class="btn btn-primary" onclick="document.getElementById('settingsForm').requestSubmit();">
                 <i class="fas fa-save"></i> Enregistrer les modifications
             </button>
         </div>
