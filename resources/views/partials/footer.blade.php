@@ -36,6 +36,12 @@
                             <i class="fas fa-envelope"></i>
                             <span>{{ data_get($siteSettings ?? [], 'contact_email', 'phovemonde@gmail.com') }}</span>
                         </div>
+                        @if (filled(data_get($siteSettings ?? [], 'contact_email_communication')))
+                            <div class="footer-contact-item">
+                                <i class="fas fa-envelope-open-text"></i>
+                                <a href="mailto:{{ data_get($siteSettings ?? [], 'contact_email_communication') }}">{{ data_get($siteSettings ?? [], 'contact_email_communication') }}</a>
+                            </div>
+                        @endif
                     </div>
                     <div class="footer-socials">
                         @foreach ([
