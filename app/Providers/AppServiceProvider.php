@@ -17,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Partager les paramètres publics avec le layout et ses partials.
-        View::composer('layouts.public', function ($view): void {
+        View::composer(['layouts.public', 'public.*'], function ($view): void {
             $view->with('siteSettings', Setting::allValues());
         });
 
