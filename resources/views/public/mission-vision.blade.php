@@ -51,7 +51,7 @@
                     </div>
 
                     <p class="content-block-text">
-                        {{ data_get($siteSettings ?? [], 'page_mission_content', 'Conformément à l’article 5 des statuts, PHOVE a pour but de venir en aide aux personnes vulnérables : orphelins, veuves, personnes âgées et personnes démunies. Notre action s’appuie sur l’amour du prochain et l’accompagnement spirituel et social.') }}
+                        {{ (data_get($siteSettings ?? [], 'page_mission_content') ?: data_get($siteSettings ?? [], 'page_mission_vision') ?: 'Conformément à l’article 5 des statuts, PHOVE a pour but de venir en aide aux personnes vulnérables : orphelins, veuves, personnes âgées et personnes démunies. Notre action s’appuie sur l’amour du prochain et l’accompagnement spirituel et social.') }}
                     </p>
                 </div>
 
@@ -79,7 +79,7 @@
                 <span class="section-subtitle">Ce qui nous inspire</span>
                 <h2 class="section-title">Notre Vision</h2>
                 <p class="section-description">
-                    {{ data_get($siteSettings ?? [], 'page_vision_content', 'PHOVE aspire à un monde où chaque personne vulnérable est accompagnée, protégée et soutenue dans sa dignité.') }}
+                    {{ (data_get($siteSettings ?? [], 'page_vision_content') ?: 'PHOVE aspire à un monde où chaque personne vulnérable est accompagnée, protégée et soutenue dans sa dignité.') }}
                 </p>
             </div>
 
