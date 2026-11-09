@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    @php($siteSettings = $siteSettings ?? [])
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -9,18 +10,18 @@
 
     <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ url('/sitemap.xml') }}" />
     {{-- Titre dynamique --}}
-    <title>@yield('title', 'PHOVE') | Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies</title>
+    <title>@yield('title', data_get($siteSettings, 'meta_title', data_get($siteSettings, 'site_name', 'PHOVE'))) | {{ data_get($siteSettings, 'site_full_name', 'Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies') }}</title>
 
     {{-- Meta tags SEO --}}
-    <meta name="description" content="@yield('meta_description', 'PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies) est une ONG congolaise apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma. Sa mission : venir en aide aux orphelins, veuves, personnes de 3ème âge et personnes démunies.')">
-    <meta name="keywords" content="@yield('meta_keywords', 'PHOVE, ONG, humanitaire, orphelins, veuves, personnes démunies, RD Congo, Goma, Nord-Kivu, aide sociale, éducation, santé, agriculture, formation professionnelle, assistance spirituelle')">
+    <meta name="description" content="@yield('meta_description', data_get($siteSettings, 'meta_description', data_get($siteSettings, 'site_description', 'PHOVE — Organisation humanitaire en RD Congo.')))">
+    <meta name="keywords" content="@yield('meta_keywords', data_get($siteSettings, 'meta_keywords', 'PHOVE, ONG, humanitaire, RD Congo, Goma'))">
     <meta name="author" content="PHOVE">
     <meta name="robots" content="index, follow">
 
     {{-- Open Graph (partage réseaux sociaux) --}}
     <meta property="og:title" content="@yield('title', 'PHOVE') | Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies">
     <meta property="og:description" content="@yield('meta_description', 'PHOVE — ONG humanitaire congolaise engagée dans l\'assistance aux orphelins, veuves et personnes démunies : éducation, santé, agriculture, formation professionnelle et accompagnement spirituel.')">
-    <meta property="og:image" content="{{ asset('assets/images/logo-phove.png') }}">
+    <meta property="og:image" content="{{ data_get($siteSettings, 'site_logo') ? media_url(data_get($siteSettings, 'site_logo')) : asset('assets/images/logo-phove.png') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="PHOVE">
@@ -36,7 +37,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Favicon --}}
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon-phove.png') }}">
+    <link rel="icon" type="image/png" href="{{ data_get($siteSettings, 'site_favicon') ? media_url(data_get($siteSettings, 'site_favicon')) : asset('assets/images/favicon-phove.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon-phove.png') }}">
 
     {{-- Police Poppins --}}
