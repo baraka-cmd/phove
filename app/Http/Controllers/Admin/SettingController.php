@@ -79,7 +79,7 @@ class SettingController extends Controller
                     $rules[$field] = ['sometimes', 'nullable', 'string', 'url', 'max:2048'];
                     break;
                 case 'phone':
-                    $rules[$field] = ['sometimes', 'nullable', 'string', 'max:30', 'regex:/^[+0-9\\s\\-().]+$/'];
+                    $rules[$field] = ['sometimes', 'nullable', 'string', 'max:30', 'regex:/^[+0-9\s\-().]+$/'];
                     $messages[$field . '.regex'] = 'Veuillez saisir un numéro de téléphone valide.';
                     break;
                 case 'number':
@@ -103,78 +103,107 @@ class SettingController extends Controller
             }
         }
 
-        $validated = $request->validate($rules, $messages);
+        $request->validate($rules, $messages);
 
-        $updatedCount = 0;
+        // Étape 1 : stocker toutes les nouvelles images avant de toucher aux valeurs en base.
+        // Ainsi, un échec de stockage ne détruit ni les anciennes images ni les autres réglages.
+        $newUploads = [];
 
         foreach ($settings as $setting) {
             $field = 'setting_' . $setting->key;
 
-            if ($setting->type === 'image') {
-                $removeRequested = $request->boolean('remove_' . $setting->key);
-
-                if ($request->hasFile($field)) {
-                    $oldPath = $setting->value;
-                    $newPath = media_store($request->file($field), 'settings');
-
-                    if (!$newPath) {
-                        return back()->withInput()->with('error', 'Le stockage de la nouvelle image a échoué. L’image précédente a été conservée.');
-                    }
-
-                    try {
-                        $setting->update(['value' => $newPath]);
-                    } catch (Throwable $exception) {
-                        media_delete($newPath);
-                        throw $exception;
-                    }
-
-                    if ($oldPath && $oldPath !== $newPath) {
-                        try {
-                            media_delete($oldPath);
-                        } catch (Throwable $exception) {
-                            report($exception);
-                        }
-                    }
-
-                    $updatedCount++;
-                    continue;
-                }
-
-                if ($removeRequested && $setting->value) {
-                    $oldPath = $setting->value;
-                    $setting->update(['value' => null]);
-                    $updatedCount++;
-
-                    try {
-                        media_delete($oldPath);
-                    } catch (Throwable $exception) {
-                        report($exception);
-                    }
-                }
-
+            if ($setting->type !== 'image' || !$request->hasFile($field)) {
                 continue;
             }
 
-            if ($setting->type === 'switch') {
-                $newValue = $request->boolean($field) ? '1' : '0';
-            } else {
-                // Le champ doit être présent dans le formulaire pour autoriser sa mise à jour.
-                // ConvertEmptyStringsToNull transforme une chaîne vide en null : c'est volontaire.
-                if (!$request->exists($field)) {
-                    continue;
+            $newPath = media_store($request->file($field), 'settings');
+
+            if (!$newPath) {
+                foreach ($newUploads as $uploadedPath) {
+                    media_delete($uploadedPath);
                 }
 
-                $newValue = $request->input($field);
-                if (is_string($newValue)) {
-                    $newValue = trim($newValue);
+                return back()->withInput()
+                    ->with('error', 'Le stockage d’une nouvelle image a échoué. Aucune modification des paramètres n’a été enregistrée.');
+            }
+
+            $newUploads[$setting->key] = $newPath;
+        }
+
+        $oldMediaToDelete = [];
+
+        try {
+            // Étape 2 : enregistrer les changements du groupe dans une transaction unique.
+            $updatedCount = DB::transaction(function () use ($request, $settings, $newUploads, &$oldMediaToDelete): int {
+                $count = 0;
+
+                foreach ($settings as $setting) {
+                    $field = 'setting_' . $setting->key;
+
+                    if ($setting->type === 'image') {
+                        if (isset($newUploads[$setting->key])) {
+                            if ($setting->value && $setting->value !== $newUploads[$setting->key]) {
+                                $oldMediaToDelete[] = $setting->value;
+                            }
+
+                            $setting->update(['value' => $newUploads[$setting->key]]);
+                            $count++;
+                            continue;
+                        }
+
+                        if ($request->boolean('remove_' . $setting->key) && $setting->value) {
+                            $oldMediaToDelete[] = $setting->value;
+                            $setting->update(['value' => null]);
+                            $count++;
+                        }
+
+                        continue;
+                    }
+
+                    if ($setting->type === 'switch') {
+                        $newValue = $request->boolean($field) ? '1' : '0';
+                    } else {
+                        // Seuls les champs présents dans le formulaire sont modifiables.
+                        // Une valeur vide devient null et peut donc réellement être effacée.
+                        if (!$request->exists($field)) {
+                            continue;
+                        }
+
+                        $newValue = $request->input($field);
+                        if (is_string($newValue)) {
+                            $newValue = trim($newValue);
+                        }
+                    }
+
+                    $newValue = $newValue === null ? null : (string) $newValue;
+
+                    if ($setting->value !== $newValue) {
+                        $setting->update(['value' => $newValue]);
+                        $count++;
+                    }
+                }
+
+                return $count;
+            });
+        } catch (Throwable $exception) {
+            // La transaction est annulée : supprimer les nouveaux fichiers orphelins.
+            foreach ($newUploads as $uploadedPath) {
+                try {
+                    media_delete($uploadedPath);
+                } catch (Throwable $cleanupException) {
+                    report($cleanupException);
                 }
             }
 
-            $newValue = $newValue === null ? null : (string) $newValue;
+            throw $exception;
+        }
 
-            if ($setting->value !== $newValue) {
-                $setting->update(['value' => $newValue]);
-                $updatedCount++;
+        // Étape 3 : les nouvelles valeurs sont validées en base ; supprimer ensuite les anciens médias.
+        foreach (array_unique($oldMediaToDelete) as $oldPath) {
+            try {
+                media_delete($oldPath);
+            } catch (Throwable $exception) {
+                report($exception);
             }
         }
 
