@@ -2,13 +2,11 @@
 
 if (!function_exists('img_url')) {
     /**
-     * Retourne l'URL d'une image.
+     * Retourne une URL exploitable pour une image locale ou distante.
      *
-     * - Si c'est une URL Cloudinary (http...) → renvoie telle quelle
-     * - Sinon → route media.show (fichier local)
-     *
-     * @param  string|null  $path
-     * @return string
+     * Les médias uploadés sont servis par la route media.show.
+     * Les images historiques conservées dans public/assets/images restent servies
+     * directement depuis le dossier public.
      */
     function img_url(?string $path): string
     {
@@ -16,12 +14,23 @@ if (!function_exists('img_url')) {
             return asset('assets/images/logo-phove.png');
         }
 
-        // URL Cloudinary ou externe → retourner directement
-        if (str_starts_with($path, 'http')) {
+        if (preg_match('/^https?:\\/\\//i', $path)) {
             return $path;
         }
 
-        // Chemin local → route media.show
-        return img_url($path);
+        $relativePath = ltrim(str_replace('\\\\', '/', $path), '/');
+        $storageFile = storage_path('app/public/' . $relativePath);
+
+        if (is_file($storageFile)) {
+            $encodedPath = implode('/', array_map('rawurlencode', explode('/', $relativePath)));
+            return url('/media/' . $encodedPath);
+        }
+
+        $legacyAsset = public_path('assets/images/' . $relativePath);
+        if (is_file($legacyAsset)) {
+            return asset('assets/images/' . $relativePath);
+        }
+
+        return asset('assets/images/logo-phove.png');
     }
 }
