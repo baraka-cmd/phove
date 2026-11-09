@@ -250,7 +250,7 @@
             <div class="content-grid">
                 {{-- Image --}}
                 <div>
-                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                    <img src="{{ img_url(data_get($siteSettings ?? [], 'page_zones_intervention_image') ?: 'assets/images/about/about-phove.jpg') }}" 
                          alt="Zones d'intervention PHOVE" 
                          class="content-image"
                          onerror="this.src='https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?w=600'">
