@@ -32,21 +32,20 @@
 
                 {{-- Réseaux sociaux --}}
                 <div class="topbar-socials">
-                    <a href="{{ data_get($siteSettings ?? [], 'social_facebook') ?: 'https://facebook.com/phovemonde' }}" target="_blank" rel="noopener noreferrer" class="topbar-social" title="Facebook PHOVE">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="{{ data_get($siteSettings ?? [], 'social_twitter') ?: 'https://twitter.com/phovemonde' }}" target="_blank" rel="noopener noreferrer" class="topbar-social" title="Twitter PHOVE">
-                        <i class="fab fa-x-twitter"></i>
-                    </a>
-                    <a href="{{ data_get($siteSettings ?? [], 'social_instagram') ?: 'https://instagram.com/phovemonde' }}" target="_blank" rel="noopener noreferrer" class="topbar-social" title="Instagram PHOVE">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="{{ data_get($siteSettings ?? [], 'social_linkedin') ?: 'https://linkedin.com/company/phovemonde' }}" target="_blank" rel="noopener noreferrer" class="topbar-social" title="LinkedIn PHOVE">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a href="{{ data_get($siteSettings ?? [], 'social_youtube') ?: 'https://youtube.com/@phovemonde' }}" target="_blank" rel="noopener noreferrer" class="topbar-social" title="YouTube PHOVE">
-                        <i class="fab fa-youtube"></i>
-                    </a>
+                    @foreach ([
+                        'social_facebook' => ['Facebook PHOVE', 'fab fa-facebook-f'],
+                        'social_twitter' => ['X PHOVE', 'fab fa-x-twitter'],
+                        'social_instagram' => ['Instagram PHOVE', 'fab fa-instagram'],
+                        'social_tiktok' => ['TikTok PHOVE', 'fab fa-tiktok'],
+                        'social_youtube' => ['YouTube PHOVE', 'fab fa-youtube'],
+                        'social_whatsapp' => ['Chaîne WhatsApp PHOVE', 'fab fa-whatsapp'],
+                    ] as $settingKey => [$socialTitle, $socialIcon])
+                        @if (filled(data_get($siteSettings ?? [], $settingKey)))
+                            <a href="{{ data_get($siteSettings ?? [], $settingKey) }}" target="_blank" rel="noopener noreferrer" class="topbar-social" title="{{ $socialTitle }}" aria-label="{{ $socialTitle }}">
+                                <i class="{{ $socialIcon }}"></i>
+                            </a>
+                        @endif
+                    @endforeach
                 </div>
 
                 {{-- Séparateur --}}
