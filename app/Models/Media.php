@@ -158,7 +158,7 @@ class Media extends Model
         }
 
         // Pour les images Cloudinary, générer une miniature optimisée.
-        if ($this->fichier && preg_match('~^https?://~i', $this->fichier)) {
+        if ($this->fichier && $this->type === 'image' && preg_match('~^https?://~i', $this->fichier)) {
             return media_miniature($this->fichier, null, 600, 420);
         }
 
