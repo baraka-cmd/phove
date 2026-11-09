@@ -124,7 +124,11 @@ Route::get('/media/{path}', function ($path) {
     $realPath = realpath($fullPath);
     $basePath = realpath(storage_path('app/public'));
 
-    if (strpos($realPath, $basePath) !== 0) {
+    if (
+        !$realPath
+        || !$basePath
+        || !str_starts_with($realPath, $basePath . DIRECTORY_SEPARATOR)
+    ) {
         abort(403, 'Accès interdit');
     }
 
