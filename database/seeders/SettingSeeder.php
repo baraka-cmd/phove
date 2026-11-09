@@ -341,6 +341,61 @@ class SettingSeeder extends Seeder
             'ordre' => 19,
         ],
 
+        [
+            'key' => 'page_value_compassion',
+            'value' => null,
+            'type' => 'textarea',
+            'group' => 'pages',
+            'label' => 'Valeurs — Compassion',
+            'description' => 'Texte descriptif de la valeur compassion sur la page Nos valeurs.',
+            'ordre' => 20,
+        ],
+        [
+            'key' => 'page_value_solidarite',
+            'value' => null,
+            'type' => 'textarea',
+            'group' => 'pages',
+            'label' => 'Valeurs — Solidarité',
+            'description' => 'Texte descriptif de la valeur solidarité sur la page Nos valeurs.',
+            'ordre' => 21,
+        ],
+        [
+            'key' => 'page_value_foi',
+            'value' => null,
+            'type' => 'textarea',
+            'group' => 'pages',
+            'label' => 'Valeurs — Foi en Dieu',
+            'description' => 'Texte descriptif de la valeur foi en dieu sur la page Nos valeurs.',
+            'ordre' => 22,
+        ],
+        [
+            'key' => 'page_value_charite',
+            'value' => null,
+            'type' => 'textarea',
+            'group' => 'pages',
+            'label' => 'Valeurs — Charité',
+            'description' => 'Texte descriptif de la valeur charité sur la page Nos valeurs.',
+            'ordre' => 23,
+        ],
+        [
+            'key' => 'page_value_integrite',
+            'value' => null,
+            'type' => 'textarea',
+            'group' => 'pages',
+            'label' => 'Valeurs — Intégrité',
+            'description' => 'Texte descriptif de la valeur intégrité sur la page Nos valeurs.',
+            'ordre' => 24,
+        ],
+        [
+            'key' => 'page_value_transparence',
+            'value' => null,
+            'type' => 'textarea',
+            'group' => 'pages',
+            'label' => 'Valeurs — Transparence',
+            'description' => 'Texte descriptif de la valeur transparence sur la page Nos valeurs.',
+            'ordre' => 25,
+        ],
+
         // SEO
         // ============================================
         [
