@@ -51,15 +51,7 @@
                     </div>
 
                     <p class="content-block-text">
-                        Conformément à <strong>l'article 5 des statuts</strong>, PHOVE a comme 
-                        but de <strong>venir en aide aux personnes vulnérables</strong> : 
-                        orphelins, veuves, personnes de 3ème âge et personnes démunies.
-                    </p>
-
-                    <p class="content-block-text">
-                        L'objectif principal que poursuit PHOVE est d'accomplir la mission de Dieu : 
-                        « Aimez-vous les uns les autres partout dans le monde sans distinction de 
-                        races ni de tribus » — Romain 13:8.
+                        {{ data_get($siteSettings ?? [], 'page_mission_content', 'Conformément à l’article 5 des statuts, PHOVE a pour but de venir en aide aux personnes vulnérables : orphelins, veuves, personnes âgées et personnes démunies. Notre action s’appuie sur l’amour du prochain et l’accompagnement spirituel et social.') }}
                     </p>
                 </div>
 
@@ -87,8 +79,7 @@
                 <span class="section-subtitle">Ce qui nous inspire</span>
                 <h2 class="section-title">Notre Vision</h2>
                 <p class="section-description">
-                    PHOVE aspire à un monde où chaque personne vulnérable est accompagnée, 
-                    protégée et soutenue dans sa dignité.
+                    {{ data_get($siteSettings ?? [], 'page_vision_content', 'PHOVE aspire à un monde où chaque personne vulnérable est accompagnée, protégée et soutenue dans sa dignité.') }}
                 </p>
             </div>
 
