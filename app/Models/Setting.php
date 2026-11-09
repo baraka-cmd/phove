@@ -51,10 +51,9 @@ class Setting extends Model
      */
     public static function get(string $key, mixed $default = null): mixed
     {
-        return Cache::remember('setting.' . $key, self::$cacheDuration, function () use ($key, $default) {
-            $setting = self::where('key', $key)->first();
-            return $setting ? $setting->value : $default;
-        });
+        $setting = self::query()->where('key', $key)->first();
+
+        return $setting ? $setting->value : $default;
     }
 
     /**
@@ -82,13 +81,12 @@ class Setting extends Model
      */
     public static function getGroup(string $group): array
     {
-        return Cache::remember('settings.group.' . $group, self::$cacheDuration, function () use ($group) {
-            return self::where('group', $group)
-                ->orderBy('ordre')
-                ->get()
-                ->pluck('value', 'key')
-                ->toArray();
-        });
+        return self::query()
+            ->where('group', $group)
+            ->orderBy('ordre')
+            ->get()
+            ->pluck('value', 'key')
+            ->toArray();
     }
 
     /**
@@ -98,12 +96,11 @@ class Setting extends Model
      */
     public static function allSettings(): array
     {
-        return Cache::remember('settings.all', self::$cacheDuration, function () {
-            return self::orderBy('group')
-                ->orderBy('ordre')
-                ->get()
-                ->toArray();
-        });
+        return self::query()
+            ->orderBy('group')
+            ->orderBy('ordre')
+            ->get()
+            ->toArray();
     }
 
     /**
@@ -113,9 +110,9 @@ class Setting extends Model
      */
     public static function allValues(): array
     {
-        return Cache::remember('settings.values', self::$cacheDuration, function () {
-            return self::query()->pluck('value', 'key')->all();
-        });
+        // Les paramètres sont peu nombreux. Une lecture directe garantit que les
+        // insertions SQL initiales et les modifications externes sont visibles immédiatement.
+        return self::query()->pluck('value', 'key')->all();
     }
 
     /**
