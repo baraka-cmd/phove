@@ -43,23 +43,7 @@
                     <h2 class="section-title text-left">Une organisation née d'une inspiration divine</h2>
                     Commune de Karisimbi
                     <p class="content-block-text">
-                        <strong>PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies)</strong> 
-                        est une organisation non gouvernementale apolitique à caractère social et spirituel, 
-                        créée le <strong>30 août 2012</strong> à Goma, dans la province du Nord-Kivu, 
-                        en République Démocratique du Congo.
-                    </p>
-
-                    <p class="content-block-text">
-                        L'organisation a été conçue par le serviteur de Dieu <strong>l'Apôtre Philippe 
-                        KABOYI MUSAMUGUMA</strong> après avoir fait <strong>40 jours de jeûne et de prière</strong>. 
-                        Il reçut une inspiration divine du Seigneur en date du <strong>20 avril 2012</strong> 
-                        sur la montagne appelée <strong>KALAGANE</strong> à Bukavu, au Sud-Kivu.
-                    </p>
-
-                    <p class="content-block-text">
-                        Le message s'est répandu dans toutes les églises de la province du Sud-Kivu et partout 
-                        en RD Congo. Il fut bien accueilli à son passage, même dans les pays limitrophes : 
-                        Rwanda, Uganda, Kenya, Tanzanie, Burundi, Zambie, Angola, Soudan et Afrique du Sud.
+                        {{ data_get($siteSettings ?? [], 'page_qui_sommes_nous', 'PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies) est une organisation non gouvernementale apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma, en République Démocratique du Congo. Elle accompagne les personnes vulnérables et agit pour leur dignité.') }}
                     </p>
 
                     <div class="quote-block">
