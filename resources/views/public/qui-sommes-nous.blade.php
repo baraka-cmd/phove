@@ -2,7 +2,7 @@
 
 @section('title', 'Qui sommes-nous ?')
 
-@section('meta_description', 'PHOVE est une organisation non gouvernementale apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma. Découvrez notre histoire, notre fondateur et nos 10 membres fondateurs.')
+@section('meta_description', data_get($siteSettings ?? [], 'meta_description', 'PHOVE est une organisation non gouvernementale apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma. Découvrez notre histoire, notre fondateur et nos 10 membres fondateurs.'))
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
@@ -21,7 +21,7 @@
             </div>
             <h1 class="page-header-title">Qui sommes-nous ?</h1>
             <p class="page-header-subtitle">
-                Découvrez l'histoire, la mission et l'engagement de PHOVE au service des orphelins, veuves et personnes démunies de la République Démocratique du Congo.
+                {{ data_get($siteSettings ?? [], 'page_qui_sommes_nous') ?: 'Découvrez l\'histoire, la mission et l\'engagement de PHOVE au service des orphelins, veuves et personnes démunies de la République Démocratique du Congo.' }}
             </p>
             <nav class="page-breadcrumb">
                 <a href="{{ url('/') }}"><i class="fas fa-home"></i> Accueil</a>
@@ -73,7 +73,7 @@
 
                 {{-- Image --}}
                 <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                    <img src="{{ img_url(data_get($siteSettings ?? [], 'page_about_image') ?: 'assets/images/about/about-phove.jpg') }}" 
                          alt="PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies" 
                          class="content-image"
                          onerror="this.src='https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600'">
