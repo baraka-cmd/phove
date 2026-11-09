@@ -107,6 +107,18 @@ class Setting extends Model
     }
 
     /**
+     * Récupère toutes les valeurs sous forme de tableau clé => valeur.
+     *
+     * @return array<string, mixed>
+     */
+    public static function allValues(): array
+    {
+        return Cache::remember('settings.values', self::$cacheDuration, function () {
+            return self::query()->pluck('value', 'key')->all();
+        });
+    }
+
+    /**
      * Vide le cache des paramètres.
      *
      * @return void
@@ -114,6 +126,7 @@ class Setting extends Model
     public static function clearCache(): void
     {
         Cache::forget('settings.all');
+        Cache::forget('settings.values');
 
         $groups = ['identite', 'contact', 'social', 'pages', 'seo', 'maintenance'];
         foreach ($groups as $group) {
@@ -139,7 +152,7 @@ class Setting extends Model
     public function urlValue(): ?string
     {
         if ($this->type === 'image' && $this->value) {
-            return asset('storage/' . $this->value);
+            return function_exists('media_url') ? media_url($this->value) : asset('storage/' . $this->value);
         }
         return $this->value;
     }
