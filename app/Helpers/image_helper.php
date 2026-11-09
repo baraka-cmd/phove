@@ -2,10 +2,12 @@
 
 if (!function_exists('img_url')) {
     /**
-     * Retourne l'URL d'une image.
+     * Retourne une URL exploitable pour une image locale ou distante.
      *
-     * - Si c'est une URL Cloudinary (http...) → renvoie telle quelle
-     * - Sinon → route media.show (fichier local)
+     * - Les URL Cloudinary (HTTPS/HTTP) sont conservées telles quelles.
+     * - Les chemins présents dans public/ sont servis directement.
+     * - Les médias présents dans storage/app/public sont servis via /media/.
+     * - Un chemin introuvable utilise le logo local de secours.
      *
      * @param  string|null  $path
      * @return string
@@ -16,12 +18,63 @@ if (!function_exists('img_url')) {
             return asset('assets/images/logo-phove.png');
         }
 
-        // URL Cloudinary ou externe → retourner directement
-        if (str_starts_with($path, 'http')) {
+        $path = trim($path);
+
+        if ($path === '') {
+            return asset('assets/images/logo-phove.png');
+        }
+
+        // Cloudinary et autres URL distantes : ne jamais les transformer.
+        if (preg_match('~^https?://~i', $path)) {
             return $path;
         }
 
-        // Chemin local → route media.show
-        return img_url($path);
+        // Normaliser les chemins locaux sans permettre de sortir des répertoires autorisés.
+        $relativePath = ltrim(str_replace(chr(92), '/', $path), '/');
+
+        if ($relativePath === '' || str_contains($relativePath, '../') || $relativePath === '..') {
+            return asset('assets/images/logo-phove.png');
+        }
+
+        $publicRoot = realpath(public_path());
+        $publicFile = realpath(public_path($relativePath));
+
+        if (
+            $publicRoot !== false &&
+            $publicFile !== false &&
+            str_starts_with($publicFile, $publicRoot . DIRECTORY_SEPARATOR) &&
+            is_file($publicFile)
+        ) {
+            return asset($relativePath);
+        }
+
+        $storageRoot = realpath(storage_path('app/public'));
+        $storageFile = realpath(storage_path('app/public/' . $relativePath));
+
+        if (
+            $storageRoot !== false &&
+            $storageFile !== false &&
+            str_starts_with($storageFile, $storageRoot . DIRECTORY_SEPARATOR) &&
+            is_file($storageFile)
+        ) {
+            $encodedPath = implode('/', array_map('rawurlencode', explode('/', $relativePath)));
+
+            return url('/media/' . $encodedPath);
+        }
+
+        // Compatibilité avec les anciens fichiers stockés dans public/assets/images.
+        $legacyRoot = realpath(public_path('assets/images'));
+        $legacyFile = realpath(public_path('assets/images/' . $relativePath));
+
+        if (
+            $legacyRoot !== false &&
+            $legacyFile !== false &&
+            str_starts_with($legacyFile, $legacyRoot . DIRECTORY_SEPARATOR) &&
+            is_file($legacyFile)
+        ) {
+            return asset('assets/images/' . $relativePath);
+        }
+
+        return asset('assets/images/logo-phove.png');
     }
 }
