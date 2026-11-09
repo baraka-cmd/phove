@@ -42,20 +42,20 @@
                 <div class="legal-number">1</div>
                 <div class="legal-content">
                     <h2 class="legal-title">Éditeur de la plateforme</h2>
-                    <p>La plateforme <strong>www.phove.org</strong> est éditée par :</p>
+                    <p>{{ data_get($siteSettings ?? [], 'page_mentions_legales', 'La plateforme PHOVE est éditée par le Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies.') }}</p>
                     <div class="legal-info-card">
                         <div class="legal-info-item">
                             <i class="fas fa-building"></i>
                             <div>
                                 <strong>Raison sociale</strong>
-                                <span>PROGRAMME HUMANITAIRE AUX ORPHELINS, VEUVES ET PERSONNES DÉMUNIES</span>
+                                <span>{{ data_get($siteSettings ?? [], 'site_full_name', 'PROGRAMME HUMANITAIRE AUX ORPHELINS, VEUVES ET PERSONNES DÉMUNIES') }}</span>
                             </div>
                         </div>
                         <div class="legal-info-item">
                             <i class="fas fa-tag"></i>
                             <div>
                                 <strong>Sigle</strong>
-                                <span>PHOVE</span>
+                                <span>{{ data_get($siteSettings ?? [], 'site_name', 'PHOVE') }}</span>
                             </div>
                         </div>
                         <div class="legal-info-item">
@@ -76,28 +76,28 @@
                             <i class="fas fa-map-marker-alt"></i>
                             <div>
                                 <strong>Siège social</strong>
-                                <span>Rue Georges BUSHU N°092, Quartier Katoyi, Commune de Karisimbi, Goma, Nord-Kivu, République Démocratique du Congo</span>
+                                <span>{{ data_get($siteSettings ?? [], 'contact_adresse', 'Goma, Nord-Kivu, République Démocratique du Congo') }}</span>
                             </div>
                         </div>
                         <div class="legal-info-item">
                             <i class="fas fa-map-pin"></i>
                             <div>
                                 <strong>Repère géographique</strong>
-                                <span>UACO / Maranata, entrée président</span>
+                                <span>{{ data_get($siteSettings ?? [], 'contact_repere', 'Goma, RD Congo') }}</span>
                             </div>
                         </div>
                         <div class="legal-info-item">
                             <i class="fas fa-phone-alt"></i>
                             <div>
                                 <strong>Téléphones</strong>
-                                <span>+243 970 872 910 | +243 819 009 131 | +243 893 844 776 | +243 902 512 262</span>
+                                <span>{{ collect(['contact_telephone_1', 'contact_telephone_2', 'contact_telephone_3', 'contact_telephone_4'])->map(fn ($key) => data_get($siteSettings ?? [], $key))->filter()->implode(' | ') }}</span>
                             </div>
                         </div>
                         <div class="legal-info-item">
                             <i class="fas fa-envelope"></i>
                             <div>
                                 <strong>Email</strong>
-                                <span>phovemonde@gmail.com</span>
+                                <span>{{ data_get($siteSettings ?? [], 'contact_email', 'phovemonde@gmail.com') }}</span>
                             </div>
                         </div>
                     </div>
