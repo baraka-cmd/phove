@@ -57,7 +57,7 @@
 
                 {{-- Image --}}
                 <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                    <img src="{{ data_get($siteSettings ?? [], 'page_mission_image') ? media_url(data_get($siteSettings, 'page_mission_image')) : asset('assets/images/about/about-phove.jpg') }}" 
                          alt="Mission PHOVE — Compassion avec la population" 
                          class="content-image"
                          onerror="this.src='https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600'">
