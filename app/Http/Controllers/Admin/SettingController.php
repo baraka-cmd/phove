@@ -8,7 +8,6 @@ use Illuminate\\Http\\JsonResponse;
 use Illuminate\\Http\\RedirectResponse;
 use Illuminate\\Http\\Request;
 use Illuminate\\Support\\Facades\\DB;
-use Illuminate\\Support\\Facades\\Validator;
 use Illuminate\\Validation\\Rule;
 use Illuminate\\View\\View;
 use Throwable;
@@ -165,7 +164,7 @@ class SettingController extends Controller
                     } else {
                         // Seuls les champs présents dans le formulaire sont modifiables.
                         // Une valeur vide devient null et peut donc réellement être effacée.
-                        if (!$request->exists($field)) {
+                        if (!$request->has($field)) {
                             continue;
                         }
 
