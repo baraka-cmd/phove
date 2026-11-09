@@ -2,23 +2,28 @@
 {{-- TOP BAR — PHOVE --}}
 {{-- Contacts, Réseaux sociaux, Langues --}}
 {{-- ============================================ --}}
+@php
+    $topbarPhone = data_get($siteSettings ?? [], 'contact_telephone_1') ?: '+243 970 872 910';
+    $topbarEmail = data_get($siteSettings ?? [], 'contact_email') ?: 'phovemonde@gmail.com';
+    $topbarAddress = data_get($siteSettings ?? [], 'contact_adresse') ?: 'Goma, Nord-Kivu, RD Congo';
+@endphp
 <div class="topbar" id="topbar">
     <div class="container">
         <div class="topbar-inner">
 
             {{-- Gauche : Contacts --}}
             <div class="topbar-left">
-                <a href="tel:{{ preg_replace('/\\s+/', '', data_get($siteSettings ?? [], 'contact_telephone_1', '{{ data_get($siteSettings ?? [], 'contact_telephone_1', '+243 970 872 910') }}')) }}" class="topbar-contact" title="Appeler PHOVE">
+                <a href="tel:{{ preg_replace('/\\s+/', '', $topbarPhone) }}" class="topbar-contact" title="Appeler PHOVE">
                     <i class="fas fa-phone-alt"></i>
-                    <span>+243 970 872 910</span>
+                    <span>{{ $topbarPhone }}</span>
                 </a>
-                <a href="mailto:{{ data_get($siteSettings ?? [], 'contact_email', '{{ data_get($siteSettings ?? [], 'contact_email', 'phovemonde@gmail.com') }}') }}" class="topbar-contact" title="Envoyer un email">
+                <a href="mailto:{{ $topbarEmail }}" class="topbar-contact" title="Envoyer un email">
                     <i class="fas fa-envelope"></i>
-                    <span>phovemonde@gmail.com</span>
+                    <span>{{ $topbarEmail }}</span>
                 </a>
                 <span class="topbar-contact" title="Localisation du siège">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>Goma, Nord-Kivu, RD Congo</span>
+                    <span>{{ $topbarAddress }}</span>
                 </span>
             </div>
 
