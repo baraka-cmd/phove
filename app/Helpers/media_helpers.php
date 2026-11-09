@@ -32,7 +32,13 @@ if (!function_exists('media_store')) {
             return null;
         }
 
-        return app(CloudinaryService::class)->upload($file, $folder);
+        $url = app(CloudinaryService::class)->upload($file, $folder);
+
+        if (!$url) {
+            throw new \RuntimeException("L'envoi du média vers Cloudinary a échoué. Vérifiez la configuration Cloudinary et les journaux Render.");
+        }
+
+        return $url;
     }
 }
 
@@ -47,7 +53,13 @@ if (!function_exists('media_store_as')) {
         }
 
         // Cloudinary génère son propre nom → on ignore $nomFichier
-        return app(CloudinaryService::class)->upload($file, $folder);
+        $url = app(CloudinaryService::class)->upload($file, $folder);
+
+        if (!$url) {
+            throw new \RuntimeException("L'envoi du média vers Cloudinary a échoué. Vérifiez la configuration Cloudinary et les journaux Render.");
+        }
+
+        return $url;
     }
 }
 
