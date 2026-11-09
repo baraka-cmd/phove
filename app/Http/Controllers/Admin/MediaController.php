@@ -487,16 +487,21 @@ class MediaController extends Controller
         $extension = strtolower($fichier->getClientOriginalExtension());
         $type      = in_array($extension, $this->formatsImages) ? 'image' : 'video';
 
-        // Supprimer les anciens fichiers
-        $this->supprimerFichiersPhysiques($media);
-
-        // Stocker le nouveau
-        $nomFichier = Str::uuid() . '.' . $extension;
-        $dossier    = $type === 'image' ? 'medias/images' : 'medias/videos';
+        // Stocker et valider le nouveau fichier AVANT de supprimer l'ancien.
+        // Ainsi, un échec Cloudinary ne détruit jamais le média actuellement disponible.
+        $dossier = $type === 'image' ? 'medias/images' : 'medias/videos';
         $chemin = media_store($fichier, $dossier);
+
+        if (!$chemin) {
+            return redirect()->back()
+                ->with('error', "Le nouveau fichier n'a pas pu être stocké. L'ancien média a été conservé.");
+        }
 
         // Cloudinary génère les miniatures à la volée (transformations d'URL)
         $cheminMiniature = null;
+
+        $ancienFichier = $media->fichier;
+        $ancienneMiniature = $media->miniature;
 
         $media->update([
             'type'      => $type,
@@ -504,6 +509,14 @@ class MediaController extends Controller
             'miniature' => $cheminMiniature,
             'taille'    => $fichier->getSize(),
         ]);
+
+        // Supprimer les anciens fichiers uniquement après la mise à jour réussie.
+        if ($ancienFichier && $ancienFichier !== $chemin) {
+            media_delete($ancienFichier);
+        }
+        if ($ancienneMiniature && $ancienneMiniature !== $cheminMiniature) {
+            media_delete($ancienneMiniature);
+        }
 
         return redirect()->back()
             ->with('success', 'Le fichier a été remplacé avec succès.');
