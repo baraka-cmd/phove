@@ -248,7 +248,7 @@
                                 <input type="color"
                                        name="{{ $inputName }}"
                                        class="settings-input"
-                                       value="{{ preg_match('/^#[0-9a-fA-F]{6}$/', (string) $oldValue) ? $oldValue : '#0F766E' }}">
+                                       value="{{ preg_match('/^#(?:[0-9a-fA-F]{3}){1,2}$/', (string) $oldValue) ? $oldValue : '#0F766E' }}">
                             </div>
 
                         @elseif($setting->type === 'switch')
