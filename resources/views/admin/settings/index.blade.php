@@ -67,6 +67,23 @@
 
         {{-- Body --}}
         <div class="settings-card-body">
+            @if(session('success'))
+                <div class="alert alert-success" role="status">{{ session('success') }}</div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger" role="alert">{{ session('error') }}</div>
+            @endif
+            @if($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    <strong>Certains paramètres n’ont pas été enregistrés :</strong>
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
             <form action="{{ route('admin.parametres.update') }}" method="POST" enctype="multipart/form-data" id="settingsForm">
                 @csrf
                 @method('PUT')
@@ -112,7 +129,7 @@
                             <textarea name="{{ $inputName }}" 
                                       class="settings-input settings-textarea" 
                                       rows="6" 
-                                      maxlength="5000">{{ $oldValue }}</textarea>
+                                      maxlength="10000">{{ $oldValue }}</textarea>
 
                         {{-- ============================================ --}}
                         {{-- IMAGE --}}
