@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Partenaire;
+use App\Models\Media;
 use App\Models\Projet;
 use App\Models\Temoignage;
 use Illuminate\View\View;
@@ -47,6 +48,17 @@ class HomeController extends Controller
             ->get();
 
         // --------------------------------------------
+        // Les neuf photos publiées les plus récentes de la galerie.
+        $galerieAccueil = Media::query()
+            ->where('publier', true)
+            ->where('type', 'image')
+            ->whereNotNull('fichier')
+            ->where('fichier', '!=', '')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->take(9)
+            ->get();
+
         // Témoignages approuvés (visibles publiquement)
         // --------------------------------------------
         $temoignages = Temoignage::where('statut', 'approuve')
@@ -65,6 +77,7 @@ class HomeController extends Controller
             'articles',
             'projets',
             'partenaires',
+            'galerieAccueil',
             'temoignages',
             'totalProjets'
         ));
