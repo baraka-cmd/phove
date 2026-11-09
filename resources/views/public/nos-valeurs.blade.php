@@ -61,9 +61,7 @@
                         <i class="fas fa-heart"></i>
                     </div>
                     <p class="content-block-text">
-                        La <strong>compassion</strong> est au cœur de notre mission humanitaire. 
-                        C'est notre devise : <strong>« Compassion avec la population »</strong>. 
-                        Elle se traduit par :
+                        {{ (data_get($siteSettings ?? [], 'page_value_compassion') ?: 'La compassion est au cœur de notre mission humanitaire. C\\'est notre devise : « Compassion avec la population ». Elle se traduit par :') }}
                     </p>
                     <ul class="check-list">
                         <li>
@@ -111,9 +109,7 @@
                         <i class="fas fa-hands-helping"></i>
                     </div>
                     <p class="content-block-text">
-                        La <strong>solidarité</strong> est le fondement de notre action collective. 
-                        Nous croyons en l'union des forces : <strong>« L'union fait la force et la 
-                        corde à 3 fils se rompt difficilement »</strong>. Elle se manifeste par :
+                        {{ (data_get($siteSettings ?? [], 'page_value_solidarite') ?: 'La solidarité est le fondement de notre action collective. Nous croyons en l\\'union des forces : « L\\'union fait la force et la corde à 3 fils se rompt difficilement ». Elle se manifeste par :') }}
                     </p>
                     <ul class="check-list">
                         <li>
@@ -161,9 +157,7 @@
                         <i class="fas fa-dove"></i>
                     </div>
                     <p class="content-block-text">
-                        Notre <strong>foi en Dieu</strong> est le fondement spirituel de notre 
-                        organisation. Nous sommes des serviteurs de Dieu guidés par les Saintes 
-                        Écritures. Cette valeur se traduit par :
+                        {{ (data_get($siteSettings ?? [], 'page_value_foi') ?: 'Notre foi en Dieu est le fondement spirituel de notre organisation. Nous sommes des serviteurs de Dieu guidés par les Saintes Écritures. Cette valeur se traduit par :') }}
                     </p>
                     <ul class="check-list">
                         <li>
@@ -211,10 +205,7 @@
                         <i class="fas fa-hand-holding-heart"></i>
                     </div>
                     <p class="content-block-text">
-                        La <strong>charité</strong> est l'expression concrète de notre amour 
-                        du prochain. Conformément à l'article 45 des statuts, chaque membre 
-                        doit être <strong>charitable et capable de vivre selon Romain 13:8</strong>. 
-                        Elle se manifeste par :
+                        {{ (data_get($siteSettings ?? [], 'page_value_charite') ?: 'La charité est l\\'expression concrète de notre amour du prochain. Conformément à l\\'article 45 des statuts, chaque membre doit être charitable et capable de vivre selon Romain 13:8. Elle se manifeste par :') }}
                     </p>
                     <ul class="check-list">
                         <li>
@@ -262,9 +253,7 @@
                         <i class="fas fa-shield-alt"></i>
                     </div>
                     <p class="content-block-text">
-                        L'<strong>intégrité</strong> guide notre conduite morale et éthique. 
-                        Conformément à l'article 71 des statuts, <strong>la corruption à tout 
-                        niveau est à bannir</strong> dans l'organisation. Elle se traduit par :
+                        {{ (data_get($siteSettings ?? [], 'page_value_integrite') ?: 'L\\'intégrité guide notre conduite morale et éthique. Conformément à l\\'article 71 des statuts, la corruption à tout niveau est à bannir dans l\\'organisation. Elle se traduit par :') }}
                     </p>
                     <ul class="check-list">
                         <li>
@@ -312,9 +301,7 @@
                         <i class="fas fa-search"></i>
                     </div>
                     <p class="content-block-text">
-                        La <strong>transparence</strong> est essentielle pour établir une relation 
-                        de confiance avec nos bénéficiaires, partenaires et donateurs. 
-                        Elle se manifeste par :
+                        {{ (data_get($siteSettings ?? [], 'page_value_transparence') ?: 'La transparence est essentielle pour établir une relation de confiance avec nos bénéficiaires, partenaires et donateurs. Elle se manifeste par :') }}
                     </p>
                     <ul class="check-list">
                         <li>
