@@ -61,7 +61,7 @@
                         <i class="fas fa-heart"></i>
                     </div>
                     <p class="content-block-text">
-                        {{ (data_get($siteSettings ?? [], 'page_value_compassion') ?: 'La compassion est au cœur de notre mission humanitaire. C\\'est notre devise : « Compassion avec la population ». Elle se traduit par :') }}
+                        {{ (data_get($siteSettings ?? [], 'page_value_compassion') ?: 'La compassion est au cœur de notre mission humanitaire. C’est notre devise : « Compassion avec la population ». Elle se traduit par :') }}
                     </p>
                     <ul class="check-list">
                         <li>
@@ -109,7 +109,7 @@
                         <i class="fas fa-hands-helping"></i>
                     </div>
                     <p class="content-block-text">
-                        {{ (data_get($siteSettings ?? [], 'page_value_solidarite') ?: 'La solidarité est le fondement de notre action collective. Nous croyons en l\\'union des forces : « L\\'union fait la force et la corde à 3 fils se rompt difficilement ». Elle se manifeste par :') }}
+                        {{ (data_get($siteSettings ?? [], 'page_value_solidarite') ?: 'La solidarité est le fondement de notre action collective. Nous croyons en l’union des forces : « L’union fait la force et la corde à 3 fils se rompt difficilement ». Elle se manifeste par :') }}
                     </p>
                     <ul class="check-list">
                         <li>
@@ -205,7 +205,7 @@
                         <i class="fas fa-hand-holding-heart"></i>
                     </div>
                     <p class="content-block-text">
-                        {{ (data_get($siteSettings ?? [], 'page_value_charite') ?: 'La charité est l\\'expression concrète de notre amour du prochain. Conformément à l\\'article 45 des statuts, chaque membre doit être charitable et capable de vivre selon Romain 13:8. Elle se manifeste par :') }}
+                        {{ (data_get($siteSettings ?? [], 'page_value_charite') ?: 'La charité est l’expression concrète de notre amour du prochain. Conformément à l’article 45 des statuts, chaque membre doit être charitable et capable de vivre selon Romain 13:8. Elle se manifeste par :') }}
                     </p>
                     <ul class="check-list">
                         <li>
@@ -253,7 +253,7 @@
                         <i class="fas fa-shield-alt"></i>
                     </div>
                     <p class="content-block-text">
-                        {{ (data_get($siteSettings ?? [], 'page_value_integrite') ?: 'L\\'intégrité guide notre conduite morale et éthique. Conformément à l\\'article 71 des statuts, la corruption à tout niveau est à bannir dans l\\'organisation. Elle se traduit par :') }}
+                        {{ (data_get($siteSettings ?? [], 'page_value_integrite') ?: 'L’intégrité guide notre conduite morale et éthique. Conformément à l’article 71 des statuts, la corruption à tout niveau est à bannir dans l’organisation. Elle se traduit par :') }}
                     </p>
                     <ul class="check-list">
                         <li>
