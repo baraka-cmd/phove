@@ -2,7 +2,7 @@
 
 @section('title', 'Accueil')
 
-@section('meta_description', 'PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies. ONG humanitaire congolaise créée en 2012 à Goma. Compassion avec la population.')
+@section('meta_description', data_get($siteSettings ?? [], 'meta_description', 'PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies. ONG humanitaire congolaise créée en 2012 à Goma. Compassion avec la population.'))
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
@@ -19,13 +19,13 @@
     <section class="hero" id="hero">
         {{-- Slides --}}
         <div class="hero-slider">
-            <div class="hero-slide active" style="background-image: url('{{ asset('assets/images/slide1.jpg') }}');">
+            <div class="hero-slide active" style="background-image: url('{{ img_url(data_get($siteSettings ?? [], 'home_hero_image_1') ?: 'assets/images/slide1.jpg') }}');">
                 <div class="hero-overlay"></div>
             </div>
-            <div class="hero-slide" style="background-image: url('{{ asset('assets/images/slide2.jpg') }}');">
+            <div class="hero-slide" style="background-image: url('{{ img_url(data_get($siteSettings ?? [], 'home_hero_image_2') ?: 'assets/images/slide2.jpg') }}');">
                 <div class="hero-overlay"></div>
             </div>
-            <div class="hero-slide" style="background-image: url('{{ asset('assets/images/slide3.jpg') }}');">
+            <div class="hero-slide" style="background-image: url('{{ img_url(data_get($siteSettings ?? [], 'home_hero_image_3') ?: 'assets/images/slide3.jpg') }}');">
                 <div class="hero-overlay"></div>
             </div>
         </div>
@@ -41,15 +41,13 @@
         <div class="container">
             <div class="hero-content">
                 <span class="hero-badge">
-                    <i class="fas fa-dot-circle"></i> Depuis 2012 — Goma, Nord-Kivu, RD Congo
+                    <i class="fas fa-dot-circle"></i> {{ data_get($siteSettings ?? [], 'home_hero_badge') ?: 'Depuis 2012 — Goma, Nord-Kivu, RD Congo' }}
                 </span>
                 <h1 class="hero-title">
-                    <span class="highlight">Compassion</span> avec la population
+                    <span class="highlight">{{ data_get($siteSettings ?? [], 'home_hero_title') ?: 'Compassion avec la population' }}</span>
                 </h1>
                 <p class="hero-description">
-                    PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies — 
-                    vient en aide aux plus vulnérables : éducation, santé, agriculture, formation 
-                    professionnelle, assistance sociale et spirituelle.
+                    {{ data_get($siteSettings ?? [], 'home_hero_description') ?: 'PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies — vient en aide aux plus vulnérables : éducation, santé, agriculture, formation professionnelle, assistance sociale et spirituelle.' }}
                 </p>
                 <div class="hero-buttons">
                     <a href="{{ url('/faire-un-don') }}" class="hero-btn-primary">
@@ -138,7 +136,7 @@
             <div class="about-grid">
                 {{-- Image --}}
                 <div class="about-image-wrapper">
-                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                    <img src="{{ img_url(data_get($siteSettings ?? [], 'home_about_image') ?: 'assets/images/about/about-phove.jpg') }}" 
                          alt="PHOVE — Action humanitaire auprès des orphelins et veuves" 
                          class="about-image"
                          onerror="this.src='https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600'">
