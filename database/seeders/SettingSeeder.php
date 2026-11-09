@@ -69,7 +69,7 @@ class SettingSeeder extends Seeder
             'type' => 'image',
             'group' => 'identite',
             'label' => 'Favicon',
-            'description' => 'Icône du site affichée dans l\'onglet du navigateur. Format : PNG ou ICO, 32×32 px.',
+            'description' => 'Icône du site affichée dans l\'onglet du navigateur. Format recommandé : PNG, 32×32 px.',
             'ordre' => 6,
         ],
 
