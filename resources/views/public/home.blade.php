@@ -13,19 +13,26 @@
 
 @section('content')
 
+    @php
+        $siteSettings = $siteSettings ?? [];
+        $heroImage1 = !empty($siteSettings['home_hero_image_1']) ? media_url($siteSettings['home_hero_image_1']) : asset('assets/images/slide1.jpg');
+        $heroImage2 = !empty($siteSettings['home_hero_image_2']) ? media_url($siteSettings['home_hero_image_2']) : asset('assets/images/slide2.jpg');
+        $heroImage3 = !empty($siteSettings['home_hero_image_3']) ? media_url($siteSettings['home_hero_image_3']) : asset('assets/images/slide3.jpg');
+    @endphp
+
     {{-- ============================================ --}}
     {{-- HERO SECTION — SLIDER --}}
     {{-- ============================================ --}}
     <section class="hero" id="hero">
         {{-- Slides --}}
         <div class="hero-slider">
-            <div class="hero-slide active" style="background-image: url('{{ asset('assets/images/slide1.jpg') }}');">
+            <div class="hero-slide active" style="background-image: url('{{ $heroImage1 }}');">
                 <div class="hero-overlay"></div>
             </div>
-            <div class="hero-slide" style="background-image: url('{{ asset('assets/images/slide2.jpg') }}');">
+            <div class="hero-slide" style="background-image: url('{{ $heroImage2 }}');">
                 <div class="hero-overlay"></div>
             </div>
-            <div class="hero-slide" style="background-image: url('{{ asset('assets/images/slide3.jpg') }}');">
+            <div class="hero-slide" style="background-image: url('{{ $heroImage3 }}');">
                 <div class="hero-overlay"></div>
             </div>
         </div>
@@ -41,15 +48,13 @@
         <div class="container">
             <div class="hero-content">
                 <span class="hero-badge">
-                    <i class="fas fa-dot-circle"></i> Depuis 2012 — Goma, Nord-Kivu, RD Congo
+                    <i class="fas fa-dot-circle"></i> {{ data_get($siteSettings, 'home_hero_badge', 'Depuis 2012 — Goma, Nord-Kivu, RD Congo') }}
                 </span>
                 <h1 class="hero-title">
-                    <span class="highlight">Compassion</span> avec la population
+                    <span class="highlight">{{ data_get($siteSettings, 'home_hero_title', 'Compassion avec la population') }}</span>
                 </h1>
                 <p class="hero-description">
-                    PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies — 
-                    vient en aide aux plus vulnérables : éducation, santé, agriculture, formation 
-                    professionnelle, assistance sociale et spirituelle.
+                    {{ data_get($siteSettings, 'home_hero_description', 'PHOVE vient en aide aux plus vulnérables : éducation, santé, agriculture, formation professionnelle, assistance sociale et spirituelle.') }}
                 </p>
                 <div class="hero-buttons">
                     <a href="{{ url('/faire-un-don') }}" class="hero-btn-primary">
@@ -152,22 +157,11 @@
                 <div class="about-content">
                     <span class="section-subtitle">Qui sommes-nous ?</span>
                     <h2 class="section-title">
-                        Une organisation au service des orphelins, veuves et personnes démunies
+                        {{ data_get($siteSettings, 'home_about_title', 'Une organisation au service des orphelins, veuves et personnes démunies') }}
                     </h2>
 
                     <p class="about-text">
-                        <strong>PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies)</strong> 
-                        est une organisation non gouvernementale apolitique à caractère social et spirituel, 
-                        créée le <strong>30 août 2012</strong> à Goma, dans la province du Nord-Kivu, 
-                        en République Démocratique du Congo.
-                    </p>
-
-                    <p class="about-text">
-                        Fondée par l'<strong>Apôtre Philippe KABOYI MUSAMUGUMA</strong> après 40 jours 
-                        de jeûne et de prière sur la montagne KALAGANE à Bukavu, PHOVE est née d'une 
-                        inspiration divine reçue le <strong>20 avril 2012</strong>. Sa mission : 
-                        venir en aide aux personnes vulnérables — orphelins, veuves, personnes de 
-                        3ème âge et personnes démunies.
+                        {{ data_get($siteSettings, 'home_about_description', 'PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies) est une organisation non gouvernementale apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma, en République Démocratique du Congo. Elle accompagne les personnes vulnérables : orphelins, veuves, personnes âgées et personnes démunies.') }}
                     </p>
 
                     <div class="about-values-list">
