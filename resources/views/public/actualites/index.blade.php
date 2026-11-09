@@ -165,7 +165,7 @@
             {{-- Pagination --}}
             @if($articles->hasPages())
             <div class="actualites-pagination">
-                {{ $articles->links() }}
+                {{ $articles->links('pagination.custom') }}
             </div>
             @endif
 
