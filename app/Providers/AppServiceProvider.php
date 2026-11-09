@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use App\Models\Setting;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,7 +16,12 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // ⭐ Forcer HTTPS en production
+        // Partager les paramètres publics avec le layout et ses partials.
+        View::composer('layouts.public', function ($view): void {
+            $view->with('siteSettings', Setting::allValues());
+        });
+
+        // Forcer HTTPS en production.
         if (config('app.env') === 'production') {
             URL::forceScheme('https');
         }
