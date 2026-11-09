@@ -685,6 +685,78 @@
     }
 }
 
-
-
-
+/* ============================================================
+   PAGINATION — STYLE COMMUN ET RESPONSIVE
+   ============================================================ */
+.custom-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px 20px;
+    width: 100%;
+    margin: 24px 0 8px;
+}
+.custom-pagination-info {
+    color: #64748b;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+.custom-pagination-info strong { color: #1e293b; font-weight: 700; }
+.custom-pagination nav { margin-left: auto; }
+.custom-pagination-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.custom-pagination-links li { display: inline-flex; }
+.custom-pagination-links a,
+.custom-pagination-links li > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    min-height: 38px;
+    padding: 7px 11px;
+    border: 1px solid #dbe3ec;
+    border-radius: 9px;
+    background: #fff;
+    color: #334155;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    transition: background-color .18s ease, border-color .18s ease, color .18s ease;
+}
+.custom-pagination-links a:hover {
+    border-color: #16558f;
+    background: #f0f6fc;
+    color: #16558f;
+}
+.custom-pagination-links li.active > span {
+    border-color: #16558f;
+    background: #16558f;
+    color: #fff;
+}
+.custom-pagination-links li.disabled > span {
+    background: #f8fafc;
+    color: #94a3b8;
+    cursor: not-allowed;
+}
+.custom-pagination-links a:focus-visible {
+    outline: 3px solid rgba(22, 85, 143, .25);
+    outline-offset: 2px;
+}
+@media (max-width: 600px) {
+    .custom-pagination { flex-direction: column; align-items: stretch; }
+    .custom-pagination nav { margin: 0; }
+    .custom-pagination-links { gap: 5px; }
+    .custom-pagination-links a,
+    .custom-pagination-links li > span { min-width: 34px; min-height: 36px; padding: 6px 9px; }
+    .custom-pagination-info { text-align: center; }
+}
