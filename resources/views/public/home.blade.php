@@ -1,8 +1,8 @@
 @extends('layouts.public')
 
-@section('title', 'Accueil')
+@section('title', data_get($siteSettings ?? [], 'meta_title') ?: 'Accueil')
 
-@section('meta_description', 'PHOVE — Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies. ONG humanitaire congolaise créée en 2012 à Goma. Compassion avec la population.')
+@section('meta_description', data_get($siteSettings ?? [], 'meta_description') ?: data_get($siteSettings ?? [], 'site_description', 'PHOVE — Organisation humanitaire en RD Congo.'))
 
 @section('styles')
     <link rel="stylesheet" href="{{ asset('assets/css/public-pages-common.css') }}">
@@ -48,13 +48,13 @@
         <div class="container">
             <div class="hero-content">
                 <span class="hero-badge">
-                    <i class="fas fa-dot-circle"></i> {{ data_get($siteSettings, 'home_hero_badge', 'Depuis 2012 — Goma, Nord-Kivu, RD Congo') }}
+                    <i class="fas fa-dot-circle"></i> {{ (data_get($siteSettings, 'home_hero_badge') ?: 'Depuis 2012 — Goma, Nord-Kivu, RD Congo') }}
                 </span>
                 <h1 class="hero-title">
-                    <span class="highlight">{{ data_get($siteSettings, 'home_hero_title', 'Compassion avec la population') }}</span>
+                    <span class="highlight">{{ (data_get($siteSettings, 'home_hero_title') ?: data_get($siteSettings, 'site_slogan', 'Compassion avec la population')) }}</span>
                 </h1>
                 <p class="hero-description">
-                    {{ data_get($siteSettings, 'home_hero_description', 'PHOVE vient en aide aux plus vulnérables : éducation, santé, agriculture, formation professionnelle, assistance sociale et spirituelle.') }}
+                    {{ (data_get($siteSettings, 'home_hero_description') ?: 'PHOVE vient en aide aux plus vulnérables : éducation, santé, agriculture, formation professionnelle, assistance sociale et spirituelle.') }}
                 </p>
                 <div class="hero-buttons">
                     <a href="{{ url('/faire-un-don') }}" class="hero-btn-primary">
@@ -157,11 +157,11 @@
                 <div class="about-content">
                     <span class="section-subtitle">Qui sommes-nous ?</span>
                     <h2 class="section-title">
-                        {{ data_get($siteSettings, 'home_about_title', 'Une organisation au service des orphelins, veuves et personnes démunies') }}
+                        {{ (data_get($siteSettings, 'home_about_title') ?: 'Une organisation au service des orphelins, veuves et personnes démunies') }}
                     </h2>
 
                     <p class="about-text">
-                        {{ data_get($siteSettings, 'home_about_description', 'PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies) est une organisation non gouvernementale apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma, en République Démocratique du Congo. Elle accompagne les personnes vulnérables : orphelins, veuves, personnes âgées et personnes démunies.') }}
+                        {{ (data_get($siteSettings, 'home_about_description') ?: 'PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies) est une organisation non gouvernementale apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma, en République Démocratique du Congo. Elle accompagne les personnes vulnérables : orphelins, veuves, personnes âgées et personnes démunies.') }}
                     </p>
 
                     <div class="about-values-list">
