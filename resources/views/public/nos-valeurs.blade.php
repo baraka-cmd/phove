@@ -87,7 +87,7 @@
                     </ul>
                 </div>
                 <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                    <img src="{{ data_get($siteSettings ?? [], 'page_values_image') ? media_url(data_get($siteSettings, 'page_values_image')) : asset('assets/images/about/about-phove.jpg') }}" 
                          alt="Compassion PHOVE — Au service des plus démunis" 
                          class="content-image"
                          onerror="this.src='https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600'">
