@@ -14,7 +14,7 @@ if (!function_exists('img_url')) {
             return asset('assets/images/logo-phove.png');
         }
 
-        if (preg_match('/^https?:\\/\\//i', $path)) {
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
             return $path;
         }
 
