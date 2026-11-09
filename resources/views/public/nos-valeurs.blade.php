@@ -64,7 +64,7 @@
                         <i class="fas fa-heart"></i>
                     </div>
                     <p class="content-block-text">
-                        La <strong>compassion</strong> est au cœur de notre mission humanitaire. 
+                        {{ data_get($siteSettings ?? [], 'page_value_compassion') ?: 'La compassion est au cœur de notre mission humanitaire.' }} 
                         C'est notre devise : <strong>« Compassion avec la population »</strong>. 
                         Elle se traduit par :
                     </p>
@@ -92,7 +92,7 @@
                     </ul>
                 </div>
                 <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                    <img src="{{ img_url(data_get($siteSettings ?? [], 'page_values_image') ?: 'assets/images/about/about-phove.jpg') }}" 
                          alt="Compassion PHOVE — Au service des plus démunis" 
                          class="content-image"
                          onerror="this.src='https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600'">
@@ -114,7 +114,7 @@
                         <i class="fas fa-hands-helping"></i>
                     </div>
                     <p class="content-block-text">
-                        La <strong>solidarité</strong> est le fondement de notre action collective. 
+                        {{ data_get($siteSettings ?? [], 'page_value_solidarite') ?: 'La solidarité est le fondement de notre action collective.' }} 
                         Nous croyons en l'union des forces : <strong>« L'union fait la force et la 
                         corde à 3 fils se rompt difficilement »</strong>. Elle se manifeste par :
                     </p>
