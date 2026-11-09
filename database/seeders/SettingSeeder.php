@@ -396,6 +396,43 @@ class SettingSeeder extends Seeder
             'ordre' => 25,
         ],
 
+        [
+            'key' => 'home_about_image',
+            'value' => null,
+            'type' => 'image',
+            'group' => 'pages',
+            'label' => 'Accueil — Image de présentation',
+            'description' => 'Image principale de la section de présentation sur l’accueil.',
+            'ordre' => 40,
+        ],
+        [
+            'key' => 'page_about_image',
+            'value' => null,
+            'type' => 'image',
+            'group' => 'pages',
+            'label' => 'Qui sommes-nous — Image',
+            'description' => 'Image d’illustration de la page Qui sommes-nous.',
+            'ordre' => 41,
+        ],
+        [
+            'key' => 'page_mission_image',
+            'value' => null,
+            'type' => 'image',
+            'group' => 'pages',
+            'label' => 'Mission & Vision — Image',
+            'description' => 'Image d’illustration de la section Mission & Vision.',
+            'ordre' => 42,
+        ],
+        [
+            'key' => 'page_values_image',
+            'value' => null,
+            'type' => 'image',
+            'group' => 'pages',
+            'label' => 'Nos valeurs — Image',
+            'description' => 'Image d’illustration de la page Nos valeurs.',
+            'ordre' => 43,
+        ],
+
         // SEO
         // ============================================
         [
