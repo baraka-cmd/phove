@@ -17,9 +17,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!file) return;
 
             // Validation
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/x-icon', 'image/vnd.microsoft.icon'];
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
             if (!allowedTypes.includes(file.type)) {
-                showToast('Format non supporté. Utilisez JPG, PNG, WebP ou ICO.', 'error');
+                showToast('Format non supporté. Utilisez JPG, PNG ou WebP.', 'error');
                 this.value = '';
                 return;
             }
@@ -244,8 +244,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if ((e.ctrlKey || e.metaKey) && e.key === 's') {
             e.preventDefault();
             if (settingsForm) {
-                settingsForm.submit();
-                showToast('Paramètres enregistrés !', 'success', 2000);
+                if (typeof settingsForm.requestSubmit === 'function') {
+                    settingsForm.requestSubmit();
+                } else {
+                    settingsForm.submit();
+                }
             }
         }
     });
