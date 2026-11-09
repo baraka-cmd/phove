@@ -1,219 +1,184 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\\Http\\Controllers\\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Setting;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\View\View;
+use App\\Http\\Controllers\\Controller;
+use App\\Models\\Setting;
+use Illuminate\\Http\\JsonResponse;
+use Illuminate\\Http\\RedirectResponse;
+use Illuminate\\Http\\Request;
+use Illuminate\\Support\\Facades\\DB;
+use Illuminate\\Support\\Facades\\Validator;
+use Illuminate\\Validation\\Rule;
+use Illuminate\\View\\View;
+use Throwable;
 
 class SettingController extends Controller
 {
-    /**
-     * Groupes de paramètres disponibles.
-     *
-     * @var array<string, array<string, string>>
-     */
     protected array $groups = [
-        'identite' => [
-            'label'       => 'Identité',
-            'icon'        => 'fa-building',
-            'description' => 'Nom, logo, slogan et description de l\'organisation PHOVE.',
-        ],
-        'contact' => [
-            'label'       => 'Contact',
-            'icon'        => 'fa-address-book',
-            'description' => 'Adresse, téléphones, email et autres coordonnées du siège de Goma.',
-        ],
-        'social' => [
-            'label'       => 'Réseaux sociaux',
-            'icon'        => 'fa-share-alt',
-            'description' => 'Liens vers les comptes Facebook, Twitter, LinkedIn, YouTube, Instagram et WhatsApp.',
-        ],
-        'pages' => [
-            'label'       => 'Pages statiques',
-            'icon'        => 'fa-file-alt',
-            'description' => 'Contenu des pages institutionnelles : Qui sommes-nous, Mission & Vision, Nos valeurs, Mentions légales.',
-        ],
-        'seo' => [
-            'label'       => 'SEO',
-            'icon'        => 'fa-search',
-            'description' => 'Optimisation pour les moteurs de recherche : méta-titres, descriptions et mots-clés.',
-        ],
-        'maintenance' => [
-            'label'       => 'Maintenance',
-            'icon'        => 'fa-tools',
-            'description' => 'Mode maintenance et message affiché aux visiteurs.',
-        ],
+        'identite' => ['label' => 'Identité', 'icon' => 'fa-building', 'description' => 'Nom, logo, slogan et description de PHOVE.'],
+        'contact' => ['label' => 'Contact', 'icon' => 'fa-address-book', 'description' => 'Adresse, téléphones, email et coordonnées du siège.'],
+        'social' => ['label' => 'Réseaux sociaux', 'icon' => 'fa-share-alt', 'description' => 'Liens et coordonnées des réseaux sociaux officiels.'],
+        'pages' => ['label' => 'Pages statiques', 'icon' => 'fa-file-alt', 'description' => 'Contenus éditoriaux des pages institutionnelles et de l’accueil.'],
+        'seo' => ['label' => 'SEO', 'icon' => 'fa-search', 'description' => 'Métadonnées utilisées par les moteurs de recherche.'],
+        'maintenance' => ['label' => 'Maintenance', 'icon' => 'fa-tools', 'description' => 'Mode maintenance et message destiné aux visiteurs.'],
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | INDEX
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Affiche le panneau de configuration avec tous les paramètres.
-     */
     public function index(Request $request): View
     {
-        // Groupe actif (par défaut : identite)
-        $activeGroup = $request->input('group', 'identite');
+        $activeGroup = (string) $request->query('group', 'identite');
 
         if (!array_key_exists($activeGroup, $this->groups)) {
             $activeGroup = 'identite';
         }
 
-        // Récupérer les paramètres du groupe actif
-        $settings = Setting::where('group', $activeGroup)
+        $settings = Setting::query()
+            ->where('group', $activeGroup)
             ->orderBy('ordre')
+            ->orderBy('label')
             ->get();
 
-        // Récupérer tous les paramètres pour la prévisualisation
-        $allSettings = Setting::all()->pluck('value', 'key')->toArray();
+        $allSettings = Setting::query()->pluck('value', 'key')->all();
 
-        return view('admin.settings.index', compact(
-            'settings',
-            'allSettings',
-            'activeGroup'
-        ));
+        return view('admin.settings.index', compact('settings', 'allSettings', 'activeGroup'));
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | UPDATE
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Met à jour tous les paramètres d'un groupe.
-     */
     public function update(Request $request): RedirectResponse
     {
-        $activeGroup = $request->input('group', 'identite');
+        $activeGroup = (string) $request->input('group', 'identite');
 
         if (!array_key_exists($activeGroup, $this->groups)) {
             return redirect()->route('admin.parametres.index')
                 ->with('error', 'Groupe de paramètres invalide.');
         }
 
-        // Récupérer les paramètres existants du groupe
-        $existingSettings = Setting::where('group', $activeGroup)->get();
+        $settings = Setting::query()->where('group', $activeGroup)->get();
 
-        // Préparer les règles de validation dynamiques
-        $validationRules    = [];
-        $validationMessages = [];
+        if ($settings->isEmpty()) {
+            return redirect()->route('admin.parametres.index', ['group' => $activeGroup])
+                ->with('info', 'Aucun paramètre n’est encore configuré dans ce groupe.');
+        }
 
-        foreach ($existingSettings as $setting) {
-            $inputName = 'setting_' . $setting->key;
+        $rules = [];
+        $messages = [];
+
+        foreach ($settings as $setting) {
+            $field = 'setting_' . $setting->key;
 
             switch ($setting->type) {
                 case 'image':
-                    $validationRules[$inputName] = [
-                        'nullable',
-                        'image',
-                        'mimes:jpeg,jpg,png,webp,ico,svg',
-                        'max:2048',
-                    ];
-                    $validationMessages[$inputName . '.image'] = 'Le fichier doit être une image.';
-                    $validationMessages[$inputName . '.mimes'] = 'Le fichier doit être au format JPG, PNG, WebP, ICO ou SVG.';
-                    $validationMessages[$inputName . '.max']   = 'L\'image ne doit pas dépasser 2 Mo.';
+                    $rules[$field] = ['sometimes', 'nullable', 'file', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'];
+                    $messages[$field . '.image'] = 'Le fichier doit être une image JPG, PNG ou WebP.';
+                    $messages[$field . '.mimes'] = 'Formats acceptés : JPG, PNG et WebP.';
+                    $messages[$field . '.max'] = 'L’image ne doit pas dépasser 2 Mo.';
                     break;
-
                 case 'email':
-                    $validationRules[$inputName] = ['nullable', 'email'];
-                    $validationMessages[$inputName . '.email'] = 'Veuillez saisir une adresse email valide.';
+                    $rules[$field] = ['sometimes', 'nullable', 'string', 'email', 'max:255'];
                     break;
-
                 case 'url':
-                    $validationRules[$inputName] = ['nullable', 'url'];
-                    $validationMessages[$inputName . '.url'] = 'Veuillez saisir une URL valide (commençant par https://).';
+                    $rules[$field] = ['sometimes', 'nullable', 'string', 'url', 'max:2048'];
                     break;
-
                 case 'phone':
-                    $validationRules[$inputName] = [
-                        'nullable',
-                        'string',
-                        'max:30',
-                        'regex:/^[+0-9\s\-\(\)]+$/',
-                    ];
-                    $validationMessages[$inputName . '.regex'] = 'Veuillez saisir un numéro de téléphone valide.';
+                    $rules[$field] = ['sometimes', 'nullable', 'string', 'max:30', 'regex:/^[+0-9\\s\\-().]+$/'];
+                    $messages[$field . '.regex'] = 'Veuillez saisir un numéro de téléphone valide.';
                     break;
-
                 case 'number':
-                    $validationRules[$inputName] = ['nullable', 'numeric'];
-                    $validationMessages[$inputName . '.numeric'] = 'Veuillez saisir un nombre valide.';
+                    $rules[$field] = ['sometimes', 'nullable', 'numeric'];
                     break;
+                case 'color':
+                    $rules[$field] = ['sometimes', 'nullable', 'string', 'regex:/^#(?:[0-9a-fA-F]{3}){1,2}$/'];
+                    $messages[$field . '.regex'] = 'La couleur doit être au format hexadécimal, par exemple #0F766E.';
+                    break;
+                case 'textarea':
+                    $rules[$field] = ['sometimes', 'nullable', 'string', 'max:10000'];
+                    break;
+                case 'text':
+                default:
+                    $rules[$field] = ['sometimes', 'nullable', 'string', 'max:255'];
+                    break;
+            }
+
+            if ($setting->type === 'image') {
+                $rules['remove_' . $setting->key] = ['sometimes', 'boolean'];
             }
         }
 
-        // ✅ Validation AVANT tout traitement
-        if (!empty($validationRules)) {
-            $request->validate($validationRules, $validationMessages);
-        }
+        $validated = $request->validate($rules, $messages);
 
         $updatedCount = 0;
 
-        foreach ($existingSettings as $setting) {
-            $inputName = 'setting_' . $setting->key;
+        foreach ($settings as $setting) {
+            $field = 'setting_' . $setting->key;
 
-            // ---- Image ----
             if ($setting->type === 'image') {
-                // Suppression demandée
-                $removeName = 'remove_' . $setting->key;
-                if ($request->input($removeName) === '1') {
-                    if ($setting->value) {
-                        media_delete($setting->value);
+                $removeRequested = $request->boolean('remove_' . $setting->key);
+
+                if ($request->hasFile($field)) {
+                    $oldPath = $setting->value;
+                    $newPath = media_store($request->file($field), 'settings');
+
+                    if (!$newPath) {
+                        return back()->withInput()->with('error', 'Le stockage de la nouvelle image a échoué. L’image précédente a été conservée.');
                     }
-                    $setting->update(['value' => null]);
+
+                    try {
+                        $setting->update(['value' => $newPath]);
+                    } catch (Throwable $exception) {
+                        media_delete($newPath);
+                        throw $exception;
+                    }
+
+                    if ($oldPath && $oldPath !== $newPath) {
+                        try {
+                            media_delete($oldPath);
+                        } catch (Throwable $exception) {
+                            report($exception);
+                        }
+                    }
+
                     $updatedCount++;
                     continue;
                 }
 
-                // Nouveau fichier envoyé
-                if ($request->hasFile($inputName)) {
-                    // Supprimer l'ancien fichier (local ou Cloudinary)
-                    if ($setting->value) {
-                        media_delete($setting->value);
-                    }
+                if ($removeRequested && $setting->value) {
+                    $oldPath = $setting->value;
+                    $setting->update(['value' => null]);
+                    $updatedCount++;
 
-                    // Upload du nouveau fichier
-                    $path = media_store($request->file($inputName), 'settings');
-
-                    if ($path) {
-                        $setting->update(['value' => $path]);
-                        $updatedCount++;
+                    try {
+                        media_delete($oldPath);
+                    } catch (Throwable $exception) {
+                        report($exception);
                     }
                 }
+
+                continue;
             }
-            // ---- Switch (checkbox) ----
-            elseif ($setting->type === 'switch') {
-                $newValue = $request->has($inputName) ? '1' : '0';
-                if ($setting->value !== $newValue) {
-                    $setting->update(['value' => $newValue]);
-                    $updatedCount++;
+
+            if ($setting->type === 'switch') {
+                $newValue = $request->boolean($field) ? '1' : '0';
+            } else {
+                // Le champ doit être présent dans le formulaire pour autoriser sa mise à jour.
+                // ConvertEmptyStringsToNull transforme une chaîne vide en null : c'est volontaire.
+                if (!$request->exists($field)) {
+                    continue;
+                }
+
+                $newValue = $request->input($field);
+                if (is_string($newValue)) {
+                    $newValue = trim($newValue);
                 }
             }
-            // ---- Tous les autres types ----
-            else {
-                $newValue = $request->input($inputName);
-                if ($newValue !== null && $newValue !== $setting->value) {
-                    $setting->update(['value' => $newValue]);
-                    $updatedCount++;
-                }
+
+            $newValue = $newValue === null ? null : (string) $newValue;
+
+            if ($setting->value !== $newValue) {
+                $setting->update(['value' => $newValue]);
+                $updatedCount++;
             }
         }
 
-        // Vider le cache (méthode statique du modèle Setting)
-        if (method_exists(Setting::class, 'clearCache')) {
-            Setting::clearCache();
-        }
+        Setting::clearCache();
 
         $message = $updatedCount > 0
             ? $updatedCount . ' paramètre(s) mis à jour avec succès.'
@@ -223,66 +188,41 @@ class SettingController extends Controller
             ->with('success', $message);
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | REMOVE IMAGE (AJAX)
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Supprime l'image d'un paramètre (AJAX).
-     */
     public function removeImage(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
+        $validated = $request->validate([
             'key' => ['required', 'string', 'max:100', Rule::exists('settings', 'key')],
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Clé de paramètre invalide.',
-            ], 422);
-        }
+        $setting = Setting::query()
+            ->where('key', $validated['key'])
+            ->where('type', 'image')
+            ->first();
 
-        $key     = $request->input('key');
-        $setting = Setting::where('key', $key)->first();
-
-        // Sécurité : le setting doit exister
         if (!$setting) {
             return response()->json([
                 'success' => false,
-                'message' => 'Paramètre introuvable.',
+                'message' => 'Paramètre image introuvable.',
             ], 404);
-        }
-
-        // Vérifier que c'est bien une image
-        if ($setting->type !== 'image') {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ce paramètre n\'est pas une image.',
-            ], 400);
         }
 
         if (!$setting->value) {
             return response()->json([
                 'success' => false,
-                'message' => 'Aucune image trouvée.',
+                'message' => 'Aucune image n’est actuellement enregistrée.',
             ], 404);
         }
 
-        // Supprimer le fichier physique
-        if ($setting->value) {
-            media_delete($setting->value);
-        }
-
-        // Mettre à jour la base de données
+        $oldPath = $setting->value;
         $setting->update(['value' => null]);
 
-        // Vider le cache
-        if (method_exists(Setting::class, 'clearCache')) {
-            Setting::clearCache();
+        try {
+            media_delete($oldPath);
+        } catch (Throwable $exception) {
+            report($exception);
         }
+
+        Setting::clearCache();
 
         return response()->json([
             'success' => true,
@@ -290,46 +230,24 @@ class SettingController extends Controller
         ]);
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | SHOW (AJAX)
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * Affiche un paramètre spécifique (pour preview AJAX).
-     */
     public function show(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
+        $validated = $request->validate([
             'key' => ['required', 'string', 'max:100', Rule::exists('settings', 'key')],
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Clé de paramètre invalide.',
-            ], 422);
-        }
-
-        $key     = $request->input('key');
-        $setting = Setting::where('key', $key)->first();
+        $setting = Setting::query()->where('key', $validated['key'])->first();
 
         if (!$setting) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Paramètre introuvable.',
-            ], 404);
+            return response()->json(['success' => false, 'message' => 'Paramètre introuvable.'], 404);
         }
 
         return response()->json([
             'success' => true,
             'data' => [
-                'key'   => $setting->key,
+                'key' => $setting->key,
                 'value' => $setting->value,
-                'url'   => $setting->type === 'image' && method_exists($setting, 'urlValue')
-                    ? $setting->urlValue()
-                    : null,
+                'url' => $setting->type === 'image' ? media_url($setting->value) : null,
             ],
         ]);
     }
