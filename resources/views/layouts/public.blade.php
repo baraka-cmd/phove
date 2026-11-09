@@ -15,30 +15,30 @@
     {{-- Meta tags SEO --}}
     <meta name="description" content="@yield('meta_description', data_get($siteSettings, 'meta_description', data_get($siteSettings, 'site_description', 'PHOVE — Organisation humanitaire en RD Congo.')))">
     <meta name="keywords" content="@yield('meta_keywords', data_get($siteSettings, 'meta_keywords', 'PHOVE, ONG, humanitaire, RD Congo, Goma'))">
-    <meta name="author" content="PHOVE">
+    <meta name="author" content="{{ data_get($siteSettings, 'site_name', 'PHOVE') }}">
     <meta name="robots" content="index, follow">
 
     {{-- Open Graph (partage réseaux sociaux) --}}
-    <meta property="og:title" content="@yield('title', 'PHOVE') | Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies">
+    <meta property="og:title" content="@yield('title', data_get($siteSettings, 'site_name', 'PHOVE')) | {{ data_get($siteSettings, 'site_full_name', 'Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies') }}">
     <meta property="og:description" content="@yield('meta_description', 'PHOVE — ONG humanitaire congolaise engagée dans l\'assistance aux orphelins, veuves et personnes démunies : éducation, santé, agriculture, formation professionnelle et accompagnement spirituel.')">
     <meta property="og:image" content="{{ data_get($siteSettings, 'site_logo') ? media_url(data_get($siteSettings, 'site_logo')) : asset('assets/images/logo-phove.png') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="PHOVE">
+    <meta property="og:site_name" content="{{ data_get($siteSettings, 'site_name', 'PHOVE') }}">
     <meta property="og:locale" content="fr_FR">
 
     {{-- Twitter Card --}}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="@yield('title', 'PHOVE')">
     <meta name="twitter:description" content="@yield('meta_description', 'PHOVE — ONG humanitaire congolaise : compassion avec la population.')">
-    <meta name="twitter:image" content="{{ asset('assets/images/logo-phove.png') }}">
+    <meta name="twitter:image" content="{{ data_get($siteSettings, 'site_logo') ? media_url(data_get($siteSettings, 'site_logo')) : asset('assets/images/logo-phove.png') }}">
 
     {{-- CSRF Token --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Favicon --}}
     <link rel="icon" type="image/png" href="{{ data_get($siteSettings, 'site_favicon') ? media_url(data_get($siteSettings, 'site_favicon')) : asset('assets/images/favicon-phove.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon-phove.png') }}">
+    <link rel="apple-touch-icon" href="{{ data_get($siteSettings, 'site_favicon') ? media_url(data_get($siteSettings, 'site_favicon')) : asset('assets/images/favicon-phove.png') }}">
 
     {{-- Police Poppins --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
