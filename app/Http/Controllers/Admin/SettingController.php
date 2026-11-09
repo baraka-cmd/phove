@@ -178,17 +178,21 @@ class SettingController extends Controller
 
                 // Nouveau fichier envoyé
                 if ($request->hasFile($inputName)) {
-                    // Supprimer l'ancien fichier (local ou Cloudinary)
-                    if ($setting->value) {
-                        media_delete($setting->value);
-                    }
+                    // Envoyer le nouveau fichier AVANT de toucher à l'ancien.
+                    // Si Cloudinary ou le stockage échoue, l'image actuelle reste intacte.
+                    $newPath = media_store($request->file($inputName), 'settings');
 
-                    // Upload du nouveau fichier
-                    $path = media_store($request->file($inputName), 'settings');
+                    if ($newPath) {
+                        $oldPath = $setting->value;
 
-                    if ($path) {
-                        $setting->update(['value' => $path]);
+                        // Enregistrer d'abord le nouveau chemin en base.
+                        $setting->update(['value' => $newPath]);
                         $updatedCount++;
+
+                        // Supprimer l'ancien fichier uniquement après l'enregistrement réussi.
+                        if ($oldPath && $oldPath !== $newPath) {
+                            media_delete($oldPath);
+                        }
                     }
                 }
             }
