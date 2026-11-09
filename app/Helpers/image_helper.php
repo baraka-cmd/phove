@@ -18,7 +18,7 @@ if (!function_exists('img_url')) {
             return $path;
         }
 
-        $relativePath = ltrim(str_replace('\\\\', '/', $path), '/');
+        $relativePath = ltrim(str_replace(chr(92), '/', $path), '/');
         $storageFile = storage_path('app/public/' . $relativePath);
 
         if (is_file($storageFile)) {
