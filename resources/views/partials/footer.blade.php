@@ -13,18 +13,15 @@
                 <div class="col-4 footer-col">
                     <div class="footer-brand">
                         <a href="{{ url('/') }}" class="footer-logo">
-                            <img src="{{ asset('assets/images/logo-phove.png') }}" alt="PHOVE Logo" class="footer-logo-img">
+                            <img src="{{ img_url(data_get($siteSettings ?? [], 'site_logo') ?: 'assets/images/logo-phove.png') }}" alt="PHOVE Logo" class="footer-logo-img">
                             <div class="footer-logo-text">
-                                <span class="footer-logo-name">PHOVE</span>
-                                <span class="footer-logo-subtitle">Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies</span>
+                                <span class="footer-logo-name">{{ data_get($siteSettings ?? [], 'site_name', 'PHOVE') }}</span>
+                                <span class="footer-logo-subtitle">{{ data_get($siteSettings ?? [], 'site_full_name', 'Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies') }}</span>
                             </div>
                         </a>
                     </div>
                     <p class="footer-description">
-                        Organisation non gouvernementale apolitique à caractère social et spirituel, 
-                        créée le 30 août 2012 à Goma. PHOVE vient en aide aux orphelins, veuves, 
-                        personnes de 3ème âge et personnes démunies : éducation, santé, agriculture, 
-                        formation professionnelle, assistance sociale et spirituelle.
+                        {{ data_get($siteSettings ?? [], 'site_description', 'Organisation non gouvernementale apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma.') }}
                     </p>
                     <div class="footer-contact-list">
                         <div class="footer-contact-item">
@@ -33,27 +30,27 @@
                         </div>
                         <div class="footer-contact-item">
                             <i class="fas fa-phone-alt"></i>
-                            <span>+243 970 872 910</span>
+                            <span>{{ data_get($siteSettings ?? [], 'contact_telephone_1', '+243 970 872 910') }}</span>
                         </div>
                         <div class="footer-contact-item">
                             <i class="fas fa-envelope"></i>
-                            <span>phovemonde@gmail.com</span>
+                            <span>{{ data_get($siteSettings ?? [], 'contact_email', 'phovemonde@gmail.com') }}</span>
                         </div>
                     </div>
                     <div class="footer-socials">
-                        <a href="https://facebook.com/phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="Facebook PHOVE">
+                        <a href="{{ data_get($siteSettings ?? [], 'social_facebook') ?: 'https://facebook.com/phovemonde' }}" target="_blank" rel="noopener noreferrer" class="footer-social" title="Facebook PHOVE">
                             <i class="fab fa-facebook-f"></i>
                         </a>
-                        <a href="https://twitter.com/phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="Twitter / X PHOVE">
+                        <a href="{{ data_get($siteSettings ?? [], 'social_twitter') ?: 'https://twitter.com/phovemonde' }}" target="_blank" rel="noopener noreferrer" class="footer-social" title="Twitter / X PHOVE">
                             <i class="fab fa-x-twitter"></i>
                         </a>
-                        <a href="https://instagram.com/phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="Instagram PHOVE">
+                        <a href="{{ data_get($siteSettings ?? [], 'social_instagram') ?: 'https://instagram.com/phovemonde' }}" target="_blank" rel="noopener noreferrer" class="footer-social" title="Instagram PHOVE">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="https://linkedin.com/company/phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="LinkedIn PHOVE">
+                        <a href="{{ data_get($siteSettings ?? [], 'social_linkedin') ?: 'https://linkedin.com/company/phovemonde' }}" target="_blank" rel="noopener noreferrer" class="footer-social" title="LinkedIn PHOVE">
                             <i class="fab fa-linkedin-in"></i>
                         </a>
-                        <a href="https://youtube.com/@phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="YouTube PHOVE">
+                        <a href="{{ data_get($siteSettings ?? [], 'social_youtube') ?: 'https://youtube.com/@phovemonde' }}" target="_blank" rel="noopener noreferrer" class="footer-social" title="YouTube PHOVE">
                             <i class="fab fa-youtube"></i>
                         </a>
                     </div>
