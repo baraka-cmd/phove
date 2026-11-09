@@ -130,6 +130,12 @@ class Media extends Model
             return null;
         }
 
+        // Les URL Cloudinary doivent être utilisées directement : la route locale
+        // /media/{path} ne sait servir que les fichiers du disque public.
+        if (preg_match('~^https?://~i', $this->fichier)) {
+            return $this->fichier;
+        }
+
         return route('media.show', [
             'path' => ltrim($this->fichier, '/'),
         ]);
@@ -142,9 +148,18 @@ class Media extends Model
     public function urlMiniature(): ?string
     {
         if ($this->miniature) {
+            if (preg_match('~^https?://~i', $this->miniature)) {
+                return $this->miniature;
+            }
+
             return route('media.show', [
                 'path' => ltrim($this->miniature, '/'),
             ]);
+        }
+
+        // Pour les images Cloudinary, générer une miniature optimisée.
+        if ($this->fichier && preg_match('~^https?://~i', $this->fichier)) {
+            return media_miniature($this->fichier, null, 600, 420);
         }
 
         return $this->url();
@@ -162,6 +177,10 @@ class Media extends Model
             return false;
         }
 
+        if (preg_match('~^https?://~i', $this->fichier)) {
+            return true;
+        }
+
         return Storage::disk('public')->exists($this->fichier);
     }
 
@@ -174,6 +193,10 @@ class Media extends Model
             return false;
         }
 
+        if (preg_match('~^https?://~i', $this->miniature)) {
+            return true;
+        }
+
         return Storage::disk('public')->exists($this->miniature);
     }
 
@@ -183,11 +206,22 @@ class Media extends Model
      */
     public function tailleFormatee(): ?string
     {
-        if (!$this->fichier || !Storage::disk('public')->exists($this->fichier)) {
+        if (!$this->fichier) {
             return null;
         }
 
-        $taille = Storage::disk('public')->size($this->fichier);
+        // La taille est enregistrée lors de l'upload, y compris pour Cloudinary.
+        if (preg_match('~^https?://~i', $this->fichier)) {
+            if (!$this->taille) {
+                return null;
+            }
+            $taille = (int) $this->taille;
+        } else {
+            if (!Storage::disk('public')->exists($this->fichier)) {
+                return null;
+            }
+            $taille = Storage::disk('public')->size($this->fichier);
+        }
 
         if ($taille > 1048576) {
             return round($taille / 1048576, 1) . ' Mo';
