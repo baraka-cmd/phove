@@ -10,6 +10,7 @@
         'instagram' => ['url' => data_get($siteSettings, 'social_instagram'), 'icon' => 'fa-instagram', 'label' => 'Instagram'],
         'linkedin' => ['url' => data_get($siteSettings, 'social_linkedin'), 'icon' => 'fa-linkedin-in', 'label' => 'LinkedIn'],
         'youtube' => ['url' => data_get($siteSettings, 'social_youtube'), 'icon' => 'fa-youtube', 'label' => 'YouTube'],
+        'whatsapp' => ['url' => data_get($siteSettings, 'social_whatsapp') ? 'https://wa.me/' . preg_replace('/\\D+/', '', data_get($siteSettings, 'social_whatsapp')) : null, 'icon' => 'fa-whatsapp', 'label' => 'WhatsApp'],
     ];
 @endphp
 <div class="topbar" id="topbar">
