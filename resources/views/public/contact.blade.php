@@ -43,15 +43,12 @@
                     </div>
                     <div class="contact-coord-content">
                         <h4>Adresse</h4>
-                        <p>
-                            Rue Georges BUSHU N°092<br>
-                            Quartier Katoyi, Commune de Karisimbi<br>
-                            Goma, Nord-Kivu<br>
-                            République Démocratique du Congo
-                        </p>
-                        <small style="color: #64748B; font-style: italic;">
-                            Repère : UACO / Maranata, entrée président
-                        </small>
+                        <p>{{ data_get($siteSettings ?? [], 'contact_adresse', 'Goma, Nord-Kivu, République Démocratique du Congo') }}</p>
+                        @if(data_get($siteSettings ?? [], 'contact_repere'))
+                            <small style="color: #64748B; font-style: italic;">
+                                Repère : {{ data_get($siteSettings, 'contact_repere') }}
+                            </small>
+                        @endif
                     </div>
                 </div>
 
@@ -62,10 +59,11 @@
                     <div class="contact-coord-content">
                         <h4>Téléphones</h4>
                         <p>
-                            <a href="tel:+243970872910">+243 970 872 910</a><br>
-                            <a href="tel:+243819009131">+243 819 009 131</a><br>
-                            <a href="tel:+243893844776">+243 893 844 776</a><br>
-                            <a href="tel:+243902512262">+243 902 512 262</a>
+                            @foreach(['contact_telephone_1', 'contact_telephone_2', 'contact_telephone_3', 'contact_telephone_4'] as $phoneKey)
+                                @if(data_get($siteSettings ?? [], $phoneKey))
+                                    <a href="tel:{{ preg_replace('/[^0-9+]/', '', data_get($siteSettings, $phoneKey)) }}">{{ data_get($siteSettings, $phoneKey) }}</a><br>
+                                @endif
+                            @endforeach
                         </p>
                     </div>
                 </div>
@@ -77,7 +75,7 @@
                     <div class="contact-coord-content">
                         <h4>Email</h4>
                         <p>
-                            <a href="mailto:phovemonde@gmail.com">phovemonde@gmail.com</a>
+                            <a href="mailto:{{ data_get($siteSettings ?? [], 'contact_email', 'phovemonde@gmail.com') }}">{{ data_get($siteSettings ?? [], 'contact_email', 'phovemonde@gmail.com') }}</a>
                         </p>
                     </div>
                 </div>
