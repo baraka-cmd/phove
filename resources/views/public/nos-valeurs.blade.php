@@ -42,10 +42,7 @@
                 <span class="section-subtitle">Ce qui nous définit</span>
                 <h2 class="section-title">Les six piliers de notre action</h2>
                 <p class="section-description">
-                    PHOVE fonde son action sur des valeurs essentielles inspirées des Saintes 
-                    Écritures et de notre devise : <strong>« Compassion avec la population »</strong>. 
-                    Ces valeurs constituent le socle de notre identité et guident notre conduite 
-                    au quotidien.
+                    {{ data_get($siteSettings ?? [], 'page_nos_valeurs', 'PHOVE fonde son action sur des valeurs essentielles inspirées des Saintes Écritures et de sa devise : Compassion avec la population. Ces valeurs constituent le socle de notre identité et guident notre conduite au quotidien.') }}
                 </p>
             </div>
         </div>
