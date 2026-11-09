@@ -458,7 +458,7 @@
                     </ul>
                 </div>
                 <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                    <img src="{{ img_url(data_get($siteSettings ?? [], 'page_organisation_fonctionnement_image') ?: 'assets/images/about/about-phove.jpg') }}" 
                          alt="Structure PHOVE" 
                          class="content-image"
                          onerror="this.src='https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600'">
