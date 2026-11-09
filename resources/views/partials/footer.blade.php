@@ -13,49 +13,50 @@
                 <div class="col-4 footer-col">
                     <div class="footer-brand">
                         <a href="{{ url('/') }}" class="footer-logo">
-                            <img src="{{ asset('assets/images/logo-phove.png') }}" alt="PHOVE Logo" class="footer-logo-img">
+                            <img src="{{ data_get($siteSettings ?? [], 'site_logo') ? media_url(data_get($siteSettings, 'site_logo')) : asset('assets/images/logo-phove.png') }}" alt="Logo {{ data_get($siteSettings ?? [], 'site_name', 'PHOVE') }}" class="footer-logo-img">
                             <div class="footer-logo-text">
-                                <span class="footer-logo-name">PHOVE</span>
-                                <span class="footer-logo-subtitle">Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies</span>
+                                <span class="footer-logo-name">{{ data_get($siteSettings ?? [], 'site_name', 'PHOVE') }}</span>
+                                <span class="footer-logo-subtitle">{{ data_get($siteSettings ?? [], 'site_full_name', 'Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies') }}</span>
                             </div>
                         </a>
                     </div>
                     <p class="footer-description">
-                        Organisation non gouvernementale apolitique à caractère social et spirituel, 
-                        créée le 30 août 2012 à Goma. PHOVE vient en aide aux orphelins, veuves, 
-                        personnes de 3ème âge et personnes démunies : éducation, santé, agriculture, 
-                        formation professionnelle, assistance sociale et spirituelle.
+                        {{ data_get($siteSettings ?? [], 'site_description', 'Organisation non gouvernementale apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma.') }}
                     </p>
                     <div class="footer-contact-list">
-                        <div class="footer-contact-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>Rue Georges BUSHU N°092, Quartier Katoyi<br>Commune de Karisimbi, Goma, Nord-Kivu, RD Congo</span>
-                        </div>
-                        <div class="footer-contact-item">
-                            <i class="fas fa-phone-alt"></i>
-                            <span>+243 970 872 910</span>
-                        </div>
-                        <div class="footer-contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <span>phovemonde@gmail.com</span>
-                        </div>
+                        @if(data_get($siteSettings ?? [], 'contact_adresse'))
+                            <div class="footer-contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>{{ data_get($siteSettings, 'contact_adresse') }}</span>
+                            </div>
+                        @endif
+                        @if(data_get($siteSettings ?? [], 'contact_telephone_1'))
+                            <div class="footer-contact-item">
+                                <i class="fas fa-phone-alt"></i>
+                                <a href="tel:{{ preg_replace('/[^0-9+]/', '', data_get($siteSettings, 'contact_telephone_1')) }}">{{ data_get($siteSettings, 'contact_telephone_1') }}</a>
+                            </div>
+                        @endif
+                        @if(data_get($siteSettings ?? [], 'contact_email'))
+                            <div class="footer-contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <a href="mailto:{{ data_get($siteSettings, 'contact_email') }}">{{ data_get($siteSettings, 'contact_email') }}</a>
+                            </div>
+                        @endif
                     </div>
                     <div class="footer-socials">
-                        <a href="https://facebook.com/phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="Facebook PHOVE">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="https://twitter.com/phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="Twitter / X PHOVE">
-                            <i class="fab fa-x-twitter"></i>
-                        </a>
-                        <a href="https://instagram.com/phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="Instagram PHOVE">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="https://linkedin.com/company/phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="LinkedIn PHOVE">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a href="https://youtube.com/@phovemonde" target="_blank" rel="noopener noreferrer" class="footer-social" title="YouTube PHOVE">
-                            <i class="fab fa-youtube"></i>
-                        </a>
+                        @foreach([
+                            ['url' => data_get($siteSettings ?? [], 'social_facebook'), 'icon' => 'fa-facebook-f', 'label' => 'Facebook'],
+                            ['url' => data_get($siteSettings ?? [], 'social_twitter'), 'icon' => 'fa-x-twitter', 'label' => 'X'],
+                            ['url' => data_get($siteSettings ?? [], 'social_instagram'), 'icon' => 'fa-instagram', 'label' => 'Instagram'],
+                            ['url' => data_get($siteSettings ?? [], 'social_linkedin'), 'icon' => 'fa-linkedin-in', 'label' => 'LinkedIn'],
+                            ['url' => data_get($siteSettings ?? [], 'social_youtube'), 'icon' => 'fa-youtube', 'label' => 'YouTube'],
+                        ] as $social)
+                            @if($social['url'])
+                                <a href="{{ $social['url'] }}" target="_blank" rel="noopener noreferrer" class="footer-social" title="{{ $social['label'] }}">
+                                    <i class="fab {{ $social['icon'] }}"></i>
+                                </a>
+                            @endif
+                        @endforeach
                     </div>
                 </div>
 
@@ -130,8 +131,8 @@
         <div class="container">
             <div class="footer-bottom-inner">
                 <p class="footer-copyright">
-                    &copy; {{ date('Y') }} <strong>PHOVE</strong>. Tous droits réservés. 
-                    <span class="footer-slogan">« Compassion avec la population »</span>
+                    &copy; {{ date('Y') }} <strong>{{ data_get($siteSettings ?? [], 'site_name', 'PHOVE') }}</strong>. Tous droits réservés. 
+                    <span class="footer-slogan">« {{ data_get($siteSettings ?? [], 'site_slogan', 'Compassion avec la population') }} »</span>
                 </p>
                 <div class="footer-bottom-links">
                     <a href="{{ url('/mentions-legales') }}">Mentions légales</a>
