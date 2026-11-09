@@ -248,6 +248,99 @@ class SettingSeeder extends Seeder
         ],
 
         // ============================================
+        // CONTENU DE L'ACCUEIL ET PAGES ÉDITORIALES
+        // Valeurs nulles jusqu'à leur configuration par l'administrateur.
+        [
+            'key' => 'home_hero_badge',
+            'value' => null,
+            'type' => 'text',
+            'group' => 'pages',
+            'label' => 'Accueil — Badge du bandeau principal',
+            'description' => 'Courte accroche affichée au-dessus du titre principal.',
+            'ordre' => 10,
+        ],
+        [
+            'key' => 'home_hero_title',
+            'value' => null,
+            'type' => 'text',
+            'group' => 'pages',
+            'label' => 'Accueil — Titre principal',
+            'description' => 'Titre principal du bandeau d’accueil.',
+            'ordre' => 11,
+        ],
+        [
+            'key' => 'home_hero_description',
+            'value' => null,
+            'type' => 'textarea',
+            'group' => 'pages',
+            'label' => 'Accueil — Texte principal',
+            'description' => 'Texte de présentation sous le titre principal.',
+            'ordre' => 12,
+        ],
+        [
+            'key' => 'home_hero_image_1',
+            'value' => null,
+            'type' => 'image',
+            'group' => 'pages',
+            'label' => 'Accueil — Image du bandeau 1',
+            'description' => 'Première image du slider de la page d’accueil.',
+            'ordre' => 13,
+        ],
+        [
+            'key' => 'home_hero_image_2',
+            'value' => null,
+            'type' => 'image',
+            'group' => 'pages',
+            'label' => 'Accueil — Image du bandeau 2',
+            'description' => 'Deuxième image du slider de la page d’accueil.',
+            'ordre' => 14,
+        ],
+        [
+            'key' => 'home_hero_image_3',
+            'value' => null,
+            'type' => 'image',
+            'group' => 'pages',
+            'label' => 'Accueil — Image du bandeau 3',
+            'description' => 'Troisième image du slider de la page d’accueil.',
+            'ordre' => 15,
+        ],
+        [
+            'key' => 'home_about_title',
+            'value' => null,
+            'type' => 'text',
+            'group' => 'pages',
+            'label' => 'Accueil — Titre de présentation',
+            'description' => 'Titre de la section Qui sommes-nous sur la page d’accueil.',
+            'ordre' => 16,
+        ],
+        [
+            'key' => 'home_about_description',
+            'value' => null,
+            'type' => 'textarea',
+            'group' => 'pages',
+            'label' => 'Accueil — Présentation courte',
+            'description' => 'Texte de présentation affiché sur la page d’accueil.',
+            'ordre' => 17,
+        ],
+        [
+            'key' => 'page_mission_content',
+            'value' => null,
+            'type' => 'textarea',
+            'group' => 'pages',
+            'label' => 'Page Mission — Contenu',
+            'description' => 'Texte éditorial de la mission de PHOVE.',
+            'ordre' => 18,
+        ],
+        [
+            'key' => 'page_vision_content',
+            'value' => null,
+            'type' => 'textarea',
+            'group' => 'pages',
+            'label' => 'Page Vision — Contenu',
+            'description' => 'Texte éditorial de la vision de PHOVE.',
+            'ordre' => 19,
+        ],
+
         // SEO
         // ============================================
         [
@@ -304,13 +397,14 @@ class SettingSeeder extends Seeder
     /**
      * Exécuter le seeder.
      *
-     * Crée ou met à jour tous les paramètres par défaut de PHOVE
+     * Crée uniquement les paramètres manquants sans écraser les valeurs existantes
      * dans la table `settings`.
      */
     public function run(): void
     {
         foreach ($this->defaults as $setting) {
-            Setting::updateOrCreate(
+            // Ne jamais écraser les valeurs éditées dans l'administration lors d'un reseed.
+            Setting::firstOrCreate(
                 ['key' => $setting['key']],
                 $setting
             );
