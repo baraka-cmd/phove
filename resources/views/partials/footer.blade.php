@@ -30,12 +30,14 @@
                                 <span>{{ data_get($siteSettings, 'contact_adresse') }}</span>
                             </div>
                         @endif
-                        @if(data_get($siteSettings ?? [], 'contact_telephone_1'))
-                            <div class="footer-contact-item">
-                                <i class="fas fa-phone-alt"></i>
-                                <a href="tel:{{ preg_replace('/[^0-9+]/', '', data_get($siteSettings, 'contact_telephone_1')) }}">{{ data_get($siteSettings, 'contact_telephone_1') }}</a>
-                            </div>
-                        @endif
+                        @foreach(['contact_telephone_1', 'contact_telephone_2', 'contact_telephone_3', 'contact_telephone_4'] as $phoneKey)
+                            @if(data_get($siteSettings ?? [], $phoneKey))
+                                <div class="footer-contact-item">
+                                    <i class="fas fa-phone-alt"></i>
+                                    <a href="tel:{{ preg_replace('/[^0-9+]/', '', data_get($siteSettings, $phoneKey)) }}">{{ data_get($siteSettings, $phoneKey) }}</a>
+                                </div>
+                            @endif
+                        @endforeach
                         @if(data_get($siteSettings ?? [], 'contact_email'))
                             <div class="footer-contact-item">
                                 <i class="fas fa-envelope"></i>
@@ -50,6 +52,7 @@
                             ['url' => data_get($siteSettings ?? [], 'social_instagram'), 'icon' => 'fa-instagram', 'label' => 'Instagram'],
                             ['url' => data_get($siteSettings ?? [], 'social_linkedin'), 'icon' => 'fa-linkedin-in', 'label' => 'LinkedIn'],
                             ['url' => data_get($siteSettings ?? [], 'social_youtube'), 'icon' => 'fa-youtube', 'label' => 'YouTube'],
+                            ['url' => data_get($siteSettings ?? [], 'social_whatsapp') ? 'https://wa.me/' . preg_replace('/\\D+/', '', data_get($siteSettings, 'social_whatsapp')) : null, 'icon' => 'fa-whatsapp', 'label' => 'WhatsApp'],
                         ] as $social)
                             @if($social['url'])
                                 <a href="{{ $social['url'] }}" target="_blank" rel="noopener noreferrer" class="footer-social" title="{{ $social['label'] }}">
