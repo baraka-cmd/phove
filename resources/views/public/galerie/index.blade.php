@@ -197,7 +197,7 @@
                 {{-- ---------------------------------------- --}}
                 @if($medias->hasPages())
                     <div class="galerie-pagination">
-                        {{ $medias->links() }}
+                        {{ $medias->links('pagination.custom') }}
                     </div>
                 @endif
 
