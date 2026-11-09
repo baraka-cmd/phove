@@ -51,7 +51,7 @@
                     </div>
 
                     <p class="content-block-text">
-                        Conformément à <strong>l'article 5 des statuts</strong>, PHOVE a comme 
+                        {{ data_get($siteSettings ?? [], 'page_mission_content') ?: 'Conformément à <strong>l\'article 5 des statuts</strong>, PHOVE a comme ' }}
                         but de <strong>venir en aide aux personnes vulnérables</strong> : 
                         orphelins, veuves, personnes de 3ème âge et personnes démunies.
                     </p>
@@ -65,7 +65,7 @@
 
                 {{-- Image --}}
                 <div class="content-image-wrapper">
-                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                    <img src="{{ img_url(data_get($siteSettings ?? [], 'page_mission_image') ?: 'assets/images/about/about-phove.jpg') }}" 
                          alt="Mission PHOVE — Compassion avec la population" 
                          class="content-image"
                          onerror="this.src='https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600'">
@@ -87,7 +87,7 @@
                 <span class="section-subtitle">Ce qui nous inspire</span>
                 <h2 class="section-title">Notre Vision</h2>
                 <p class="section-description">
-                    PHOVE aspire à un monde où chaque personne vulnérable est accompagnée, 
+                    {{ data_get($siteSettings ?? [], 'page_vision_content') ?: 'PHOVE aspire à un monde où chaque personne vulnérable est accompagnée,' }} 
                     protégée et soutenue dans sa dignité.
                 </p>
             </div>
