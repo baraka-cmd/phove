@@ -520,6 +520,60 @@
     {{-- ============================================ --}}
     {{-- SECTION CTA — APPEL À L'ACTION --}}
     {{-- ============================================ --}}
+    {{-- ============================================ --}}
+    {{-- SECTION GALERIE — 9 PHOTOS RÉCENTES --}}
+    {{-- ============================================ --}}
+    <section class="home-gallery-section" id="galerie-recente">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-subtitle">Nos actions en images</span>
+                <h2 class="section-title">Notre galerie</h2>
+                <p class="section-description">
+                    Quelques moments de nos actions humanitaires sur le terrain.
+                    Découvrez les images qui témoignent de notre engagement auprès des communautés.
+                </p>
+            </div>
+
+            @if(isset($galerieAccueil) && $galerieAccueil->isNotEmpty())
+                <div class="home-gallery-grid">
+                    @foreach($galerieAccueil as $media)
+                        @php
+                            $imageUrl = $media->urlMiniature();
+                            $imageTitre = $media->titre ?: 'Action humanitaire de PHOVE';
+                        @endphp
+                        @if($imageUrl)
+                            <a class="home-gallery-item"
+                               href="{{ route('galerie.index') }}"
+                               aria-label="Découvrir la galerie : {{ $imageTitre }}">
+                                <img src="{{ $imageUrl }}"
+                                     alt="{{ $imageTitre }}"
+                                     loading="lazy"
+                                     decoding="async">
+                                <span class="home-gallery-overlay">
+                                    <span class="home-gallery-caption">{{ $imageTitre }}</span>
+                                    <span class="home-gallery-zoom" aria-hidden="true">
+                                        <i class="fas fa-images"></i>
+                                    </span>
+                                </span>
+                            </a>
+                        @endif
+                    @endforeach
+                </div>
+            @else
+                <div class="home-gallery-empty">
+                    <i class="fas fa-images" aria-hidden="true"></i>
+                    <p>Les photos de nos actions seront bientôt disponibles.</p>
+                </div>
+            @endif
+
+            <div class="home-gallery-footer">
+                <a href="{{ route('galerie.index') }}" class="btn btn-primary">
+                    <i class="fas fa-images"></i> Voir toute la galerie
+                </a>
+            </div>
+        </div>
+    </section>
+
     <section class="cta-section">
         <div class="container">
             <div class="cta-content">
