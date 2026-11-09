@@ -81,6 +81,9 @@ class SettingController extends Controller
                     $rules[$field] = ['sometimes', 'nullable', 'string', 'max:30', 'regex:/^[+0-9\s\-().]+$/'];
                     $messages[$field . '.regex'] = 'Veuillez saisir un numéro de téléphone valide.';
                     break;
+                case 'switch':
+                    $rules[$field] = ['sometimes', 'boolean'];
+                    break;
                 case 'number':
                     $rules[$field] = ['sometimes', 'nullable', 'numeric'];
                     break;
@@ -108,25 +111,35 @@ class SettingController extends Controller
         // Ainsi, un échec de stockage ne détruit ni les anciennes images ni les autres réglages.
         $newUploads = [];
 
-        foreach ($settings as $setting) {
-            $field = 'setting_' . $setting->key;
+        try {
+            foreach ($settings as $setting) {
+                $field = 'setting_' . $setting->key;
 
-            if ($setting->type !== 'image' || !$request->hasFile($field)) {
-                continue;
-            }
-
-            $newPath = media_store($request->file($field), 'settings');
-
-            if (!$newPath) {
-                foreach ($newUploads as $uploadedPath) {
-                    media_delete($uploadedPath);
+                if ($setting->type !== 'image' || !$request->hasFile($field)) {
+                    continue;
                 }
 
-                return back()->withInput()
-                    ->with('error', 'Le stockage d’une nouvelle image a échoué. Aucune modification des paramètres n’a été enregistrée.');
+                $newPath = media_store($request->file($field), 'settings');
+
+                if (!$newPath) {
+                    throw new \RuntimeException('Le stockage d’une nouvelle image a échoué.');
+                }
+
+                $newUploads[$setting->key] = $newPath;
+            }
+        } catch (Throwable $exception) {
+            foreach ($newUploads as $uploadedPath) {
+                try {
+                    media_delete($uploadedPath);
+                } catch (Throwable $cleanupException) {
+                    report($cleanupException);
+                }
             }
 
-            $newUploads[$setting->key] = $newPath;
+            report($exception);
+
+            return back()->withInput()
+                ->with('error', 'Le stockage d’une nouvelle image a échoué. Aucune modification des paramètres n’a été enregistrée.');
         }
 
         $oldMediaToDelete = [];
