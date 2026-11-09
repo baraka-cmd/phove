@@ -289,7 +289,7 @@
             <a href="{{ route('admin.dashboard') }}" class="btn btn-outline">
                 <i class="fas fa-arrow-left"></i> Retour au tableau de bord
             </a>
-            <button type="button" class="btn btn-primary" onclick="document.getElementById('settingsForm').requestSubmit();">
+            <button type="submit" form="settingsForm" class="btn btn-primary">
                 <i class="fas fa-save"></i> Enregistrer les modifications
             </button>
         </div>
