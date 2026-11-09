@@ -45,14 +45,14 @@
             {{-- ======================================== --}}
             {{-- LOGO --}}
             {{-- ======================================== --}}
-            <a href="{{ url('/') }}" class="header-logo" title="PHOVE — Retour à l'accueil">
-                <img src="{{ asset('assets/images/logo-phove.png') }}"
-                     alt="Logo PHOVE"
+            <a href="{{ url('/') }}" class="header-logo" title="{{ data_get($siteSettings ?? [], 'site_name', 'PHOVE') }} — Retour à l'accueil">
+                <img src="{{ data_get($siteSettings ?? [], 'site_logo') ? media_url(data_get($siteSettings, 'site_logo')) : asset('assets/images/logo-phove.png') }}"
+                     alt="Logo {{ data_get($siteSettings ?? [], 'site_name', 'PHOVE') }}"
                      class="header-logo-img">
                 <div class="header-logo-text">
-                    <span class="header-logo-name">PHOVE</span>
+                    <span class="header-logo-name">{{ data_get($siteSettings ?? [], 'site_name', 'PHOVE') }}</span>
                     <span class="header-logo-subtitle">
-                        Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies
+                        {{ data_get($siteSettings ?? [], 'site_full_name', 'Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies') }}
                     </span>
                 </div>
             </a>
