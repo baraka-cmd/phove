@@ -19,15 +19,29 @@ if (!function_exists('img_url')) {
         }
 
         $relativePath = ltrim(str_replace(chr(92), '/', $path), '/');
-        $storageFile = storage_path('app/public/' . $relativePath);
 
-        if (is_file($storageFile)) {
+        // Accepter les chemins déjà relatifs à public/ (ex. assets/images/photo.jpg).
+        $publicRoot = realpath(public_path());
+        $publicFile = realpath(public_path($relativePath));
+
+        if ($publicRoot && $publicFile && str_starts_with($publicFile, $publicRoot . DIRECTORY_SEPARATOR)) {
+            return asset($relativePath);
+        }
+
+        // Médias déposés sur le disque Laravel public.
+        $storageRoot = realpath(storage_path('app/public'));
+        $storageFile = realpath(storage_path('app/public/' . $relativePath));
+
+        if ($storageRoot && $storageFile && str_starts_with($storageFile, $storageRoot . DIRECTORY_SEPARATOR)) {
             $encodedPath = implode('/', array_map('rawurlencode', explode('/', $relativePath)));
             return url('/media/' . $encodedPath);
         }
 
-        $legacyAsset = public_path('assets/images/' . $relativePath);
-        if (is_file($legacyAsset)) {
+        // Compatibilité avec les anciens noms de fichiers placés dans assets/images.
+        $legacyRoot = realpath(public_path('assets/images'));
+        $legacyFile = realpath(public_path('assets/images/' . $relativePath));
+
+        if ($legacyRoot && $legacyFile && str_starts_with($legacyFile, $legacyRoot . DIRECTORY_SEPARATOR)) {
             return asset('assets/images/' . $relativePath);
         }
 
