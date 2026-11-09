@@ -143,7 +143,7 @@
             <div class="about-grid">
                 {{-- Image --}}
                 <div class="about-image-wrapper">
-                    <img src="{{ asset('assets/images/about/about-phove.jpg') }}" 
+                    <img src="{{ data_get($siteSettings, 'home_about_image') ? media_url(data_get($siteSettings, 'home_about_image')) : asset('assets/images/about/about-phove.jpg') }}" 
                          alt="PHOVE — Action humanitaire auprès des orphelins et veuves" 
                          class="about-image"
                          onerror="this.src='https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=600'">
