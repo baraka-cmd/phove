@@ -203,7 +203,7 @@
                                        class="settings-input" 
                                        value="{{ $oldValue }}" 
                                        placeholder="https://"
-                                       maxlength="255">
+                                       maxlength="2048">
                             </div>
 
                         {{-- ============================================ --}}
