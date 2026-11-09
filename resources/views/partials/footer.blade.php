@@ -28,6 +28,9 @@
                             <div class="footer-contact-item">
                                 <i class="fas fa-map-marker-alt"></i>
                                 <span>{{ data_get($siteSettings, 'contact_adresse') }}</span>
+                                @if(data_get($siteSettings ?? [], 'contact_bp'))
+                                    <small>BP : {{ data_get($siteSettings, 'contact_bp') }}</small>
+                                @endif
                             </div>
                         @endif
                         @foreach(['contact_telephone_1', 'contact_telephone_2', 'contact_telephone_3', 'contact_telephone_4'] as $phoneKey)
