@@ -19,6 +19,12 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->trustProxies(at: '*');
 
         // ─────────────────────────────────────────
+        // Appliquer le mode maintenance aux routes web publiques.
+        // Les routes /admin restent accessibles via le middleware lui-même.
+        $middleware->web(append: [
+            \\App\\Http\\Middleware\\EnsureSiteIsAvailable::class,
+        ]);
+
         // Alias des middlewares personnalisés
         // ─────────────────────────────────────────
         $middleware->alias([
