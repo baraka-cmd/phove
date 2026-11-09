@@ -44,6 +44,11 @@
                     <div class="contact-coord-content">
                         <h4>Adresse</h4>
                         <p>{{ data_get($siteSettings ?? [], 'contact_adresse', 'Goma, Nord-Kivu, République Démocratique du Congo') }}</p>
+                        @if(data_get($siteSettings ?? [], 'contact_bp'))
+                            <small style="display:block; margin-top:6px; color:#64748B;">
+                                Boîte postale : {{ data_get($siteSettings, 'contact_bp') }}
+                            </small>
+                        @endif
                         @if(data_get($siteSettings ?? [], 'contact_repere'))
                             <small style="color: #64748B; font-style: italic;">
                                 Repère : {{ data_get($siteSettings, 'contact_repere') }}
