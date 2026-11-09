@@ -9,18 +9,18 @@
 
     <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ url('/sitemap.xml') }}" />
     {{-- Titre dynamique --}}
-    <title>@yield('title', 'PHOVE') | Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies</title>
+    <title>@yield('title', data_get($siteSettings ?? [], 'meta_title', data_get($siteSettings ?? [], 'site_name', 'PHOVE'))) </title>
 
     {{-- Meta tags SEO --}}
-    <meta name="description" content="@yield('meta_description', 'PHOVE (Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies) est une ONG congolaise apolitique à caractère social et spirituel, créée le 30 août 2012 à Goma. Sa mission : venir en aide aux orphelins, veuves, personnes de 3ème âge et personnes démunies.')">
-    <meta name="keywords" content="@yield('meta_keywords', 'PHOVE, ONG, humanitaire, orphelins, veuves, personnes démunies, RD Congo, Goma, Nord-Kivu, aide sociale, éducation, santé, agriculture, formation professionnelle, assistance spirituelle')">
-    <meta name="author" content="PHOVE">
+    <meta name="description" content="{{ data_get($siteSettings ?? [], 'meta_description', 'PHOVE est une ONG congolaise engagée auprès des personnes vulnérables.') }}">
+    <meta name="keywords" content="{{ data_get($siteSettings ?? [], 'meta_keywords', 'PHOVE, ONG, humanitaire, Goma, RDC') }}">
+    <meta name="author" content="{{ data_get($siteSettings ?? [], 'site_name', 'PHOVE') }}">
     <meta name="robots" content="index, follow">
 
     {{-- Open Graph (partage réseaux sociaux) --}}
     <meta property="og:title" content="@yield('title', 'PHOVE') | Programme Humanitaire aux Orphelins, Veuves et Personnes Démunies">
     <meta property="og:description" content="@yield('meta_description', 'PHOVE — ONG humanitaire congolaise engagée dans l\'assistance aux orphelins, veuves et personnes démunies : éducation, santé, agriculture, formation professionnelle et accompagnement spirituel.')">
-    <meta property="og:image" content="{{ asset('assets/images/logo-phove.png') }}">
+    <meta property="og:image" content="{{ img_url(data_get($siteSettings ?? [], 'site_logo') ?: 'assets/images/logo-phove.png') }}">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="PHOVE">
@@ -36,7 +36,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- Favicon --}}
-    <link rel="icon" type="image/png" href="{{ asset('assets/images/favicon-phove.png') }}">
+    <link rel="icon" type="image/png" href="{{ img_url(data_get($siteSettings ?? [], 'site_favicon') ?: 'assets/images/favicon-phove.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('assets/images/favicon-phove.png') }}">
 
     {{-- Police Poppins --}}
